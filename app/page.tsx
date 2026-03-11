@@ -1,65 +1,323 @@
-import Image from "next/image";
+import { LoopEngineIcon } from "@/components/logo";
+import { CodeTabs } from "@/components/home/CodeTabs";
+import { NpmInstallChip } from "@/components/home/NpmInstallChip";
+import Link from "next/link";
+import type { ReactNode } from "react";
+
+const packages = [
+  { name: "@loop-engine/sdk", slug: "sdk", description: "High-level entry point for loop systems." },
+  { name: "@loop-engine/core", slug: "core", description: "Canonical types and model contracts." },
+  { name: "@loop-engine/runtime", slug: "runtime", description: "Loop engine execution lifecycle." },
+  { name: "@loop-engine/dsl", slug: "dsl", description: "YAML and builder loop definition APIs." },
+  { name: "@loop-engine/events", slug: "events", description: "Event contracts and event bus types." },
+  { name: "@loop-engine/guards", slug: "guards", description: "Built-in and custom guard registry." },
+  { name: "@loop-engine/actors", slug: "actors", description: "Actor model and attribution helpers." },
+  { name: "@loop-engine/observability", slug: "observability", description: "Metrics, timelines, replay." }
+];
+
+async function getGitHubStars(): Promise<number> {
+  try {
+    const response = await fetch("https://api.github.com/repos/loopengine/loop-engine", {
+      next: { revalidate: 3600 }
+    });
+    if (!response.ok) {
+      return 0;
+    }
+    const data = (await response.json()) as { stargazers_count?: number };
+    return data.stargazers_count ?? 0;
+  } catch {
+    return 0;
+  }
+}
 
 export default function Home() {
+  const architecture = ["SIGNAL", "LOOP ENGINE", "ACTOR", "TRANSITION", "EVIDENCE", "LEARNING"];
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <HomeContent architecture={architecture} />
+  );
+}
+
+async function HomeContent({ architecture }: { architecture: string[] }) {
+  const stars = await getGitHubStars();
+
+  return (
+    <>
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background: "var(--color-surface-alt)",
+          minHeight: "max(80vh, calc(100vh - 56px))",
+          borderBottom: "1px solid var(--color-border)"
+        }}
+      >
+        <div
+          className="absolute inset-0 opacity-40"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, color-mix(in srgb, var(--color-border) 100%, transparent) 0px, color-mix(in srgb, var(--color-border) 100%, transparent) 1px, transparent 1px, transparent 32px), repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-border) 100%, transparent) 0px, color-mix(in srgb, var(--color-border) 100%, transparent) 1px, transparent 1px, transparent 32px)"
+          }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+        <div className="relative mx-auto w-full max-w-[1200px] px-6 py-16 md:px-10 md:py-24">
+          <div className="mx-auto max-w-[800px]">
+            <p className="fade-in-up" style={{ animationDelay: "0ms" }}>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-xs)",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--color-primary)"
+                }}
+              >
+                Open Infrastructure · MIT Licensed
+              </span>
+            </p>
+            <h1
+              className="fade-in-up mt-3"
+              style={{
+                animationDelay: "80ms",
+                fontSize: "clamp(var(--text-3xl), 6vw, var(--text-5xl))",
+                letterSpacing: "-0.03em",
+                lineHeight: 1.05,
+                maxWidth: 720
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              The control layer for AI-operated enterprises
+            </h1>
+            <p
+              className="fade-in-up mt-5"
+              style={{
+                animationDelay: "160ms",
+                fontSize: "var(--text-md)",
+                color: "var(--color-ink-tertiary)",
+                maxWidth: 540,
+                lineHeight: 1.65
+              }}
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              Loop Engine gives AI finite states, deterministic guards, and structured feedback.
+              Not improvisation - control.
+            </p>
+
+            <div
+              className="fade-in-up mt-9 flex flex-col items-stretch gap-3 min-[480px]:items-center min-[480px]:flex-row min-[480px]:flex-wrap"
+              style={{ animationDelay: "240ms" }}
+            >
+              <Link
+                href="/docs/getting-started"
+                className="le-cta-button inline-flex items-center"
+                style={{
+                  background: "var(--color-primary)",
+                  color: "#fff",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "12px 28px",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-sm)"
+                }}
+              >
+                Get started
+              </Link>
+              <a
+                href="https://github.com/loopengine/loop-engine"
+                rel="noreferrer"
+                target="_blank"
+                className="inline-flex items-center"
+                style={{
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-ink-secondary)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "12px 28px",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-sm)"
+                }}
+              >
+                View on GitHub
+              </a>
+              <div className="max-w-full overflow-x-auto">
+                <NpmInstallChip />
+              </div>
+            </div>
+
+            <div className="fade-in-up mt-14 flex flex-wrap items-center gap-2 md:gap-3" style={{ animationDelay: "400ms" }}>
+              {architecture.map((node, index) => (
+                <div key={node} className="flex items-center gap-2">
+                  <span
+                    style={{
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 999,
+                      padding: "8px 12px",
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "var(--text-xs)",
+                      letterSpacing: "0.04em"
+                    }}
+                  >
+                    {node}
+                  </span>
+                  {index < architecture.length - 1 ? (
+                    <span style={{ color: "var(--color-primary-mid)" }} aria-hidden>
+                      →
+                    </span>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
+      </section>
+
+      <section
+        style={{
+          background: "var(--color-surface)",
+          borderTop: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "80px 0"
+        }}
+      >
+        <div className="mx-auto grid w-full max-w-[1200px] gap-5 px-6 md:grid-cols-3 md:px-10">
+          <FeatureCard
+            title="Structure, not improvisation"
+            icon={<LoopEngineIcon size={32} color="var(--color-primary)" />}
+            body="AI works best when decisions are bounded, outcomes are measurable, and every action leaves evidence. Loop Engine provides that structure."
+          />
+          <FeatureCard
+            title="Every actor accounted for"
+            icon={
+              <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
+                <circle cx="8" cy="16" r="4" fill="var(--color-primary-mid)" />
+                <circle cx="16" cy="10" r="4" fill="var(--color-primary)" />
+                <circle cx="24" cy="16" r="4" fill="var(--color-primary-dark)" />
+              </svg>
+            }
+            body="Human, automation, AI agent - the actor model treats all three identically. No action is anonymous. Every transition has attributed evidence."
+          />
+          <FeatureCard
+            title="Loops learn"
+            icon={
+              <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
+                <path d="M6 19c2-6 7-8 11-8 3 0 6 1 9 4" stroke="var(--color-primary)" strokeWidth="2" fill="none" />
+                <path d="M22 6l4 1-2 4" stroke="var(--color-primary)" strokeWidth="2" fill="none" />
+                <path d="M7 24h18" stroke="var(--color-border-dark)" strokeWidth="2" />
+              </svg>
+            }
+            body="Each closed loop emits structured training signals. Forecasts improve. Lead times sharpen. The system gets better automatically."
+          />
+        </div>
+      </section>
+
+      <section style={{ background: "var(--color-surface-dark)", padding: "80px 0" }}>
+        <div className="mx-auto grid w-full max-w-[1200px] gap-8 px-6 md:grid-cols-2 md:px-10">
+          <div>
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-xs)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--color-primary-mid)"
+              }}
+            >
+              Quick start
+            </p>
+            <h2 className="mt-3" style={{ color: "var(--color-code-text)" }}>
+              Running in 60 seconds
+            </h2>
+            <ol className="mt-4 space-y-2" style={{ color: "var(--color-code-text)" }}>
+              <li>
+                <span className="mono">1.</span> Install the SDK
+              </li>
+              <li>
+                <span className="mono">2.</span> Define your loop
+              </li>
+              <li>
+                <span className="mono">3.</span> Start and transition
+              </li>
+              <li>
+                <span className="mono">4.</span> Subscribe to events
+              </li>
+            </ol>
+          </div>
+          <CodeTabs />
+        </div>
+      </section>
+
+      <section style={{ background: "var(--color-surface-alt)", padding: "80px 0" }}>
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <h2>Everything you need to build on</h2>
+          <div className="mt-6 grid gap-4 min-[480px]:grid-cols-2 md:grid-cols-4">
+            {packages.map((pkg) => (
+              <Link
+                key={pkg.name}
+                href={`/docs/packages/${pkg.slug}`}
+                style={{
+                  background: "var(--color-surface)",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "var(--radius-md)",
+                  padding: "20px 24px",
+                  transition: "all var(--dur-fast) var(--ease-out)"
+                }}
+              >
+                <p
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "var(--text-xs)",
+                    color: "var(--color-primary)"
+                  }}
+                >
+                  {pkg.name}
+                </p>
+                <p style={{ fontSize: "var(--text-sm)", color: "var(--color-ink-tertiary)", marginTop: 8 }}>
+                  {pkg.description}
+                </p>
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6">
+            <Link href="/docs/packages" style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}>
+              View all packages →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: "24px 0", borderTop: "1px solid var(--color-border)" }}>
+        <div
+          className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-2 px-6 text-center md:px-10"
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "var(--text-xs)",
+            color: "var(--color-ink-muted)"
+          }}
+        >
+          <span>Loop Engine is an open infrastructure project created by</span>
+          <a href="https://betterdata.co" rel="noreferrer" target="_blank" style={{ color: "var(--color-primary)" }}>
+            Better Data
           </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+          <span>· MIT Licensed ·</span>
+          <a href="https://github.com/loopengine/loop-engine" rel="noreferrer" target="_blank">
+            ★ {stars}
           </a>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
+  );
+}
+
+function FeatureCard({ title, body, icon }: { title: string; body: string; icon: ReactNode }) {
+  return (
+    <article
+      style={{
+        padding: 32,
+        border: "1px solid var(--color-border)",
+        borderRadius: "var(--radius-lg)",
+        background: "var(--color-surface)",
+        transition: "all var(--dur-base) var(--ease-out)"
+      }}
+    >
+      <div>{icon}</div>
+      <h3 style={{ marginTop: 16, fontSize: "var(--text-lg)" }}>{title}</h3>
+      <p style={{ marginTop: 10, fontSize: "var(--text-base)", color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+        {body}
+      </p>
+    </article>
   );
 }

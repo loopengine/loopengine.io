@@ -1,0 +1,48 @@
+## Install the SDK
+
+Use npm, pnpm, or yarn to install the package:
+
+```bash
+npm install @loop-engine/sdk
+```
+
+## Define a loop
+
+```ts
+import { LoopBuilder } from '@loop-engine/sdk'
+
+const loop = LoopBuilder
+  .create('expense.approval', 'finance')
+  .state('SUBMITTED')
+  .state('APPROVED', { isTerminal: true })
+  .initialState('SUBMITTED')
+  .transition({ id: 'approve', from: 'SUBMITTED', to: 'APPROVED', actors: ['human'] })
+  .outcome({ id: 'expense_approved', valueUnit: 'expense_approved', description: 'Expense approved', measurable: true })
+  .build()
+```
+
+## Run and subscribe
+
+```ts
+import { aggregateId, transitionId } from '@loop-engine/core'
+import { createLoopSystem } from '@loop-engine/sdk'
+
+const { engine, eventBus } = createLoopSystem({ loops: [loop] })
+
+eventBus.subscribe(async (event) => {
+  console.log(event.type)
+})
+
+await engine.start({
+  loopId: 'expense.approval',
+  aggregateId: aggregateId('EXP-001'),
+  orgId: 'acme',
+  actor: { type: 'system', id: 'system:intake' }
+})
+
+await engine.transition({
+  aggregateId: aggregateId('EXP-001'),
+  transitionId: transitionId('approve'),
+  actor: { type: 'human', id: 'manager@acme.com' }
+})
+```

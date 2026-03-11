@@ -1,0 +1,29 @@
+## createLoopSystem
+
+`createLoopSystem` is the easiest way to assemble engine, event bus, and optional signal engine.
+
+<Callout variant="info" title="Default behavior">
+If `store` is not provided, the SDK uses the in-memory adapter.
+</Callout>
+
+```ts
+import { createLoopSystem } from '@loop-engine/sdk'
+
+const { engine, eventBus } = createLoopSystem({
+  loops: [myLoop]
+})
+```
+
+## Optional dependencies
+
+You can inject a custom `store` and `guards` registry:
+
+```ts
+import { createLoopSystem, guardRegistry } from '@loop-engine/sdk'
+
+const system = createLoopSystem({
+  loops: [myLoop],
+  guards: guardRegistry,
+  signals: true
+})
+```

@@ -41,9 +41,81 @@ a {
   color: inherit;
 }
 
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  z-index: 1000;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.skip-link:focus-visible {
+  left: 8px;
+}
+
 ::selection {
   background: var(--color-primary-light);
   color: var(--color-primary-dark);
+}
+
+.le-nav-link:hover {
+  color: var(--color-ink) !important;
+}
+
+.le-doc-item:hover {
+  color: var(--color-ink) !important;
+  border-left-color: var(--color-border) !important;
+}
+
+.le-cta-button:hover {
+  background: color-mix(in srgb, var(--color-primary) 92%, black);
+  transform: translateY(-1px);
+}
+
+.kw {
+  color: var(--color-code-keyword);
+}
+
+.str {
+  color: var(--color-code-string);
+}
+
+.type {
+  color: var(--color-code-type);
+}
+
+.cmt {
+  color: var(--color-code-comment);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in-up {
+    animation: fade-in-up 500ms var(--ease-out) both;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .le-logo-arrow {

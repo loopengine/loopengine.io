@@ -1,0 +1,33 @@
+## @loop-engine/sdk
+
+High-level package for assembling loop execution in application code.
+
+<PackageCard
+  name="@loop-engine/sdk"
+  description="Engine factory, builder exports, event bus helpers."
+  href="/docs/packages/sdk"
+/>
+
+## Exports
+
+- `createLoopSystem`
+- `LoopBuilder`
+- `createLoopEngine`
+- `InMemoryEventBus`
+- `computeMetrics`, `buildTimeline`
+
+## Example
+
+```ts
+import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
+
+const loop = LoopBuilder.create('demo.loop', 'demo')
+  .state('OPEN')
+  .state('DONE', { isTerminal: true })
+  .initialState('OPEN')
+  .transition({ id: 'finish', from: 'OPEN', to: 'DONE', actors: ['human'] })
+  .outcome({ id: 'done', valueUnit: 'done', description: 'Done', measurable: true })
+  .build()
+
+const { engine } = createLoopSystem({ loops: [loop] })
+```
