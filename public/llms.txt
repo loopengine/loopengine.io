@@ -1,0 +1,82 @@
+# Loop Engine
+
+> Open runtime for constrained, observable, and improvable enterprise
+> operational loops. Apache-2.0 Licensed. Created by Better Data.
+> https://loopengine.io
+
+Loop Engine is a TypeScript monorepo of packages for defining, running,
+and observing bounded operational loops with a finite-state actor model.
+AI agents, humans, and automation systems are all first-class actors.
+Every transition emits structured events. Guards enforce deterministic policy.
+Learning signals feed back into AI model improvement.
+
+## Core packages
+
+- @loop-engine/sdk - recommended entry point, re-exports everything
+- @loop-engine/core - shared types and interfaces, zero dependencies
+- @loop-engine/dsl - LoopBuilder fluent API + YAML parser/validator
+- @loop-engine/runtime - LoopEngine class, transition execution, state management
+- @loop-engine/events - InMemoryEventBus + all event type definitions
+- @loop-engine/guards - GuardRegistry + built-in guard functions
+- @loop-engine/actors - actor types, authorization, evidence building
+- @loop-engine/signals - SignalEngine + built-in signal detection rules
+- @loop-engine/observability - LoopMetrics, LoopTimeline, replay
+- @loop-engine/registry-client - loop definition registry (local, HTTP, Better Data)
+- @loop-engine/adapter-memory - in-memory LoopStore (default, works in browser)
+- @loop-engine/adapter-postgres - PostgreSQL LoopStore (peerDep: pg)
+- @loop-engine/adapter-kafka - Kafka EventBus (peerDep: kafkajs)
+- @loop-engine/adapter-http - HTTP webhook EventBus
+
+## Key concepts
+
+Loop: a bounded operational process with named states, at least one terminal
+state, transitions between states, and a measurable outcome. Loops close when
+they reach a terminal state. Loops track outcomes, not task completion.
+
+Actor: any entity that executes a transition. Five types: human, automation,
+ai-agent, webhook, system. All five produce the same TransitionRecord shape.
+Every action is attributed. No anonymous transitions.
+
+Guard: a deterministic policy check that runs before a transition executes.
+Hard guards block the transition (state does not advance). Soft guards record
+a warning in evidence and allow the transition to proceed. Guards are NOT LLM
+calls - they are synchronous policy assertions.
+
+Signal: a detected pattern in loop behavior. Signals can trigger new loops,
+alert operators, or feed into AI recommendations. The DEMAND_SPIKE signal
+is the canonical example.
+
+Learning signal: structured data emitted when a loop closes, comparing
+predicted vs actual outcomes. Used to improve AI forecasting models over time.
+Keys must match registered BusinessMetric.id values.
+
+## Install
+
+  npm install @loop-engine/sdk
+
+## Quick start
+
+  import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
+
+  const approval = LoopBuilder
+    .create('expense.approval', 'finance')
+    .state('SUBMITTED')
+    .state('APPROVED', { isTerminal: true })
+    .state('REJECTED', { isTerminal: true })
+    .initialState('SUBMITTED')
+    .transition({ id: 'approve', from: 'SUBMITTED', to: 'APPROVED', allowedActors: ['human'] })
+    .transition({ id: 'reject', from: 'SUBMITTED', to: 'REJECTED', allowedActors: ['human'] })
+    .outcome({ id: 'expense_approved', valueUnit: 'expense_approved' })
+    .build()
+
+  const { engine } = createLoopSystem({ loops: [approval] })
+
+## Links
+
+Documentation:   https://loopengine.io/docs
+Full docs (LLM): https://loopengine.io/llms-full.txt
+Getting started: https://loopengine.io/docs/getting-started/quick-start
+GitHub:          https://github.com/loopengine/loop-engine
+npm org:         https://npmjs.com/org/loop-engine
+Examples:        https://github.com/loopengine/loop-examples
+Created by:      https://betterdata.co

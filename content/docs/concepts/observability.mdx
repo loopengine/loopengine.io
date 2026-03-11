@@ -1,0 +1,75 @@
+## What Loop Engine tracks
+
+Runtime state comes from:
+
+- `LoopInstance` records (`currentState`, `status`, timestamps)
+- `TransitionRecord[]` history (who did what, when, and with what evidence)
+
+The observability package computes aggregate metrics and timelines from that data.
+
+## `LoopMetrics`
+
+`computeMetrics(instances, history, period)` returns:
+
+- `loopId`
+- `period`
+- `totalInstances`
+- `openInstances`
+- `closedInstances`
+- `errorInstances`
+- `avgDurationMs`
+- `medianDurationMs`
+- `p95DurationMs`
+- `completionRate`
+- `guardFailureRate`
+- `aiActorRate`
+- `humanActorRate`
+- `avgTransitionCount`
+
+```ts
+import { computeMetrics } from '@loop-engine/observability'
+```
+
+## Timelines and state residency
+
+Use `buildTimeline(instance, history)` for a normalized timeline view.
+
+Use `getStateResidency(timeline)` to see dwell per state:
+
+```ts
+import { buildTimeline, getStateResidency } from '@loop-engine/observability'
+
+const timeline = buildTimeline(instance, history)
+const residency = getStateResidency(timeline)
+```
+
+State residency highlights bottlenecks (for example loops spending excessive time in `OPEN` or `INVOICE_MATCHED`).
+
+## Replay and validation
+
+`replayLoop(definition, history)` validates transition history against a definition:
+
+```ts
+import { replayLoop } from '@loop-engine/observability'
+
+const replay = replayLoop(definition, history)
+if (!replay.valid) {
+  console.error(replay.errors)
+}
+```
+
+Use replay for:
+
+- audits
+- debugging invalid transitions
+- migration validation after definition updates
+
+## Devtools
+
+`@loop-engine/ui-devtools` exports components for local diagnostics:
+
+- `DevtoolsPanel`
+- `LoopTimeline`
+- `EventStream`
+- `StateDiagram`
+- `MetricsCard`

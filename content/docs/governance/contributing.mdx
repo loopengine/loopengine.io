@@ -1,0 +1,75 @@
+---
+title: Contributing
+description: How to contribute to Loop Engine - DCO sign-off, what belongs in this repo, design principles, and PR conventions.
+section: Governance
+---
+
+<Callout variant="tip" title="New contributors">
+Look for issues tagged `good first issue`. Documentation improvements and loop definitions in `loops/` are the easiest starting points.
+</Callout>
+
+# Contributing to Loop Engine
+
+## Before you build anything
+
+Open an issue before significant work. This avoids duplicated implementation and ensures roadmap alignment.
+
+## DCO sign-off
+
+All commits must be signed off.
+
+```bash
+git commit -s -m "feat: add ..."
+```
+
+This appends the required `Signed-off-by: Your Name <email>` trailer.
+
+## What belongs in this repo
+
+Allowed:
+
+- domain-neutral primitives (`packages/core`)
+- reusable loop definitions (`loops/`)
+- adapters and examples with cross-domain utility
+
+Not accepted:
+
+- SCM-specific business logic
+- proprietary optimization algorithms
+- Better Data tenant/billing internals
+
+## Governance model
+
+Repository currently documents a BDFL model:
+
+- Better Data, Inc. controls final roadmap and release decisions
+- community contributions are welcomed
+
+## Branch and PR conventions
+
+- open issue first for significant work
+- pass CI checks before review
+- breaking changes to core types require RFC issue (`[RFC]`)
+
+## Versioning with changesets
+
+```bash
+pnpm changeset
+```
+
+Event schema breaking changes require a 6-month deprecation notice.
+
+## Local development
+
+```bash
+pnpm install
+pnpm build
+pnpm test
+```
+
+Run package-specific tests:
+
+```bash
+pnpm --filter @loop-engine/core test
+pnpm --filter @loop-engine/runtime test
+```

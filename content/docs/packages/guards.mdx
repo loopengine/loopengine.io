@@ -1,0 +1,50 @@
+# @loop-engine/guards
+
+Guard registry types and built-in policy guards.
+
+## Install
+
+```bash
+npm install @loop-engine/guards
+```
+
+## API reference
+
+### `GuardRegistry`
+
+```ts
+class GuardRegistry {
+  register(guardId: GuardId, fn: GuardFunction): void
+  get(guardId: GuardId): GuardFunction | undefined
+  createEvaluator(): GuardEvaluator
+}
+```
+
+### `createGuardRegistry`
+
+```ts
+createGuardRegistry(): GuardRegistry
+```
+
+### `defaultRegistry`
+
+Preloaded with:
+
+- `actor_has_permission`
+- `approval_obtained`
+- `deadline_not_exceeded`
+- `duplicate_check_passed`
+- `field_value_constraint`
+
+### Built-in guard exports
+
+- `approvalObtainedGuard`
+- `actorPermissionGuard`
+- `deadlineNotExceededGuard`
+- `duplicateCheckPassedGuard`
+- `fieldValueConstraintGuard`
+
+## Related packages
+
+- Depends on core only
+- Used by runtime and sdk

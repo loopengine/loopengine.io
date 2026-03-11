@@ -1,0 +1,102 @@
+## Loop definition YAML reference
+
+This format is validated by `LoopDefinitionSchema` in `@loop-engine/dsl`.
+
+### Top-level fields
+
+- `id: string` (required)
+- `version: string` semver `x.y.z` (required)
+- `description: string` (required)
+- `domain: string` (required)
+- `states: StateSpec[]` (required, at least 1)
+- `initialState: string` (required, must exist in `states`)
+- `transitions: TransitionSpec[]` (required)
+- `outcome: OutcomeSpec` (required)
+- `participants?: string[]`
+- `spawnableLoops?: string[]`
+- `metadata?: Record<string, unknown>`
+
+### `StateSpec`
+
+- `id: string` (required)
+- `description?: string`
+- `isTerminal?: boolean`
+- `isError?: boolean`
+
+### `TransitionSpec`
+
+- `id: string`
+- `from: string`
+- `to: string`
+- `allowedActors: ("human" | "automation" | "ai-agent" | "webhook" | "system")[]`
+- `guards?: GuardSpec[]`
+- `sideEffects?: SideEffectSpec[]`
+- `description?: string`
+
+### `GuardSpec`
+
+- `id: string`
+- `description: string`
+- `failureMessage: string`
+- `severity: "hard" | "soft"`
+- `evaluatedBy: "runtime" | "module" | "external"`
+
+### `OutcomeSpec`
+
+- `id: string`
+- `description: string`
+- `valueUnit: string`
+- `measurable: boolean`
+- `businessMetrics?: BusinessMetric[]`
+
+## Annotated example (`scm.procurement`)
+
+```yaml
+id: scm.procurement
+version: 1.0.0
+domain: scm
+description: Purchase order lifecycle through settlement
+
+states:
+  - id: OPEN
+  - id: PO_CONFIRMED
+  - id: RECEIVED
+  - id: INVOICE_MATCHED
+  - id: SETTLED
+    isTerminal: true
+  - id: DISPUTED
+    isError: true
+
+initialState: OPEN
+
+transitions:
+  - id: confirm_po
+    from: OPEN
+    to: PO_CONFIRMED
+    allowedActors: [human, automation, ai-agent]
+    guards:
+      - id: approval_obtained
+        severity: hard
+        evaluatedBy: external
+        description: PO must be approved before confirmation
+        failureMessage: PO confirmation requires explicit approval
+
+outcome:
+  id: po_settled
+  description: Purchase order settled with matched invoice
+  valueUnit: po_settled
+  measurable: true
+  businessMetrics:
+    - id: cycle_time_days
+      label: PO cycle time (days)
+      unit: days
+      improvableByAI: true
+```
+
+## Common validation errors
+
+- `initialState` not found in `states`
+- transition `from`/`to` references unknown state
+- empty `allowedActors`
+- duplicate state IDs
+- invalid `version` format (must be semver)

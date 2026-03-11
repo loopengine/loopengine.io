@@ -1,0 +1,72 @@
+---
+title: Guards and Policy
+description: Guards are deterministic policy checks that run before a transition executes - hard guards block, soft guards warn.
+section: Core Concepts
+---
+
+## What guards are
+
+Guards are deterministic policy checks evaluated before state advancement.  
+In this runtime, a guard is a `GuardFunction` returning `{ passed, code?, message?, metadata? }`.
+
+## Hard vs soft
+
+| | Hard | Soft |
+|---|---|---|
+| Blocks transition | Yes | No |
+| State advances | No | Yes |
+| Emitted event on failure | `loop.guard.failed` | Failure warning is attached to `_softGuardWarnings` evidence |
+| Typical use | Mandatory policy | Warning and monitoring |
+
+## `evaluatedBy`
+
+`GuardSpec.evaluatedBy`:
+
+- `runtime` - evaluated by registered `GuardFunction`
+- `module` - declared for module-level policy contract
+- `external` - caller provides result context in evidence contract
+
+## Built-in guards
+
+### `actor_has_permission`
+
+- Reads: `required_role`, `roles`
+- Fails when `required_role` is missing from `roles`
+
+### `approval_obtained`
+
+- Reads: `approved`
+- Fails when `approved !== true`
+
+### `deadline_not_exceeded`
+
+- Reads: `deadline_iso`
+- Fails when deadline format is invalid or current time exceeds deadline
+
+### `duplicate_check_passed`
+
+- Reads: `duplicate_found`
+- Fails when `duplicate_found === true`
+
+### `field_value_constraint`
+
+- Reads: `constraint` plus referenced field
+- Supported operators: `eq`, `gt`, `lt`, `in`
+
+## Add a custom guard
+
+```ts
+import { guardId } from '@loop-engine/core'
+import { createGuardRegistry } from '@loop-engine/guards'
+
+const registry = createGuardRegistry()
+registry.register(guardId('my_custom_guard'), async (context) => {
+  const passed = context.evidence.budget_available === true
+  return {
+    passed,
+    message: passed ? 'Budget available' : 'Insufficient budget'
+  }
+})
+```
+
+Use this registry in `createLoopSystem({ loops, guards: registry })`.

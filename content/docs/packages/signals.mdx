@@ -1,0 +1,46 @@
+# @loop-engine/signals
+
+Signal engine and built-in signal detection rules.
+
+## Install
+
+```bash
+npm install @loop-engine/signals
+```
+
+## API reference
+
+### `createSignalEngine`
+
+```ts
+createSignalEngine(): SignalEngine
+```
+
+Returns engine preloaded with:
+
+- `threshold-breach`
+- `state-dwell`
+- `repeated-guard-failure`
+- `loop-not-started`
+
+### `SignalEngine`
+
+```ts
+interface SignalEngine {
+  registerRule(rule: SignalRule): void
+  process(events: LoopEvent[]): Signal[]
+  subscribe(handler: (signal: Signal) => void): () => void
+}
+```
+
+### Built-in rule factories
+
+- `thresholdBreachRule(config)`
+- `stateDwellRule(config)`
+- `repeatedGuardFailureRule(config)`
+- `loopNotStartedRule(config)`
+
+## Related packages
+
+- Depends on core + events
+- Re-exported by sdk

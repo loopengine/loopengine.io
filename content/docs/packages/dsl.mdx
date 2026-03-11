@@ -1,0 +1,62 @@
+# @loop-engine/dsl
+
+YAML/JSON loop authoring, parsing, and validation.
+
+## Install
+
+```bash
+npm install @loop-engine/dsl
+```
+
+## API reference
+
+### `LoopBuilder`
+
+```ts
+LoopBuilder.create(id: string, domain: string): LoopBuilder
+```
+
+Fluent authoring API with `.build()` schema validation.
+
+### `parseLoopYaml`
+
+```ts
+parseLoopYaml(yamlContent: string): LoopDefinition
+```
+
+Parses YAML and validates against `LoopDefinitionSchema`.
+
+### `parseLoopJson`
+
+```ts
+parseLoopJson(json: string): LoopDefinition
+```
+
+### `parseLoopFile`
+
+```ts
+parseLoopFile(content: string, format: "yaml" | "json"): LoopDefinition
+```
+
+### `validateLoopDefinition`
+
+```ts
+validateLoopDefinition(input: unknown): { valid: boolean; errors: string[]; definition?: LoopDefinition }
+```
+
+### `serializeToYaml`
+
+```ts
+serializeToYaml(definition: LoopDefinition): string
+```
+
+### `serializeToJson`
+
+```ts
+serializeToJson(definition: LoopDefinition, pretty = true): string
+```
+
+## Related packages
+
+- Depends on `@loop-engine/core`
+- Used by `@loop-engine/sdk`, `@loop-engine/runtime`, and `@loop-engine/registry-client`

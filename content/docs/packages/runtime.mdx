@@ -1,0 +1,58 @@
+# @loop-engine/runtime
+
+Execution engine and runtime interfaces.
+
+## Install
+
+```bash
+npm install @loop-engine/runtime
+```
+
+## API reference
+
+### `createLoopEngine`
+
+```ts
+createLoopEngine(options: LoopEngineOptions): LoopEngine
+```
+
+### `LoopEngine.start`
+
+```ts
+start(options: StartOptions): Promise<LoopInstance>
+```
+
+### `LoopEngine.transition`
+
+```ts
+transition(options: TransitionOptions): Promise<TransitionResult>
+```
+
+### `LoopEngine.getState`
+
+```ts
+getState(aggregateId: AggregateId): Promise<LoopInstance | null>
+```
+
+### `LoopEngine.getHistory`
+
+```ts
+getHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
+```
+
+### `LoopStore` interface
+
+```ts
+interface LoopStore {
+  getInstance(aggregateId: AggregateId): Promise<LoopInstance | null>
+  saveInstance(instance: LoopInstance): Promise<void>
+  getTransitionHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
+  saveTransitionRecord(record: TransitionRecord): Promise<void>
+  listOpenInstances(loopId: LoopId, orgId: string): Promise<LoopInstance[]>
+}
+```
+
+## Related packages
+
+- Depends on core, actors, guards, events, dsl
+- Usually consumed via `@loop-engine/sdk`

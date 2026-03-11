@@ -1,0 +1,166 @@
+---
+title: Your First Loop
+description: Build an expense approval loop step by step, with states, actors, guards, and outcomes.
+section: Getting Started
+---
+
+## 1) Design the loop before writing code
+
+Start with outcome first:
+
+- Outcome ID: `expense_approved`
+- Value unit: `expense_approved`
+- States: `SUBMITTED -> UNDER_REVIEW -> APPROVED` (or `REJECTED`)
+- Actors: `system`, `automation`, `human`
+
+<LoopDiagram
+  states={[
+    { id: "SUBMITTED" },
+    { id: "UNDER_REVIEW" },
+    { id: "APPROVED", isTerminal: true },
+    { id: "REJECTED", isTerminal: true }
+  ]}
+  transitions={[
+    { id: "start_review", from: "SUBMITTED", to: "UNDER_REVIEW" },
+    { id: "approve", from: "UNDER_REVIEW", to: "APPROVED" },
+    { id: "reject", from: "UNDER_REVIEW", to: "REJECTED" }
+  ]}
+/>
+
+## 2) States and transitions
+
+`StateSpec` fields from `@loop-engine/core`:
+
+- `id` (required)
+- `isTerminal?: boolean` (default false)
+- `isError?: boolean` (default false)
+
+Terminal states close the loop (`status: "CLOSED"`).  
+Error states set `status: "ERROR"`.
+
+## 3) Actors
+
+Loop Engine supports 5 actor types:
+
+- `human`
+- `automation`
+- `ai-agent`
+- `webhook`
+- `system`
+
+Actor authorization is checked against each transition's `allowedActors`.
+
+See [The Actor Model](/docs/concepts/actor-model) for full details.
+
+## 4) Start and run the loop
+
+```ts
+import { aggregateId, transitionId } from '@loop-engine/core'
+import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
+
+const approval = LoopBuilder
+  .create('expense.approval', 'finance')
+  .description('Expense report approval')
+  .state('SUBMITTED')
+  .state('UNDER_REVIEW')
+  .state('APPROVED', { isTerminal: true })
+  .state('REJECTED', { isTerminal: true })
+  .initialState('SUBMITTED')
+  .transition({
+    id: 'start_review',
+    from: 'SUBMITTED',
+    to: 'UNDER_REVIEW',
+    actors: ['automation']
+  })
+  .transition({
+    id: 'approve',
+    from: 'UNDER_REVIEW',
+    to: 'APPROVED',
+    actors: ['human'],
+    guards: [
+      {
+        id: 'approval_obtained',
+        severity: 'hard',
+        evaluatedBy: 'runtime',
+        description: 'Approval must be present',
+        failureMessage: 'Approval not obtained'
+      }
+    ]
+  })
+  .transition({
+    id: 'reject',
+    from: 'UNDER_REVIEW',
+    to: 'REJECTED',
+    actors: ['human']
+  })
+  .outcome({
+    id: 'expense_approved',
+    description: 'Expense report approved',
+    valueUnit: 'expense_approved'
+  })
+  .build()
+
+const aggregate = aggregateId('EXP-2026-001')
+const { engine } = createLoopSystem({ loops: [approval] })
+
+await engine.start({
+  loopId: 'expense.approval',
+  aggregateId: aggregate,
+  orgId: 'acme',
+  actor: { type: 'system', id: 'system:intake' }, // StartOptions.actor
+  metadata: { source: 'expense_form' } // optional StartOptions.metadata
+})
+
+const reviewResult = await engine.transition({
+  aggregateId: aggregate,
+  transitionId: transitionId('start_review'),
+  actor: { type: 'automation', id: 'system:router' }
+})
+
+const approveResult = await engine.transition({
+  aggregateId: aggregate,
+  transitionId: transitionId('approve'),
+  actor: { type: 'human', id: 'manager@acme.com' },
+  evidence: { approved: true, comment: 'Within policy' }
+})
+```
+
+## 5) Inspect the result
+
+```ts
+const instance = await engine.getState(aggregate)
+const history = await engine.getHistory(aggregate)
+
+console.log(instance?.currentState) // branded StateId
+console.log(instance?.status)       // OPEN | IN_PROGRESS | CLOSED | ERROR | CANCELLED
+
+// TransitionRecord fields
+for (const row of history) {
+  console.log(row.transitionId, row.fromState, row.toState, row.actor.type, row.occurredAt)
+}
+```
+
+`engine.getState()` returns `Promise<LoopInstance | null>`.  
+`engine.getHistory()` returns `Promise<TransitionRecord[]>`.
+
+## 6) Guard failure example
+
+If `approval_obtained` fails (for example `evidence.approved !== true`), `transition()` returns:
+
+```ts
+{
+  status: "guard_failed",
+  fromState: "UNDER_REVIEW",
+  guardFailures: [
+    { guardId: "approval_obtained", message: "Approval not obtained", severity: "hard" }
+  ]
+}
+```
+
+The state does not advance, and `loop.guard.failed` is emitted.
+
+## 7) Next steps
+
+- [What is a Loop?](/docs/concepts/what-is-a-loop)
+- [Guards and Policy](/docs/concepts/guards-and-policy)
+- [Transitions](/docs/running-loops/transitions)

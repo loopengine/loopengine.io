@@ -1,8 +1,36 @@
+import type { Metadata } from "next";
 import { Callout } from "@/components/docs/Callout";
 import { CodeBlock } from "@/components/docs/CodeBlock";
 import { DocLayout } from "@/components/docs/DocLayout";
 import { LoopDiagram } from "@/components/docs/LoopDiagram";
 import { PackageCard } from "@/components/docs/PackageCard";
+
+export const metadata: Metadata = {
+  title: "Docs",
+  description: "Documentation for Loop Engine runtime, actors, guards, and adapters.",
+  alternates: {
+    canonical: "https://loopengine.io/docs"
+  },
+  openGraph: {
+    title: "Docs · Loop Engine",
+    description: "Documentation for Loop Engine runtime, actors, guards, and adapters.",
+    url: "https://loopengine.io/docs",
+    images: [
+      {
+        url: "https://loopengine.io/og?title=Docs&section=Documentation",
+        width: 1200,
+        height: 630,
+        alt: "Docs · Loop Engine"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Docs · Loop Engine",
+    description: "Documentation for Loop Engine runtime, actors, guards, and adapters.",
+    images: ["https://loopengine.io/og?title=Docs&section=Documentation"]
+  }
+};
 
 export default function DocsHomePage() {
   return (

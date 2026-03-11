@@ -1,33 +1,95 @@
-## @loop-engine/sdk
+---
+title: "@loop-engine/sdk"
+description: The @loop-engine/sdk package is the recommended entry point - it re-exports everything needed to define, run, and observe loops.
+section: Packages
+---
 
-High-level package for assembling loop execution in application code.
+# @loop-engine/sdk
 
-<PackageCard
-  name="@loop-engine/sdk"
-  description="Engine factory, builder exports, event bus helpers."
-  href="/docs/packages/sdk"
-/>
+Top-level package for building and running loops with default runtime wiring.
 
-## Exports
+## Install
 
-- `createLoopSystem`
-- `LoopBuilder`
-- `createLoopEngine`
-- `InMemoryEventBus`
-- `computeMetrics`, `buildTimeline`
+```bash
+npm install @loop-engine/sdk
+```
+
+## What's included
+
+Direct exports:
+
+- `createLoopSystem(...)` (SDK factory)
+- `createLoopEngine` (from `@loop-engine/runtime`)
+- `LoopBuilder` (from `@loop-engine/dsl`)
+- `guardRegistry` (default guard registry)
+- `createSignalEngine` (from `@loop-engine/signals`)
+- `InMemoryEventBus` (from `@loop-engine/events`)
+- `computeMetrics`, `buildTimeline` (from `@loop-engine/observability`)
+
+Type exports:
+
+- `LoopDefinition`, `LoopInstance`, `TransitionRecord`, `Signal` (from `@loop-engine/core`)
+
+## API reference
+
+### `createLoopSystem`
+
+```ts
+createLoopSystem(options: {
+  loops: LoopDefinition[]
+  store?: LoopStore
+  guards?: GuardRegistry
+  signals?: boolean
+}): {
+  engine: LoopEngine
+  signals?: SignalEngine
+  eventBus: InMemoryEventBus
+}
+```
+
+Creates:
+
+- runtime engine
+- in-memory event bus
+- optional signal engine
+
+Defaults:
+
+- `store` -> `memoryStore()`
+- `guards` -> default registry with built-in guards
 
 ## Example
 
 ```ts
+import { aggregateId, transitionId } from '@loop-engine/core'
 import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
 
-const loop = LoopBuilder.create('demo.loop', 'demo')
+const loop = LoopBuilder
+  .create('demo.loop', 'demo')
   .state('OPEN')
   .state('DONE', { isTerminal: true })
   .initialState('OPEN')
   .transition({ id: 'finish', from: 'OPEN', to: 'DONE', actors: ['human'] })
-  .outcome({ id: 'done', valueUnit: 'done', description: 'Done', measurable: true })
+  .outcome({ id: 'done', description: 'Loop done', valueUnit: 'done' })
   .build()
 
 const { engine } = createLoopSystem({ loops: [loop] })
+
+await engine.start({
+  loopId: 'demo.loop',
+  aggregateId: aggregateId('A-1'),
+  orgId: 'acme',
+  actor: { type: 'system', id: 'system:bootstrap' }
+})
+
+await engine.transition({
+  aggregateId: aggregateId('A-1'),
+  transitionId: transitionId('finish'),
+  actor: { type: 'human', id: 'owner@acme.com' }
+})
 ```
+
+## Related packages
+
+- Depends on runtime, dsl, guards, signals, events, observability, adapter-memory, core.
+- If you need lower-level control, use `@loop-engine/runtime` directly.

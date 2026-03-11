@@ -1,0 +1,54 @@
+# @loop-engine/events
+
+Event contracts, Zod schemas, and in-memory event bus.
+
+## Install
+
+```bash
+npm install @loop-engine/events
+```
+
+## API reference
+
+### `InMemoryEventBus`
+
+```ts
+class InMemoryEventBus {
+  emit(event: LoopEvent): Promise<void>
+  subscribe(handler: (event: LoopEvent) => Promise<void>): () => void
+}
+```
+
+### `LOOP_EVENT_TYPES`
+
+String constants for:
+
+- `loop.started`
+- `loop.transition.requested`
+- `loop.transition.executed`
+- `loop.transition.blocked`
+- `loop.guard.failed`
+- `loop.completed`
+- `loop.error`
+- `loop.spawned`
+- `loop.signal.received`
+- `loop.outcome.recorded`
+
+### `extractLearningSignal`
+
+```ts
+extractLearningSignal(
+  completed: LoopCompletedEvent,
+  history: TransitionRecord[],
+  predicted?: Record<string, unknown>
+): LearningSignal
+```
+
+### Schemas
+
+`LoopEventSchema` and per-event schemas (for runtime validation/parsing).
+
+## Related packages
+
+- Depends on `@loop-engine/core`
+- Used by runtime, sdk, signals, adapters, and ui-devtools

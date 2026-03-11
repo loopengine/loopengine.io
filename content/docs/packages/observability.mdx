@@ -1,0 +1,44 @@
+# @loop-engine/observability
+
+Metrics, timeline, and replay utilities for loop analysis.
+
+## Install
+
+```bash
+npm install @loop-engine/observability
+```
+
+## API reference
+
+### `computeMetrics`
+
+```ts
+computeMetrics(
+  instances: LoopInstance[],
+  history: TransitionRecord[],
+  period: { from: string; to: string }
+): LoopMetrics
+```
+
+### `buildTimeline`
+
+```ts
+buildTimeline(instance: LoopInstance, history: TransitionRecord[]): LoopTimeline
+```
+
+### `getStateResidency`
+
+```ts
+getStateResidency(timeline: LoopTimeline): StateResidency[]
+```
+
+### `replayLoop`
+
+```ts
+replayLoop(definition: LoopDefinition, history: TransitionRecord[]): { valid: boolean; errors: string[] }
+```
+
+## Related packages
+
+- Depends on core
+- Used by sdk and ui-devtools

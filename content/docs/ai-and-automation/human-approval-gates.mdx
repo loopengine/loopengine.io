@@ -1,0 +1,55 @@
+## When to require human approval
+
+Use human gates for:
+
+- high-value financial commitments
+- irreversible actions
+- regulated or compliance-heavy decisions
+
+## Pattern A: exclude `ai-agent` from `allowedActors`
+
+```yaml
+- id: settle_invoice
+  from: MATCHED
+  to: SETTLED
+  allowedActors: [human, automation]
+```
+
+If an AI actor attempts this transition, authorization returns `requiresApproval: true`.
+
+## Pattern B: AI constraints in authorization
+
+`AIActorConstraints` in `@loop-engine/actors`:
+
+```ts
+{
+  canRecommendTransitions: true
+  canExecuteTransitions: boolean
+  requiresHumanApprovalFor: TransitionId[]
+  maxConsecutiveAITransitions: number
+  currentConsecutiveAITransitions?: number
+}
+```
+
+When limits are exceeded, `canActorExecuteTransition()` returns unauthorized with approval required.
+
+## Pending approval sequence
+
+```ts
+const aiAuth = canActorExecuteTransition(aiActor, transition, constraints)
+if (!aiAuth.authorized && aiAuth.requiresApproval) {
+  // Create human review task using ai evidence
+}
+
+// Later, human executes same transition:
+await engine.transition({
+  aggregateId,
+  transitionId,
+  actor: { type: 'human', id: 'approver@acme.com' },
+  evidence: { approved: true, approval_ticket: 'APR-123' }
+})
+```
+
+<Callout variant="important" title="Circuit breaker">
+`maxConsecutiveAITransitions` has no implicit default in source. You set and track it in your application by passing `currentConsecutiveAITransitions` to authorization checks.
+</Callout>

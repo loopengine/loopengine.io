@@ -1,0 +1,37 @@
+# @loop-engine/adapter-postgres
+
+PostgreSQL-backed `LoopStore` adapter surface and schema bootstrap.
+
+## Install
+
+```bash
+npm install @loop-engine/adapter-postgres pg
+```
+
+## API reference
+
+### `createSchema`
+
+```ts
+createSchema(pool: PgPoolLike): Promise<void>
+```
+
+Creates tables:
+
+- `loop_instances`
+- `loop_transitions`
+
+### `postgresStore`
+
+```ts
+postgresStore(pool: PgPoolLike): LoopStore
+```
+
+<Callout variant="warning" title="Implementation status">
+Current `postgresStore` methods are stubs and throw `postgresStore runtime implementation pending`.
+</Callout>
+
+## Related packages
+
+- Depends on core + runtime
+- Peer dependency: `pg@^8.0.0`

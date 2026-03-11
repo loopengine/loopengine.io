@@ -1,0 +1,40 @@
+# @loop-engine/adapter-http
+
+HTTP webhook `EventBus` adapter.
+
+## Install
+
+```bash
+npm install @loop-engine/adapter-http
+```
+
+## API reference
+
+### `httpEventBus`
+
+```ts
+httpEventBus(options: {
+  webhookUrl: string
+  headers?: Record<string, string>
+  retries?: number
+}): EventBus
+```
+
+- `emit()` sends JSON payloads to `webhookUrl`.
+- `subscribe()` throws: `WebhookEventBus does not support subscribe`.
+
+## Usage
+
+```ts
+import { httpEventBus } from '@loop-engine/adapter-http'
+
+const bus = httpEventBus({
+  webhookUrl: 'https://hooks.example.com/loop-events',
+  retries: 3
+})
+```
+
+## Related packages
+
+- Depends on runtime + events
+- Use when external systems only need push delivery

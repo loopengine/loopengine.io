@@ -1,0 +1,42 @@
+# @loop-engine/actors
+
+Actor types, actor constraints, and actor evidence helpers.
+
+## Install
+
+```bash
+npm install @loop-engine/actors
+```
+
+## API reference
+
+### Actor types
+
+- `HumanActor`
+- `AutomationActor`
+- `AIAgentActor`
+- `WebhookActor`
+- `SystemActor`
+- `Actor` union
+- `AIActorSubmission`
+
+### `canActorExecuteTransition`
+
+```ts
+canActorExecuteTransition(
+  actor: Actor,
+  transition: TransitionSpec,
+  constraints?: AIActorConstraints
+): { authorized: boolean; requiresApproval: boolean; reason?: string }
+```
+
+### `buildActorEvidence`
+
+```ts
+buildActorEvidence(actor: Actor, baseEvidence: Evidence): Evidence
+```
+
+## Related packages
+
+- Depends on `@loop-engine/core`
+- Used by runtime, sdk, and application-level approval flows

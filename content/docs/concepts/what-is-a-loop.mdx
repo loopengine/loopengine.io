@@ -1,0 +1,77 @@
+---
+title: What is a Loop?
+description: A loop tracks operational outcomes with named states, attributed actors, and structured feedback - not task completion.
+section: Core Concepts
+---
+
+## The problem
+
+Enterprise AI systems fail when actions are not bounded by explicit state, policy, and traceability.  
+Loop Engine provides finite states, deterministic transition checks, and event traces that make decisions auditable.
+
+## A loop is not a workflow
+
+| | Workflow | Loop |
+|---|---|---|
+| Unit of work | Task | Outcome |
+| State | Implicit | Explicit and named |
+| Actors | Generic user/system | `human` / `automation` / `ai-agent` / `webhook` / `system` |
+| Failure model | Usually generic step errors | Guard failures and attributed rejections |
+| Learning | External or absent | Structured signals and measurable outcomes |
+
+## Anatomy of a loop (`LoopDefinition`)
+
+- `id: LoopId`
+- `version: string`
+- `description: string`
+- `domain: string`
+- `states: StateSpec[]`
+- `initialState: StateId`
+- `transitions: TransitionSpec[]`
+- `outcome: OutcomeSpec`
+- `participants?: string[]`
+- `spawnableLoops?: LoopId[]`
+- `metadata?: Record<string, unknown>`
+
+Use optional fields (`participants`, `spawnableLoops`, `metadata`) only when needed by your platform model.
+
+## Lifecycle (`LoopStatus`)
+
+```text
+OPEN -> IN_PROGRESS -> CLOSED
+OPEN -> IN_PROGRESS -> ERROR
+OPEN -> IN_PROGRESS -> CANCELLED
+```
+
+## Real example (abbreviated from `loops/scm/procurement.yaml`)
+
+```yaml
+id: scm.procurement
+version: 1.0.0
+domain: scm
+description: Purchase order lifecycle from requisition through settlement
+states:
+  - id: OPEN
+  - id: PO_CONFIRMED
+  - id: RECEIVED
+  - id: INVOICE_MATCHED
+  - id: SETTLED
+    isTerminal: true
+initialState: OPEN
+transitions:
+  - id: confirm_po
+    from: OPEN
+    to: PO_CONFIRMED
+    allowedActors: [human, automation, ai-agent]
+    guards:
+      - id: approval_obtained
+        severity: hard
+        evaluatedBy: external
+        description: PO must be approved before confirmation
+        failureMessage: PO confirmation requires explicit approval
+outcome:
+  id: po_settled
+  description: Purchase order fully settled
+  valueUnit: po_settled
+  measurable: true
+```

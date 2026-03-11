@@ -1,0 +1,55 @@
+## Why evidence matters
+
+Evidence is persisted in every `TransitionRecord`.  
+For AI actions, evidence is the audit answer to: _why was this recommendation accepted?_.
+
+## `buildActorEvidence()`
+
+From `@loop-engine/actors`:
+
+```ts
+buildActorEvidence(actor: Actor, baseEvidence: Evidence): Evidence
+```
+
+For all actor types, it merges:
+
+- `actor_type`
+- `actor_id`
+
+For `ai-agent`, it also merges:
+
+- `ai_agent_id`
+- `ai_confidence` (if present in base evidence)
+- `ai_reasoning` (if present in base evidence)
+
+## Confidence policy
+
+Loop Engine stores confidence but does not enforce policy thresholds itself.  
+Implement thresholds in your app layer:
+
+- `>= 0.90`: can auto-execute when authorized
+- `0.70 - 0.89`: execute with review workflow
+- `< 0.70`: recommend only, require human gate
+
+## Reasoning best practices
+
+- include concrete numeric drivers
+- include threshold context
+- keep concise for audit readability
+
+Good:
+
+```text
+Stock 18% below reorder point (82 units). Lead time 12d. Trigger threshold: 95 units.
+```
+
+## Reading AI evidence from history
+
+```ts
+const history = await engine.getHistory(aggregateId)
+
+for (const row of history) {
+  if (row.actor.type !== 'ai-agent') continue
+  console.log(row.evidence.ai_confidence, row.evidence.ai_reasoning)
+}
+```

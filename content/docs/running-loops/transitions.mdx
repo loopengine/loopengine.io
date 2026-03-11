@@ -1,0 +1,63 @@
+## `engine.transition(options)`
+
+Signature:
+
+```ts
+transition(options: {
+  aggregateId: AggregateId
+  transitionId: TransitionId
+  actor: { type: "human" | "automation" | "ai-agent" | "webhook" | "system"; id: string }
+  evidence?: Evidence
+  correlationId?: CorrelationId
+}): Promise<TransitionResult>
+```
+
+## `TransitionResult`
+
+```ts
+{
+  status: "executed" | "guard_failed" | "rejected" | "pending_approval"
+  fromState: StateId
+  toState?: StateId
+  guardFailures?: { guardId: GuardId; message: string; severity: "hard" | "soft" }[]
+  rejectionReason?: string
+  requiresApprovalFrom?: ActorId
+  event?: TransitionExecutedEvent | GuardFailedEvent
+}
+```
+
+## Handle all statuses
+
+```ts
+const result = await engine.transition({
+  aggregateId,
+  transitionId,
+  actor,
+  evidence
+})
+
+switch (result.status) {
+  case 'executed':
+    console.log(result.toState)
+    break
+  case 'guard_failed':
+    console.log(result.guardFailures)
+    break
+  case 'rejected':
+    console.log(result.rejectionReason)
+    break
+  case 'pending_approval':
+    console.log(result.requiresApprovalFrom)
+    break
+}
+```
+
+## Evidence best practices
+
+Evidence is persisted in `TransitionRecord.evidence` and emitted in `loop.transition.executed`.
+
+- Human actions: include user decision context
+- Automation actions: include triggering rule or source
+- AI actions: include `ai_confidence` and `ai_reasoning` (via `buildActorEvidence`)
+
+Use evidence to answer: _why was this action taken?_ without reconstructing from logs.

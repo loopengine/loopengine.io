@@ -1,0 +1,53 @@
+# RFC Process
+
+Significant changes should go through an RFC issue before implementation.
+
+## When an RFC is required
+
+Required (from current contributor policy):
+
+- breaking changes to core types (`@loop-engine/core`)
+
+Strongly recommended:
+
+- breaking event schema changes (`@loop-engine/events`)
+- DSL format changes
+- governance model changes
+- new top-level packages with cross-cutting impact
+
+Not usually required:
+
+- bug fixes
+- new built-in guards or signal rules
+- loop definition additions in `loops/`
+- documentation changes
+
+## Why event schema changes require extra care
+
+<Callout variant="important" title="Downstream risk">
+Event payloads are often consumed by analytics and training pipelines.  
+Unexpected schema changes can corrupt downstream data silently.
+</Callout>
+
+Repository guidance currently states: breaking event schema changes require a 6-month deprecation notice.
+
+## RFC submission flow
+
+1. Open GitHub issue with `[RFC]` in title
+2. Describe:
+   - problem
+   - proposal
+   - alternatives considered
+3. Collect maintainer/community feedback
+4. Land implementation PR linked to the RFC issue
+
+## Deprecation policy
+
+Current documented rule in `CONTRIBUTING.md`:
+
+- breaking event schema changes require 6-month deprecation notice
+
+See the repository governance docs for the current maintainer model and decision process:
+
+- [`GOVERNANCE.md`](https://github.com/loopengine/loop-engine/blob/main/GOVERNANCE.md)
+- [`MAINTAINERS.md`](https://github.com/loopengine/loop-engine/blob/main/MAINTAINERS.md)

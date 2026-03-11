@@ -1,0 +1,59 @@
+## What learning signals are
+
+`LearningSignal` captures predicted vs actual outcome data at loop completion boundaries.
+It is produced by `extractLearningSignal()` in `@loop-engine/events`.
+
+## `LearningSignal` fields
+
+- `loopId`
+- `aggregateId`
+- `outcomeId`
+- `predicted: Record<string, unknown>`
+- `actual: Record<string, unknown>`
+- `delta: Record<string, number>`
+- `occurredAt`
+- `confidence?`
+
+## `extractLearningSignal` signature
+
+```ts
+extractLearningSignal(
+  completed: LoopCompletedEvent,
+  history: TransitionRecord[],
+  predicted?: Record<string, unknown>
+): LearningSignal
+```
+
+Current implementation behavior:
+
+- derives `actual.cycle_time_days` from completion time minus first history timestamp
+- computes numeric deltas where both `predicted[key]` and `actual[key]` are numbers
+- returns empty `delta` when keys do not numerically align
+
+## Business metrics
+
+`BusinessMetric` (from `@loop-engine/core`):
+
+- `id`
+- `label`
+- `unit`
+- `improvableByAI`
+
+Example metrics from `loops/scm/procurement.yaml`:
+
+- `cycle_time_days`
+- `three_way_match_first_attempt`
+- `supplier_lead_time_accuracy`
+
+Marking `improvableByAI: true` identifies metrics appropriate for model optimization loops.
+
+## Feedback cycle
+
+```text
+Loop completes
+  -> extractLearningSignal()
+  -> store signal in training dataset
+  -> retrain/tune model
+  -> deploy improved agent behavior
+  -> faster, safer loop completion
+```

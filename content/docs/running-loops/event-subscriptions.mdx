@@ -1,0 +1,80 @@
+## EventBus subscription model
+
+`InMemoryEventBus` (`@loop-engine/events`) exposes:
+
+```ts
+emit(event: LoopEvent): Promise<void>
+subscribe(handler: (event: LoopEvent) => Promise<void>): () => void
+```
+
+## Event types
+
+- `loop.started`
+- `loop.transition.requested`
+- `loop.transition.executed`
+- `loop.transition.blocked`
+- `loop.guard.failed`
+- `loop.completed`
+- `loop.error`
+- `loop.spawned`
+- `loop.signal.received`
+- `loop.outcome.recorded`
+
+## Subscribe patterns
+
+```ts
+eventBus.subscribe(async (event) => {
+  console.log(event.type, event.aggregateId)
+})
+```
+
+```ts
+eventBus.subscribe(async (event) => {
+  if (event.type === 'loop.completed') {
+    console.log('Closed:', event.outcomeId, `${event.durationMs}ms`)
+  }
+})
+```
+
+```ts
+const unsubscribe = eventBus.subscribe(async (event) => {
+  console.log(event.type)
+})
+
+unsubscribe()
+```
+
+## Audit trail pattern
+
+Persist `loop.transition.executed` payloads and retain:
+
+- actor type/id
+- from/to state
+- evidence
+- timestamp
+
+That yields a complete decision history for compliance and incident review.
+
+## External delivery adapters
+
+### HTTP webhook bus
+
+```ts
+import { httpEventBus } from '@loop-engine/adapter-http'
+
+const bus = httpEventBus({
+  webhookUrl: 'https://your-app.com/loop-events'
+})
+```
+
+### Kafka bus
+
+```ts
+import { kafkaEventBus } from '@loop-engine/adapter-kafka'
+import { Kafka } from 'kafkajs'
+
+const bus = kafkaEventBus({
+  kafka: new Kafka({ brokers: ['localhost:9092'] }),
+  topic: 'loop-events'
+})
+```

@@ -1,29 +1,68 @@
-## createLoopSystem
+---
+title: createLoopSystem
+description: The createLoopSystem factory wires together a LoopEngine, event bus, and optional registry in a single call.
+section: Running Loops
+---
 
-`createLoopSystem` is the easiest way to assemble engine, event bus, and optional signal engine.
+## `createLoopSystem(options)`
 
-<Callout variant="info" title="Default behavior">
-If `store` is not provided, the SDK uses the in-memory adapter.
-</Callout>
+Factory from `@loop-engine/sdk`:
+
+```ts
+createLoopSystem(options: {
+  loops: LoopDefinition[]
+  store?: LoopStore
+  guards?: GuardRegistry
+  signals?: boolean
+}): {
+  engine: LoopEngine
+  eventBus: InMemoryEventBus
+  signals?: SignalEngine
+}
+```
+
+- `loops` is required and becomes the in-memory registry.
+- `store` defaults to `memoryStore()`.
+- `guards` defaults to `defaultRegistry` from `@loop-engine/guards`.
+- `signals: true` adds a default `SignalEngine`.
+
+## Pattern 1: zero-config
 
 ```ts
 import { createLoopSystem } from '@loop-engine/sdk'
 
-const { engine, eventBus } = createLoopSystem({
-  loops: [myLoop]
+const { engine, eventBus } = createLoopSystem({ loops: [definition] })
+```
+
+## Pattern 2: custom store (PostgreSQL adapter)
+
+```ts
+import { createLoopSystem } from '@loop-engine/sdk'
+import { postgresStore } from '@loop-engine/adapter-postgres'
+import { Pool } from 'pg'
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const { engine } = createLoopSystem({
+  loops: [definition],
+  store: postgresStore(pool)
 })
 ```
 
-## Optional dependencies
+<Callout variant="warning" title="Current adapter status">
+`postgresStore()` exports the expected `LoopStore` interface, but runtime methods are currently stubbed and throw `postgresStore runtime implementation pending`.
+</Callout>
 
-You can inject a custom `store` and `guards` registry:
+## Pattern 3: signals enabled
 
 ```ts
-import { createLoopSystem, guardRegistry } from '@loop-engine/sdk'
+import { createLoopSystem } from '@loop-engine/sdk'
 
-const system = createLoopSystem({
-  loops: [myLoop],
-  guards: guardRegistry,
+const { signals } = createLoopSystem({
+  loops: [definition],
   signals: true
+})
+
+signals?.subscribe((signal) => {
+  console.log(signal.type, signal.subject)
 })
 ```

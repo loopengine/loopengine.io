@@ -1,0 +1,63 @@
+---
+title: AI as Actor
+description: AI is one actor among several in Loop Engine - it can recommend and execute transitions within defined bounds, never outside them.
+section: AI and Automation
+---
+
+## AI as an actor, not the controller
+
+Loop Engine treats AI the same way it treats humans and automation: as an attributed actor constrained by transitions and guards.
+
+## What AI can do
+
+- inspect loop state in your application layer
+- recommend transitions with evidence
+- execute transitions where `allowedActors` includes `ai-agent`
+
+## What AI cannot do
+
+- bypass `allowedActors`
+- bypass hard guards
+- modify loop definitions at runtime
+- execute indefinitely if circuit-breaker constraints block it
+
+## `AIAgentActor` shape
+
+```ts
+interface AIAgentActor extends ActorRef {
+  type: "ai-agent"
+  agentId: string
+  gatewaySessionId: string
+  recommendedBy?: string
+}
+```
+
+## AI submission flow
+
+```ts
+import { actorId, transitionId } from '@loop-engine/core'
+import { canActorExecuteTransition, buildActorEvidence, type AIAgentActor } from '@loop-engine/actors'
+
+const agent: AIAgentActor = {
+  type: 'ai-agent',
+  id: actorId('agent:demand-forecaster'),
+  agentId: 'claude-3-5-sonnet',
+  gatewaySessionId: session.id
+}
+
+const auth = canActorExecuteTransition(agent, transition)
+if (auth.authorized) {
+  const evidence = buildActorEvidence(agent, {
+    ai_confidence: 0.94,
+    ai_reasoning: 'Stock level below reorder point; lead time elevated',
+    recommended_qty: 500
+  })
+
+  await engine.transition({
+    aggregateId,
+    transitionId: transitionId('trigger_po'),
+    actor: { type: agent.type, id: String(agent.id) },
+    evidence
+  })
+}
+```

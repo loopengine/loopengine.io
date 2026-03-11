@@ -1,0 +1,32 @@
+# @loop-engine/adapter-kafka
+
+Kafka-backed `EventBus` adapter.
+
+## Install
+
+```bash
+npm install @loop-engine/adapter-kafka kafkajs
+```
+
+## API reference
+
+### `kafkaEventBus`
+
+```ts
+kafkaEventBus(options: {
+  kafka: {
+    producer(): ProducerLike
+    consumer(args: { groupId: string }): ConsumerLike
+  }
+  topic: string
+  groupId?: string
+}): EventBus
+```
+
+- `emit()` publishes JSON event payloads to Kafka.
+- `subscribe()` creates consumer flow and invokes handler per message.
+
+## Related packages
+
+- Depends on runtime + events
+- Peer dependency: `kafkajs@^2.0.0`

@@ -1,0 +1,63 @@
+## `LoopStore` interface
+
+All persistence adapters must implement:
+
+```ts
+getInstance(aggregateId: AggregateId): Promise<LoopInstance | null>
+saveInstance(instance: LoopInstance): Promise<void>
+getTransitionHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
+saveTransitionRecord(record: TransitionRecord): Promise<void>
+listOpenInstances(loopId: LoopId, orgId: string): Promise<LoopInstance[]>
+```
+
+## `@loop-engine/adapter-memory`
+
+```ts
+import { memoryStore } from '@loop-engine/adapter-memory'
+const store = memoryStore()
+```
+
+Use for tests, local development, browser demos.  
+Data resets on process restart.
+
+## `@loop-engine/adapter-postgres`
+
+```ts
+import { postgresStore, createSchema } from '@loop-engine/adapter-postgres'
+import { Pool } from 'pg'
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+await createSchema(pool)
+const store = postgresStore(pool)
+```
+
+Schema creates:
+
+- `loop_instances`
+  - `aggregate_id`, `loop_id`, `org_id`, `current_state`, `status`, `started_at`, `closed_at`, `correlation_id`, `metadata`
+- `loop_transitions`
+  - `id`, `loop_id`, `aggregate_id`, `transition_id`, `from_state`, `to_state`, `actor`, `evidence`, `occurred_at`, `duration_ms`
+
+Peer dependency: `pg@^8.0.0`.
+
+## Event bus adapters
+
+### `@loop-engine/adapter-kafka`
+
+- Provides `kafkaEventBus(...)`
+- Use for streaming and service-to-service fanout
+- Peer dependency: `kafkajs@^2.0.0`
+
+### `@loop-engine/adapter-http`
+
+- Provides `httpEventBus(...)`
+- Use for webhooks and low-friction integrations
+- `subscribe()` is intentionally unsupported (emit-only adapter)
+
+## Build a custom adapter
+
+Implement `LoopStore` exactly and pass it to:
+
+```ts
+createLoopSystem({ loops, store: myStore })
+```

@@ -1,0 +1,101 @@
+# @loop-engine/registry-client
+
+Loop definition registry with local, HTTP, and Better Data adapters.
+
+## Install
+
+```bash
+npm install @loop-engine/registry-client
+```
+
+## The default: local registry
+
+For most use cases, pass loop definitions directly to `createLoopSystem`:
+
+```ts
+import { createLoopSystem } from '@loop-engine/sdk'
+import { procurement, replenishment } from './loops'
+
+const { engine } = await createLoopSystem({
+  loops: [procurement, replenishment]
+})
+```
+
+No external registry is required.
+
+## Loading from a directory
+
+```ts
+import { localRegistry } from '@loop-engine/registry-client'
+import { createLoopSystem } from '@loop-engine/sdk'
+
+const { engine } = await createLoopSystem({
+  loops: [],
+  registry: localRegistry({ loopsDir: './loops' })
+})
+```
+
+Works in Node.js. In browser, use `definitions[]`.
+
+## Loading YAML from disk + inline definitions
+
+```ts
+const registry = localRegistry({
+  loopsDir: './loops',
+  definitions: [customLoop]
+})
+```
+
+Inline definitions are loaded and available alongside file-based definitions.
+
+## HTTP registry (any server)
+
+```ts
+import { httpRegistry } from '@loop-engine/registry-client'
+
+const registry = httpRegistry({
+  baseUrl: 'https://your-registry.example.com',
+  headers: { Authorization: `Bearer ${token}` }
+})
+```
+
+Server contract:
+
+- `GET /loops`
+- `GET /loops?domain={domain}`
+- `GET /loops/{loopId}`
+- `GET /loops/{loopId}/{version}`
+- `POST /loops`
+- `DELETE /loops/{loopId}`
+
+## Better Data platform registry
+
+```ts
+import { betterDataRegistry } from '@loop-engine/registry-client/betterdata'
+
+const registry = betterDataRegistry({
+  apiKey: process.env.BD_API_KEY!,
+  orgId: 'your-org-id'
+})
+```
+
+<Callout variant="info">
+The Better Data platform adapter is not included in the main bundle.
+Import it separately from `@loop-engine/registry-client/betterdata`.
+It requires a Better Data account — see [betterdata.co/docs/loop-registry](https://betterdata.co/docs/loop-registry).
+</Callout>
+
+## LoopRegistry interface
+
+```ts
+import type { LoopRegistry } from '@loop-engine/registry-client'
+
+const myRegistry: LoopRegistry = {
+  get: async (id) => null,
+  getVersion: async (id, version) => null,
+  list: async (options) => [],
+  has: async (id) => false,
+  register: async (definition, options) => {},
+  remove: async (id) => false
+}
+```

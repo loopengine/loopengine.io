@@ -28,9 +28,71 @@ const monoFont = JetBrains_Mono({
   display: "swap",
 });
 
+const BASE_URL = "https://loopengine.io";
+
 export const metadata: Metadata = {
-  title: "Loop Engine",
-  description: "Open runtime for observable, controllable operational loops.",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "Loop Engine",
+    template: "%s · Loop Engine"
+  },
+  description:
+    "Open runtime for constrained, observable, and improvable enterprise operational loops. Apache-2.0 licensed.",
+  keywords: [
+    "loop engine",
+    "enterprise runtime",
+    "state machine",
+    "AI actor",
+    "operational loops",
+    "open source",
+    "TypeScript",
+    "workflow engine"
+  ],
+  authors: [{ name: "Better Data, Inc.", url: "https://betterdata.co" }],
+  creator: "Better Data, Inc.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: BASE_URL,
+    siteName: "Loop Engine",
+    title: "Loop Engine",
+    description:
+      "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+    images: [
+      {
+        url: "/og",
+        width: 1200,
+        height: 630,
+        alt: "Loop Engine — Open Runtime"
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Loop Engine",
+    description:
+      "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+    images: ["/og"],
+    creator: "@loopengineio",
+    site: "@loopengineio"
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1
+    }
+  },
+  icons: {
+    icon: [{ url: "/brand/favicon.svg", type: "image/svg+xml" }]
+  },
+  manifest: "/site.webmanifest",
+  alternates: {
+    canonical: BASE_URL
+  }
 };
 
 export default function RootLayout({

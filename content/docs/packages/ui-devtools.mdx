@@ -1,0 +1,42 @@
+# @loop-engine/ui-devtools
+
+React components for local loop debugging and visualization.
+
+## Install
+
+```bash
+npm install @loop-engine/ui-devtools
+```
+
+Peer dependencies:
+
+- `react` (`^18 || ^19`)
+- `react-dom` (`^18 || ^19`)
+
+## API reference
+
+Exported components:
+
+- `LoopStateBadge`
+- `ActorBadge`
+- `LoopTimeline`
+- `StateDiagram`
+- `EventStream`
+- `MetricsCard`
+- `DevtoolsPanel`
+
+Example:
+
+```tsx
+import { DevtoolsPanel } from '@loop-engine/ui-devtools'
+
+export function Page() {
+  return <DevtoolsPanel apiUrl="http://localhost:3000/api" />
+}
+```
+
+`DevtoolsPanel` returns `null` unless `NODE_ENV === "development"`.
+
+## Related packages
+
+- Depends on core, events, observability

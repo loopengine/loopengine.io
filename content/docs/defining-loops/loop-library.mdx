@@ -1,0 +1,67 @@
+## Canonical loop definitions
+
+Loop Engine currently ships these canonical definitions from `loops/`:
+
+| Loop ID | Domain | States | Terminal states | Business metrics |
+|---|---|---:|---:|---:|
+| `scm.procurement` | `scm` | 8 | 2 | 3 |
+| `scm.replenishment` | `scm` | 5 | 2 | 2 |
+| `crm.lead_qualification` | `crm` | 6 | 2 | 2 |
+| `finance.invoice_collection` | `finance` | 6 | 2 | 2 |
+| `support.ticket_resolution` | `support` | 6 | 2 | 2 |
+| `erp.purchase_approval` | `erp` | 6 | 2 | 2 |
+
+## Featured definition: `scm.procurement`
+
+```yaml
+id: scm.procurement
+version: 1.0.0
+domain: scm
+description: >
+  Purchase order lifecycle from requisition through receipt and settlement.
+states:
+  - id: OPEN
+  - id: PO_CONFIRMED
+  - id: RECEIPT_SCHEDULED
+  - id: RECEIVED
+  - id: INVOICE_MATCHED
+  - id: SETTLED
+    isTerminal: true
+  - id: CANCELLED
+    isTerminal: true
+  - id: DISPUTED
+    isError: true
+initialState: OPEN
+transitions:
+  - id: confirm_po
+    from: OPEN
+    to: PO_CONFIRMED
+    allowedActors: [human, automation, ai-agent]
+outcome:
+  id: po_settled
+  description: Purchase order fully settled with matched invoice and inventory updated
+  valueUnit: po_settled
+  measurable: true
+```
+
+Raw files:
+
+- [procurement.yaml](https://github.com/loopengine/loop-engine/blob/main/loops/scm/procurement.yaml)
+- [replenishment.yaml](https://github.com/loopengine/loop-engine/blob/main/loops/scm/replenishment.yaml)
+- [lead-qualification.yaml](https://github.com/loopengine/loop-engine/blob/main/loops/crm/lead-qualification.yaml)
+
+## Contributing a loop definition
+
+- Add YAML under `loops/{domain}/{name}.yaml`
+- Validate with `pnpm validate-loops`
+- Include a concrete `outcome`
+- Add `businessMetrics` when measurable
+- Prefer at least one non-human actor option (`automation`, `system`, or `ai-agent`) where domain-appropriate
+
+See [Contributing](/docs/governance/contributing) for full workflow.
+
+## Naming conventions
+
+- Loop ID: `{domain}.{noun}` (for example `scm.procurement`)
+- State IDs: `SCREAMING_SNAKE_CASE`
+- Transition IDs: `snake_case` verbs (for example `confirm_po`, `receive_goods`)

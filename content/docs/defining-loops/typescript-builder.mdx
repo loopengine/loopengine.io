@@ -1,0 +1,75 @@
+## `LoopBuilder` API (`@loop-engine/dsl`)
+
+`LoopBuilder` is a fluent authoring API that validates on `.build()`.
+
+### Signatures
+
+```ts
+LoopBuilder.create(id: string, domain: string): LoopBuilder
+version(v: string): LoopBuilder
+description(d: string): LoopBuilder
+state(id: string, options?: { isTerminal?: boolean; isError?: boolean }): LoopBuilder
+initialState(id: string): LoopBuilder
+transition(spec: {
+  id: string
+  from: string
+  to: string
+  actors: ActorType[]
+  guards?: Partial<GuardSpec>[]
+}): LoopBuilder
+outcome(spec: {
+  id?: string
+  description?: string
+  valueUnit?: string
+  measurable?: boolean
+  businessMetrics?: Array<{ id: string; label: string; unit: string; improvableByAI: boolean }>
+}): LoopBuilder
+build(): LoopDefinition
+```
+
+### Runtime behavior notes
+
+- `.transition()` throws if `actors` is empty.
+- `.build()` throws if outcome is missing.
+- `.build()` validates via `validateLoopDefinition()`.
+
+## Example: procurement-style loop in TypeScript
+
+```ts
+import { LoopBuilder } from '@loop-engine/dsl'
+
+const procurement = LoopBuilder
+  .create('scm.procurement', 'scm')
+  .version('1.0.0')
+  .description('Purchase order lifecycle through settlement')
+  .state('OPEN')
+  .state('PO_CONFIRMED')
+  .state('RECEIVED')
+  .state('INVOICE_MATCHED')
+  .state('SETTLED', { isTerminal: true })
+  .initialState('OPEN')
+  .transition({
+    id: 'confirm_po',
+    from: 'OPEN',
+    to: 'PO_CONFIRMED',
+    actors: ['human', 'automation', 'ai-agent'],
+    guards: [
+      {
+        id: 'approval_obtained',
+        severity: 'hard',
+        evaluatedBy: 'external',
+        description: 'PO must be approved',
+        failureMessage: 'PO confirmation requires explicit approval'
+      }
+    ]
+  })
+  .outcome({
+    id: 'po_settled',
+    description: 'Purchase order settled',
+    valueUnit: 'po_settled',
+    measurable: true
+  })
+  .build()
+```
+
+Use YAML when loop definitions are owned by ops/product teams; use builder when you prefer type-guided code review and composition.

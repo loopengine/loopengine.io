@@ -1,0 +1,32 @@
+# @loop-engine/core
+
+Domain model types for Loop Engine and branded ID helpers.
+
+## Install
+
+```bash
+npm install @loop-engine/core
+```
+
+## Overview
+
+Use this package when you need shared type contracts without pulling runtime code.
+It has zero runtime dependencies.
+
+## API reference
+
+Core exports include:
+
+- branded types: `LoopId`, `StateId`, `TransitionId`, `AggregateId`, `ActorId`, `GuardId`, `SignalId`, `OutcomeId`, `CorrelationId`
+- helper constructors: `loopId()`, `stateId()`, `transitionId()`, `aggregateId()`, `actorId()`, `guardId()`, `signalId()`, `outcomeId()`, `correlationId()`
+- domain interfaces: `LoopDefinition`, `StateSpec`, `TransitionSpec`, `GuardSpec`, `OutcomeSpec`, `BusinessMetric`, `LoopInstance`, `TransitionRecord`, `Signal`
+
+Example:
+
+```ts
+import { aggregateId, transitionId, type LoopDefinition } from '@loop-engine/core'
+```
+
+## Related packages
+
+- Used by every other `@loop-engine/*` package.

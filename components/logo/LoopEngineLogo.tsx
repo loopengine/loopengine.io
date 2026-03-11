@@ -196,7 +196,7 @@ export function LoopEngineLogo({
               color: "var(--color-ink-tertiary)",
             }}
           >
-            Open Runtime · MIT Licensed
+            Open Runtime · Apache-2.0
           </span>
         ) : null}
       </div>

@@ -1,0 +1,88 @@
+## Built-in guard reference
+
+All built-ins are in `packages/guards/src/built-in/*` and are registered by default in `defaultRegistry`.
+
+### `actor_has_permission`
+
+- Evaluated by: `runtime`
+- Implementation: checks `evidence.required_role` against `evidence.roles`
+- Failure message: `Missing actor roles in evidence` or `Actor missing required role: <role>`
+
+Required evidence fields:
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `required_role` | `string` | conditional | role to require |
+| `roles` | `unknown[]` | conditional | actor role set |
+
+### `approval_obtained`
+
+- Evaluated by: `runtime`
+- Check: `evidence.approved === true`
+- Failure message: `Approval not obtained`
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `approved` | `boolean` | yes | explicit approval flag |
+
+### `deadline_not_exceeded`
+
+- Evaluated by: `runtime`
+- Check: current time before `Date.parse(evidence.deadline_iso)`
+- Failures: `Invalid deadline format` or `Deadline exceeded`
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `deadline_iso` | `string` | conditional | ISO deadline timestamp |
+
+### `duplicate_check_passed`
+
+- Evaluated by: `runtime`
+- Check: `evidence.duplicate_found !== true`
+- Failure message: `Duplicate detected`
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `duplicate_found` | `boolean` | conditional | duplicate marker |
+
+### `field_value_constraint`
+
+- Evaluated by: `runtime`
+- Reads `evidence.constraint`:
+  - `field`
+  - `operator: "eq" | "gt" | "lt" | "in"`
+  - `value`
+- Failure message: `Field constraint failed for <field>`
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `constraint` | object | yes | rule descriptor |
+| `<constraint.field>` | unknown | yes | value to compare |
+
+## Loop definition usage
+
+```yaml
+guards:
+  - id: approval_obtained
+    severity: hard
+    evaluatedBy: runtime
+    description: Approval must be present
+    failureMessage: Approval not obtained
+```
+
+## Failure behavior
+
+- Hard guard failure returns `TransitionResult.status: "guard_failed"`
+- Runtime emits `loop.guard.failed`
+- State does not advance
+- Soft guard failures are preserved under `_softGuardWarnings` in transition evidence
+
+## Writing custom guards
+
+Use `GuardFunction` from `@loop-engine/guards`:
+
+```ts
+type GuardFunction = (context: GuardContext) => Promise<GuardResult>
+```
+
+See [Guards and Policy](/docs/concepts/guards-and-policy) for full custom registry setup.

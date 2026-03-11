@@ -40,9 +40,61 @@ export default function Home() {
 
 async function HomeContent({ architecture }: { architecture: string[] }) {
   const stars = await getGitHubStars();
+  const homeJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://loopengine.io/#website",
+        url: "https://loopengine.io",
+        name: "Loop Engine",
+        description:
+          "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+        publisher: { "@id": "https://loopengine.io/#org" }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://loopengine.io/#org",
+        name: "Better Data, Inc.",
+        url: "https://betterdata.co",
+        sameAs: [
+          "https://github.com/loopengine",
+          "https://npmjs.com/org/loop-engine",
+          "https://x.com/loopengineio"
+        ]
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://loopengine.io/#software",
+        name: "Loop Engine",
+        applicationCategory: "DeveloperApplication",
+        applicationSubCategory: "Runtime Library",
+        operatingSystem: "Node.js 18+",
+        url: "https://loopengine.io",
+        downloadUrl: "https://npmjs.com/package/@loop-engine/sdk",
+        softwareVersion: "0.1.0",
+        description:
+          "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+        license: "https://www.apache.org/licenses/LICENSE-2.0",
+        author: { "@id": "https://loopengine.io/#org" },
+        offers: {
+          "@type": "Offer",
+          price: "0",
+          priceCurrency: "USD"
+        },
+        codeRepository: "https://github.com/loopengine/loop-engine",
+        programmingLanguage: "TypeScript",
+        keywords: "runtime, state machine, workflow, AI actor, enterprise, TypeScript, open source"
+      }
+    ]
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeJsonLd) }}
+      />
       <section
         className="relative overflow-hidden"
         style={{
@@ -70,7 +122,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                   color: "var(--color-primary)"
                 }}
               >
-                Open Infrastructure · MIT Licensed
+                Open Infrastructure · Apache-2.0
               </span>
             </p>
             <h1
@@ -292,7 +344,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
           <a href="https://betterdata.co" rel="noreferrer" target="_blank" style={{ color: "var(--color-primary)" }}>
             Better Data
           </a>
-          <span>· MIT Licensed ·</span>
+          <span>· Apache-2.0 ·</span>
           <a href="https://github.com/loopengine/loop-engine" rel="noreferrer" target="_blank">
             ★ {stars}
           </a>

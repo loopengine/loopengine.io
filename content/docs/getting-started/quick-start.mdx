@@ -1,6 +1,14 @@
-## Install the SDK
+---
+title: Quick Start
+description: Install @loop-engine/sdk, define a loop, and run it in under 5 minutes.
+section: Getting Started
+---
 
-Use npm, pnpm, or yarn to install the package:
+## Prerequisites
+
+Node.js 18+ and npm or pnpm.
+
+## Install
 
 ```bash
 npm install @loop-engine/sdk
@@ -11,38 +19,85 @@ npm install @loop-engine/sdk
 ```ts
 import { LoopBuilder } from '@loop-engine/sdk'
 
-const loop = LoopBuilder
+const approval = LoopBuilder
   .create('expense.approval', 'finance')
+  .description('Expense report approval')
   .state('SUBMITTED')
+  .state('UNDER_REVIEW')
   .state('APPROVED', { isTerminal: true })
+  .state('REJECTED', { isTerminal: true })
   .initialState('SUBMITTED')
-  .transition({ id: 'approve', from: 'SUBMITTED', to: 'APPROVED', actors: ['human'] })
-  .outcome({ id: 'expense_approved', valueUnit: 'expense_approved', description: 'Expense approved', measurable: true })
+  .transition({
+    id: 'start_review',
+    from: 'SUBMITTED',
+    to: 'UNDER_REVIEW',
+    actors: ['automation']
+  })
+  .transition({
+    id: 'approve',
+    from: 'UNDER_REVIEW',
+    to: 'APPROVED',
+    actors: ['human']
+  })
+  .transition({
+    id: 'reject',
+    from: 'UNDER_REVIEW',
+    to: 'REJECTED',
+    actors: ['human']
+  })
+  .outcome({
+    id: 'expense_approved',
+    description: 'Expense report approved',
+    valueUnit: 'expense_approved'
+  })
   .build()
 ```
 
-## Run and subscribe
+## Run it
 
 ```ts
 import { aggregateId, transitionId } from '@loop-engine/core'
 import { createLoopSystem } from '@loop-engine/sdk'
 
-const { engine, eventBus } = createLoopSystem({ loops: [loop] })
-
-eventBus.subscribe(async (event) => {
-  console.log(event.type)
-})
+const { engine, eventBus } = createLoopSystem({ loops: [approval] })
+eventBus.subscribe(async (event) => console.log(event.type))
 
 await engine.start({
   loopId: 'expense.approval',
-  aggregateId: aggregateId('EXP-001'),
+  aggregateId: aggregateId('EXP-2026-001'),
   orgId: 'acme',
   actor: { type: 'system', id: 'system:intake' }
 })
 
 await engine.transition({
-  aggregateId: aggregateId('EXP-001'),
-  transitionId: transitionId('approve'),
-  actor: { type: 'human', id: 'manager@acme.com' }
+  aggregateId: aggregateId('EXP-2026-001'),
+  transitionId: transitionId('start_review'),
+  actor: { type: 'automation', id: 'system:router' }
 })
+
+await engine.transition({
+  aggregateId: aggregateId('EXP-2026-001'),
+  transitionId: transitionId('approve'),
+  actor: { type: 'human', id: 'manager@acme.com' },
+  evidence: { comment: 'Approved for Q1 budget' }
+})
+
+const state = await engine.getState(aggregateId('EXP-2026-001'))
+console.log(state?.currentState) // APPROVED
+console.log(state?.status)       // CLOSED
 ```
+
+## What just happened
+
+<Callout variant="info" title="Execution summary">
+- The loop moved through 3 states (`SUBMITTED -> UNDER_REVIEW -> APPROVED`)
+- 3 actor types were used (`system`, `automation`, `human`)
+- Each successful transition emitted `loop.transition.executed`
+- Reaching a terminal state sets loop status to `CLOSED`
+</Callout>
+
+## Next steps
+
+- [Installation](/docs/getting-started/installation)
+- [Your First Loop](/docs/getting-started/your-first-loop)
+- [Core Concepts](/docs/concepts/what-is-a-loop)

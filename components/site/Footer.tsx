@@ -37,8 +37,8 @@ export function Footer() {
           </p>
         </div>
         <div className="text-sm">
-          <p className="mono">MIT Licensed</p>
-          <p className="mt-2">Permission is hereby granted, free of charge, to any person obtaining a copy.</p>
+          <p className="mono">Apache-2.0 Licensed</p>
+          <p className="mt-2">Open source under the Apache License 2.0.</p>
           <p className="mt-2">
             <a href="https://github.com/loopengine/loop-engine/blob/main/LICENSE" rel="noreferrer" target="_blank">
               View LICENSE

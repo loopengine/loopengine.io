@@ -1,0 +1,70 @@
+## Install @loop-engine/sdk
+
+```bash
+npm install @loop-engine/sdk
+```
+
+```bash
+pnpm add @loop-engine/sdk
+```
+
+```bash
+yarn add @loop-engine/sdk
+```
+
+## TypeScript configuration
+
+Use at least:
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "moduleResolution": "bundler",
+    "strict": true
+  }
+}
+```
+
+`moduleResolution: "node16"` also works.
+
+## Install packages individually
+
+If you do not want the SDK aggregate package, install only what you need:
+
+- `@loop-engine/core` - domain model types and branded IDs
+- `@loop-engine/dsl` - `LoopBuilder`, parser, schema validation
+- `@loop-engine/runtime` - `LoopEngine` and runtime interfaces
+- `@loop-engine/events` - event types, schemas, and `InMemoryEventBus`
+- `@loop-engine/guards` - guard registry and built-in guards
+- `@loop-engine/actors` - actor types, constraints, evidence helpers
+- `@loop-engine/signals` - signal engine and built-in rules
+- `@loop-engine/observability` - metrics, timelines, replay
+- `@loop-engine/registry-client` - remote/local loop registry client
+- `@loop-engine/ui-devtools` - React devtools components
+- `@loop-engine/adapter-memory` - in-memory `LoopStore`
+- `@loop-engine/adapter-postgres` - PostgreSQL `LoopStore` adapter
+- `@loop-engine/adapter-kafka` - Kafka `EventBus` adapter
+- `@loop-engine/adapter-http` - HTTP webhook `EventBus` adapter
+
+## Runtime requirements
+
+- Node.js 18+ is required.
+
+## Browser support
+
+Works in browser:
+
+- `@loop-engine/core`
+- `@loop-engine/dsl`
+- `@loop-engine/events`
+- `@loop-engine/actors`
+- `@loop-engine/guards`
+- `@loop-engine/observability`
+- `@loop-engine/signals`
+- `@loop-engine/adapter-memory`
+
+Notes:
+
+- `@loop-engine/runtime` needs a `LoopStore` implementation.
+- `@loop-engine/adapter-postgres` and `@loop-engine/adapter-kafka` are server-side adapters.

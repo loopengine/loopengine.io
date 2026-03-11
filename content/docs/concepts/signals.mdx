@@ -1,0 +1,68 @@
+## What signals are
+
+Signals are detected patterns derived from loop events.  
+A `SignalRule` evaluates event streams and returns a detection result when matched.
+
+## `SignalRule` anatomy
+
+```ts
+interface SignalRule {
+  id: string
+  name: string
+  description: string
+  targetLoopId?: LoopId
+  evaluate: (events: LoopEvent[]) => SignalDetectionResult | null
+}
+```
+
+## Built-in signal rules
+
+### `threshold-breach`
+
+- Signal type: `THRESHOLD_BREACH`
+- Detects numeric evidence crossing configured threshold
+- Config: `field`, `operator`, `threshold`
+
+### `state-dwell`
+
+- Signal type: `STATE_DWELL_EXCEEDED`
+- Detects prolonged dwell in a target state
+- Config: `state`, `maxDwellMinutes`
+
+### `repeated-guard-failure`
+
+- Signal type: `GUARD_FAILURE_PATTERN`
+- Detects repeated `loop.guard.failed` events for one guard ID
+- Config: `guardId`, `maxFailures`
+
+### `loop-not-started`
+
+- Signal type: `LOOP_TRIGGER_DELAYED`
+- Detects when a signal is received but no loop started in time window
+- Config: `maxDelayMinutes`
+
+## Create a signal engine
+
+```ts
+import { createSignalEngine } from '@loop-engine/sdk'
+
+const signals = createSignalEngine()
+signals.subscribe((signal) => {
+  console.log(signal.type, signal.subject, signal.confidence)
+})
+```
+
+## Connect signal detection to loop creation
+
+```ts
+signals.subscribe(async (signal) => {
+  if (signal.type !== 'THRESHOLD_BREACH') return
+  await engine.start({
+    loopId: 'scm.replenishment',
+    aggregateId: aggregateId(`repl-${Date.now()}`),
+    orgId: 'acme',
+    actor: { type: 'system', id: 'system:signal-router' },
+    metadata: { triggeredBy: signal.id }
+  })
+})
+```

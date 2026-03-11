@@ -1,0 +1,16 @@
+{
+  "name": "Loop Engine",
+  "short_name": "Loop Engine",
+  "description": "Open runtime for enterprise operational loops",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0A0F1E",
+  "theme_color": "#2563EB",
+  "icons": [
+    {
+      "src": "/brand/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

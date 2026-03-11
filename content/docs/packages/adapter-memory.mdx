@@ -1,0 +1,40 @@
+# @loop-engine/adapter-memory
+
+In-memory `LoopStore` implementation for development and tests.
+
+## Install
+
+```bash
+npm install @loop-engine/adapter-memory
+```
+
+## API reference
+
+### `MemoryStore`
+
+```ts
+class MemoryStore implements LoopStore
+```
+
+### `memoryStore`
+
+```ts
+memoryStore(): LoopStore
+```
+
+## Usage
+
+```ts
+import { createLoopSystem } from '@loop-engine/sdk'
+import { memoryStore } from '@loop-engine/adapter-memory'
+
+const { engine } = createLoopSystem({
+  loops,
+  store: memoryStore()
+})
+```
+
+## Related packages
+
+- Depends on core + runtime
+- Default store used by sdk when no store is provided
