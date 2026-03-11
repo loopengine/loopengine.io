@@ -1,0 +1,19 @@
+<svg width="260" height="44" viewBox="0 0 260 44" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Loop Engine logo">
+  <defs>
+    <marker id="arrow-light" markerWidth="4" markerHeight="4" refX="2.8" refY="2" orient="auto">
+      <path d="M0,0 L0,4 L3.6,2 Z" fill="#2563EB"/>
+    </marker>
+  </defs>
+  <g transform="translate(4 4)">
+    <line x1="10" y1="4" x2="22" y2="4" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-light)"/>
+    <line x1="28" y1="10" x2="28" y2="22" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-light)"/>
+    <line x1="22" y1="28" x2="10" y2="28" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-light)"/>
+    <line x1="4" y1="22" x2="4" y2="10" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-light)"/>
+    <circle cx="4" cy="4" r="3" fill="#2563EB"/>
+    <circle cx="28" cy="4" r="3" fill="#2563EB"/>
+    <circle cx="28" cy="28" r="3" fill="#2563EB"/>
+    <circle cx="4" cy="28" r="3" fill="#2563EB"/>
+  </g>
+  <text x="52" y="29" fill="#0A0F1E" font-family="'DM Serif Display', Georgia, serif" font-size="24" font-weight="700" letter-spacing="-0.5">Loop Engine</text>
+  <text x="193" y="18" fill="#94A3B8" font-family="'JetBrains Mono', monospace" font-size="10">TM</text>
+</svg>

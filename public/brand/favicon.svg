@@ -1,0 +1,15 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-favicon" markerWidth="3.2" markerHeight="3.2" refX="2.2" refY="1.6" orient="auto">
+      <path d="M0,0 L0,3.2 L3,1.6 Z" fill="#2563EB"/>
+    </marker>
+  </defs>
+  <line x1="9.8" y1="6.4" x2="22.2" y2="6.4" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-favicon)"/>
+  <line x1="25.6" y1="9.8" x2="25.6" y2="22.2" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-favicon)"/>
+  <line x1="22.2" y1="25.6" x2="9.8" y2="25.6" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-favicon)"/>
+  <line x1="6.4" y1="22.2" x2="6.4" y2="9.8" stroke="#2563EB" stroke-width="2" marker-end="url(#arrow-favicon)"/>
+  <circle cx="6.4" cy="6.4" r="2.7" fill="#2563EB"/>
+  <circle cx="25.6" cy="6.4" r="2.7" fill="#2563EB"/>
+  <circle cx="25.6" cy="25.6" r="2.7" fill="#2563EB"/>
+  <circle cx="6.4" cy="25.6" r="2.7" fill="#2563EB"/>
+</svg>

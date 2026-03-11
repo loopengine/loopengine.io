@@ -1,0 +1,80 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  --font-display: var(--font-display-next), "DM Serif Display", "Fraunces", Georgia, serif;
+  --font-body: var(--font-body-next), "DM Sans", "Instrument Sans", system-ui, sans-serif;
+  --font-mono: var(--font-mono-next), "JetBrains Mono", "IBM Plex Mono", "Fira Code", monospace;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink-secondary);
+  background: var(--color-surface-alt);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  color: var(--color-ink);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-mono);
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.le-logo-arrow {
+  fill: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .le-logo-node {
+    opacity: 0;
+    animation: le-node-fade 220ms var(--ease-out) forwards;
+  }
+
+  .le-logo-arrow {
+    animation: le-arrow-draw 360ms var(--ease-out) forwards;
+  }
+}
+
+@keyframes le-node-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes le-arrow-draw {
+  from {
+    stroke-dashoffset: var(--dash);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
