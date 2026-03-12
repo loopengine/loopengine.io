@@ -1,0 +1,92 @@
+---
+title: LLM Commerce Gateway Integration
+description: Connect Loop Engine to LLM Commerce Gateway so AI reads live commerce data while Loop Engine enforces approval before writes.
+section: Examples
+---
+
+## Overview
+
+LLM Commerce Gateway exposes inventory, pricing, suppliers, and order operations as structured tool interfaces for LLM-driven workflows. Loop Engine governs the workflow state around those tools so recommendations and actions happen through explicit transitions.
+
+The boundary is strict: Commerce Gateway handles commerce data access and operation execution, while Loop Engine handles state, actor attribution, guard enforcement, approval gates, and audit records.
+
+## Architecture
+
+```text
+Demand Spike Signal
+       |
+       v
+Loop Engine -------------------- engine.start('procurement.loop')
+       |                        state: GATEWAY_QUERY
+       |
+       v
+AI Actor ----------------------- GET /inventory/:sku
+       |                        GET /demand-forecast/:sku      Commerce
+       |                        GET /suppliers/:sku      ----> Gateway API
+       |                        (read only)
+       |
+       v
+Loop Engine -------------------- guard: confidence_threshold >= 0.80
+       |                        state: PENDING_APPROVAL
+       |
+       v
+Human Approves ----------------- engine.transition('approve_order', humanActor)
+       |
+       v
+Automation Actor --------------- POST /purchase-orders          Commerce
+       |                        (write post-approval only) ---> Gateway API
+       |
+       v
+Loop Engine -------------------- transition('place_order') -> engine.close(outcome: 'po_created')
+```
+
+## Three governed workflows
+
+| Loop | Trigger | AI queries | Guard | Write operation |
+|------|---------|------------|-------|-----------------|
+| Procurement | Demand spike / low stock | Inventory, forecast, suppliers | confidence >= 0.80 + human approval | createPurchaseOrder |
+| Price change | Competitor price, margin alert | Price history, demand elasticity | confidence >= 0.85 + human approval | updatePrice |
+| Inventory adjustment | Expiry, damage, shrink | Current lots, expiry dates | human approval | writeDownInventory |
+
+## Using @loop-engine/adapter-commerce-gateway
+
+```ts
+import { createLoopSystem } from '@loop-engine/sdk'
+import { CommerceGatewayClient, buildProcurementActor } from '@loop-engine/adapter-commerce-gateway'
+
+const gatewayClient = new CommerceGatewayClient({
+  baseUrl: process.env.COMMERCE_GATEWAY_URL!,
+  apiKey: process.env.COMMERCE_GATEWAY_API_KEY!
+})
+
+const procurementActor = buildProcurementActor({
+  gatewayClient,
+  llmProvider: 'claude', // switch to 'openai' for GPT-4o
+  apiKey: process.env.ANTHROPIC_API_KEY!,
+  confidenceThreshold: 0.8
+})
+
+const { engine } = await createLoopSystem({ loops: [procurementLoop] })
+const evidence = await procurementActor({ instance: { data: { sku: 'LMB-BRS-001' } } })
+```
+
+## The governance boundary
+
+Commerce Gateway owns structured commerce data and operation APIs. It executes reads and writes for inventory, demand, suppliers, pricing, and orders.
+
+Loop Engine owns workflow progression, actor attribution, guard outcomes, human approval transitions, transition history, and learning feedback from outcomes.
+
+## Full procurement walkthrough
+
+1. `DEMAND_SPIKE` starts `procurement.loop` and moves to `GATEWAY_QUERY`.
+2. AI actor reads `inventory`, `demand-forecast`, and `suppliers` from Commerce Gateway.
+3. LLM emits recommendation evidence (`recommendedQty`, `supplierId`, `confidence`, `rationale`).
+4. `confidence_threshold` passes and loop moves to `PENDING_APPROVAL`.
+5. Human approves; automation actor calls `createPurchaseOrder`; loop executes `place_order` and closes with `po_created`.
+
+## Resources
+
+- [`@loop-engine/adapter-commerce-gateway`](/docs/packages/adapter-commerce-gateway)
+- [commerce-gateway-example source](https://github.com/loopengine/loop-examples/tree/main/commerce-gateway-skill)
+- [LLM Commerce Gateway](https://commercegateway.io)
+- [Commerce Gateway docs](https://commercegateway.io/docs)

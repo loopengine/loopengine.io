@@ -1,0 +1,86 @@
+---
+title: "@loop-engine/adapter-commerce-gateway"
+description: LLM Commerce Gateway adapter that builds governed AI actors from live commerce data while keeping writes behind approval transitions.
+section: Packages
+---
+
+## Install
+
+```bash
+npm install @loop-engine/adapter-commerce-gateway
+```
+
+Install one LLM SDK based on provider choice:
+
+```bash
+npm install @anthropic-ai/sdk
+# or
+npm install openai
+```
+
+## Prerequisites
+
+- `COMMERCE_GATEWAY_URL`
+- `COMMERCE_GATEWAY_API_KEY`
+
+## CommerceGatewayClient
+
+```ts
+const client = new CommerceGatewayClient({
+  baseUrl: process.env.COMMERCE_GATEWAY_URL!,
+  apiKey: process.env.COMMERCE_GATEWAY_API_KEY!
+})
+```
+
+Methods:
+
+- `getInventory(sku)`
+- `getInventoryBatch(skus)`
+- `getDemandForecast(sku, horizon?)`
+- `getSuppliers(sku)`
+- `getCurrentPrice(sku)`
+- `getPriceHistory(sku, days)`
+- `createPurchaseOrder(order)` (write operation; post-approval only)
+- `recordLoopOutcome(outcome)` (optional endpoint support by deployment)
+
+## buildProcurementActor
+
+```ts
+const actor = buildProcurementActor({
+  gatewayClient: client,
+  llmProvider: 'openai',
+  apiKey: process.env.OPENAI_API_KEY!,
+  confidenceThreshold: 0.8
+})
+```
+
+Returns `async (context) => Evidence`, where `context.instance.data.sku` drives Gateway queries and the actor returns evidence for a guarded transition.
+
+## Evidence shape
+
+```ts
+type ProcurementEvidence = {
+  recommendedSku: string
+  recommendedQty: number
+  estimatedCost: number
+  supplierId: string
+  confidence: number
+  rationale: string
+  gatewayRequestIds: string[]
+  modelUsed: string
+  timestamp: string
+  _confidence: number
+}
+```
+
+## Read vs write boundary
+
+AI actor functions in this package call read endpoints only. Order creation stays in automation flows after a human approval transition passes guard checks.
+
+## buildPricingActor
+
+<Callout variant="warning">Coming in v0.2: `buildPricingActor` currently throws a pending implementation error.</Callout>
+
+## Related example
+
+See [LLM Commerce Gateway Integration](/docs/examples/commerce-gateway) for the end-to-end procurement flow.
