@@ -92,6 +92,14 @@ export const docsSections: DocsNavSection[] = [
     ]
   },
   {
+    label: "Integrations",
+    items: [
+      { title: "OpenClaw", href: "/docs/examples/openclaw" },
+      { title: "Vercel AI SDK", href: "/docs/integrations/vercel-ai" },
+      { title: "PagerDuty", href: "/docs/integrations/pagerduty" }
+    ]
+  },
+  {
     label: "Governance",
     items: [
       { title: "License", href: "/docs/governance/license" },

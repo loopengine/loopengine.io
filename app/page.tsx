@@ -15,6 +15,70 @@ const packages = [
   { name: "@loop-engine/observability", slug: "observability", description: "Metrics, timelines, replay." }
 ];
 
+type IntegrationCard = {
+  name: string;
+  badge: string;
+  description: string;
+  capabilities?: string[];
+  docsHref?: string;
+  npmHref?: string;
+  npmLabel?: string;
+  featured?: boolean;
+};
+
+const integrations: IntegrationCard[] = [
+  {
+    name: "OpenClaw",
+    badge: "Featured Integration",
+    description:
+      "OpenClaw is the agent that acts. Loop Engine is the runtime that governs what it's allowed to do.",
+    capabilities: [
+      "Wrap OpenClaw skills with hard approval gates - structural, not prompt-based",
+      "Route PENDING_HUMAN_APPROVAL events to WhatsApp, Telegram, Slack, or Discord"
+    ],
+    docsHref: "/docs/examples/openclaw",
+    npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-openclaw",
+    npmLabel: "@loop-engine/adapter-openclaw",
+    featured: true
+  },
+  {
+    name: "Vercel AI SDK",
+    badge: "Live Integration",
+    description:
+      "Wrap any Vercel AI SDK tool call with structural approval gates and audit trails. Drop-in compatible with useChat and streamText.",
+    capabilities: [
+      "requiresApproval() gate - structural, not prompt-based, cannot be injected away",
+      "Full transition audit trail on every tool call, pass or approve"
+    ],
+    docsHref: "/docs/integrations/vercel-ai",
+    npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-vercel-ai",
+    npmLabel: "@loop-engine/adapter-vercel-ai"
+  },
+  {
+    name: "PagerDuty",
+    badge: "Live Integration",
+    description:
+      "AI agent actions page your on-call engineer. No new approval UI - your team already lives in PagerDuty.",
+    capabilities: [
+      "PENDING_HUMAN_APPROVAL triggers a PagerDuty incident with full loop context and approval link",
+      "Incident auto-resolves when the loop is approved or rejected"
+    ],
+    docsHref: "/docs/integrations/pagerduty",
+    npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-pagerduty",
+    npmLabel: "@loop-engine/adapter-pagerduty"
+  },
+  {
+    name: "n8n",
+    badge: "Coming soon",
+    description: "Stateful approval checkpoints and auditable loop orchestration for n8n automations."
+  },
+  {
+    name: "Temporal",
+    badge: "Coming soon",
+    description: "Loop Engine governance hooks for long-running Temporal workflows and human gates."
+  }
+];
+
 async function getGitHubStars(): Promise<number> {
   try {
     const response = await fetch("https://api.github.com/repos/loopengine/loop-engine", {
@@ -256,6 +320,107 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         </div>
       </section>
 
+      <section
+        style={{
+          background: "var(--color-surface-subtle)",
+          borderTop: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "80px 0"
+        }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)"
+            }}
+          >
+            Integrations
+          </p>
+          <h2 className="mt-3">Works with the agentic ecosystem</h2>
+          <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
+            Loop Engine governs what your AI agents are allowed to do - across every framework they run
+            in.
+          </p>
+
+          <div className="mt-8 grid gap-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
+            {integrations.map((integration) => (
+              <article
+                key={integration.name}
+                style={{
+                  background: integration.featured ? "var(--color-surface)" : "var(--color-surface-alt)",
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "var(--radius-lg)",
+                  padding: integration.featured ? "28px 28px 24px" : "22px 20px",
+                  minHeight: integration.featured ? 260 : 190,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10
+                }}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <OpenClawPlaceholderIcon />
+                    <h3 style={{ fontSize: integration.featured ? "var(--text-xl)" : "var(--text-lg)" }}>
+                      {integration.name}
+                    </h3>
+                  </div>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: "var(--text-xs)",
+                      color: integration.featured ? "var(--color-primary)" : "var(--color-ink-muted)",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 999,
+                      padding: "4px 10px",
+                      whiteSpace: "nowrap"
+                    }}
+                  >
+                    {integration.badge}
+                  </span>
+                </div>
+                <p style={{ color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>{integration.description}</p>
+                {integration.capabilities?.length ? (
+                  <ul className="mt-1 space-y-2">
+                    {integration.capabilities.map((capability) => (
+                      <li key={capability} className="flex gap-2">
+                        <span style={{ color: "var(--color-primary)" }}>·</span>
+                        <span style={{ color: "var(--color-ink-secondary)", lineHeight: 1.6 }}>{capability}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {integration.docsHref || integration.npmHref ? (
+                  <div className="mt-auto flex flex-col gap-2 pt-2">
+                    {integration.docsHref ? (
+                      <Link
+                        href={integration.docsHref}
+                        style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
+                      >
+                        View integration docs →
+                      </Link>
+                    ) : null}
+                    {integration.npmHref ? (
+                      <a
+                        href={integration.npmHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
+                      >
+                        {(integration.npmLabel ?? "@loop-engine/adapter-openclaw") + " on npm →"}
+                      </a>
+                    ) : null}
+                  </div>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section style={{ background: "var(--color-surface-dark)", padding: "80px 0" }}>
         <div className="mx-auto grid w-full max-w-[1200px] gap-8 px-6 md:grid-cols-2 md:px-10">
           <div>
@@ -371,5 +536,14 @@ function FeatureCard({ title, body, icon }: { title: string; body: string; icon:
         {body}
       </p>
     </article>
+  );
+}
+
+function OpenClawPlaceholderIcon() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden>
+      <rect x="2" y="2" width="22" height="22" rx="6" fill="none" stroke="var(--color-primary-mid)" strokeWidth="1.5" />
+      <path d="M8 13h10M13 8v10" stroke="var(--color-primary)" strokeWidth="1.5" />
+    </svg>
   );
 }

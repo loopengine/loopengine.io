@@ -1,0 +1,158 @@
+---
+title: Vercel AI SDK
+description: Govern Vercel AI SDK tool calls with structural approval gates and auditable Loop Engine transitions.
+section: Integrations
+---
+
+## Overview
+
+Vercel AI SDK is the default stack for building agentic apps with `useChat` and `streamText`, but raw tool calls execute when the model requests them. Without a governance layer, prompt injection and model mistakes can reach consequential tools directly.
+
+`@loop-engine/adapter-vercel-ai` wraps any tool definition with structural guards, `PENDING_HUMAN_APPROVAL` checkpoints, and full transition history. You keep existing Vercel AI SDK architecture while adding enforceable policy controls.
+
+## Demo scenario (purchase order)
+
+For outreach demos, use one concrete story: an AI procurement agent requests a `$9,200` PO to Acme Medical Devices.
+
+- Tool call is accepted by the LLM layer.
+- Governance layer holds execution at `PENDING_HUMAN_APPROVAL`.
+- Approver decision advances to `EXECUTING`.
+- Tool executes and returns `PO-0042`.
+- Full transition history is preserved for review.
+
+## Installation
+
+```bash
+pnpm add @loop-engine/adapter-vercel-ai ai
+# or npm/yarn equivalent
+```
+
+## Quick start
+
+```ts
+import { tool, streamText } from "ai";
+import { openai } from "@ai-sdk/openai";
+import { z } from "zod";
+import { wrapTool } from "@loop-engine/adapter-vercel-ai";
+
+const submitPurchaseOrder = wrapTool(
+  tool({
+    description: "Submit a purchase order to the procurement system",
+    parameters: z.object({
+      vendor: z.string(),
+      amount: z.number(),
+      items: z.array(z.string())
+    }),
+    execute: async ({ vendor, amount, items }) => {
+      // actual PO submission logic
+      return { orderId: "PO-0042", status: "submitted", vendor, amount, items };
+    }
+  }),
+  {
+    loopDefinition: purchaseOrderLoop, // canonical governance loop
+    engine, // Loop Engine instance
+    requiresApproval: ({ amount }) => amount > 5000, // gate high-value actions
+    onApprovalRequired: async (loopId, input) => {
+      // plug in PagerDuty, Slack, OpenClaw, etc.
+      console.log(`Loop ${loopId} requires approval for $${input.amount} PO`);
+    },
+    actor: { type: "ai-agent", id: "procurement-agent" as never } // AI initiator attribution
+  }
+);
+
+await streamText({
+  model: openai("gpt-4o"),
+  tools: { submitPurchaseOrder },
+  prompt: "Submit a PO to Acme Medical for $9,200 worth of supplies"
+});
+```
+
+## Approval flow
+
+1. LLM calls the governed tool.
+2. Loop starts in `INITIATED` and transitions to `AI_ANALYSIS`.
+3. `requiresApproval()` evaluates the input.
+4. If approval is required, loop transitions to `PENDING_HUMAN_APPROVAL`.
+5. `onApprovalRequired()` fires and sends notification payloads.
+6. Human approves; loop transitions to `EXECUTING`.
+7. Wrapped `tool.execute()` runs.
+8. Loop transitions to `EXECUTED` and history is persisted.
+
+## Narrative output to share
+
+```text
+Model requested tool: submitPurchaseOrder(vendor="Acme Medical Devices", amount=9200)
+Loop state: PENDING_HUMAN_APPROVAL
+Reason: requiresApproval(amount > 5000)
+Approver action: APPROVE
+Execution result: { orderId: "PO-0042", status: "submitted" }
+Audit trail: 5 transitions recorded
+```
+
+## Wiring the approval notification
+
+PagerDuty (see [PagerDuty integration](/docs/integrations/pagerduty)):
+
+```ts
+const pagerduty = new PagerDutyNotifier({ integrationKey: process.env.PAGERDUTY_INTEGRATION_KEY! });
+onApprovalRequired: async (loopId, input) => {
+  await pagerduty.notify(loopId, {
+    loopId,
+    loopName: "purchase-order",
+    actor: { type: "ai-agent", id: "procurement-agent" as never },
+    input,
+    summary: `AI requested $${input.amount} PO to ${input.vendor}`
+  });
+};
+```
+
+Slack webhook:
+
+```ts
+onApprovalRequired: async (loopId, input) => {
+  await fetch(process.env.SLACK_WEBHOOK_URL!, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ text: `Approval required for ${loopId}: $${input.amount} PO` })
+  });
+};
+```
+
+OpenClaw messaging:
+
+```ts
+onApprovalRequired: async (loopId) => {
+  // Route to OpenClaw channel workflow
+  console.log(`OpenClaw approval flow for ${loopId}`);
+};
+```
+
+See [OpenClaw Integration](/docs/examples/openclaw) for channel delivery details.
+
+## Audit trail
+
+Use `engine.getHistory()` to inspect every pass/block/approval in order:
+
+```ts
+const history = await engine.getHistory(aggregateId(loopId as string));
+console.log(history.map((transition) => ({
+  id: transition.id,
+  transitionId: transition.transitionId,
+  fromState: transition.fromState,
+  toState: transition.toState,
+  actor: transition.actor,
+  evidence: transition.evidence,
+  occurredAt: transition.occurredAt
+})));
+```
+
+## API reference
+
+| API | Description |
+|---|---|
+| `wrapTool(tool, config)` | Wraps an existing Vercel AI SDK tool with governed execution. |
+| `config.loopDefinition` | Loop definition containing `AI_ANALYSIS`, approval, and execution states. |
+| `config.engine` | Loop Engine instance used to start/transition loop state. |
+| `config.requiresApproval(input)` | Optional predicate to gate high-impact inputs. |
+| `config.onApprovalRequired(loopId, input)` | Async callback for notifier routing when approval is required. |
+| `config.actor` | Attributed initiator actor for transition records. |

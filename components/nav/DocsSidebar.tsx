@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMemo, useState } from "react";
 import { docsSections } from "./docs-nav";
 
 function isActive(pathname: string, href: string): boolean {
@@ -10,6 +11,22 @@ function isActive(pathname: string, href: string): boolean {
 
 export function DocsSidebar() {
   const pathname = usePathname();
+  const [query, setQuery] = useState("");
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const visibleSections = useMemo(() => {
+    if (!normalizedQuery) return docsSections;
+    return docsSections
+      .map((section) => ({
+        ...section,
+        items: section.items.filter(
+          (item) =>
+            item.title.toLowerCase().includes(normalizedQuery) ||
+            item.href.toLowerCase().includes(normalizedQuery)
+        )
+      }))
+      .filter((section) => section.items.length > 0);
+  }, [normalizedQuery]);
 
   return (
     <aside
@@ -27,7 +44,52 @@ export function DocsSidebar() {
       }}
     >
       <nav aria-label="Documentation sidebar">
-        {docsSections.map((section, sectionIndex) => (
+        <div style={{ padding: "4px 24px 12px" }}>
+          <label
+            htmlFor="docs-search"
+            style={{
+              display: "block",
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-ink-muted)",
+              marginBottom: 8
+            }}
+          >
+            Search docs
+          </label>
+          <input
+            id="docs-search"
+            type="search"
+            placeholder="Filter pages..."
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            style={{
+              width: "100%",
+              border: "1px solid var(--color-border)",
+              borderRadius: 8,
+              padding: "8px 10px",
+              fontFamily: "var(--font-body)",
+              fontSize: "var(--text-sm)",
+              color: "var(--color-ink)",
+              background: "var(--color-surface)"
+            }}
+          />
+        </div>
+        {visibleSections.length === 0 && (
+          <p
+            style={{
+              padding: "0 24px 8px",
+              fontFamily: "var(--font-body)",
+              fontSize: "var(--text-sm)",
+              color: "var(--color-ink-muted)"
+            }}
+          >
+            No matching docs pages.
+          </p>
+        )}
+        {visibleSections.map((section, sectionIndex) => (
           <div key={section.label}>
             <p
               style={{

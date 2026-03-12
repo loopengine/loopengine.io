@@ -14,24 +14,26 @@ createLoopSystem(options: {
   store?: LoopStore
   guards?: GuardRegistry
   signals?: boolean
-}): {
+  registry?: LoopRegistry
+}): Promise<{
   engine: LoopEngine
   eventBus: InMemoryEventBus
   signals?: SignalEngine
-}
+}>
 ```
 
 - `loops` is required and becomes the in-memory registry.
 - `store` defaults to `memoryStore()`.
 - `guards` defaults to `defaultRegistry` from `@loop-engine/guards`.
 - `signals: true` adds a default `SignalEngine`.
+- `registry` is optional; if `registry.list()` fails, startup falls back to `loops[]`.
 
 ## Pattern 1: zero-config
 
 ```ts
 import { createLoopSystem } from '@loop-engine/sdk'
 
-const { engine, eventBus } = createLoopSystem({ loops: [definition] })
+const { engine, eventBus } = await createLoopSystem({ loops: [definition] })
 ```
 
 ## Pattern 2: custom store (PostgreSQL adapter)
@@ -42,22 +44,18 @@ import { postgresStore } from '@loop-engine/adapter-postgres'
 import { Pool } from 'pg'
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-const { engine } = createLoopSystem({
+const { engine } = await createLoopSystem({
   loops: [definition],
   store: postgresStore(pool)
 })
 ```
-
-<Callout variant="warning" title="Current adapter status">
-`postgresStore()` exports the expected `LoopStore` interface, but runtime methods are currently stubbed and throw `postgresStore runtime implementation pending`.
-</Callout>
 
 ## Pattern 3: signals enabled
 
 ```ts
 import { createLoopSystem } from '@loop-engine/sdk'
 
-const { signals } = createLoopSystem({
+const { signals } = await createLoopSystem({
   loops: [definition],
   signals: true
 })

@@ -1,10 +1,10 @@
 ---
 title: "@loop-engine/adapter-postgres"
-description: createSchema provisions PostgreSQL tables for loop state, while postgresStore currently exposes a stubbed LoopStore surface.
+description: createSchema provisions PostgreSQL tables and postgresStore provides a production LoopStore backed by node-postgres.
 section: Packages
 ---
 
-`@loop-engine/adapter-postgres` provides schema setup and a PostgreSQL store interface target for runtime persistence.
+`@loop-engine/adapter-postgres` provides schema setup and a concrete PostgreSQL `LoopStore` for runtime persistence.
 
 ## Install
 
@@ -37,13 +37,16 @@ await createSchema(pool)
 postgresStore(pool: PgPoolLike): LoopStore
 ```
 
-<Callout variant="warning" title="Implementation status">
-All `postgresStore` runtime methods are currently stubbed and throw `postgresStore runtime implementation pending`:
-`getInstance`, `saveInstance`, `getTransitionHistory`, `saveTransitionRecord`, and `listOpenInstances`.
-</Callout>
+`postgresStore()` implements all `LoopStore` methods:
+
+- `getInstance`
+- `saveInstance`
+- `getTransitionHistory`
+- `saveTransitionRecord`
+- `listOpenInstances`
 
 ## Production notes
 
 - Use `pg` connection pooling.
 - Keep SSL, idle timeout, and max connection settings explicit in deployment config.
-- Treat this package as schema-ready but runtime-incomplete in `v0.1.0`.
+- Run `createSchema()` during provisioning before serving runtime traffic.
