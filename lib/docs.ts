@@ -28,8 +28,10 @@ function toTitle(value: string): string {
     .join(" ");
 }
 
-function slugToFile(slug: string[]): string {
-  return path.join(docsRoot, ...slug) + ".mdx";
+function slugToFileCandidates(slug: string[]): string[] {
+  const direct = path.join(docsRoot, ...slug) + ".mdx";
+  const index = path.join(docsRoot, ...slug, "index.mdx");
+  return [direct, index];
 }
 
 function headingId(text: string): string {
@@ -104,11 +106,19 @@ This doc page is scaffolded and ready for content.
 
 export async function loadDoc(slug: string[]): Promise<LoadedDoc> {
   const safeSlug = slug.length ? slug : ["getting-started", "quick-start"];
-  const filePath = slugToFile(safeSlug);
   let source = "";
-  try {
-    source = await readFile(filePath, "utf8");
-  } catch {
+  const candidates = slugToFileCandidates(safeSlug);
+  let loaded = false;
+  for (const filePath of candidates) {
+    try {
+      source = await readFile(filePath, "utf8");
+      loaded = true;
+      break;
+    } catch {
+      // Try next candidate path.
+    }
+  }
+  if (!loaded) {
     source = placeholderForSlug(safeSlug);
   }
 
