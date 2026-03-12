@@ -13,19 +13,10 @@ Start with outcome first:
 - States: `SUBMITTED -> UNDER_REVIEW -> APPROVED` (or `REJECTED`)
 - Actors: `system`, `automation`, `human`
 
-<LoopDiagram
-  states={[
-    { id: "SUBMITTED" },
-    { id: "UNDER_REVIEW" },
-    { id: "APPROVED", isTerminal: true },
-    { id: "REJECTED", isTerminal: true }
-  ]}
-  transitions={[
-    { id: "start_review", from: "SUBMITTED", to: "UNDER_REVIEW" },
-    { id: "approve", from: "UNDER_REVIEW", to: "APPROVED" },
-    { id: "reject", from: "UNDER_REVIEW", to: "REJECTED" }
-  ]}
-/>
+```text
+SUBMITTED -> UNDER_REVIEW -> APPROVED
+                        \-> REJECTED
+```
 
 ## 2) States and transitions
 

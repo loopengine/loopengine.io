@@ -1,6 +1,10 @@
-# @loop-engine/events
+---
+title: "@loop-engine/events"
+description: InMemoryEventBus and typed lifecycle event contracts provide pub-sub plumbing for loop runtime behavior.
+section: Packages
+---
 
-Event contracts, Zod schemas, and in-memory event bus.
+`@loop-engine/events` defines the event contract and ships an in-memory event bus implementation.
 
 ## Install
 
@@ -8,20 +12,9 @@ Event contracts, Zod schemas, and in-memory event bus.
 npm install @loop-engine/events
 ```
 
-## API reference
+## Event catalog
 
-### `InMemoryEventBus`
-
-```ts
-class InMemoryEventBus {
-  emit(event: LoopEvent): Promise<void>
-  subscribe(handler: (event: LoopEvent) => Promise<void>): () => void
-}
-```
-
-### `LOOP_EVENT_TYPES`
-
-String constants for:
+The exported `LOOP_EVENT_TYPES` constants map to:
 
 - `loop.started`
 - `loop.transition.requested`
@@ -34,7 +27,45 @@ String constants for:
 - `loop.signal.received`
 - `loop.outcome.recorded`
 
-### `extractLearningSignal`
+Every event extends:
+
+```ts
+interface LoopEventBase {
+  eventId: string
+  loopId: LoopId
+  aggregateId: AggregateId
+  orgId: string
+  occurredAt: string
+  correlationId: CorrelationId
+  causationId?: string
+}
+```
+
+## InMemoryEventBus
+
+```ts
+class InMemoryEventBus {
+  emit(event: LoopEvent): Promise<void>
+  subscribe(handler: (event: LoopEvent) => Promise<void>): () => void
+}
+```
+
+`subscribe()` returns an unsubscribe callback, and handler failures do not block other subscribers.
+
+```ts
+import { InMemoryEventBus } from "@loop-engine/events"
+
+const bus = new InMemoryEventBus()
+const unsubscribe = bus.subscribe(async (event) => {
+  if (event.type === "loop.transition.executed") {
+    console.log(event.transitionId, event.actor.type)
+  }
+})
+
+unsubscribe()
+```
+
+## Learning signal extraction
 
 ```ts
 extractLearningSignal(
@@ -44,11 +75,4 @@ extractLearningSignal(
 ): LearningSignal
 ```
 
-### Schemas
-
-`LoopEventSchema` and per-event schemas (for runtime validation/parsing).
-
-## Related packages
-
-- Depends on `@loop-engine/core`
-- Used by runtime, sdk, signals, adapters, and ui-devtools
+This helper derives `actual`, `predicted`, and numeric `delta` fields from completion history.

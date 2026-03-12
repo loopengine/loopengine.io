@@ -1,0 +1,47 @@
+---
+title: Postgres Persistence
+description: Postgres wiring replaces the default memory store while preserving loop definitions and transition logic.
+section: Examples
+---
+
+Postgres persistence keeps loop state durable across restarts while preserving runtime behavior and actor/guard semantics.
+
+## Store swap
+
+```ts
+// before
+const system = await createLoopSystem({ loops: [definition], store: memoryStore() })
+
+// after
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+await createSchema(pool)
+const system = await createLoopSystem({ loops: [definition], store: postgresStore(pool) })
+```
+
+Loop definitions and transition calls stay unchanged.
+
+## Schema bootstrap
+
+```ts
+import { createSchema } from "@loop-engine/adapter-postgres"
+import { Pool } from "pg"
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+await createSchema(pool)
+```
+
+## Runtime status
+
+<Callout variant="warning" title="Current adapter status">
+`postgresStore()` runtime methods are stubbed in `v0.1.0` and throw `postgresStore runtime implementation pending`.
+</Callout>
+
+## Environment
+
+- `DATABASE_URL` points to PostgreSQL.
+- Use connection pooling for service workloads.
+- Configure SSL and timeout limits in production.
+
+## Full source
+
+- https://github.com/loopengine/loop-examples/tree/main/postgres-persistence

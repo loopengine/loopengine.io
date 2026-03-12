@@ -1,6 +1,10 @@
-# @loop-engine/signals
+---
+title: "@loop-engine/signals"
+description: SignalEngine evaluates event streams with rule functions and emits Signal records for detection workflows.
+section: Packages
+---
 
-Signal engine and built-in signal detection rules.
+`@loop-engine/signals` detects patterns from `LoopEvent[]` and emits typed `Signal` objects.
 
 ## Install
 
@@ -8,22 +12,7 @@ Signal engine and built-in signal detection rules.
 npm install @loop-engine/signals
 ```
 
-## API reference
-
-### `createSignalEngine`
-
-```ts
-createSignalEngine(): SignalEngine
-```
-
-Returns engine preloaded with:
-
-- `threshold-breach`
-- `state-dwell`
-- `repeated-guard-failure`
-- `loop-not-started`
-
-### `SignalEngine`
+## Engine API
 
 ```ts
 interface SignalEngine {
@@ -33,14 +22,37 @@ interface SignalEngine {
 }
 ```
 
-### Built-in rule factories
+Factory:
 
-- `thresholdBreachRule(config)`
-- `stateDwellRule(config)`
-- `repeatedGuardFailureRule(config)`
-- `loopNotStartedRule(config)`
+```ts
+createSignalEngine(): SignalEngine
+```
 
-## Related packages
+`createSignalEngine()` pre-registers:
 
-- Depends on core + events
-- Re-exported by sdk
+- `threshold-breach`
+- `state-dwell`
+- `repeated-guard-failure`
+- `loop-not-started`
+
+## Built-in rule factories
+
+```ts
+thresholdBreachRule(config: ThresholdRuleConfig): SignalRule
+stateDwellRule(config: StateDwellRuleConfig): SignalRule
+repeatedGuardFailureRule(config: RepeatedGuardFailureConfig): SignalRule
+loopNotStartedRule(config: LoopNotStartedConfig): SignalRule
+```
+
+```ts
+import { createSignalEngine } from "@loop-engine/signals"
+
+const signalEngine = createSignalEngine()
+signalEngine.subscribe((signal) => {
+  console.log(signal.type, signal.subject, signal.confidence)
+})
+```
+
+## Detection flow
+
+Signals are detections, not actors. Application code decides what to do with them, including whether to start or transition loops.

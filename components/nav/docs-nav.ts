@@ -73,7 +73,20 @@ export const docsSections: DocsNavSection[] = [
       { title: "@loop-engine/adapter-postgres", href: "/docs/packages/adapter-postgres" },
       { title: "@loop-engine/adapter-kafka", href: "/docs/packages/adapter-kafka" },
       { title: "@loop-engine/adapter-http", href: "/docs/packages/adapter-http" },
+      { title: "@loop-engine/adapter-openclaw", href: "/docs/packages/adapter-openclaw" },
       { title: "All packages", href: "/docs/packages/all-packages" }
+    ]
+  },
+  {
+    label: "Examples",
+    items: [
+      { title: "Overview", href: "/docs/examples/index" },
+      { title: "Expense Approval", href: "/docs/examples/expense-approval" },
+      { title: "AI Replenishment", href: "/docs/examples/ai-replenishment" },
+      { title: "Demand Signal", href: "/docs/examples/demand-signal" },
+      { title: "Postgres Persistence", href: "/docs/examples/postgres-persistence" },
+      { title: "Event Streaming", href: "/docs/examples/event-streaming" },
+      { title: "OpenClaw Integration", href: "/docs/examples/openclaw" }
     ]
   },
   {

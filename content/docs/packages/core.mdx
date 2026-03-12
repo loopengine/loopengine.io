@@ -1,6 +1,10 @@
-# @loop-engine/core
+---
+title: "@loop-engine/core"
+description: Shared TypeScript contracts and branded IDs define the Loop Engine boundary with zero runtime dependencies.
+section: Packages
+---
 
-Domain model types for Loop Engine and branded ID helpers.
+`@loop-engine/core` defines the type contract used by every other `@loop-engine/*` package and ships no runtime implementations.
 
 ## Install
 
@@ -10,23 +14,138 @@ npm install @loop-engine/core
 
 ## Overview
 
-Use this package when you need shared type contracts without pulling runtime code.
-It has zero runtime dependencies.
+Core provides branded identifiers, actor and guard primitives, and canonical loop lifecycle interfaces. Runtime, DSL, adapters, and SDK layers all import these contracts.
 
-## API reference
-
-Core exports include:
-
-- branded types: `LoopId`, `StateId`, `TransitionId`, `AggregateId`, `ActorId`, `GuardId`, `SignalId`, `OutcomeId`, `CorrelationId`
-- helper constructors: `loopId()`, `stateId()`, `transitionId()`, `aggregateId()`, `actorId()`, `guardId()`, `signalId()`, `outcomeId()`, `correlationId()`
-- domain interfaces: `LoopDefinition`, `StateSpec`, `TransitionSpec`, `GuardSpec`, `OutcomeSpec`, `BusinessMetric`, `LoopInstance`, `TransitionRecord`, `Signal`
-
-Example:
+## Branded IDs
 
 ```ts
-import { aggregateId, transitionId, type LoopDefinition } from '@loop-engine/core'
+export type LoopId = string & { readonly __brand: "LoopId" }
+export type StateId = string & { readonly __brand: "StateId" }
+export type TransitionId = string & { readonly __brand: "TransitionId" }
+export type AggregateId = string & { readonly __brand: "AggregateId" }
+export type ActorId = string & { readonly __brand: "ActorId" }
+export type GuardId = string & { readonly __brand: "GuardId" }
+export type SignalId = string & { readonly __brand: "SignalId" }
+export type OutcomeId = string & { readonly __brand: "OutcomeId" }
+export type CorrelationId = string & { readonly __brand: "CorrelationId" }
 ```
 
-## Related packages
+Helper constructors cast incoming strings to branded IDs:
 
-- Used by every other `@loop-engine/*` package.
+```ts
+import { aggregateId, transitionId } from "@loop-engine/core"
+
+const aggregate = aggregateId("EXP-2026-001")
+const transition = transitionId("approve")
+```
+
+## Loop definition types
+
+```ts
+export type ActorType = "human" | "automation" | "ai-agent" | "webhook" | "system"
+export type LoopStatus = "OPEN" | "IN_PROGRESS" | "CLOSED" | "ERROR" | "CANCELLED"
+
+export interface GuardSpec {
+  id: GuardId
+  description: string
+  failureMessage: string
+  severity: "hard" | "soft"
+  evaluatedBy: "runtime" | "module" | "external"
+}
+
+export interface StateSpec {
+  id: StateId
+  description?: string
+  isTerminal?: boolean
+  isError?: boolean
+}
+
+export interface TransitionSpec {
+  id: TransitionId
+  from: StateId
+  to: StateId
+  allowedActors: ActorType[]
+  guards?: GuardSpec[]
+  sideEffects?: SideEffectSpec[]
+  description?: string
+}
+
+export interface LoopDefinition {
+  id: LoopId
+  version: string
+  description: string
+  domain: string
+  states: StateSpec[]
+  initialState: StateId
+  transitions: TransitionSpec[]
+  outcome: OutcomeSpec
+  participants?: string[]
+  spawnableLoops?: LoopId[]
+  metadata?: Record<string, unknown>
+}
+```
+
+## Runtime state types
+
+```ts
+export interface ActorRef {
+  type: ActorType
+  id: ActorId
+  displayName?: string
+  sessionId?: string
+  agentId?: string
+}
+
+export interface LoopInstance {
+  loopId: LoopId
+  aggregateId: AggregateId
+  orgId: string
+  currentState: StateId
+  status: LoopStatus
+  startedAt: string
+  closedAt?: string
+  correlationId: CorrelationId
+  metadata?: Record<string, unknown>
+}
+
+export interface TransitionRecord {
+  id: string
+  loopId: LoopId
+  aggregateId: AggregateId
+  transitionId: TransitionId
+  fromState: StateId
+  toState: StateId
+  actor: ActorRef
+  evidence: Evidence
+  occurredAt: string
+  durationMs?: number
+}
+```
+
+## Signal and outcome types
+
+```ts
+export interface OutcomeSpec {
+  id: OutcomeId
+  description: string
+  valueUnit: string
+  measurable: boolean
+  businessMetrics?: BusinessMetric[]
+}
+
+export interface Signal {
+  id: SignalId
+  type: string
+  subject: string
+  confidence?: number
+  observedAt: string
+  payload: Record<string, unknown>
+  triggeredLoopId?: LoopId
+}
+```
+
+## Design principles
+
+- Type-first boundaries keep packages interoperable without runtime coupling.
+- Zero runtime dependencies keep `core` safe for shared libraries and edge bundles.
+- Branded IDs reduce accidental string mixing across loop, actor, transition, and signal contexts.

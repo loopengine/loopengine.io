@@ -1,0 +1,59 @@
+---
+title: Event Streaming
+description: Event subscriptions and timeline utilities turn loop lifecycle events into auditable operational streams.
+section: Examples
+---
+
+Event streaming exposes loop lifecycle data for audit logs, notifications, and observability pipelines.
+
+## Event subscriptions
+
+```ts
+import { LOOP_EVENT_TYPES } from "@loop-engine/events"
+
+const unsubscribe = eventBus.subscribe(async (event) => {
+  switch (event.type) {
+    case LOOP_EVENT_TYPES.LOOP_STARTED:
+    case LOOP_EVENT_TYPES.TRANSITION_EXECUTED:
+    case LOOP_EVENT_TYPES.GUARD_FAILED:
+    case LOOP_EVENT_TYPES.LOOP_COMPLETED:
+    case LOOP_EVENT_TYPES.LOOP_ERROR:
+    case LOOP_EVENT_TYPES.OUTCOME_RECORDED:
+      console.log(event.type, event.aggregateId)
+      break
+  }
+})
+```
+
+## Audit log accumulation
+
+```ts
+const audit: Array<{ at: string; type: string; aggregateId: string }> = []
+
+eventBus.subscribe(async (event) => {
+  audit.push({
+    at: event.occurredAt,
+    type: event.type,
+    aggregateId: String(event.aggregateId)
+  })
+})
+```
+
+## Timeline and replay
+
+```ts
+import { buildTimeline, replayLoop } from "@loop-engine/observability"
+
+const instance = await engine.getState(aggregateId("EXP-1"))
+const history = await engine.getHistory(aggregateId("EXP-1"))
+
+if (instance) {
+  const timeline = buildTimeline(instance, history)
+  const replay = replayLoop(definition, history)
+  console.log(timeline.durationMs, replay.valid)
+}
+```
+
+## Full source
+
+- https://github.com/loopengine/loop-examples/tree/main/event-streaming

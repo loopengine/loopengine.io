@@ -1,0 +1,94 @@
+---
+title: OpenClaw Integration
+description: Use OpenClaw as the human approval channel for Loop Engine and route approval gates through WhatsApp, Telegram, Slack, or Discord.
+section: Examples
+---
+
+## Overview
+
+OpenClaw handles delivery and replies across messaging channels, while Loop Engine owns state transitions, actor constraints, and guard decisions.
+
+Approval gates are runtime policy checks, not prompt conventions. Even if an agent asks to self-approve, a transition with `allowedActors: ['human']` rejects non-human actors.
+
+## Architecture
+
+```text
+User (WhatsApp)
+     |
+     | "approve rpl-001"
+     v
+OpenClaw Gateway ------------------------------------.
+     |                                                |
+     | engine.transition('approve', humanActor)      |
+     v                                                |
+Loop Engine                                           |
+     |                                                |
+     |- guard: approval_obtained ✅                  |
+     |- allowedActors: ['human'] ✅                  |
+     v                                                |
+PENDING_BUYER_APPROVAL -> PO_TRIGGERED               |
+     |                                                |
+     '--- loop.transitioned --------------------------'
+                      "✅ Approved. Loop closed."
+```
+
+## Using @loop-engine/adapter-openclaw
+
+```ts
+import { createLoopSystem } from '@loop-engine/sdk'
+import { OpenClawEventBus } from '@loop-engine/adapter-openclaw'
+import { replenishmentLoop } from './loops/replenishment'
+
+const eventBus = new OpenClawEventBus({
+  channel: 'whatsapp',
+  target: '+15551234567',
+  events: ['loop.transition.executed', 'loop.completed', 'loop.guard.failed'],
+  approvalStates: ['PENDING_BUYER_APPROVAL']
+})
+
+const system = await createLoopSystem({
+  loops: [replenishmentLoop],
+  eventBus
+})
+```
+
+## The approval flow
+
+1. Demand spike detection starts the loop with `loop.started`.
+2. The AI analysis transition moves from `AI_ANALYSIS` to `PENDING_BUYER_APPROVAL`.
+3. OpenClaw receives forwarded loop events and sends:
+   `⚠️ Approval required: rpl-dc-east-001 ... Reply: approve rpl-dc-east-001 | reject rpl-dc-east-001`.
+4. A buyer replies `approve rpl-dc-east-001` from a phone.
+5. The OpenClaw skill calls `engine.transition` with a human actor.
+6. `approval_obtained` passes and the loop advances to `PO_TRIGGERED`.
+7. OpenClaw sends `✅ Approved. Loop advanced to: PO_TRIGGERED`.
+
+## Why guards beat prompts
+
+`allowedActors` and guard evaluation happen in the runtime transition engine, not in the language model output path. That keeps approval logic deterministic and testable.
+
+Prompt injection can change model text, but it cannot bypass transition authorization or guard failures. This is the security boundary for agentic operations.
+
+## Installing the OpenClaw skill
+
+```bash
+git clone https://github.com/loopengine/loop-examples
+cp -r loop-examples/openclaw-skill ~/.openclaw/skills/loop-engine
+```
+
+The skill supports:
+
+- `start loop [loop-id]`
+- `transition [instance-id] [transition-id]`
+- `approve [instance-id]`
+- `reject [instance-id]`
+- `status [instance-id]`
+- `list loops`
+
+Source: [loop-examples/openclaw-skill](https://github.com/loopengine/loop-examples/tree/main/openclaw-skill)
+
+## Resources
+
+- [`@loop-engine/adapter-openclaw`](/docs/packages/adapter-openclaw)
+- [OpenClaw project](https://github.com/openclaw/openclaw)
+- [openclaw-skill source](https://github.com/loopengine/loop-examples/tree/main/openclaw-skill)

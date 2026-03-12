@@ -1,0 +1,66 @@
+---
+title: "@loop-engine/adapter-openclaw"
+description: OpenClaw gateway EventBus adapter that forwards Loop Engine lifecycle events to OpenClaw-connected messaging channels.
+section: Packages
+---
+
+## Overview
+
+`@loop-engine/adapter-openclaw` wraps an internal event bus and forwards selected loop events to OpenClaw over its WebSocket gateway control plane.
+
+## Install
+
+```bash
+npm install @loop-engine/adapter-openclaw ws
+```
+
+## Prerequisites
+
+- OpenClaw gateway reachable at `ws://127.0.0.1:18789`
+- Configured OpenClaw channel and target destination
+
+## createLoopSystem usage
+
+```ts
+import { createLoopSystem } from '@loop-engine/sdk'
+import { OpenClawEventBus } from '@loop-engine/adapter-openclaw'
+import { replenishmentLoop } from './loops/replenishment'
+
+const bus = new OpenClawEventBus({
+  channel: 'whatsapp',
+  target: '+15551234567',
+  events: ['loop.transition.executed', 'loop.completed'],
+  approvalStates: ['PENDING_BUYER_APPROVAL']
+})
+
+const system = await createLoopSystem({ loops: [replenishmentLoop], eventBus: bus })
+```
+
+## OpenClawAdapterOptions
+
+```ts
+interface OpenClawAdapterOptions {
+  gatewayUrl?: string // default: ws://127.0.0.1:18789
+  channel: string
+  target: string
+  accountId?: string
+  events?: string[] // default: ['loop.transition.executed','loop.completed','loop.guard.failed']
+  loopIds?: string[] // default: []
+  approvalStates?: string[] // default: []
+  inner?: EventBus // default: new InMemoryEventBus()
+  autoReconnect?: boolean // default: true
+  reconnectDelay?: number // default: 5000
+}
+```
+
+## Approval state detection
+
+The adapter marks a transition event as approval-required when `toState` matches `PENDING|APPROVAL` unless explicit `approvalStates` are configured.
+
+## Lifecycle cleanup
+
+Call `disconnect()` during shutdown to stop reconnect timers and close the current socket cleanly.
+
+## Related example
+
+See [OpenClaw Integration](/docs/examples/openclaw) for the end-to-end approval flow.

@@ -1,6 +1,10 @@
-# @loop-engine/runtime
+---
+title: "@loop-engine/runtime"
+description: The LoopEngine class starts loops, executes transitions, and stores state through the LoopStore interface.
+section: Packages
+---
 
-Execution engine and runtime interfaces.
+`@loop-engine/runtime` is the execution layer that mutates loop state and emits lifecycle events.
 
 ## Install
 
@@ -8,39 +12,56 @@ Execution engine and runtime interfaces.
 npm install @loop-engine/runtime
 ```
 
-## API reference
-
-### `createLoopEngine`
+## Engine construction
 
 ```ts
 createLoopEngine(options: LoopEngineOptions): LoopEngine
 ```
 
-### `LoopEngine.start`
+`LoopEngineOptions`:
+
+```ts
+interface LoopEngineOptions {
+  registry: LoopRegistry
+  store: LoopStore
+  eventBus?: EventBus
+  guardEvaluator?: GuardEvaluator
+  clock?: () => string
+}
+```
+
+## Core methods
 
 ```ts
 start(options: StartOptions): Promise<LoopInstance>
-```
-
-### `LoopEngine.transition`
-
-```ts
 transition(options: TransitionOptions): Promise<TransitionResult>
-```
-
-### `LoopEngine.getState`
-
-```ts
 getState(aggregateId: AggregateId): Promise<LoopInstance | null>
+getHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
+listOpen(loopId: string, orgId: string): Promise<LoopInstance[]>
+registerSideEffectHandler(sideEffectId: string, handler: SideEffectHandler): void
 ```
 
-### `LoopEngine.getHistory`
+Transition result statuses from source:
+
+- `executed`
+- `guard_failed`
+- `rejected`
+- `pending_approval`
 
 ```ts
-getHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
+const result = await engine.transition({
+  aggregateId,
+  transitionId: transitionId("approve"),
+  actor: { type: "human", id: "manager@acme.com" },
+  evidence: { approved: true }
+})
+
+if (result.status === "guard_failed") {
+  console.log(result.guardFailures)
+}
 ```
 
-### `LoopStore` interface
+## Store and bus interfaces
 
 ```ts
 interface LoopStore {
@@ -50,9 +71,11 @@ interface LoopStore {
   saveTransitionRecord(record: TransitionRecord): Promise<void>
   listOpenInstances(loopId: LoopId, orgId: string): Promise<LoopInstance[]>
 }
+
+interface EventBus {
+  emit(event: LoopEvent): Promise<void>
+  subscribe(handler: (event: LoopEvent) => Promise<void>): () => void
+}
 ```
 
-## Related packages
-
-- Depends on core, actors, guards, events, dsl
-- Usually consumed via `@loop-engine/sdk`
+Use `@loop-engine/adapter-memory` in development and `@loop-engine/adapter-postgres` for a production persistence target.

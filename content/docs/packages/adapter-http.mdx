@@ -1,6 +1,10 @@
-# @loop-engine/adapter-http
+---
+title: "@loop-engine/adapter-http"
+description: httpEventBus forwards Loop Engine events to external webhooks with lightweight retry behavior.
+section: Packages
+---
 
-HTTP webhook `EventBus` adapter.
+`@loop-engine/adapter-http` sends runtime events to an outbound webhook endpoint.
 
 ## Install
 
@@ -8,9 +12,7 @@ HTTP webhook `EventBus` adapter.
 npm install @loop-engine/adapter-http
 ```
 
-## API reference
-
-### `httpEventBus`
+## Event bus factory
 
 ```ts
 httpEventBus(options: {
@@ -20,21 +22,20 @@ httpEventBus(options: {
 }): EventBus
 ```
 
-- `emit()` sends JSON payloads to `webhookUrl`.
-- `subscribe()` throws: `WebhookEventBus does not support subscribe`.
-
-## Usage
+- `emit()` posts JSON payloads to `webhookUrl`.
+- Retries default to `3`, with exponential backoff.
+- `subscribe()` throws because this adapter is push-only.
 
 ```ts
-import { httpEventBus } from '@loop-engine/adapter-http'
+import { httpEventBus } from "@loop-engine/adapter-http"
 
 const bus = httpEventBus({
-  webhookUrl: 'https://hooks.example.com/loop-events',
+  webhookUrl: "https://hooks.example.com/loop-events",
+  headers: { Authorization: "Bearer webhook-token" },
   retries: 3
 })
 ```
 
-## Related packages
+## Delivery model
 
-- Depends on runtime + events
-- Use when external systems only need push delivery
+Use this adapter for outbound integrations (webhooks, automation tools, monitoring sinks) where event replay is handled outside Loop Engine.

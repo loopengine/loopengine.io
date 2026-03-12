@@ -1,0 +1,34 @@
+---
+title: Examples
+description: Runnable Loop Engine examples cover AI actors, approval workflows, signals, persistence, and event streaming.
+section: Examples
+---
+
+Loop Engine examples demonstrate production-style patterns with minimal code and explicit operational constraints.
+
+## Repository
+
+All runnable examples live in:
+
+- https://github.com/loopengine/loop-examples
+
+## Example index
+
+| Example | What it shows | Packages used |
+|---|---|---|
+| Expense Approval | Human-only approval loop with hard policy guard | sdk, actors |
+| AI Replenishment (Claude) | Anthropic AI actor recommendation + human approval gate | sdk, actors, signals |
+| AI Replenishment (OpenAI) | OpenAI AI actor recommendation with identical loop behavior | sdk, actors, signals |
+| Demand Signal | Rule-based signal detection feeding loop start | sdk, signals |
+| Postgres Persistence | Swapping memory store for Postgres adapter contract | sdk, adapter-postgres |
+| Event Streaming | Event subscriptions, timeline, and replay utilities | sdk, events, observability |
+
+## Running examples
+
+```bash
+git clone https://github.com/loopengine/loop-examples
+cd loop-examples
+pnpm install
+```
+
+Each example directory includes run commands and environment setup notes.

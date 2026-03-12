@@ -61,3 +61,45 @@ if (auth.authorized) {
   })
 }
 ```
+
+## Provider implementations
+
+The actor contract stays constant across providers. Only SDK wiring changes.
+
+```ts
+// Anthropic path (Claude)
+const claudeActor: AIAgentActor = {
+  type: "ai-agent",
+  id: actorId("agent:demand-forecaster"),
+  agentId: "claude-sonnet-4-20250514",
+  gatewaySessionId: "claude-session-123"
+}
+
+// OpenAI path (GPT-4o)
+const openAiActor: AIAgentActor = {
+  type: "ai-agent",
+  id: actorId("agent:demand-forecaster"),
+  agentId: "gpt-4o",
+  gatewaySessionId: "openai-session-123"
+}
+```
+
+Anthropic and OpenAI both submit through the same transition path and evidence schema:
+
+- `ai_confidence`
+- `ai_reasoning`
+- `recommended_action`
+- `recommended_qty`
+
+## Safety constraints
+
+- Confidence `0.58` on `recommend_replenishment` returns `guard_failed` and holds state at `AI_ANALYSIS`.
+- Confidence `0.82` passes `confidence_threshold` and advances to `PENDING_BUYER_APPROVAL`.
+- AI attempts on `approve_replenishment` are rejected when transition `allowedActors` is `["human"]`.
+
+## Deep-dive example
+
+The full dual-provider walkthrough is in `/docs/examples/ai-replenishment`, with source links for both provider adapters:
+
+- [Anthropic actor example](https://github.com/loopengine/loop-examples/tree/main/ai-actors/claude)
+- [OpenAI actor example](https://github.com/loopengine/loop-examples/tree/main/ai-actors/openai)

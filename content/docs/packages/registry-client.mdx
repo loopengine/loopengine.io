@@ -1,6 +1,10 @@
-# @loop-engine/registry-client
+---
+title: "@loop-engine/registry-client"
+description: Local and HTTP registry adapters load LoopDefinition objects, with Better Data support behind a subpath export.
+section: Packages
+---
 
-Loop definition registry with local, HTTP, and Better Data adapters.
+`@loop-engine/registry-client` provides local-first loop definition lookup with optional network adapters.
 
 ## Install
 
@@ -8,58 +12,36 @@ Loop definition registry with local, HTTP, and Better Data adapters.
 npm install @loop-engine/registry-client
 ```
 
-## The default: local registry
-
-For most use cases, pass loop definitions directly to `createLoopSystem`:
+## Local registry
 
 ```ts
-import { createLoopSystem } from '@loop-engine/sdk'
-import { procurement, replenishment } from './loops'
+import { localRegistry } from "@loop-engine/registry-client"
 
-const { engine } = await createLoopSystem({
-  loops: [procurement, replenishment]
-})
-```
-
-No external registry is required.
-
-## Loading from a directory
-
-```ts
-import { localRegistry } from '@loop-engine/registry-client'
-import { createLoopSystem } from '@loop-engine/sdk'
-
-const { engine } = await createLoopSystem({
-  loops: [],
-  registry: localRegistry({ loopsDir: './loops' })
-})
-```
-
-Works in Node.js. In browser, use `definitions[]`.
-
-## Loading YAML from disk + inline definitions
-
-```ts
 const registry = localRegistry({
-  loopsDir: './loops',
-  definitions: [customLoop]
+  definitions: [customLoop],
+  loopsDir: "./loops",
+  watch: true
 })
 ```
 
-Inline definitions are loaded and available alongside file-based definitions.
+- `definitions` works in browser and Node.
+- `loopsDir` loads `.yaml`, `.yml`, and `.json` definitions in Node.
+- Browser usage with `loopsDir` logs a warning and ignores filesystem mode.
 
-## HTTP registry (any server)
+## HTTP registry
 
 ```ts
-import { httpRegistry } from '@loop-engine/registry-client'
+import { httpRegistry } from "@loop-engine/registry-client"
 
 const registry = httpRegistry({
-  baseUrl: 'https://your-registry.example.com',
-  headers: { Authorization: `Bearer ${token}` }
+  baseUrl: "https://registry.example.com",
+  headers: { Authorization: `Bearer ${token}` },
+  timeoutMs: 10_000,
+  retries: 2
 })
 ```
 
-Server contract:
+Expected server contract:
 
 - `GET /loops`
 - `GET /loops?domain={domain}`
@@ -68,34 +50,35 @@ Server contract:
 - `POST /loops`
 - `DELETE /loops/{loopId}`
 
-## Better Data platform registry
+## Better Data adapter
 
 ```ts
-import { betterDataRegistry } from '@loop-engine/registry-client/betterdata'
+import { betterDataRegistry } from "@loop-engine/registry-client/betterdata"
 
 const registry = betterDataRegistry({
   apiKey: process.env.BD_API_KEY!,
-  orgId: 'your-org-id'
+  orgId: "your-org-id",
+  env: "production"
 })
 ```
 
 <Callout variant="info">
-The Better Data platform adapter is not included in the main bundle.
-Import it separately from `@loop-engine/registry-client/betterdata`.
-It requires a Better Data account — see [betterdata.co/docs/loop-registry](https://betterdata.co/docs/loop-registry).
+The Better Data adapter is intentionally excluded from the main package entrypoint. Import it from `@loop-engine/registry-client/betterdata`.
 </Callout>
 
-## LoopRegistry interface
+## Registry interface
 
 ```ts
-import type { LoopRegistry } from '@loop-engine/registry-client'
-
-const myRegistry: LoopRegistry = {
-  get: async (id) => null,
-  getVersion: async (id, version) => null,
-  list: async (options) => [],
-  has: async (id) => false,
-  register: async (definition, options) => {},
-  remove: async (id) => false
+interface LoopRegistry {
+  get(id: LoopId): Promise<LoopDefinition | null>
+  getVersion(id: LoopId, version: string): Promise<LoopDefinition | null>
+  list(options?: { domain?: string }): Promise<LoopDefinition[]>
+  has(id: LoopId): Promise<boolean>
+  register(definition: LoopDefinition, options?: { force?: boolean }): Promise<void>
+  remove(id: LoopId): Promise<boolean>
 }
 ```
+
+## SDK integration
+
+`createLoopSystem({ loops, registry })` merges registry results with local loops. Local `loops[]` definitions override matching registry IDs, and registry failures fall back to local-only startup.

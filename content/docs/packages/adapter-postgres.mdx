@@ -1,6 +1,10 @@
-# @loop-engine/adapter-postgres
+---
+title: "@loop-engine/adapter-postgres"
+description: createSchema provisions PostgreSQL tables for loop state, while postgresStore currently exposes a stubbed LoopStore surface.
+section: Packages
+---
 
-PostgreSQL-backed `LoopStore` adapter surface and schema bootstrap.
+`@loop-engine/adapter-postgres` provides schema setup and a PostgreSQL store interface target for runtime persistence.
 
 ## Install
 
@@ -8,30 +12,38 @@ PostgreSQL-backed `LoopStore` adapter surface and schema bootstrap.
 npm install @loop-engine/adapter-postgres pg
 ```
 
-## API reference
-
-### `createSchema`
+## Schema bootstrap
 
 ```ts
 createSchema(pool: PgPoolLike): Promise<void>
 ```
 
-Creates tables:
+`createSchema()` creates:
 
 - `loop_instances`
 - `loop_transitions`
 
-### `postgresStore`
+```ts
+import { Pool } from "pg"
+import { createSchema } from "@loop-engine/adapter-postgres"
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+await createSchema(pool)
+```
+
+## Store factory
 
 ```ts
 postgresStore(pool: PgPoolLike): LoopStore
 ```
 
 <Callout variant="warning" title="Implementation status">
-Current `postgresStore` methods are stubs and throw `postgresStore runtime implementation pending`.
+All `postgresStore` runtime methods are currently stubbed and throw `postgresStore runtime implementation pending`:
+`getInstance`, `saveInstance`, `getTransitionHistory`, `saveTransitionRecord`, and `listOpenInstances`.
 </Callout>
 
-## Related packages
+## Production notes
 
-- Depends on core + runtime
-- Peer dependency: `pg@^8.0.0`
+- Use `pg` connection pooling.
+- Keep SSL, idle timeout, and max connection settings explicit in deployment config.
+- Treat this package as schema-ready but runtime-incomplete in `v0.1.0`.

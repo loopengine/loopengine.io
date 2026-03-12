@@ -1,6 +1,10 @@
-# @loop-engine/observability
+---
+title: "@loop-engine/observability"
+description: Metrics, timeline, and replay helpers turn loop history into audit and performance insights.
+section: Packages
+---
 
-Metrics, timeline, and replay utilities for loop analysis.
+`@loop-engine/observability` converts instance + transition data into metrics and replayable timelines.
 
 ## Install
 
@@ -8,9 +12,7 @@ Metrics, timeline, and replay utilities for loop analysis.
 npm install @loop-engine/observability
 ```
 
-## API reference
-
-### `computeMetrics`
+## Metrics
 
 ```ts
 computeMetrics(
@@ -20,25 +22,33 @@ computeMetrics(
 ): LoopMetrics
 ```
 
-### `buildTimeline`
+`LoopMetrics` includes `completionRate`, `avgDurationMs`, `medianDurationMs`, `p95DurationMs`, `aiActorRate`, `humanActorRate`, and `avgTransitionCount`.
+
+```ts
+import { computeMetrics } from "@loop-engine/observability"
+
+const metrics = computeMetrics(instances, history, {
+  from: "2026-03-01T00:00:00.000Z",
+  to: "2026-03-31T23:59:59.999Z"
+})
+```
+
+## Timeline
 
 ```ts
 buildTimeline(instance: LoopInstance, history: TransitionRecord[]): LoopTimeline
-```
-
-### `getStateResidency`
-
-```ts
 getStateResidency(timeline: LoopTimeline): StateResidency[]
 ```
 
-### `replayLoop`
+Use timeline output to power audit UIs and state-duration debugging.
+
+## Replay
 
 ```ts
-replayLoop(definition: LoopDefinition, history: TransitionRecord[]): { valid: boolean; errors: string[] }
+replayLoop(
+  definition: LoopDefinition,
+  history: TransitionRecord[]
+): { valid: boolean; errors: string[] }
 ```
 
-## Related packages
-
-- Depends on core
-- Used by sdk and ui-devtools
+Replay verifies that recorded transitions are valid against the current loop definition.

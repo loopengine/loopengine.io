@@ -1,0 +1,68 @@
+---
+title: Demand Signal
+description: Signal detection converts event patterns into typed Signal records that can trigger replenishment loops.
+section: Examples
+---
+
+Demand signal detection connects observed loop behavior to explicit follow-up actions without letting signal rules mutate state directly.
+
+## Detection flow
+
+Signals are detections, not actors. Runtime callers decide whether to start a new loop from the emitted signal.
+
+## Signal rule usage
+
+```ts
+import { createSignalEngine, thresholdBreachRule } from "@loop-engine/signals"
+
+const signalEngine = createSignalEngine()
+signalEngine.registerRule(
+  thresholdBreachRule({
+    field: "demandChange",
+    operator: "gt",
+    threshold: 0.75
+  })
+)
+```
+
+## Lumebondé detection example
+
+```ts
+const events = [
+  {
+    type: "loop.transition.executed",
+    loopId: "scm.replenishment",
+    aggregateId: "repl-lmb-001",
+    orgId: "lumebonde",
+    occurredAt: new Date().toISOString(),
+    correlationId: "corr-1",
+    eventId: "evt-1",
+    fromState: "SIGNAL_DETECTED",
+    toState: "AI_ANALYSIS",
+    transitionId: "start_analysis",
+    actor: { type: "automation", id: "system:router" },
+    evidence: { demandChange: 0.89, sku: "LMB-BRS-001", currentStock: 142, reorderPoint: 280 }
+  }
+] as any
+
+const signals = signalEngine.process(events)
+// signals[0]?.type === "THRESHOLD_BREACH"
+```
+
+## Triggering loop start
+
+```ts
+signalEngine.subscribe(async (signal) => {
+  await engine.start({
+    loopId: "scm.replenishment",
+    aggregateId: aggregateId(`repl-${Date.now()}`),
+    orgId: "lumebonde",
+    actor: { type: "system", id: "system:signal-engine" },
+    metadata: { sourceSignalType: signal.type, sourceSignalId: signal.id }
+  })
+})
+```
+
+## Full source
+
+- https://github.com/loopengine/loop-examples/tree/main/demand-signal

@@ -1,0 +1,127 @@
+---
+title: AI Replenishment
+description: Anthropic and OpenAI actors run the same replenishment loop, while guards and human approval enforce safety boundaries.
+section: Examples
+---
+
+AI replenishment shows model-swappable actor wiring with identical loop constraints and deterministic approval policy.
+
+## Loop behavior
+
+- States: `SIGNAL_DETECTED -> AI_ANALYSIS -> PENDING_BUYER_APPROVAL -> PO_TRIGGERED`
+- AI actor transition: `recommend_replenishment`
+- Hard guards: `confidence_threshold`, `approval_obtained`
+- Human-only transition: `approve_replenishment`
+
+## Scenario
+
+Lumebondé Bond Repair Serum (`LMB-BRS-001`) spikes `+89%` at `DC-East` with `currentStock=142`, `reorderPoint=280`, `forecastedDemand=527`, and `leadTimeDays=14`.
+
+## Loop definition
+
+```ts
+import { LoopBuilder } from "@loop-engine/sdk"
+
+const replenishmentLoop = LoopBuilder
+  .create("scm.replenishment", "scm")
+  .version("1.0.0")
+  .description("Triggered replenishment from demand signal")
+  .state("SIGNAL_DETECTED")
+  .state("AI_ANALYSIS")
+  .state("PENDING_BUYER_APPROVAL")
+  .state("PO_TRIGGERED", { isTerminal: true })
+  .state("DEFERRED", { isTerminal: true })
+  .initialState("SIGNAL_DETECTED")
+  .transition({ id: "start_analysis", from: "SIGNAL_DETECTED", to: "AI_ANALYSIS", actors: ["automation"] })
+  .transition({
+    id: "recommend_replenishment",
+    from: "AI_ANALYSIS",
+    to: "PENDING_BUYER_APPROVAL",
+    actors: ["ai-agent", "automation"],
+    guards: [
+      {
+        id: "confidence_threshold" as never,
+        description: "AI confidence >= 0.75",
+        failureMessage: "Confidence below threshold",
+        severity: "hard",
+        evaluatedBy: "external"
+      }
+    ]
+  })
+  .transition({ id: "approve_replenishment", from: "PENDING_BUYER_APPROVAL", to: "PO_TRIGGERED", actors: ["human"] })
+  .outcome({ id: "replenishment_triggered", description: "PO submitted", valueUnit: "replenishment_triggered" })
+  .build()
+```
+
+## Anthropic and OpenAI actors
+
+Both providers create the same `AIAgentActor` shape and submit evidence with identical keys.
+
+```ts
+import { actorId } from "@loop-engine/core"
+import type { AIAgentActor } from "@loop-engine/actors"
+
+const claudeActor: AIAgentActor = {
+  type: "ai-agent",
+  id: actorId("agent:demand-forecaster"),
+  agentId: "claude-sonnet-4-20250514",
+  gatewaySessionId: "claude-session-001"
+}
+
+const openAiActor: AIAgentActor = {
+  type: "ai-agent",
+  id: actorId("agent:demand-forecaster"),
+  agentId: "gpt-4o",
+  gatewaySessionId: "openai-session-001"
+}
+```
+
+## Guard outcomes
+
+```ts
+// confidence 0.58 -> held at AI_ANALYSIS
+const lowConfidence = await engine.transition({
+  aggregateId,
+  transitionId: transitionId("recommend_replenishment"),
+  actor: claudeActor,
+  evidence: { ai_confidence: 0.58, ai_reasoning: "Insufficient certainty" }
+})
+// lowConfidence.status === "guard_failed"
+
+// confidence 0.82 -> advances to PENDING_BUYER_APPROVAL
+const highConfidence = await engine.transition({
+  aggregateId,
+  transitionId: transitionId("recommend_replenishment"),
+  actor: openAiActor,
+  evidence: { ai_confidence: 0.82, ai_reasoning: "Demand spike sustained" }
+})
+// highConfidence.status === "executed"
+```
+
+## Human approval gate
+
+```ts
+// AI tries to execute human-only transition
+const rejected = await engine.transition({
+  aggregateId,
+  transitionId: transitionId("approve_replenishment"),
+  actor: claudeActor,
+  evidence: { approval_obtained: true }
+})
+// rejected.status === "rejected"
+
+// Human executes approval path
+await engine.transition({
+  aggregateId,
+  transitionId: transitionId("approve_replenishment"),
+  actor: { type: "human", id: "buyer@lumebonde.com" },
+  evidence: { approved: true, approval_obtained: true }
+})
+```
+
+## Provider parity
+
+The loop definition, transition IDs, guards, and state progression remain identical across Anthropic and OpenAI implementations.
+
+- https://github.com/loopengine/loop-examples/tree/main/ai-actors/claude
+- https://github.com/loopengine/loop-examples/tree/main/ai-actors/openai

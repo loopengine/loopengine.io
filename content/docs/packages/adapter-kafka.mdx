@@ -1,6 +1,10 @@
-# @loop-engine/adapter-kafka
+---
+title: "@loop-engine/adapter-kafka"
+description: kafkaEventBus bridges Loop Engine events to Kafka topics for distributed consumers and durable streaming.
+section: Packages
+---
 
-Kafka-backed `EventBus` adapter.
+`@loop-engine/adapter-kafka` implements the runtime `EventBus` interface on top of a Kafka-like producer/consumer client.
 
 ## Install
 
@@ -8,25 +12,27 @@ Kafka-backed `EventBus` adapter.
 npm install @loop-engine/adapter-kafka kafkajs
 ```
 
-## API reference
-
-### `kafkaEventBus`
+## Event bus factory
 
 ```ts
 kafkaEventBus(options: {
-  kafka: {
-    producer(): ProducerLike
-    consumer(args: { groupId: string }): ConsumerLike
-  }
+  kafka: KafkaLike
   topic: string
   groupId?: string
 }): EventBus
 ```
 
-- `emit()` publishes JSON event payloads to Kafka.
-- `subscribe()` creates consumer flow and invokes handler per message.
+- `emit()` sends serialized `LoopEvent` payloads to `options.topic`.
+- `subscribe()` starts a consumer with `groupId` (default: `loopengine`) and forwards parsed messages to the handler.
 
-## Related packages
+```ts
+import { Kafka } from "kafkajs"
+import { kafkaEventBus } from "@loop-engine/adapter-kafka"
 
-- Depends on runtime + events
-- Peer dependency: `kafkajs@^2.0.0`
+const kafka = new Kafka({ brokers: ["localhost:9092"] })
+const bus = kafkaEventBus({ kafka, topic: "loop-events", groupId: "loopengine-docs" })
+```
+
+## Topic strategy
+
+Use one topic per environment or domain boundary to keep replay and retention policies explicit.

@@ -4,9 +4,7 @@ description: The @loop-engine/sdk package is the recommended entry point - it re
 section: Packages
 ---
 
-# @loop-engine/sdk
-
-Top-level package for building and running loops with default runtime wiring.
+`@loop-engine/sdk` is the fastest way to define loops, create a runtime, and wire guards, events, and optional signals.
 
 ## Install
 
@@ -14,25 +12,19 @@ Top-level package for building and running loops with default runtime wiring.
 npm install @loop-engine/sdk
 ```
 
-## What's included
+## Re-export surface
 
-Direct exports:
+Source-verified exports include:
 
-- `createLoopSystem(...)` (SDK factory)
-- `createLoopEngine` (from `@loop-engine/runtime`)
-- `LoopBuilder` (from `@loop-engine/dsl`)
-- `guardRegistry` (default guard registry)
-- `createSignalEngine` (from `@loop-engine/signals`)
-- `InMemoryEventBus` (from `@loop-engine/events`)
-- `computeMetrics`, `buildTimeline` (from `@loop-engine/observability`)
+- `LoopBuilder`
+- `createLoopSystem` and `createLoopEngine`
+- `guardRegistry` and `createSignalEngine`
+- `InMemoryEventBus`
+- `computeMetrics` and `buildTimeline`
+- `localRegistry` and `httpRegistry`
+- core types: `LoopDefinition`, `LoopInstance`, `TransitionRecord`, `Signal`
 
-Type exports:
-
-- `LoopDefinition`, `LoopInstance`, `TransitionRecord`, `Signal` (from `@loop-engine/core`)
-
-## API reference
-
-### `createLoopSystem`
+## createLoopSystem
 
 ```ts
 createLoopSystem(options: {
@@ -40,56 +32,73 @@ createLoopSystem(options: {
   store?: LoopStore
   guards?: GuardRegistry
   signals?: boolean
-}): {
+  registry?: LoopRegistry
+}): Promise<{
   engine: LoopEngine
   signals?: SignalEngine
   eventBus: InMemoryEventBus
-}
+}>
 ```
 
-Creates:
+Behavior from source:
 
-- runtime engine
-- in-memory event bus
-- optional signal engine
-
-Defaults:
-
-- `store` -> `memoryStore()`
-- `guards` -> default registry with built-in guards
-
-## Example
+- `store` defaults to `memoryStore()`
+- `guards` defaults to `guardRegistry`
+- `signals: true` adds a `SignalEngine`
+- `registry` is additive; local `loops[]` win on ID conflicts
+- registry load failures log a warning and fall back to local loops
 
 ```ts
-import { aggregateId, transitionId } from '@loop-engine/core'
-import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
+import { aggregateId, transitionId } from "@loop-engine/core"
+import { LoopBuilder, createLoopSystem } from "@loop-engine/sdk"
 
 const loop = LoopBuilder
-  .create('demo.loop', 'demo')
-  .state('OPEN')
-  .state('DONE', { isTerminal: true })
-  .initialState('OPEN')
-  .transition({ id: 'finish', from: 'OPEN', to: 'DONE', actors: ['human'] })
-  .outcome({ id: 'done', description: 'Loop done', valueUnit: 'done' })
+  .create("expense.approval", "finance")
+  .state("SUBMITTED")
+  .state("APPROVED", { isTerminal: true })
+  .state("REJECTED", { isTerminal: true })
+  .initialState("SUBMITTED")
+  .transition({ id: "approve", from: "SUBMITTED", to: "APPROVED", actors: ["human"] })
+  .transition({ id: "reject", from: "SUBMITTED", to: "REJECTED", actors: ["human"] })
+  .outcome({ id: "expense_approved", description: "Expense approved", valueUnit: "expense_approved" })
   .build()
 
-const { engine } = createLoopSystem({ loops: [loop] })
+const { engine, eventBus } = await createLoopSystem({ loops: [loop] })
+
+eventBus.subscribe(async (event) => {
+  if (event.type === "loop.transition.executed") {
+    console.log(event.transitionId)
+  }
+})
 
 await engine.start({
-  loopId: 'demo.loop',
-  aggregateId: aggregateId('A-1'),
-  orgId: 'acme',
-  actor: { type: 'system', id: 'system:bootstrap' }
+  loopId: "expense.approval",
+  aggregateId: aggregateId("EXP-1"),
+  orgId: "acme",
+  actor: { type: "system", id: "system:intake" }
 })
 
 await engine.transition({
-  aggregateId: aggregateId('A-1'),
-  transitionId: transitionId('finish'),
-  actor: { type: 'human', id: 'owner@acme.com' }
+  aggregateId: aggregateId("EXP-1"),
+  transitionId: transitionId("approve"),
+  actor: { type: "human", id: "manager@acme.com" },
+  evidence: { approved: true }
 })
 ```
 
-## Related packages
+## Direct imports
 
-- Depends on runtime, dsl, guards, signals, events, observability, adapter-memory, core.
-- If you need lower-level control, use `@loop-engine/runtime` directly.
+```ts
+import {
+  LoopBuilder,
+  createLoopSystem,
+  createLoopEngine,
+  InMemoryEventBus,
+  type LoopDefinition
+} from "@loop-engine/sdk"
+```
+
+## Package selection
+
+- Use `@loop-engine/sdk` for apps, scripts, and most services.
+- Use individual packages for tight bundle control or specialized integrations.

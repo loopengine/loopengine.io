@@ -1,6 +1,10 @@
-# @loop-engine/guards
+---
+title: "@loop-engine/guards"
+description: GuardRegistry and deterministic guard functions enforce policy checks before transitions execute.
+section: Packages
+---
 
-Guard registry types and built-in policy guards.
+`@loop-engine/guards` provides deterministic policy checks that run inside transition execution.
 
 ## Install
 
@@ -8,9 +12,22 @@ Guard registry types and built-in policy guards.
 npm install @loop-engine/guards
 ```
 
-## API reference
+## Guard model
 
-### `GuardRegistry`
+Guards in this package are synchronous policy assertions wrapped as async functions. They do not call LLMs or network services.
+
+`GuardResult`:
+
+```ts
+interface GuardResult {
+  passed: boolean
+  code?: string
+  message?: string
+  metadata?: Record<string, unknown>
+}
+```
+
+## Registry API
 
 ```ts
 class GuardRegistry {
@@ -20,31 +37,35 @@ class GuardRegistry {
 }
 ```
 
-### `createGuardRegistry`
-
 ```ts
-createGuardRegistry(): GuardRegistry
+import { createGuardRegistry } from "@loop-engine/guards"
+import { guardId } from "@loop-engine/core"
+
+const registry = createGuardRegistry()
+registry.register(guardId("budget_available"), async (context) => ({
+  passed: context.evidence.budget_ok === true,
+  message: "Budget check failed"
+}))
 ```
 
-### `defaultRegistry`
+## Built-in guards
 
-Preloaded with:
+`defaultRegistry` pre-registers:
 
-- `actor_has_permission`
-- `approval_obtained`
-- `deadline_not_exceeded`
-- `duplicate_check_passed`
-- `field_value_constraint`
+- `actor_has_permission` (`actorPermissionGuard`)
+- `approval_obtained` (`approvalObtainedGuard`)
+- `deadline_not_exceeded` (`deadlineNotExceededGuard`)
+- `duplicate_check_passed` (`duplicateCheckPassedGuard`)
+- `field_value_constraint` (`fieldValueConstraintGuard`)
 
-### Built-in guard exports
+Built-in evidence keys:
 
-- `approvalObtainedGuard`
-- `actorPermissionGuard`
-- `deadlineNotExceededGuard`
-- `duplicateCheckPassedGuard`
-- `fieldValueConstraintGuard`
+- `approval_obtained` reads `evidence.approved === true`
+- `actor_has_permission` reads `required_role` and `roles`
+- `deadline_not_exceeded` reads `deadline_iso`
+- `duplicate_check_passed` reads `duplicate_found`
+- `field_value_constraint` reads `constraint` with operators `eq | gt | lt | in`
 
-## Related packages
+## Hard and soft behavior
 
-- Depends on core only
-- Used by runtime and sdk
+Hard/soft severity is defined on each `GuardSpec` in `@loop-engine/core`. Runtime blocks on hard failures and records soft failures under `_softGuardWarnings` in transition evidence.

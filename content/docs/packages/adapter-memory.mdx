@@ -1,6 +1,10 @@
-# @loop-engine/adapter-memory
+---
+title: "@loop-engine/adapter-memory"
+description: MemoryStore provides zero-config LoopStore persistence for local development, tests, and browser demos.
+section: Packages
+---
 
-In-memory `LoopStore` implementation for development and tests.
+`@loop-engine/adapter-memory` stores loop state and transition history in process memory.
 
 ## Install
 
@@ -8,33 +12,32 @@ In-memory `LoopStore` implementation for development and tests.
 npm install @loop-engine/adapter-memory
 ```
 
-## API reference
-
-### `MemoryStore`
+## Store API
 
 ```ts
-class MemoryStore implements LoopStore
-```
+class MemoryStore implements LoopStore {
+  getInstance(aggregateId: AggregateId): Promise<LoopInstance | null>
+  saveInstance(instance: LoopInstance): Promise<void>
+  getTransitionHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
+  saveTransitionRecord(record: TransitionRecord): Promise<void>
+  listOpenInstances(loopId: LoopId, orgId: string): Promise<LoopInstance[]>
+}
 
-### `memoryStore`
-
-```ts
 memoryStore(): LoopStore
 ```
 
-## Usage
+## SDK wiring
 
 ```ts
-import { createLoopSystem } from '@loop-engine/sdk'
-import { memoryStore } from '@loop-engine/adapter-memory'
+import { memoryStore } from "@loop-engine/adapter-memory"
+import { createLoopSystem } from "@loop-engine/sdk"
 
-const { engine } = createLoopSystem({
-  loops,
+const { engine } = await createLoopSystem({
+  loops: [definition],
   store: memoryStore()
 })
 ```
 
-## Related packages
+## Runtime limits
 
-- Depends on core + runtime
-- Default store used by sdk when no store is provided
+State resets when the process restarts. Use this adapter for development, test suites, and ephemeral demos.

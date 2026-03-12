@@ -1,6 +1,10 @@
-# @loop-engine/actors
+---
+title: "@loop-engine/actors"
+description: Actor types, authorization checks, and evidence helpers keep transition attribution explicit and enforceable.
+section: Packages
+---
 
-Actor types, actor constraints, and actor evidence helpers.
+`@loop-engine/actors` models all five actor categories and provides transition authorization + evidence utilities.
 
 ## Install
 
@@ -8,19 +12,37 @@ Actor types, actor constraints, and actor evidence helpers.
 npm install @loop-engine/actors
 ```
 
-## API reference
+## Actor types
 
-### Actor types
+```ts
+interface HumanActor extends ActorRef {
+  type: "human"
+  sessionId: string
+}
 
-- `HumanActor`
-- `AutomationActor`
-- `AIAgentActor`
-- `WebhookActor`
-- `SystemActor`
-- `Actor` union
-- `AIActorSubmission`
+interface AutomationActor extends ActorRef {
+  type: "automation"
+  serviceId: string
+}
 
-### `canActorExecuteTransition`
+interface AIAgentActor extends ActorRef {
+  type: "ai-agent"
+  agentId: string
+  gatewaySessionId: string
+  recommendedBy?: string
+}
+
+interface WebhookActor extends ActorRef {
+  type: "webhook"
+  source: string
+}
+
+interface SystemActor extends ActorRef {
+  type: "system"
+}
+```
+
+## Authorization
 
 ```ts
 canActorExecuteTransition(
@@ -30,13 +52,36 @@ canActorExecuteTransition(
 ): { authorized: boolean; requiresApproval: boolean; reason?: string }
 ```
 
-### `buildActorEvidence`
+`canActorExecuteTransition()` validates `transition.allowedActors` and optional AI safety constraints (`requiresHumanApprovalFor`, `maxConsecutiveAITransitions`, and `canExecuteTransitions`).
+
+```ts
+import { canActorExecuteTransition } from "@loop-engine/actors"
+
+const auth = canActorExecuteTransition(agentActor, transition)
+if (!auth.authorized) {
+  console.log(auth.reason)
+}
+```
+
+## Evidence building
 
 ```ts
 buildActorEvidence(actor: Actor, baseEvidence: Evidence): Evidence
 ```
 
-## Related packages
+The helper always adds:
 
-- Depends on `@loop-engine/core`
-- Used by runtime, sdk, and application-level approval flows
+- `actor_type`
+- `actor_id`
+
+For `ai-agent` it also adds `ai_agent_id` and preserves `ai_confidence` and `ai_reasoning` when present.
+
+```ts
+import { buildActorEvidence } from "@loop-engine/actors"
+
+const evidence = buildActorEvidence(aiActor, {
+  ai_confidence: 0.82,
+  ai_reasoning: "Demand spike at DC-East",
+  recommended_qty: 500
+})
+```
