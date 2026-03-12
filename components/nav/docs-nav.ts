@@ -74,6 +74,8 @@ export const docsSections: DocsNavSection[] = [
       { title: "@loop-engine/adapter-kafka", href: "/docs/packages/adapter-kafka" },
       { title: "@loop-engine/adapter-http", href: "/docs/packages/adapter-http" },
       { title: "@loop-engine/adapter-openclaw", href: "/docs/packages/adapter-openclaw" },
+      { title: "@loop-engine/adapter-anthropic", href: "/docs/packages/adapter-anthropic" },
+      { title: "@loop-engine/adapter-openai", href: "/docs/packages/adapter-openai" },
       { title: "@loop-engine/adapter-commerce-gateway", href: "/docs/packages/adapter-commerce-gateway" },
       { title: "All packages", href: "/docs/packages/all-packages" }
     ]

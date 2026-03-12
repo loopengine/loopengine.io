@@ -2,6 +2,7 @@ import { LoopEngineIcon } from "@/components/logo";
 import { CodeTabs } from "@/components/home/CodeTabs";
 import { NpmInstallChip } from "@/components/home/NpmInstallChip";
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 
 const packages = [
@@ -19,6 +20,7 @@ type IntegrationCard = {
   name: string;
   badge: string;
   description: string;
+  logoPath?: string;
   capabilities?: string[];
   docsHref?: string;
   npmHref?: string;
@@ -66,6 +68,36 @@ const integrations: IntegrationCard[] = [
     docsHref: "/docs/integrations/pagerduty",
     npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-pagerduty",
     npmLabel: "@loop-engine/adapter-pagerduty"
+  },
+  {
+    name: "Claude",
+    badge: "Live Integration",
+    logoPath: "/logos/anthropic.svg",
+    description:
+      "AI actor decisions with full governance — confidence scoring, prompt attribution, and hard guard enforcement at the runtime level.",
+    capabilities: [
+      "Confidence guard blocks low-certainty transitions - structural, not prompt-based",
+      "Prompt hash recorded on every AIAgentActor for audit trail",
+      "Human-only guard enforces approval boundary regardless of model instructions"
+    ],
+    docsHref: "/docs/packages/adapter-anthropic",
+    npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-anthropic",
+    npmLabel: "@loop-engine/adapter-anthropic"
+  },
+  {
+    name: "OpenAI",
+    badge: "Live Integration",
+    logoPath: "/logos/openai.svg",
+    description:
+      "Same governance model for GPT-4o and o-series — identical guard enforcement, same audit trail, drop-in alongside Claude in multi-model loops.",
+    capabilities: [
+      "Structured JSON response parsing via response_format built in",
+      "provider field distinguishes Claude vs GPT-4o in the audit trail",
+      "Works alongside adapter-anthropic in the same loop definition"
+    ],
+    docsHref: "/docs/packages/adapter-openai",
+    npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-openai",
+    npmLabel: "@loop-engine/adapter-openai"
   },
   {
     name: "n8n",
@@ -346,7 +378,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
             in.
           </p>
 
-          <div className="mt-8 grid gap-4 lg:grid-cols-[2fr_1fr_1fr_1fr]">
+          <div className="mt-8 grid gap-4 lg:grid-cols-3">
             {integrations.map((integration) => (
               <article
                 key={integration.name}
@@ -363,7 +395,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <OpenClawPlaceholderIcon />
+                    <IntegrationLogo name={integration.name} logoPath={integration.logoPath} />
                     <h3 style={{ fontSize: integration.featured ? "var(--text-xl)" : "var(--text-lg)" }}>
                       {integration.name}
                     </h3>
@@ -546,4 +578,19 @@ function OpenClawPlaceholderIcon() {
       <path d="M8 13h10M13 8v10" stroke="var(--color-primary)" strokeWidth="1.5" />
     </svg>
   );
+}
+
+function IntegrationLogo({ name, logoPath }: { name: string; logoPath?: string }) {
+  if (logoPath) {
+    return (
+      <Image
+        src={logoPath}
+        alt={name}
+        width={80}
+        height={24}
+        style={{ height: 24, width: "auto", objectFit: "contain" }}
+      />
+    );
+  }
+  return <OpenClawPlaceholderIcon />;
 }

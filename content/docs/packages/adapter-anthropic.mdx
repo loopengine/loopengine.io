@@ -1,0 +1,112 @@
+---
+title: "@loop-engine/adapter-anthropic"
+description: "AI actor adapter for Claude (Anthropic) — wire Claude as a governed actor in any Loop Engine workflow."
+section: "packages"
+---
+
+## Overview
+
+`@loop-engine/adapter-anthropic` wraps the Anthropic Claude API as a Loop Engine AI actor. It handles prompt construction, response parsing, confidence extraction, and prompt hashing — returning an `AIAgentActor` and `AIAgentSubmission` ready for submission to the runtime. Guards run after the adapter returns. The adapter does not call `transition()` directly.
+
+## Installation
+
+```bash
+npm install @loop-engine/adapter-anthropic @anthropic-ai/sdk
+```
+
+## Peer dependencies
+
+```text
+@anthropic-ai/sdk  ^0.39.0
+```
+
+## Basic usage
+
+```typescript
+import Anthropic from '@anthropic-ai/sdk'
+import { createAnthropicActorAdapter } from '@loop-engine/adapter-anthropic'
+import { createLoopSystem } from '@loop-engine/sdk'
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+const adapter = createAnthropicActorAdapter(anthropic, {
+  modelId: 'claude-opus-4-6',
+  confidenceThreshold: 0.75,
+})
+
+const loopSystem = await createLoopSystem({ loops: [] })
+const aggregateId = 'procurement-1'
+
+// Get the AI actor's decision for the current loop state
+const { actor, decision } = await adapter.createSubmission({
+  loopId: 'procurement',
+  loopName: 'SCM Procurement',
+  currentState: 'pending_analysis',
+  availableSignals: [
+    {
+      signalId: 'submit_recommendation',
+      name: 'Submit Recommendation',
+      description: 'Submit a purchase order recommendation',
+      allowedActors: ['ai-agent', 'automation'],
+    },
+  ],
+  instruction: 'Analyze the demand data and recommend whether to issue a purchase order.',
+  evidence: { demandForecast: 0.89, currentStock: 42, reorderPoint: 50 },
+})
+
+// Submit to the runtime — guards evaluate after this point
+const result = await loopSystem.transition({
+  aggregateId,
+  signal: decision.signalId,
+  actor,
+  evidence: decision,
+})
+```
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `modelId` | `string` | `claude-opus-4-6` | Anthropic model to use |
+| `maxTokens` | `number` | `1024` | Max tokens in response |
+| `systemPrompt` | `string` | — | Optional system prompt prepended to loop context |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0–1) |
+
+## What the adapter produces
+
+The adapter returns an `AIAgentActor` with:
+
+- `type: "ai-agent"`
+- `provider: "anthropic"`
+- `modelId` — the model used
+- `confidence` — extracted from the model response
+- `promptHash` — SHA-256 of the prompt sent (for audit trail)
+
+## Guard enforcement note
+
+The confidence guard runs at the runtime level — not inside the adapter. If you configure a `confidence-threshold` guard on the transition, the runtime will block the transition if the model's confidence falls below the threshold regardless of what the adapter returns.
+
+```typescript
+// In your loop definition — this guard is structural, not prompt-based
+{
+  guardId: 'confidence-threshold',
+  severity: 'hard',
+  evaluatedBy: 'runtime',
+  parameters: { threshold: 0.75 },
+}
+```
+
+## Error handling
+
+The adapter throws `ActorDecisionError` with one of these codes:
+
+- `INVALID_SIGNAL` — model returned a signalId not in `availableSignals`
+- `INVALID_CONFIDENCE` — confidence value outside 0–1 range
+- `PARSE_FAILED` — model response could not be parsed as JSON
+- `API_ERROR` — Anthropic API returned an error
+
+## Links
+
+- [View on npm](https://www.npmjs.com/package/@loop-engine/adapter-anthropic)
+- [Source](https://github.com/loopengine/loop-engine/tree/main/packages/adapter-anthropic)
+- Related: [AI as Actor concept](/docs/ai-and-automation/ai-as-actor), [@loop-engine/adapter-openai](/docs/packages/adapter-openai)

@@ -1,0 +1,122 @@
+---
+title: "@loop-engine/adapter-openai"
+description: "AI actor adapter for GPT-4o and o-series models — wire OpenAI as a governed actor in any Loop Engine workflow."
+section: "packages"
+---
+
+## Overview
+
+`@loop-engine/adapter-openai` wraps the OpenAI API as a Loop Engine AI actor using `response_format: { type: "json_object" }` for structured output. Same governance model as `adapter-anthropic` — identical guard enforcement, same audit trail, drop-in pattern for multi-model loops.
+
+## Installation
+
+```bash
+npm install @loop-engine/adapter-openai openai
+```
+
+## Peer dependencies
+
+```text
+openai  ^4.0.0
+```
+
+## Basic usage
+
+```typescript
+import OpenAI from 'openai'
+import { createOpenAIActorAdapter } from '@loop-engine/adapter-openai'
+import { createLoopSystem } from '@loop-engine/sdk'
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+
+const adapter = createOpenAIActorAdapter(openai, {
+  modelId: 'gpt-4o',
+  confidenceThreshold: 0.75,
+})
+
+const loopSystem = await createLoopSystem({ loops: [] })
+const aggregateId = 'procurement-1'
+
+// Get the AI actor's decision for the current loop state
+const { actor, decision } = await adapter.createSubmission({
+  loopId: 'procurement',
+  loopName: 'SCM Procurement',
+  currentState: 'pending_analysis',
+  availableSignals: [
+    {
+      signalId: 'submit_recommendation',
+      name: 'Submit Recommendation',
+      description: 'Submit a purchase order recommendation',
+      allowedActors: ['ai-agent', 'automation'],
+    },
+  ],
+  instruction: 'Analyze the demand data and recommend whether to issue a purchase order.',
+  evidence: { demandForecast: 0.89, currentStock: 42, reorderPoint: 50 },
+})
+
+// Submit to the runtime — guards evaluate after this point
+const result = await loopSystem.transition({
+  aggregateId,
+  signal: decision.signalId,
+  actor,
+  evidence: decision,
+})
+```
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `modelId` | `string` | `gpt-4o` | OpenAI model to use |
+| `maxTokens` | `number` | `1024` | Max tokens in response |
+| `systemPrompt` | `string` | — | Optional system prompt prepended to loop context |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0–1) |
+
+## What the adapter produces
+
+The adapter returns an `AIAgentActor` with:
+
+- `type: "ai-agent"`
+- `provider: "openai"`
+- `modelId` — the model used
+- `confidence` — extracted from the model response
+- `promptHash` — SHA-256 of the prompt sent (for audit trail)
+
+## Guard enforcement note
+
+The confidence guard runs at the runtime level — not inside the adapter. If you configure a `confidence-threshold` guard on the transition, the runtime will block the transition if the model's confidence falls below the threshold regardless of what the adapter returns.
+
+```typescript
+// In your loop definition — this guard is structural, not prompt-based
+{
+  guardId: 'confidence-threshold',
+  severity: 'hard',
+  evaluatedBy: 'runtime',
+  parameters: { threshold: 0.75 },
+}
+```
+
+## Multi-model loops
+
+Both adapters return the same `AIAgentActor` shape. You can use Claude for one transition and GPT-4o for another in the same loop — the runtime treats them identically. The `provider` and `modelId` fields on the actor record distinguish them in the audit trail.
+
+```typescript
+// Claude handles analysis, GPT-4o handles summarization — same loop
+const claudeActor = await claudeAdapter.createSubmission({ ... })
+const openaiActor = await openaiAdapter.createSubmission({ ... })
+```
+
+## Error handling
+
+The adapter throws `ActorDecisionError` with one of these codes:
+
+- `INVALID_SIGNAL` — model returned a signalId not in `availableSignals`
+- `INVALID_CONFIDENCE` — confidence value outside 0–1 range
+- `PARSE_FAILED` — model response could not be parsed as JSON
+- `API_ERROR` — OpenAI API returned an error
+
+## Links
+
+- [View on npm](https://www.npmjs.com/package/@loop-engine/adapter-openai)
+- [Source](https://github.com/loopengine/loop-engine/tree/main/packages/adapter-openai)
+- Related: [AI as Actor concept](/docs/ai-and-automation/ai-as-actor), [@loop-engine/adapter-anthropic](/docs/packages/adapter-anthropic)
