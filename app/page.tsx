@@ -100,6 +100,36 @@ const integrations: IntegrationCard[] = [
     npmLabel: "@loop-engine/adapter-openai"
   },
   {
+    name: "Grok",
+    badge: "Live Integration",
+    logoPath: "/logos/xai.svg",
+    description:
+      "Governed AI actors via xAI's Grok API — OpenAI-compatible format, same guard enforcement as other adapters.",
+    capabilities: [
+      "OpenAI-compatible API - drop-in with adapter-openai pattern",
+      "Grok 3 and Grok 3 Mini supported",
+      "provider: \"grok\" field distinguishes in audit trail"
+    ],
+    docsHref: "/docs/packages/adapter-grok",
+    npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-grok",
+    npmLabel: "@loop-engine/adapter-grok"
+  },
+  {
+    name: "Gemini",
+    badge: "Live Integration",
+    logoPath: "/logos/gemini.svg",
+    description:
+      "Google Gemini as a governed Loop Engine actor — native Google AI SDK, Gemini 1.5 Pro and 2.0 Flash supported.",
+    capabilities: [
+      "Native @google/generative-ai SDK (not OpenAI-compatible)",
+      "Automatic JSON code fence stripping - handles Gemini quirks",
+      "Gemini 1.5 Pro, Flash, and 2.0 Flash supported"
+    ],
+    docsHref: "/docs/packages/adapter-gemini",
+    npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-gemini",
+    npmLabel: "@loop-engine/adapter-gemini"
+  },
+  {
     name: "n8n",
     badge: "Coming soon",
     description: "Stateful approval checkpoints and auditable loop orchestration for n8n automations."
