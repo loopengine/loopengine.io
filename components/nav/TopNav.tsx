@@ -2,131 +2,88 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef, useState } from "react";
-import { LoopEngineLogo } from "@/components/logo";
-import { MobileMenu } from "./MobileMenu";
 
-const navLinks = [
-  { label: "Docs", href: "/docs" },
-  { label: "Examples", href: "/docs/examples" },
-  { label: "Packages", href: "/docs/packages" }
+type NavItem = {
+  label: string;
+  href: string;
+  matchPrefix?: string;
+};
+
+const navItems: NavItem[] = [
+  { label: "Docs", href: "/docs", matchPrefix: "/docs" },
+  { label: "Examples", href: "/#example-scm" },
+  {
+    label: "Packages",
+    href: "/docs/loop-library/supply-chain",
+    matchPrefix: "/docs/loop-library",
+  },
+  { label: "Blog", href: "/blog", matchPrefix: "/blog" },
+  { label: "Partners", href: "/partners", matchPrefix: "/partners" },
+  { label: "Registry", href: "/registry", matchPrefix: "/registry" },
 ];
 
-function isActive(pathname: string, href: string): boolean {
-  return pathname === href || pathname.startsWith(`${href}/`);
+function isItemActive(pathname: string, item: NavItem): boolean {
+  if (item.matchPrefix) {
+    return pathname.startsWith(item.matchPrefix);
+  }
+  return pathname === item.href;
+}
+
+function navLinkClass(active: boolean): string {
+  return active
+    ? "font-medium text-[var(--color-primary)] underline underline-offset-4"
+    : "text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline";
 }
 
 export function TopNav() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
 
   return (
-    <>
-      <header
-        className="sticky top-0 z-[100]"
-        style={{
-          height: 56,
-          backdropFilter: "blur(12px) saturate(180%)",
-          background: "color-mix(in srgb, var(--color-surface) 92%, transparent)",
-          borderBottom: "1px solid var(--color-border)"
-        }}
-      >
-        <div className="mx-auto flex h-full w-full max-w-[var(--max-width-full)] items-center justify-between px-4 md:px-6 lg:px-8">
-          <Link href="/" aria-label="Loop Engine home">
-            <LoopEngineLogo size="sm" />
-          </Link>
+    <header className="border-[var(--color-border)] border-b bg-[var(--color-surface)]">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
+        <Link href="/" className="font-semibold text-[var(--color-ink)] text-lg">
+          Loop Engine
+        </Link>
 
-          <nav className="hidden items-center gap-6 lg:flex" aria-label="Main navigation">
-            {navLinks.map((link) => {
-              const active = isActive(pathname, link.href);
-              return (
-                <Link
-                  key={link.href}
-                  className="le-nav-link"
-                  href={link.href}
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "var(--text-xs)",
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    color: active ? "var(--color-primary)" : "var(--color-ink-tertiary)",
-                    transition: "color var(--dur-fast) var(--ease-out)"
-                  }}
-                >
-                  {link.label}
-                </Link>
-              );
-            })}
-            <a
-              className="le-nav-link"
-              href="https://github.com/loopengine/loop-engine"
-              rel="noreferrer"
-              target="_blank"
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "var(--text-xs)",
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "var(--color-ink-tertiary)",
-                transition: "color var(--dur-fast) var(--ease-out)"
-              }}
-            >
-              GitHub
-            </a>
-          </nav>
-
-          <div className="flex items-center gap-2 md:gap-3">
-            <span
-              className="hidden lg:inline-flex"
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "var(--text-xs)",
-                border: "1px solid var(--color-primary-mid)",
-                color: "var(--color-primary)",
-                borderRadius: "999px",
-                padding: "4px 10px"
-              }}
-            >
-              @loop-engine/sdk v0.1.0
-            </span>
-            <Link
-              href="/docs/getting-started/quick-start"
-              className="le-cta-button hidden md:inline-flex"
-              style={{
-                background: "var(--color-primary)",
-                color: "#fff",
-                fontFamily: "var(--font-mono)",
-                fontSize: "var(--text-xs)",
-                padding: "6px 14px",
-                borderRadius: "var(--radius-sm)",
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-                transition: "all var(--dur-fast) var(--ease-out)"
-              }}
-            >
-              Get started
+        <nav className="hidden items-center gap-5 text-sm md:flex">
+          {navItems.map((item) => (
+            <Link key={item.label} href={item.href} className={navLinkClass(isItemActive(pathname, item))}>
+              {item.label}
             </Link>
-            <button
-              ref={menuButtonRef}
-              aria-expanded={open}
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-controls="mobile-menu-panel"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-sm)] lg:hidden"
-              onClick={() => setOpen((prev) => !prev)}
-              style={{
-                border: "1px solid var(--color-border)",
-                color: "var(--color-ink)",
-                background: "transparent"
-              }}
-              type="button"
-            >
-              <span className="text-lg leading-none">{open ? "✕" : "☰"}</span>
-            </button>
+          ))}
+          <a
+            className="rounded border border-[var(--color-border)] px-3 py-1.5 font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-alt)]"
+            href="https://github.com/loopengine/loop-engine"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+        </nav>
+
+        <details className="md:hidden">
+          <summary className="cursor-pointer rounded border border-[var(--color-border)] px-3 py-1.5 text-[var(--color-ink-secondary)] text-sm">
+            Menu
+          </summary>
+          <div className="absolute right-4 z-20 mt-2 w-56 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3 shadow-md">
+            <div className="flex flex-col gap-2 text-sm">
+              {navItems.map((item) => (
+                <Link key={item.label} href={item.href} className={navLinkClass(isItemActive(pathname, item))}>
+                  {item.label}
+                </Link>
+              ))}
+              <a
+                className="rounded border border-[var(--color-border)] px-2 py-1.5 text-center font-medium text-[var(--color-ink)]"
+                href="https://github.com/loopengine/loop-engine"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
+            </div>
           </div>
-        </div>
-      </header>
-      <MobileMenu open={open} onClose={() => setOpen(false)} triggerRef={menuButtonRef} />
-    </>
+        </details>
+      </div>
+    </header>
   );
 }
