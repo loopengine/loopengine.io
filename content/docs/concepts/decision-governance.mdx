@@ -1,0 +1,55 @@
+---
+title: Decision Governance
+description: Why governed decision loops exist - the problem Loop Engine solves that workflow engines and agent frameworks leave open.
+section: Core Concepts
+---
+
+## The Problem
+
+In modern enterprise systems, AI agents retrieve context, reason over it, and recommend or execute actions. This works well in development.
+
+In production, three requirements emerge that most stacks do not address:
+
+- Decisions must be attributable - who or what made each decision, and why
+- Policies must be enforced at the runtime level, not in prompts
+- Audit trails must be reconstructable - not reassembled from scattered logs
+
+Without an explicit governance layer, teams discover that decision trails are spread across prompt logs, API traces, application logs, and database records. Reconstructing the reasoning behind a decision after the fact is fragile.
+
+## What Loop Engine Adds
+
+Loop Engine sits between AI reasoning and operational execution. Its job is to govern the decision lifecycle.
+
+```text
+Enterprise Knowledge Sources
+          ↓
+RAG / Agent Reasoning Layer
+          ↓
+Loop Engine - Decision Governance
+          ↓
+Workflow / Execution Systems
+```
+
+Every transition through a loop:
+
+- Names the actor responsible (human, automation, or AI agent)
+- Evaluates guard policies before allowing the transition
+- Attaches evidence - what information the actor used
+- Emits a structured event with full attribution
+
+This creates a decision record at runtime, not a best-effort reconstruction later.
+
+## What This Is Not
+
+Loop Engine is not a workflow engine. It does not schedule jobs, manage retries, or handle durable execution. Systems like Temporal or Prefect own those concerns.
+
+Loop Engine is not an agent framework. It does not orchestrate tool calls or manage model context. LangGraph, OpenAI Assistants, and your own agent runtime own that layer.
+
+Loop Engine governs the boundary between reasoning and action. It enforces who can do what, under what conditions, with what evidence.
+
+## Related
+
+- [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+- [Agents and RAG](/docs/concepts/agents-and-rag)
+- [Guards and Policy](/docs/concepts/guards-and-policy)
+- [Learning Signals](/docs/concepts/learning-signals)

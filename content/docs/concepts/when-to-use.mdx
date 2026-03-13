@@ -1,0 +1,40 @@
+---
+title: When to Use Loop Engine
+description: Is Loop Engine right for your use case? Use this page to decide quickly.
+section: Core Concepts
+---
+
+## Use Loop Engine When
+
+- AI agents make recommendations that affect operational systems
+- Human approvals are required at defined checkpoints
+- Policies must be enforced consistently, not through prompt instructions
+- Decisions must carry an attributable audit trail
+- Multiple actor types (human + AI + automation) participate in one flow
+- Your industry requires demonstrable decision governance (healthcare, finance, pharma, regulated manufacturing)
+
+## You Probably Don't Need It When
+
+- Your workflow has a single actor and no approval gates
+- The operation is fully deterministic with no AI or human decision points
+- You only need retry logic and scheduling (use a workflow engine)
+- You are building a prototype or exploration system
+
+## Good Fits by Industry
+
+- Healthcare and pharma: governed clinical and supply workflows with audit trails
+- Financial services: fraud review, credit decisions, and change approvals
+- Supply chain: AI-assisted procurement and demand signal response
+- Infrastructure: change management and deployment gates
+- Content and trust: moderation escalation and editorial approval
+
+## Combined With Other Tools
+
+Loop Engine works alongside workflow engines and agent frameworks - it does not replace them.
+
+- [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+- [Agents and RAG](/docs/concepts/agents-and-rag)
+
+## Not Sure?
+
+If you are asking, "can the AI just do this without approval?" that is usually the signal that you need Loop Engine.

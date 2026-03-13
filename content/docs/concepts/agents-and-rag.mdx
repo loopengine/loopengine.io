@@ -1,0 +1,92 @@
+---
+title: Agents and RAG
+description: How Loop Engine governs the decision boundary in AI agent systems and RAG pipelines.
+section: Core Concepts
+---
+
+## What Agent Frameworks Do
+
+Agent frameworks like LangGraph, OpenAI Assistants, and custom agent loops focus on retrieving context, selecting tools, chaining operations, and generating recommendations from retrieved information.
+
+They are excellent at reasoning. They are not designed to govern whether the resulting action is authorized, attributable, or auditable.
+
+## The Governance Gap
+
+A typical agentic flow:
+
+```text
+Knowledge Base
+     ↓
+RAG Retrieval           <- context retrieval
+     ↓
+LLM / Agent Reasoning   <- recommendation
+     ↓
+Tool / API Execution    <- action
+```
+
+This works for low-risk autonomous tasks.
+
+In enterprise production - supply chain, financial approvals, healthcare, infrastructure - the gap between "agent recommends" and "system executes" needs an explicit governance layer.
+
+## Where Loop Engine Fits
+
+```text
+Knowledge Base
+     ↓
+RAG Retrieval
+     ↓
+LLM / Agent Reasoning
+     ↓
+Loop Engine             <- decision governance
+     ↓
+Workflow Execution
+```
+
+The agent's recommendation becomes a proposed transition in a Loop Engine loop. Guards evaluate it. A human approves when policy requires. The action executes only after the loop allows it.
+
+## RAG Outputs as Evidence
+
+RAG systems already produce high-value evidence: retrieved documents, confidence scores, and graph relationships.
+
+Loop Engine attaches this context directly to transitions as structured evidence, creating a permanent record of what the model used, what it recommended, and why the system allowed the action.
+
+## Code Example
+
+```ts
+import Anthropic from "@anthropic-ai/sdk";
+import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
+import { createLoopSystem } from "@loop-engine/sdk";
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const adapter = createAnthropicActorAdapter(anthropic, { modelId: "claude-opus-4-6" });
+const { engine } = await createLoopSystem({ loops: [/* procurement loop */] });
+
+const ragResults = {
+  retrievedDocs: 12,
+  confidence: 0.84,
+  ragSource: "vendor-policy-kb"
+};
+
+const { actor, decision } = await adapter.createSubmission({
+  loopId: "procurement",
+  loopName: "SCM Procurement",
+  currentState: "pending_analysis",
+  availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation" }],
+  instruction: "Recommend whether to proceed with purchase order issuance.",
+  evidence: { ...ragResults }
+});
+
+await engine.transition({
+  aggregateId: "PO-10042" as never,
+  transitionId: "submit_recommendation" as never,
+  actor,
+  evidence: { ...decision, ragResults }
+});
+```
+
+## Related
+
+- [AI as Actor](/docs/ai-and-automation/ai-as-actor)
+- [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)
+- [Decision Governance](/docs/concepts/decision-governance)
+- [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)

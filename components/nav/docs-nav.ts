@@ -14,7 +14,8 @@ export const docsSections: DocsNavSection[] = [
     items: [
       { title: "Quick Start", href: "/docs/getting-started/quick-start" },
       { title: "Installation", href: "/docs/getting-started/installation" },
-      { title: "Your First Loop", href: "/docs/getting-started/your-first-loop" }
+      { title: "Your First Loop", href: "/docs/getting-started/your-first-loop" },
+      { title: "Architecture", href: "/docs/getting-started/architecture" }
     ]
   },
   {
@@ -25,7 +26,14 @@ export const docsSections: DocsNavSection[] = [
       { title: "Guards and Policy", href: "/docs/concepts/guards-and-policy" },
       { title: "Signals", href: "/docs/concepts/signals" },
       { title: "Observability", href: "/docs/concepts/observability" },
-      { title: "Learning Signals", href: "/docs/concepts/learning-signals" }
+      { title: "Learning Signals", href: "/docs/concepts/learning-signals" },
+      { title: "AI as Actor", href: "/docs/ai-and-automation/ai-as-actor" },
+      { title: "Confidence + Evidence", href: "/docs/ai-and-automation/confidence-evidence" },
+      { title: "Human Approval Gates", href: "/docs/ai-and-automation/human-approval-gates" },
+      { title: "Decision Governance", href: "/docs/concepts/decision-governance" },
+      { title: "Loop Engine vs Workflow Engines", href: "/docs/concepts/loop-engine-vs-workflow-engines" },
+      { title: "Agents and RAG", href: "/docs/concepts/agents-and-rag" },
+      { title: "When to Use Loop Engine", href: "/docs/concepts/when-to-use" }
     ]
   },
   {
@@ -45,14 +53,6 @@ export const docsSections: DocsNavSection[] = [
       { title: "Transitions", href: "/docs/running-loops/transitions" },
       { title: "Event Subscriptions", href: "/docs/running-loops/event-subscriptions" },
       { title: "Adapters", href: "/docs/running-loops/adapters" }
-    ]
-  },
-  {
-    label: "AI and Automation",
-    items: [
-      { title: "AI as Actor", href: "/docs/ai-and-automation/ai-as-actor" },
-      { title: "Confidence + Evidence", href: "/docs/ai-and-automation/confidence-evidence" },
-      { title: "Human Approval Gates", href: "/docs/ai-and-automation/human-approval-gates" }
     ]
   },
   {
@@ -91,6 +91,8 @@ export const docsSections: DocsNavSection[] = [
       { title: "Demand Signal", href: "/docs/examples/demand-signal" },
       { title: "Postgres Persistence", href: "/docs/examples/postgres-persistence" },
       { title: "Event Streaming", href: "/docs/examples/event-streaming" },
+      { title: "Infrastructure Change Approval", href: "/docs/examples/infrastructure-change-approval" },
+      { title: "Fraud Review", href: "/docs/examples/fraud-review" },
       { title: "OpenClaw Integration", href: "/docs/examples/openclaw" },
       { title: "Commerce Gateway", href: "/docs/examples/commerce-gateway" }
     ]

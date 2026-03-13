@@ -1,0 +1,211 @@
+---
+title: Fraud Review Loop
+description: AI-assisted fraud detection with human analyst review - structured escalation, evidence capture, and final disposition.
+section: Examples
+---
+
+Fraud systems produce risk signals faster than analysts can review. This example shows a governed review loop where automation flags transactions, AI scores fraud risk, and human analysts make the final disposition with full evidence.
+
+## Loop behavior
+
+- States: `IDLE -> FLAGGED -> SCORING -> PENDING_REVIEW -> REVIEWED -> CLOSED`
+- Alternate terminal path: `PENDING_REVIEW -> DISMISSED`
+- Actors: `automation`, `ai-agent`, `human`
+- Governance: confidence threshold + evidence requirements + human-only final review
+
+## Loop definition (YAML)
+
+```yaml
+loopId: fraud.review
+version: 1.0.0
+name: Fraud Review
+description: AI-assisted fraud scoring with analyst disposition.
+states:
+  - stateId: IDLE
+    label: Idle
+  - stateId: FLAGGED
+    label: Flagged
+  - stateId: SCORING
+    label: Scoring
+  - stateId: PENDING_REVIEW
+    label: Pending Review
+  - stateId: REVIEWED
+    label: Reviewed
+  - stateId: CLOSED
+    label: Closed
+    terminal: true
+  - stateId: DISMISSED
+    label: Dismissed
+    terminal: true
+initialState: IDLE
+transitions:
+  - transitionId: ingest_flag
+    from: IDLE
+    to: FLAGGED
+    signal: ingest_flag
+    allowedActors: [automation]
+  - transitionId: start_scoring
+    from: FLAGGED
+    to: SCORING
+    signal: start_scoring
+    allowedActors: [automation]
+  - transitionId: submit_score
+    from: SCORING
+    to: PENDING_REVIEW
+    signal: submit_score
+    allowedActors: [ai-agent]
+    guards:
+      - guardId: evidence-required
+        description: Fraud context required
+        severity: hard
+        evaluatedBy: runtime
+        parameters:
+          requiredFields: [fraud_score, flagged_patterns, transaction_context]
+  - transitionId: dismiss_case
+    from: PENDING_REVIEW
+    to: DISMISSED
+    signal: dismiss_case
+    allowedActors: [automation, human]
+    guards:
+      - guardId: confidence-threshold
+        description: Low-confidence flags can be auto-dismissed
+        severity: soft
+        evaluatedBy: runtime
+        parameters:
+          threshold: 0.6
+  - transitionId: analyst_review
+    from: PENDING_REVIEW
+    to: REVIEWED
+    signal: analyst_review
+    allowedActors: [human]
+    guards:
+      - guardId: human-only
+        description: Final review requires analyst
+        severity: hard
+        evaluatedBy: runtime
+  - transitionId: close_case
+    from: REVIEWED
+    to: CLOSED
+    signal: close_case
+    allowedActors: [automation]
+```
+
+## Ingest transaction signal
+
+```ts
+import { createLoopSystem } from "@loop-engine/sdk";
+
+const { engine } = await createLoopSystem({ loops: [/* fraud.review definition */] });
+
+await engine.start({
+  loopId: "fraud.review" as never,
+  aggregateId: "txn-884422" as never,
+  actor: { type: "automation", id: "fraud:intake" },
+  metadata: { transactionId: "TXN-884422", amount: 1480, currency: "USD" }
+});
+
+await engine.transition({
+  aggregateId: "txn-884422" as never,
+  transitionId: "ingest_flag" as never,
+  actor: { type: "automation", id: "fraud:ingestor" }
+});
+```
+
+## AI scoring with OpenAI adapter
+
+```ts
+import OpenAI from "openai";
+import { createOpenAIActorAdapter } from "@loop-engine/adapter-openai";
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const scorer = createOpenAIActorAdapter(openai, {
+  modelId: "gpt-4o",
+  confidenceThreshold: 0.7
+});
+
+const { actor, decision } = await scorer.createSubmission({
+  loopId: "fraud.review",
+  loopName: "Fraud Review",
+  currentState: "SCORING",
+  availableSignals: [{ signalId: "submit_score", name: "Submit Score" }],
+  instruction: "Score fraud risk and provide patterns used in reasoning.",
+  evidence: { merchantId: "m-42", ipRisk: "high", velocitySpike: true }
+});
+```
+
+## Conditional routing by guard outcome
+
+```ts
+const result = await engine.transition({
+  aggregateId: "txn-884422" as never,
+  transitionId: "submit_score" as never,
+  actor,
+  evidence: {
+    ...decision,
+    fraud_score: decision.confidence,
+    flagged_patterns: ["velocity_spike", "new_device", "geo_mismatch"],
+    transaction_context: { amount: 1480, currency: "USD" }
+  }
+});
+
+if (result.status === "guard_failed") {
+  // Escalate to analyst by policy.
+} else if (decision.confidence < 0.6) {
+  await engine.transition({
+    aggregateId: "txn-884422" as never,
+    transitionId: "dismiss_case" as never,
+    actor: { type: "automation", id: "fraud:router" },
+    evidence: { reason: "low_confidence" }
+  });
+}
+```
+
+## Human analyst review transition
+
+```ts
+await engine.transition({
+  aggregateId: "txn-884422" as never,
+  transitionId: "analyst_review" as never,
+  actor: { type: "human", id: "analyst@bank.com" },
+  evidence: { disposition: "confirm_fraud", caseId: "FR-92011" }
+});
+```
+
+## Final disposition event
+
+```ts
+{
+  type: "loop.transition.executed",
+  loopId: "fraud.review",
+  aggregateId: "txn-884422",
+  transitionId: "analyst_review",
+  fromState: "PENDING_REVIEW",
+  toState: "REVIEWED",
+  actor: { type: "human", id: "analyst@bank.com" },
+  evidence: { disposition: "confirm_fraud", caseId: "FR-92011" }
+}
+```
+
+## Learning signal: predicted vs actual
+
+```ts
+{
+  loopId: "fraud.review",
+  aggregateId: "txn-884422",
+  predicted: { fraud_score: 0.82 },
+  actual: { confirmed_fraud: 1 },
+  delta: { fraud_score: 0.18 }
+}
+```
+
+## Running the example
+
+1. Clone the examples repository
+2. Install dependencies (`pnpm install`)
+3. Set `OPENAI_API_KEY`
+4. Run the example (`pnpm dev`)
+5. Send sample transactions and inspect transition events
+
+<Callout variant="info" title="Related guidance">
+See [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence) for evidence modeling and [Learning Signals](/docs/concepts/learning-signals) for model evaluation loops.
+</Callout>

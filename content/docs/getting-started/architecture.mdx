@@ -1,0 +1,147 @@
+---
+title: Architecture
+description: The Loop Engine model - actors, signals, guards, transitions, events, and learning signals in one place.
+section: Getting Started
+---
+
+## The Core Model
+
+A loop is a finite state machine with governed transitions. Every transition has a signal that triggers it, actors who can send it, and guards that must pass before it executes.
+
+```text
+         signal
+State A --------> State B
+          ^
+    actor + guards
+      + evidence
+```
+
+## The Six Building Blocks
+
+### 1) Loops
+
+Loops are the unit of governed work. They define states, transitions, and outcomes.
+
+```ts
+type LoopDefinition = {
+  loopId: string;
+  states: Array<{ stateId: string; terminal?: boolean }>;
+  initialState: string;
+  transitions: Array<{ transitionId: string; from: string; to: string; signal: string }>;
+};
+```
+
+### 2) Signals
+
+Signals are the triggers for state transitions. They carry actor context and evidence.
+
+```ts
+type SignalSpec = {
+  signalId: string;
+  name: string;
+  description?: string;
+};
+```
+
+### 3) Actors
+
+Actors represent who initiated a transition. Loop Engine supports three primary actor classes.
+
+```ts
+type ActorType = "human" | "automation" | "ai-agent";
+```
+
+### 4) Guards
+
+Guards are policy checks evaluated before state advancement. Hard failures block. Soft failures warn.
+
+```ts
+type GuardSpec = {
+  guardId: string;
+  severity: "hard" | "soft";
+  evaluatedBy: "runtime" | "module" | "external";
+};
+
+declare function evaluateGuards(...args: unknown[]): Promise<{
+  hardFailures: unknown[];
+  softFailures: unknown[];
+  allPassed: boolean;
+}>;
+```
+
+### 5) Events
+
+Every transition produces immutable events with actor attribution and evidence.
+
+```ts
+type LoopTransitionExecutedEvent = {
+  type: "loop.transition.executed";
+  loopId: string;
+  aggregateId: string;
+  transitionId: string;
+  fromState: string;
+  toState: string;
+  actor: { type: ActorType; id: string };
+  evidence?: Record<string, unknown>;
+};
+```
+
+### 6) Learning Signals
+
+When a loop closes, learning signals capture predicted vs actual outcomes for evaluation and model improvement.
+
+```ts
+type LearningSignal = {
+  loopId: string;
+  aggregateId: string;
+  durationMs: number;
+  predicted?: Record<string, number>;
+  actual?: Record<string, number>;
+  delta?: Record<string, number>;
+};
+```
+
+## How They Fit Together
+
+```ts
+import { createLoopSystem } from "@loop-engine/sdk";
+import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
+import Anthropic from "@anthropic-ai/sdk";
+
+const { engine } = await createLoopSystem({ loops: [/* procurement loop */] });
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const ai = createAnthropicActorAdapter(anthropic, { modelId: "claude-opus-4-6" });
+
+await engine.start({
+  loopId: "procurement" as never,
+  aggregateId: "PO-2001" as never,
+  actor: { type: "automation", id: "system:intake" }
+});
+
+const { actor, decision } = await ai.createSubmission({
+  loopId: "procurement",
+  loopName: "SCM Procurement",
+  currentState: "pending_analysis",
+  availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation" }],
+  instruction: "Recommend order action",
+  evidence: { forecast: 0.83 }
+});
+
+await engine.transition({
+  aggregateId: "PO-2001" as never,
+  transitionId: "submit_recommendation" as never,
+  actor,
+  evidence: decision
+});
+
+// Runtime evaluates confidence guard.
+// Human approval transition executes next if required.
+// Terminal transition emits loop.completed + learning signal.
+```
+
+## Next Steps
+
+- [Quick Start](/docs/getting-started/quick-start)
+- [The Actor Model](/docs/concepts/actor-model)
+- [Guards and Policy](/docs/concepts/guards-and-policy)
+- [Decision Governance](/docs/concepts/decision-governance)

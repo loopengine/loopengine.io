@@ -1,0 +1,87 @@
+---
+title: Loop Engine vs Workflow Engines
+description: How Loop Engine and workflow engines like Temporal complement each other - execution vs decision governance.
+section: Core Concepts
+---
+
+## Two Different Problems
+
+Workflow engines like Temporal solve durable execution: retries, timers, distributed coordination, and fault tolerance.
+
+Loop Engine solves decision governance: actor authorization, policy enforcement, evidence capture, and decision audit trail.
+
+These are different problems. Both can exist in the same system.
+
+## Temporal's Responsibilities
+
+- Durable workflow execution
+- Activity retries with backoff
+- Long-running process coordination
+- Saga pattern and distributed transactions
+- Timer and scheduling primitives
+
+## Loop Engine's Responsibilities
+
+- Defining who can trigger each transition
+- Enforcing guard policies before allowing state changes
+- Capturing evidence attached to each decision
+- Attributing every action to a named actor
+- Emitting structured events for audit and learning
+
+## When to Use Each
+
+Use Temporal when: you need fault-tolerant execution of multi-step operations.
+
+Use Loop Engine when: you need governed, attributable decision checkpoints.
+
+Use both when: AI agents make recommendations inside durable workflows that require human approval, policy enforcement, and audit trail.
+
+## Combined Architecture
+
+```text
+AI Agent
+   ↓
+Loop Engine    <- decision governance layer
+   ↓
+Temporal       <- durable execution layer
+   ↓
+Infrastructure
+```
+
+The agent proposes an action. Loop Engine governs whether it is allowed and by whom. Temporal durably executes the approved action.
+
+## Code Example
+
+```ts
+import { createLoopSystem } from "@loop-engine/sdk";
+import type { ActorRef, TransitionId } from "@loop-engine/core";
+
+type TemporalActivityInput = {
+  aggregateId: string;
+  transitionId: TransitionId;
+  actor: ActorRef;
+};
+
+export async function runApprovedOperation(input: TemporalActivityInput) {
+  const { engine } = createLoopSystem({ loops: [/* registered loop definitions */] });
+
+  const decision = await engine.transition({
+    aggregateId: input.aggregateId as never,
+    transitionId: input.transitionId,
+    actor: input.actor,
+    evidence: { source: "temporal-activity" }
+  });
+
+  if (decision.status !== "executed") {
+    throw new Error(`Operation blocked by governance: ${decision.status}`);
+  }
+
+  // Durable execution happens in workflow engine after approval.
+}
+```
+
+## Related
+
+- [Decision Governance](/docs/concepts/decision-governance)
+- [AI as Actor](/docs/ai-and-automation/ai-as-actor)
+- [Guards and Policy](/docs/concepts/guards-and-policy)
