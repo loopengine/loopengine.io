@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LoopEngineLogo } from "@/components/logo";
 
 type NavItem = {
   label: string;
@@ -11,12 +12,8 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: "Docs", href: "/docs", matchPrefix: "/docs" },
-  { label: "Examples", href: "/#example-scm" },
-  {
-    label: "Packages",
-    href: "/docs/loop-library/supply-chain",
-    matchPrefix: "/docs/loop-library",
-  },
+  { label: "Examples", href: "/docs/examples", matchPrefix: "/docs/examples" },
+  { label: "Packages", href: "/docs/packages", matchPrefix: "/docs/packages" },
   { label: "Blog", href: "/blog", matchPrefix: "/blog" },
   { label: "Partners", href: "/partners", matchPrefix: "/partners" },
   { label: "Registry", href: "/registry", matchPrefix: "/registry" },
@@ -41,8 +38,8 @@ export function TopNav() {
   return (
     <header className="border-[var(--color-border)] border-b bg-[var(--color-surface)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-        <Link href="/" className="font-semibold text-[var(--color-ink)] text-lg">
-          Loop Engine
+        <Link href="/" aria-label="Loop Engine home">
+          <LoopEngineLogo size="sm" />
         </Link>
 
         <nav className="hidden items-center gap-5 text-sm md:flex">
