@@ -1,0 +1,107 @@
+---
+title: "@loop-engine/adapter-grok"
+description: "AI actor adapter for Grok (xAI) — wire Grok as a governed actor using xAI's OpenAI-compatible API."
+section: "packages"
+---
+
+## Overview
+
+`@loop-engine/adapter-grok` wraps xAI's Grok API as a Loop Engine AI actor. Grok uses an OpenAI-compatible API, and this adapter uses the `openai` npm package pointed at `https://api.x.ai/v1`. It follows the same governance model as `adapter-anthropic` and `adapter-openai`: identical guard enforcement and the same audit trail shape.
+
+## Installation
+
+```bash
+npm install @loop-engine/adapter-grok openai
+```
+
+## Peer dependencies
+
+```text
+openai  ^4.0.0
+```
+
+## Basic usage
+
+```typescript
+import OpenAI from 'openai'
+import { createGrokActorAdapter } from '@loop-engine/adapter-grok'
+
+// Grok uses the OpenAI SDK with xAI's base URL
+const grok = new OpenAI({
+  apiKey: process.env.XAI_API_KEY,
+  baseURL: 'https://api.x.ai/v1',
+})
+
+const adapter = createGrokActorAdapter(process.env.XAI_API_KEY!, {
+  modelId: 'grok-3',
+  confidenceThreshold: 0.75,
+})
+
+const { actor, decision } = await adapter.createSubmission({
+  loopId: 'procurement',
+  loopName: 'SCM Procurement',
+  currentState: 'pending_analysis',
+  availableSignals: [
+    {
+      signalId: 'submit_recommendation',
+      name: 'Submit Recommendation',
+      allowedActors: ['ai-agent'],
+    },
+  ],
+  instruction: 'Analyze demand data and recommend a purchase order decision.',
+  evidence: { demandForecast: 0.91, currentStock: 38 },
+})
+```
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `modelId` | `string` | `grok-3` | Grok model to use (`grok-2`, `grok-2-mini`, `grok-3`, `grok-3-mini`) |
+| `maxTokens` | `number` | `1024` | Max tokens in response |
+| `systemPrompt` | `string` | — | Optional system prompt prepended to loop context |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0-1) |
+| `baseURL` | `string` | `https://api.x.ai/v1` | xAI API endpoint (override for testing) |
+
+## What the adapter produces
+
+The adapter returns an `AIAgentActor` with:
+
+- `type: "ai-agent"`
+- `provider: "grok"`
+- `modelId` — the model used
+- `confidence` — extracted from the model response
+- `promptHash` — SHA-256 of the prompt sent (for audit trail)
+
+## Guard enforcement note
+
+The confidence guard runs at the runtime level — not inside the adapter. If you configure a `confidence-threshold` guard on the transition, the runtime will block the transition if the model's confidence falls below the threshold regardless of what the adapter returns.
+
+```typescript
+// In your loop definition — this guard is structural, not prompt-based
+{
+  guardId: 'confidence-threshold',
+  severity: 'hard',
+  evaluatedBy: 'runtime',
+  parameters: { threshold: 0.75 },
+}
+```
+
+## Error handling
+
+The adapter throws `ActorDecisionError` with one of these codes:
+
+- `INVALID_SIGNAL` — model returned a signalId not in `availableSignals`
+- `INVALID_CONFIDENCE` — confidence value outside 0–1 range
+- `PARSE_FAILED` — model response could not be parsed as JSON
+- `API_ERROR` — xAI API returned an error (message prefixed with `[loop-engine/adapter-grok]`)
+
+## Multi-model loops
+
+All four adapters (`adapter-anthropic`, `adapter-openai`, `adapter-grok`, and `adapter-gemini`) return the same `AIAgentActor` shape. You can use different providers for different transitions in the same loop, while `provider` and `modelId` distinguish them in the audit trail.
+
+## Links
+
+- [View on npm](https://www.npmjs.com/package/@loop-engine/adapter-grok)
+- [Source](https://github.com/loopengine/loop-engine/tree/main/packages/adapter-grok)
+- Related: [AI as Actor concept](/docs/ai-and-automation/ai-as-actor), [@loop-engine/adapter-openai](/docs/packages/adapter-openai)

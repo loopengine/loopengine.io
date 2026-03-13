@@ -1,0 +1,103 @@
+---
+title: "@loop-engine/adapter-gemini"
+description: "AI actor adapter for Google Gemini — wire Gemini 1.5 Pro/Flash as a governed actor in any Loop Engine workflow."
+section: "packages"
+---
+
+## Overview
+
+`@loop-engine/adapter-gemini` wraps Google's Gemini API as a Loop Engine AI actor using the `@google/generative-ai` SDK. Unlike OpenAI-compatible adapters, Gemini uses Google's native SDK and response shape. The adapter applies the same governance model as other Loop Engine AI adapters: guard enforcement in runtime and consistent actor audit fields.
+
+## Installation
+
+```bash
+npm install @loop-engine/adapter-gemini @google/generative-ai
+```
+
+## Peer dependencies
+
+```text
+@google/generative-ai  ^0.21.0
+```
+
+## Basic usage
+
+```typescript
+import { createGeminiActorAdapter } from '@loop-engine/adapter-gemini'
+
+const adapter = createGeminiActorAdapter(process.env.GOOGLE_AI_API_KEY!, {
+  modelId: 'gemini-1.5-pro',
+  confidenceThreshold: 0.75,
+})
+
+const { actor, decision } = await adapter.createSubmission({
+  loopId: 'procurement',
+  loopName: 'SCM Procurement',
+  currentState: 'pending_analysis',
+  availableSignals: [
+    {
+      signalId: 'submit_recommendation',
+      name: 'Submit Recommendation',
+      allowedActors: ['ai-agent'],
+    },
+  ],
+  instruction: 'Analyze demand data and recommend a purchase order decision.',
+  evidence: { demandForecast: 0.87, currentStock: 45 },
+})
+```
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `modelId` | `string` | `gemini-1.5-pro` | Gemini model (`gemini-1.5-pro`, `gemini-1.5-flash`, `gemini-2.0-flash`) |
+| `maxOutputTokens` | `number` | `1024` | Max tokens in response |
+| `systemPrompt` | `string` | — | Prepended to the system instruction |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0-1) |
+
+## What the adapter produces
+
+The adapter returns an `AIAgentActor` with:
+
+- `type: "ai-agent"`
+- `provider: "gemini"`
+- `modelId` — the model used
+- `confidence` — extracted from the model response
+- `promptHash` — SHA-256 of the prompt sent (for audit trail)
+
+## Note on JSON parsing
+
+Gemini 1.5 occasionally wraps JSON responses in markdown code fences despite system instructions. The adapter strips these automatically before parsing. This cleanup becomes unnecessary in a later version that switches to `responseMimeType: "application/json"`.
+
+## Guard enforcement note
+
+The confidence guard runs at the runtime level — not inside the adapter. If you configure a `confidence-threshold` guard on the transition, the runtime will block the transition if the model's confidence falls below the threshold regardless of what the adapter returns.
+
+```typescript
+// In your loop definition — this guard is structural, not prompt-based
+{
+  guardId: 'confidence-threshold',
+  severity: 'hard',
+  evaluatedBy: 'runtime',
+  parameters: { threshold: 0.75 },
+}
+```
+
+## Error handling
+
+The adapter throws `ActorDecisionError` with one of these codes:
+
+- `INVALID_SIGNAL` — model returned a signalId not in `availableSignals`
+- `INVALID_CONFIDENCE` — confidence value outside 0–1 range
+- `PARSE_FAILED` — model response could not be parsed as JSON
+- `API_ERROR` — Gemini API returned an error (message prefixed with `[loop-engine/adapter-gemini]`)
+
+## Multi-model loops
+
+All four adapters (`adapter-anthropic`, `adapter-openai`, `adapter-grok`, and `adapter-gemini`) return the same `AIAgentActor` shape. You can use different providers for different transitions in the same loop, while `provider` and `modelId` distinguish them in the audit trail.
+
+## Links
+
+- [View on npm](https://www.npmjs.com/package/@loop-engine/adapter-gemini)
+- [Source](https://github.com/loopengine/loop-engine/tree/main/packages/adapter-gemini)
+- Related: [AI as Actor concept](/docs/ai-and-automation/ai-as-actor), [Google AI Studio](https://aistudio.google.com)
