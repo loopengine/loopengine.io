@@ -4,6 +4,20 @@
   gap: 32px;
 }
 
+.docs-layout-shell:has(.docs-home-landing) {
+  display: block;
+}
+
+.docs-layout-shell:has(.docs-home-landing) .docs-layout-sidebar,
+.docs-layout-shell:has(.docs-home-landing) .docs-layout-pager {
+  display: none;
+}
+
+.docs-layout-shell:has(.docs-home-landing) .docs-layout-content {
+  max-width: 100%;
+  padding: 0;
+}
+
 .docs-content h1 {
   font-family: var(--font-display);
   font-size: 2.25rem;
