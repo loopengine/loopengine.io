@@ -1,99 +1,96 @@
 ---
 title: Expense Approval
-description: A three-state approval loop shows define, start, transition, and close with deterministic guard behavior.
+description: The simplest governed loop - a single human-only approval gate with hard policy enforcement.
 section: Examples
+complexity: Starter
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/actors"
+source: "https://github.com/loopengine/loop-examples/tree/main/expense-approval"
 ---
 
-Expense approval demonstrates the minimal Loop Engine flow with explicit actor attribution and guard outcomes.
+<Callout variant="info" title="Full source">
+<a href="https://github.com/loopengine/loop-examples/tree/main/expense-approval" target="_blank" rel="noreferrer">
+github.com/loopengine/loop-examples/tree/main/expense-approval
+</a>
+</Callout>
 
-## Loop behavior
+## What this example shows
 
-- States: `SUBMITTED -> UNDER_REVIEW -> APPROVED | REJECTED`
-- Actors: `system`, `automation`, `human`
-- Guard: `approval_obtained` on `approve`
-- Outcome: `expense_approved`
+The foundational Loop Engine pattern. An expense submission enters a two-step approval loop. A human-only guard on the approval transition ensures automation and AI actors can never self-approve.
 
-## Loop definition
+## Loop diagram
+
+```text
+SUBMITTED --------[submit_expense]-------> PENDING_APPROVAL
+PENDING_APPROVAL ------[approve]---------> APPROVED (terminal)
+PENDING_APPROVAL -------[reject]---------> REJECTED (terminal)
+```
+
+## Actors
+
+| Actor | Type | Transitions | Guards |
+|---|---|---|---|
+| submitter | human or automation | `submit_expense` | none |
+| approver | human | `approve`, `reject` | `human-only` (hard) |
+
+## Key annotated snippet
 
 ```ts
-import { LoopBuilder } from "@loop-engine/sdk"
+import { LoopBuilder } from "@loop-engine/sdk";
 
-const approval = LoopBuilder
+// The human-only guard is the load-bearing governance rule.
+const expenseApproval = LoopBuilder
   .create("expense.approval", "finance")
   .description("Expense report approval")
   .state("SUBMITTED")
-  .state("UNDER_REVIEW")
+  .state("PENDING_APPROVAL")
   .state("APPROVED", { isTerminal: true })
   .state("REJECTED", { isTerminal: true })
   .initialState("SUBMITTED")
-  .transition({ id: "start_review", from: "SUBMITTED", to: "UNDER_REVIEW", actors: ["automation"] })
+  .transition({
+    id: "submit_expense",
+    from: "SUBMITTED",
+    to: "PENDING_APPROVAL",
+    actors: ["human", "automation"]
+  })
   .transition({
     id: "approve",
-    from: "UNDER_REVIEW",
+    from: "PENDING_APPROVAL",
     to: "APPROVED",
     actors: ["human"],
     guards: [
       {
-        id: "approval_obtained" as never,
-        description: "Manager approval required",
-        failureMessage: "Approval missing",
+        id: "human-only" as never,
+        description: "Only a human approver can approve expenses",
         severity: "hard",
         evaluatedBy: "runtime"
       }
     ]
   })
-  .transition({ id: "reject", from: "UNDER_REVIEW", to: "REJECTED", actors: ["human"] })
-  .outcome({ id: "expense_approved", description: "Expense approved", valueUnit: "expense_approved" })
-  .build()
+  .transition({ id: "reject", from: "PENDING_APPROVAL", to: "REJECTED", actors: ["human"] })
+  .build();
 ```
 
-## Runtime path
+## What emitted events look like
 
 ```ts
-import { aggregateId, transitionId } from "@loop-engine/core"
-import { createLoopSystem } from "@loop-engine/sdk"
-
-const aggregate = aggregateId("EXP-2026-001")
-const { engine } = await createLoopSystem({ loops: [approval] })
-
-await engine.start({
+{
+  type: "loop.transition.executed",
   loopId: "expense.approval",
-  aggregateId: aggregate,
-  orgId: "acme",
-  actor: { type: "system", id: "system:intake" }
-})
-
-await engine.transition({
-  aggregateId: aggregate,
-  transitionId: transitionId("start_review"),
-  actor: { type: "automation", id: "system:router" }
-})
+  aggregateId: "EXP-2026-001",
+  transitionId: "approve",
+  fromState: "PENDING_APPROVAL",
+  toState: "APPROVED",
+  actor: { type: "human", id: "manager@acme.com" },
+  occurredAt: "2026-03-13T12:05:10.991Z"
+}
 ```
 
-## Guard outcomes
+## Try it yourself
 
-```ts
-const passed = await engine.transition({
-  aggregateId: aggregate,
-  transitionId: transitionId("approve"),
-  actor: { type: "human", id: "manager@acme.com" },
-  evidence: { approved: true }
-})
-// passed.status === "executed"
-
-const failed = await engine.transition({
-  aggregateId: aggregate,
-  transitionId: transitionId("approve"),
-  actor: { type: "human", id: "manager@acme.com" },
-  evidence: { approved: false }
-})
-// failed.status === "guard_failed"
+```bash
+cd loop-examples/expense-approval
+pnpm install
+pnpm dev
 ```
-
-## Full source
-
-- https://github.com/loopengine/loop-examples/tree/main/expense-approval
-
-<Callout variant="info" title="Next pattern">
-See [Infrastructure Change Approval](/docs/examples/infrastructure-change-approval) for a more complex multi-actor approval pattern with AI blast-radius analysis.
-</Callout>

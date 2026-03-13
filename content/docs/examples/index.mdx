@@ -1,29 +1,26 @@
 ---
 title: Examples
-description: Runnable Loop Engine examples cover AI actors, approval workflows, signals, persistence, and event streaming.
+description: Production-style Loop Engine example patterns with architecture walkthroughs and links to runnable source.
 section: Examples
 ---
 
-Loop Engine examples demonstrate production-style patterns with minimal code and explicit operational constraints.
+Loop Engine examples demonstrate production-style patterns with minimal boilerplate and explicit operational constraints. Each example is a self-contained runnable project, and these pages explain the architecture and implementation pattern.
 
-## Repository
+<Callout variant="info" title="Runnable source on GitHub">
+<div style={{ display: "grid", gap: "8px" }}>
+  <div>All runnable examples live in <code>github.com/loopengine/loop-examples</code>.</div>
+  <div style={{ color: "var(--color-ink-tertiary)" }}>
+    Each directory includes a README with setup and run instructions.
+  </div>
+  <div>
+    <a href="https://github.com/loopengine/loop-examples" target="_blank" rel="noreferrer">
+      View on GitHub →
+    </a>
+  </div>
+</div>
+</Callout>
 
-All runnable examples live in:
-
-- https://github.com/loopengine/loop-examples
-
-## Example index
-
-| Example | What it shows | Packages used |
-|---|---|---|
-| Expense Approval | Human-only approval loop with hard policy guard | sdk, actors |
-| AI Replenishment (Claude) | Anthropic AI actor recommendation + human approval gate | sdk, actors, signals |
-| AI Replenishment (OpenAI) | OpenAI AI actor recommendation with identical loop behavior | sdk, actors, signals |
-| Demand Signal | Rule-based signal detection feeding loop start | sdk, signals |
-| Postgres Persistence | Swapping memory store for Postgres adapter contract | sdk, adapter-postgres |
-| Event Streaming | Event subscriptions, timeline, and replay utilities | sdk, events, observability |
-
-## Running examples
+## Clone once, run any example
 
 ```bash
 git clone https://github.com/loopengine/loop-examples
@@ -31,4 +28,75 @@ cd loop-examples
 pnpm install
 ```
 
-Each example directory includes run commands and environment setup notes.
+## Example patterns
+
+<div className="grid gap-4 md:grid-cols-2">
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/expense-approval">Expense Approval</a></h3>
+    <p>Human-only approval loop — the simplest governed pattern.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code></p>
+    <p><strong>Complexity:</strong> Starter</p>
+    <a href="/docs/examples/expense-approval">View pattern →</a>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/ai-replenishment-claude">AI Replenishment (Claude)</a></h3>
+    <p>Anthropic AI actor recommends a reorder. Human approval gate enforces policy.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>signals</code> <code>adapter-anthropic</code></p>
+    <p><strong>Complexity:</strong> Intermediate</p>
+    <a href="/docs/examples/ai-replenishment-claude">View pattern →</a>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/ai-replenishment-openai">AI Replenishment (OpenAI)</a></h3>
+    <p>Identical loop behavior with OpenAI actor — shows adapter interchangeability.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>signals</code> <code>adapter-openai</code></p>
+    <p><strong>Complexity:</strong> Intermediate</p>
+    <a href="/docs/examples/ai-replenishment-openai">View pattern →</a>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/demand-signal">Demand Signal</a></h3>
+    <p>Rule-based signal detection that triggers loop start — no AI required.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>signals</code></p>
+    <p><strong>Complexity:</strong> Starter</p>
+    <a href="/docs/examples/demand-signal">View pattern →</a>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/postgres-persistence">Postgres Persistence</a></h3>
+    <p>Swap the in-memory adapter for Postgres — adapter contract in practice.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>adapter-postgres</code></p>
+    <p><strong>Complexity:</strong> Intermediate</p>
+    <a href="/docs/examples/postgres-persistence">View pattern →</a>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/event-streaming">Event Streaming</a></h3>
+    <p>Event subscriptions, timeline reconstruction, and replay utilities.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>events</code> <code>observability</code></p>
+    <p><strong>Complexity:</strong> Intermediate</p>
+    <a href="/docs/examples/event-streaming">View pattern →</a>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/infrastructure-change-approval">Infrastructure Change Approval</a></h3>
+    <p>AI blast-radius analysis + SRE approval gate + automated rollout.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>adapter-anthropic</code></p>
+    <p><strong>Complexity:</strong> Advanced</p>
+    <a href="/docs/examples/infrastructure-change-approval">View pattern →</a>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/fraud-review">Fraud Review</a></h3>
+    <p>AI fraud scoring with conditional escalation to human analyst.</p>
+    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>signals</code> <code>adapter-openai</code></p>
+    <p><strong>Complexity:</strong> Advanced</p>
+    <a href="/docs/examples/fraud-review">View pattern →</a>
+  </article>
+</div>
+
+## Don't see your use case?
+
+- [GitHub Discussions](https://github.com/loopengine/loop-engine/discussions)
+- [RFC Process](/docs/governance/rfc-process)

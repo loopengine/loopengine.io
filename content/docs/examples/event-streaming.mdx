@@ -2,58 +2,91 @@
 title: Event Streaming
 description: Event subscriptions and timeline utilities turn loop lifecycle events into auditable operational streams.
 section: Examples
+complexity: Intermediate
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/events"
+  - "@loop-engine/observability"
+source: "https://github.com/loopengine/loop-examples/tree/main/event-streaming"
 ---
 
-Event streaming exposes loop lifecycle data for audit logs, notifications, and observability pipelines.
+<Callout variant="info" title="Full source">
+<a href="https://github.com/loopengine/loop-examples/tree/main/event-streaming" target="_blank" rel="noreferrer">
+github.com/loopengine/loop-examples/tree/main/event-streaming
+</a>
+</Callout>
 
-## Event subscriptions
+## What this example shows
 
-```ts
-import { LOOP_EVENT_TYPES } from "@loop-engine/events"
+Every transition emits a typed event. This example shows how to subscribe, persist an audit stream, and reconstruct a timeline from transition history for replay and debugging.
 
-const unsubscribe = eventBus.subscribe(async (event) => {
-  switch (event.type) {
-    case LOOP_EVENT_TYPES.LOOP_STARTED:
-    case LOOP_EVENT_TYPES.TRANSITION_EXECUTED:
-    case LOOP_EVENT_TYPES.GUARD_FAILED:
-    case LOOP_EVENT_TYPES.LOOP_COMPLETED:
-    case LOOP_EVENT_TYPES.LOOP_ERROR:
-    case LOOP_EVENT_TYPES.OUTCOME_RECORDED:
-      console.log(event.type, event.aggregateId)
-      break
-  }
-})
+## Loop diagram
+
+```text
+START ----> TRANSITION_1 ----> TRANSITION_2 ----> TERMINAL
+  |              |                  |
+  +---- emit events on every transition ----+
 ```
 
-## Audit log accumulation
+## Actors
+
+| Actor | Type | Transitions | Guards |
+|---|---|---|---|
+| runtime emitter | automation | all runtime transitions | loop-defined guards |
+| subscribers | automation | none (read-only stream consumers) | n/a |
+
+## Key annotated snippet
 
 ```ts
-const audit: Array<{ at: string; type: string; aggregateId: string }> = []
+import { LOOP_EVENT_TYPES } from "@loop-engine/events";
+import { buildTimeline, replayLoop } from "@loop-engine/observability";
+import { aggregateId } from "@loop-engine/core";
+
+const audit: Array<{ at: string; type: string; aggregateId: string }> = [];
 
 eventBus.subscribe(async (event) => {
-  audit.push({
-    at: event.occurredAt,
-    type: event.type,
-    aggregateId: String(event.aggregateId)
-  })
-})
-```
+  if (
+    event.type === LOOP_EVENT_TYPES.LOOP_STARTED ||
+    event.type === LOOP_EVENT_TYPES.TRANSITION_EXECUTED ||
+    event.type === LOOP_EVENT_TYPES.LOOP_COMPLETED
+  ) {
+    audit.push({
+      at: event.occurredAt,
+      type: event.type,
+      aggregateId: String(event.aggregateId)
+    });
+  }
+});
 
-## Timeline and replay
-
-```ts
-import { buildTimeline, replayLoop } from "@loop-engine/observability"
-
-const instance = await engine.getState(aggregateId("EXP-1"))
-const history = await engine.getHistory(aggregateId("EXP-1"))
-
+const id = aggregateId("EXP-1");
+const instance = await engine.getState(id);
+const history = await engine.getHistory(id);
 if (instance) {
-  const timeline = buildTimeline(instance, history)
-  const replay = replayLoop(definition, history)
-  console.log(timeline.durationMs, replay.valid)
+  const timeline = buildTimeline(instance, history);
+  const replay = replayLoop(definition, history);
+  console.log(timeline.durationMs, replay.valid);
 }
 ```
 
-## Full source
+## What emitted events look like
 
-- https://github.com/loopengine/loop-examples/tree/main/event-streaming
+```ts
+{
+  type: "loop.transition.executed",
+  loopId: "expense.approval",
+  aggregateId: "EXP-1",
+  transitionId: "approve",
+  fromState: "PENDING_APPROVAL",
+  toState: "APPROVED",
+  actor: { type: "human", id: "manager@acme.com" },
+  occurredAt: "2026-03-13T12:57:01.440Z"
+}
+```
+
+## Try it yourself
+
+```bash
+cd loop-examples/event-streaming
+pnpm install
+pnpm dev
+```

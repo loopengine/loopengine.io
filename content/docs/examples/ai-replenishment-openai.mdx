@@ -1,0 +1,95 @@
+---
+title: AI Replenishment (OpenAI)
+description: Identical replenishment loop behavior with OpenAI actor integration to show provider interchangeability.
+section: Examples
+complexity: Intermediate
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/actors"
+  - "@loop-engine/signals"
+  - "@loop-engine/adapter-openai"
+source: "https://github.com/loopengine/loop-examples/tree/main/ai-actors/openai"
+---
+
+<Callout variant="info" title="Full source">
+<a href="https://github.com/loopengine/loop-examples/tree/main/ai-actors/openai" target="_blank" rel="noreferrer">
+github.com/loopengine/loop-examples/tree/main/ai-actors/openai
+</a>
+</Callout>
+
+## What this example shows
+
+This page uses the same replenishment loop semantics as the Claude variant, but switches to `@loop-engine/adapter-openai`. The loop definition and transition policy remain unchanged. Only the provider adapter wiring changes.
+
+## Loop diagram
+
+```text
+IDLE ----[signal_detected]----> ANALYZING
+ANALYZING --[submit_recommendation]--> PENDING_APPROVAL
+ANALYZING --[insufficient_confidence]--> IDLE
+PENDING_APPROVAL --[approve]--> ORDERED (terminal)
+PENDING_APPROVAL --[reject]--> IDLE
+```
+
+## Actors
+
+| Actor | Type | Transitions | Guards |
+|---|---|---|---|
+| signal detector | automation | `signal_detected` | none |
+| gpt recommender | ai-agent | `submit_recommendation` | `confidence-threshold` |
+| buyer approver | human | `approve`, `reject` | `human-only` |
+
+## Key annotated snippet
+
+```ts
+import OpenAI from "openai";
+import { createOpenAIActorAdapter } from "@loop-engine/adapter-openai";
+
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const gpt = createOpenAIActorAdapter(openai, {
+  modelId: "gpt-4o",
+  confidenceThreshold: 0.75
+});
+
+// Same loop context and transition IDs as Claude variant.
+const { actor, decision } = await gpt.createSubmission({
+  loopId: "scm.replenishment",
+  loopName: "SCM Replenishment",
+  currentState: "ANALYZING",
+  availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation" }],
+  instruction: "Recommend reorder quantity based on stock and forecast.",
+  evidence: { sku: "LMB-BRS-001", currentStock: 142, reorderPoint: 280, forecastedDemand: 527 }
+});
+
+await engine.transition({
+  aggregateId: "repl-lmb-001" as never,
+  transitionId: "submit_recommendation" as never,
+  actor,
+  evidence: decision
+});
+```
+
+## What emitted events look like
+
+```ts
+{
+  type: "loop.transition.executed",
+  loopId: "scm.replenishment",
+  aggregateId: "repl-lmb-001",
+  transitionId: "submit_recommendation",
+  fromState: "ANALYZING",
+  toState: "PENDING_APPROVAL",
+  actor: { type: "ai-agent", id: "agent:openai-replenishment" },
+  occurredAt: "2026-03-13T12:29:44.501Z"
+}
+```
+
+## Try it yourself
+
+```bash
+cd loop-examples/ai-actors/openai
+pnpm install
+pnpm dev
+```
+
+See [AI Replenishment (Claude)](/docs/examples/ai-replenishment-claude) for the Anthropic version of this same loop.

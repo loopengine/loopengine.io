@@ -2,135 +2,59 @@
 title: Infrastructure Change Approval
 description: Governed infrastructure change management - AI blast-radius analysis, SRE approval gate, and automated rollout with full audit trail.
 section: Examples
+complexity: Advanced
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/actors"
+  - "@loop-engine/adapter-anthropic"
 ---
 
-Infrastructure changes are high-risk operations. This example shows a governed change approval loop where an AI actor analyzes proposed impact, a human SRE approves, and an automation actor executes rollout with full audit evidence.
+<Callout variant="warning" title="Source coming soon">
+<div style={{ display: "grid", gap: 8 }}>
+  <div>Source coming soon in <code>github.com/loopengine/loop-examples</code>.</div>
+  <div><strong>Badge:</strong> Coming Soon</div>
+</div>
+</Callout>
 
-## Loop behavior
+## What this example shows
 
-- States: `IDLE -> ANALYZING -> PENDING_APPROVAL -> APPROVED -> ROLLING_OUT -> COMPLETE`
-- Terminal branch: `PENDING_APPROVAL -> REJECTED`
-- Actors: `ai-agent`, `human`, `automation`
-- Governance: AI evidence requirements + confidence threshold + human-only approval gate
+Infrastructure change management is high risk by default. This pattern introduces explicit governance checkpoints: AI blast-radius analysis, human SRE approval, and then automation-controlled rollout. Every handoff carries evidence and attributed actors.
 
-## Loop definition (YAML)
+## Loop diagram
 
-```yaml
-loopId: infrastructure.change_approval
-version: 1.0.0
-name: Infrastructure Change Approval
-description: Governed rollout from AI analysis through SRE approval and deployment.
-states:
-  - stateId: IDLE
-    label: Idle
-  - stateId: ANALYZING
-    label: Analyzing Blast Radius
-  - stateId: PENDING_APPROVAL
-    label: Pending SRE Approval
-  - stateId: APPROVED
-    label: Approved
-  - stateId: ROLLING_OUT
-    label: Rolling Out
-  - stateId: COMPLETE
-    label: Complete
-    terminal: true
-  - stateId: REJECTED
-    label: Rejected
-    terminal: true
-initialState: IDLE
-transitions:
-  - transitionId: start_analysis
-    from: IDLE
-    to: ANALYZING
-    signal: start_analysis
-    allowedActors: [automation]
-  - transitionId: submit_analysis
-    from: ANALYZING
-    to: PENDING_APPROVAL
-    signal: submit_analysis
-    allowedActors: [ai-agent]
-    guards:
-      - guardId: evidence-required
-        description: Required blast radius evidence must be attached
-        severity: hard
-        evaluatedBy: runtime
-        parameters:
-          requiredFields: [blast_radius_score, affected_services, rollback_plan]
-      - guardId: confidence-threshold
-        description: Confidence must be high enough to proceed
-        severity: soft
-        evaluatedBy: runtime
-        parameters:
-          threshold: 0.7
-  - transitionId: approve_change
-    from: PENDING_APPROVAL
-    to: APPROVED
-    signal: approve_change
-    allowedActors: [human]
-    guards:
-      - guardId: human-only
-        description: Only SRE can approve deployment
-        severity: hard
-        evaluatedBy: runtime
-  - transitionId: reject_change
-    from: PENDING_APPROVAL
-    to: REJECTED
-    signal: reject_change
-    allowedActors: [human]
-  - transitionId: execute_rollout
-    from: APPROVED
-    to: ROLLING_OUT
-    signal: execute_rollout
-    allowedActors: [automation]
-  - transitionId: complete_rollout
-    from: ROLLING_OUT
-    to: COMPLETE
-    signal: complete_rollout
-    allowedActors: [automation]
+```text
+IDLE --[start_analysis]--> ANALYZING
+ANALYZING --[submit_analysis]--> PENDING_APPROVAL
+PENDING_APPROVAL --[approve_change]--> APPROVED --[execute_rollout]--> ROLLING_OUT --[complete_rollout]--> COMPLETE
+PENDING_APPROVAL --[reject_change]--> REJECTED
 ```
 
-## Register AI actor adapter
+## Actors
+
+| Actor | Type | Role | Guards that apply |
+|---|---|---|---|
+| change analyzer | ai-agent | Produces blast-radius assessment and recommendation | `evidence-required`, `confidence-threshold` |
+| sre approver | human | Approves or rejects rollout | `human-only` |
+| deploy controller | automation | Executes approved rollout steps | state/transition constraints |
+
+## Key annotated snippet
 
 ```ts
 import Anthropic from "@anthropic-ai/sdk";
+import { createLoopSystem } from "@loop-engine/sdk";
 import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const aiAdapter = createAnthropicActorAdapter(anthropic, {
-  modelId: "claude-opus-4-6",
-  confidenceThreshold: 0.75
-});
-```
+const adapter = createAnthropicActorAdapter(anthropic, { modelId: "claude-opus-4-6" });
+const { engine } = await createLoopSystem({ loops: [changeApprovalLoop] });
 
-## Start loop with change context
-
-```ts
-import { createLoopSystem } from "@loop-engine/sdk";
-
-const { engine } = await createLoopSystem({ loops: [/* parsed YAML definition */] });
-
-await engine.start({
-  loopId: "infrastructure.change_approval" as never,
-  aggregateId: "chg-2026-03-13-001" as never,
-  actor: { type: "automation", id: "deploy:intake-service" },
-  metadata: {
-    changeId: "CHG-10021",
-    service: "payments-api",
-    region: "us-east-1"
-  }
-});
-```
-
-## Run AI analysis transition
-
-```ts
-const { actor, decision } = await aiAdapter.createSubmission({
+const { actor, decision } = await adapter.createSubmission({
   loopId: "infrastructure.change_approval",
   loopName: "Infrastructure Change Approval",
   currentState: "ANALYZING",
   availableSignals: [{ signalId: "submit_analysis", name: "Submit Analysis" }],
-  instruction: "Assess blast radius, rollback readiness, and deployment risk.",
-  evidence: { proposedChange: "db-index-migration", environment: "prod" }
+  instruction: "Assess blast radius and rollback readiness.",
+  evidence: { changeId: "CHG-10021", service: "payments-api" }
 });
 
 await engine.transition({
@@ -146,35 +70,7 @@ await engine.transition({
 });
 ```
 
-## Human approval transition
-
-```ts
-await engine.transition({
-  aggregateId: "chg-2026-03-13-001" as never,
-  transitionId: "approve_change" as never,
-  actor: { type: "human", id: "sre@company.com" },
-  evidence: { approvalTicket: "SRE-4451", approved: true }
-});
-```
-
-## Automated rollout transition
-
-```ts
-await engine.transition({
-  aggregateId: "chg-2026-03-13-001" as never,
-  transitionId: "execute_rollout" as never,
-  actor: { type: "automation", id: "deploy:controller" }
-});
-
-await engine.transition({
-  aggregateId: "chg-2026-03-13-001" as never,
-  transitionId: "complete_rollout" as never,
-  actor: { type: "automation", id: "deploy:controller" },
-  evidence: { rolloutResult: "success", durationMin: 7 }
-});
-```
-
-## Event and audit trail shape
+## What emitted events look like
 
 ```ts
 {
@@ -189,14 +85,12 @@ await engine.transition({
 }
 ```
 
-## Running the example
+## Source coming soon
 
-1. Clone the examples repository
-2. Install dependencies (`pnpm install`)
-3. Set `ANTHROPIC_API_KEY`
-4. Run the example app (`pnpm dev`)
-5. Submit a change request and inspect emitted transition events
+<Callout variant="info" title="Subscribe for release updates">
+Source is coming soon in `loopengine/loop-examples`. Follow releases in the main repo to get notified when this example lands.
+</Callout>
 
-<Callout variant="info" title="Production pattern">
-This pattern is used in the Better Data CCO platform for governed deployment operations. See [Decision Governance](/docs/concepts/decision-governance) for the architectural context.
+<Callout variant="important" title="Related concept">
+See [Decision Governance](/docs/concepts/decision-governance) for the architecture behind this pattern.
 </Callout>

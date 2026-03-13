@@ -1,46 +1,83 @@
 ---
 title: Postgres Persistence
-description: Postgres wiring replaces the default memory store while preserving loop definitions and transition logic.
+description: Swap the in-memory adapter for Postgres - the adapter contract in practice.
 section: Examples
+complexity: Intermediate
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/adapter-postgres"
+source: "https://github.com/loopengine/loop-examples/tree/main/postgres-persistence"
 ---
 
-Postgres persistence keeps loop state durable across restarts while preserving runtime behavior and actor/guard semantics.
+<Callout variant="info" title="Full source">
+<a href="https://github.com/loopengine/loop-examples/tree/main/postgres-persistence" target="_blank" rel="noreferrer">
+github.com/loopengine/loop-examples/tree/main/postgres-persistence
+</a>
+</Callout>
 
-## Store swap
+## What this example shows
 
-```ts
-// before
-const system = await createLoopSystem({ loops: [definition], store: memoryStore() })
+Loop Engine storage is an adapter boundary. This example swaps `adapter-memory` for `adapter-postgres` without changing loop definitions or transition logic.
 
-// after
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-await createSchema(pool)
-const system = await createLoopSystem({ loops: [definition], store: postgresStore(pool) })
+## Loop diagram
+
+```text
+START LOOP ----> WRITE INSTANCE (Postgres)
+TRANSITION ----> APPEND HISTORY (Postgres)
+QUERY STATE ---> READ INSTANCE + READ HISTORY
 ```
 
-Loop definitions and transition calls stay unchanged.
+## Actors
 
-## Schema bootstrap
+| Actor | Type | Transitions | Guards |
+|---|---|---|---|
+| service runtime | automation | all business transitions | configured in loop definition |
+| reviewer (optional) | human | approval transitions | `human-only`, policy guards |
+
+## Key annotated snippet
 
 ```ts
-import { createSchema } from "@loop-engine/adapter-postgres"
-import { Pool } from "pg"
+import { createLoopSystem } from "@loop-engine/sdk";
+import { createPostgresStore, createSchema } from "@loop-engine/adapter-postgres";
+import { createMemoryLoopStorageAdapter } from "@loop-engine/adapter-memory";
+import { Pool } from "pg";
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-await createSchema(pool)
+// Version A: in-memory (default local dev)
+const memoryStore = createMemoryLoopStorageAdapter();
+const memoryRuntime = await createLoopSystem({ loops: [definition], store: memoryStore });
+
+// Version B: postgres (durable)
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+await createSchema(pool);
+const pgStore = createPostgresStore(pool);
+const postgresRuntime = await createLoopSystem({ loops: [definition], store: pgStore });
+
+// Loop definitions + transition calls are unchanged across adapters.
 ```
 
-## Runtime status
+## What emitted events look like
 
-`postgresStore()` is fully implemented and supports persisted instances, transition
-history, upserts, and open-instance lookup.
+```ts
+{
+  type: "loop.transition.executed",
+  loopId: "expense.approval",
+  aggregateId: "EXP-2026-009",
+  transitionId: "approve",
+  fromState: "PENDING_APPROVAL",
+  toState: "APPROVED",
+  actor: { type: "human", id: "manager@acme.com" },
+  occurredAt: "2026-03-13T12:49:22.290Z"
+}
+```
 
-## Environment
+## Try it yourself
 
-- `DATABASE_URL` points to PostgreSQL.
-- Use connection pooling for service workloads.
-- Configure SSL and timeout limits in production.
+```bash
+cd loop-examples/postgres-persistence
+pnpm install
+pnpm dev
+```
 
-## Full source
-
-- https://github.com/loopengine/loop-examples/tree/main/postgres-persistence
+<Callout variant="info" title="Adapter pattern">
+The same contract pattern extends to `adapter-kafka` and `adapter-http`. Any backend implementing `LoopStorageAdapter` can be used.
+</Callout>

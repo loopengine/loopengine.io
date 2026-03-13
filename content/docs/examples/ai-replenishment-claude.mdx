@@ -1,0 +1,99 @@
+---
+title: AI Replenishment (Claude)
+description: Anthropic Claude as a procurement AI actor - confidence-gated recommendation with human approval.
+section: Examples
+complexity: Intermediate
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/actors"
+  - "@loop-engine/signals"
+  - "@loop-engine/adapter-anthropic"
+source: "https://github.com/loopengine/loop-examples/tree/main/ai-actors/claude"
+---
+
+<Callout variant="info" title="Full source">
+<a href="https://github.com/loopengine/loop-examples/tree/main/ai-actors/claude" target="_blank" rel="noreferrer">
+github.com/loopengine/loop-examples/tree/main/ai-actors/claude
+</a>
+</Callout>
+
+## What this example shows
+
+An AI actor using `@loop-engine/adapter-anthropic` analyzes inventory evidence and submits a replenishment recommendation. A confidence threshold gate keeps low-confidence decisions from reaching execution. A human approval transition remains required for final ordering.
+
+## Loop diagram
+
+```text
+IDLE ----[signal_detected]----> ANALYZING
+ANALYZING --[submit_recommendation]--> PENDING_APPROVAL
+ANALYZING --[insufficient_confidence]--> IDLE
+PENDING_APPROVAL --[approve]--> ORDERED (terminal)
+PENDING_APPROVAL --[reject]--> IDLE
+```
+
+## Actors
+
+| Actor | Type | Transitions | Guards |
+|---|---|---|---|
+| signal detector | automation | `signal_detected` | none |
+| claude recommender | ai-agent | `submit_recommendation` | `confidence-threshold` |
+| buyer approver | human | `approve`, `reject` | `human-only` |
+
+## Key annotated snippet
+
+```ts
+import Anthropic from "@anthropic-ai/sdk";
+import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
+
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const claude = createAnthropicActorAdapter(anthropic, {
+  modelId: "claude-opus-4-6",
+  confidenceThreshold: 0.75
+});
+
+const { actor, decision } = await claude.createSubmission({
+  loopId: "scm.replenishment",
+  loopName: "SCM Replenishment",
+  currentState: "ANALYZING",
+  availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation" }],
+  instruction: "Recommend reorder quantity based on stock and forecast.",
+  evidence: {
+    sku: "LMB-BRS-001",
+    currentStock: 142,
+    reorderPoint: 280,
+    forecastedDemand: 527
+  }
+});
+
+await engine.transition({
+  aggregateId: "repl-lmb-001" as never,
+  transitionId: "submit_recommendation" as never,
+  actor,
+  evidence: decision
+});
+```
+
+## What emitted events look like
+
+```ts
+{
+  type: "loop.transition.executed",
+  loopId: "scm.replenishment",
+  aggregateId: "repl-lmb-001",
+  transitionId: "submit_recommendation",
+  fromState: "ANALYZING",
+  toState: "PENDING_APPROVAL",
+  actor: { type: "ai-agent", id: "agent:claude-replenishment" },
+  occurredAt: "2026-03-13T12:24:00.422Z"
+}
+```
+
+## Try it yourself
+
+```bash
+cd loop-examples/ai-actors/claude
+pnpm install
+pnpm dev
+```
+
+See [AI Replenishment (OpenAI)](/docs/examples/ai-replenishment-openai) for the identical loop with a different provider adapter.

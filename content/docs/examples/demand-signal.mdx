@@ -1,68 +1,85 @@
 ---
 title: Demand Signal
-description: Signal detection converts event patterns into typed Signal records that can trigger replenishment loops.
+description: Rule-based signal detection that triggers loop start - no AI required.
 section: Examples
+complexity: Starter
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/signals"
+source: "https://github.com/loopengine/loop-examples/tree/main/demand-signal"
 ---
 
-Demand signal detection connects observed loop behavior to explicit follow-up actions without letting signal rules mutate state directly.
+<Callout variant="info" title="Full source">
+<a href="https://github.com/loopengine/loop-examples/tree/main/demand-signal" target="_blank" rel="noreferrer">
+github.com/loopengine/loop-examples/tree/main/demand-signal
+</a>
+</Callout>
 
-## Detection flow
+## What this example shows
 
-Signals are detections, not actors. Runtime callers decide whether to start a new loop from the emitted signal.
+Not every loop needs AI. This example models rule-based detection where an automation actor watches metrics and emits a start signal when thresholds are crossed. It is the SENSE stage in the operational loop pattern.
 
-## Signal rule usage
+## Loop diagram
+
+```text
+METRIC_STREAM --[threshold_breach]--> SIGNAL_DETECTED
+SIGNAL_DETECTED --[start_loop]--> LOOP_STARTED
+LOOP_STARTED --[run_governed_flow]--> COMPLETE
+```
+
+## Actors
+
+| Actor | Type | Transitions | Guards |
+|---|---|---|---|
+| detector | automation | `threshold_breach`, `start_loop` | none |
+| runtime | system | `loop_start` | none |
+
+## Key annotated snippet
 
 ```ts
-import { createSignalEngine, thresholdBreachRule } from "@loop-engine/signals"
+import { createSignalEngine, thresholdBreachRule } from "@loop-engine/signals";
+import { aggregateId } from "@loop-engine/core";
 
-const signalEngine = createSignalEngine()
+const signalEngine = createSignalEngine();
 signalEngine.registerRule(
   thresholdBreachRule({
     field: "demandChange",
     operator: "gt",
     threshold: 0.75
   })
-)
-```
+);
 
-## Lumebondé detection example
-
-```ts
-const events = [
-  {
-    type: "loop.transition.executed",
-    loopId: "scm.replenishment",
-    aggregateId: "repl-lmb-001",
-    orgId: "lumebonde",
-    occurredAt: new Date().toISOString(),
-    correlationId: "corr-1",
-    eventId: "evt-1",
-    fromState: "SIGNAL_DETECTED",
-    toState: "AI_ANALYSIS",
-    transitionId: "start_analysis",
-    actor: { type: "automation", id: "system:router" },
-    evidence: { demandChange: 0.89, sku: "LMB-BRS-001", currentStock: 142, reorderPoint: 280 }
-  }
-] as any
-
-const signals = signalEngine.process(events)
-// signals[0]?.type === "THRESHOLD_BREACH"
-```
-
-## Triggering loop start
-
-```ts
 signalEngine.subscribe(async (signal) => {
   await engine.start({
     loopId: "scm.replenishment",
     aggregateId: aggregateId(`repl-${Date.now()}`),
-    orgId: "lumebonde",
-    actor: { type: "system", id: "system:signal-engine" },
-    metadata: { sourceSignalType: signal.type, sourceSignalId: signal.id }
-  })
-})
+    actor: { type: "automation", id: "system:signal-detector" },
+    metadata: {
+      sourceSignalType: signal.type,
+      sourceSignalId: signal.id,
+      sku: signal.payload?.sku
+    }
+  });
+});
 ```
 
-## Full source
+## What emitted events look like
 
-- https://github.com/loopengine/loop-examples/tree/main/demand-signal
+```ts
+{
+  type: "loop.started",
+  loopId: "scm.replenishment",
+  aggregateId: "repl-1710339001422",
+  initialState: "SIGNAL_DETECTED",
+  actor: { type: "automation", id: "system:signal-detector" },
+  occurredAt: "2026-03-13T12:40:50.111Z"
+}
+```
+
+## Try it yourself
+
+```bash
+cd loop-examples/demand-signal
+pnpm install
+pnpm dev
+```
