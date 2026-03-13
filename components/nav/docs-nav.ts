@@ -1,6 +1,8 @@
 export type DocsNavItem = {
   title: string;
   href: string;
+  isGroup?: boolean;
+  indent?: boolean;
 };
 
 export type DocsNavSection = {
@@ -77,9 +79,23 @@ export const docsSections: DocsNavSection[] = [
   {
     label: "Integrations",
     items: [
-      { title: "OpenClaw", href: "/docs/examples/openclaw" },
-      { title: "Vercel AI SDK", href: "/docs/integrations/vercel-ai" },
-      { title: "PagerDuty", href: "/docs/integrations/pagerduty" }
+      { title: "Overview", href: "/docs/integrations/index" },
+      { title: "⟩ AI Providers", href: "/docs/integrations/index", isGroup: true },
+      { title: "Anthropic / Claude", href: "/docs/integrations/anthropic", indent: true },
+      { title: "OpenAI", href: "/docs/integrations/openai", indent: true },
+      { title: "Grok (xAI)", href: "/docs/integrations/grok", indent: true },
+      { title: "Google Gemini", href: "/docs/integrations/gemini", indent: true },
+      { title: "⟩ Agentic Platforms", href: "/docs/integrations/index", isGroup: true },
+      { title: "OpenClaw", href: "/docs/integrations/openclaw", indent: true },
+      { title: "Vercel AI SDK", href: "/docs/integrations/vercel-ai-sdk", indent: true },
+      { title: "⟩ Storage Adapters", href: "/docs/integrations/index", isGroup: true },
+      { title: "Postgres", href: "/docs/integrations/postgres", indent: true },
+      { title: "Kafka", href: "/docs/integrations/kafka", indent: true },
+      { title: "HTTP", href: "/docs/integrations/http", indent: true },
+      { title: "⟩ Observability", href: "/docs/integrations/index", isGroup: true },
+      { title: "PagerDuty", href: "/docs/integrations/pagerduty", indent: true },
+      { title: "⟩ Commerce", href: "/docs/integrations/index", isGroup: true },
+      { title: "Commerce Gateway", href: "/docs/integrations/commerce-gateway", indent: true }
     ]
   },
   {
@@ -92,4 +108,4 @@ export const docsSections: DocsNavSection[] = [
   }
 ];
 
-export const docsOrder = docsSections.flatMap((section) => section.items);
+export const docsOrder = docsSections.flatMap((section) => section.items).filter((item) => !item.isGroup);

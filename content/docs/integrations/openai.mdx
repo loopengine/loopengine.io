@@ -1,0 +1,96 @@
+---
+title: OpenAI
+description: Use OpenAI as a governed Loop Engine actor — confidence-gated, evidence-backed, fully attributed.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-openai</span>
+  <span className="docs-status-badge status-built-in">Provider: OpenAI</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="/docs/packages/adapter-openai">Package reference →</a>
+  <a className="docs-quick-link" href="https://www.npmjs.com/package/@loop-engine/adapter-openai">npm →</a>
+  <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
+</div>
+
+## What it does
+
+`@loop-engine/adapter-openai` uses OpenAI chat completions with `response_format: { type: "json_object" }` to produce structured actor decisions. It returns an `AIAgentActor` and `AIActorDecision` for runtime submission where policy guards are enforced.
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-openai openai
+   ```
+
+2. **Create the actor**
+
+   ```typescript
+   import { createOpenAIActorAdapter } from "@loop-engine/adapter-openai";
+
+   const adapter = createOpenAIActorAdapter(process.env.OPENAI_API_KEY!, {
+     modelId: "gpt-4o",
+     confidenceThreshold: 0.75
+   });
+   ```
+
+3. **Submit to a loop transition**
+
+   ```typescript
+   const { actor, decision } = await adapter.createSubmission({
+     loopId: "procurement",
+     loopName: "SCM Procurement",
+     currentState: "pending_analysis",
+     availableSignals: [
+       {
+         signalId: "submit_recommendation",
+         name: "Submit Recommendation",
+         allowedActors: ["ai-agent"]
+       }
+     ],
+     instruction: "Analyze demand data and recommend a purchase order.",
+     evidence: { demandForecast: 0.89, currentStock: 42, reorderPoint: 50 }
+   });
+
+   await loopSystem.transition({
+     aggregateId: "procurement-1",
+     signal: decision.signalId,
+     actor,
+     evidence: decision
+   });
+   ```
+
+## How it works
+
+1. Builds a structured prompt from loop context
+2. Calls OpenAI with JSON object response format
+3. Parses response and validates `signalId` + `confidence`
+4. Computes `promptHash` for auditability
+5. Returns actor + decision for runtime enforcement
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `modelId` | `string` | `gpt-4o` | OpenAI model ID (`gpt-4o-mini`, `o1`, `o3-mini` also supported) |
+| `maxTokens` | `number` | `1024` | Max tokens in response |
+| `systemPrompt` | `string` | — | Optional system prompt prepended to loop context |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0–1) |
+
+## Troubleshooting
+
+- `ActorDecisionError: INVALID_SIGNAL` — Returned `signalId` is not in `availableSignals`.
+- `ActorDecisionError: INVALID_CONFIDENCE` — Confidence outside 0–1; constrain via `systemPrompt`.
+- `ActorDecisionError: API_ERROR` — Check `OPENAI_API_KEY` and model availability.
+
+## Related
+
+- [AI as Actor](/docs/ai-and-automation/ai-as-actor)
+- [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)
+- [Human Approval Gates](/docs/ai-and-automation/human-approval-gates)
+- [Anthropic adapter](/docs/integrations/anthropic), [Grok adapter](/docs/integrations/grok), [Gemini adapter](/docs/integrations/gemini)

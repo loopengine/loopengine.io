@@ -37,7 +37,7 @@ export function DocToc({ headings }: DocTocProps) {
 
   return (
     <aside
-      className="hidden xl:block"
+      className="hidden lg:block"
       style={{
         width: 200,
         position: "sticky",

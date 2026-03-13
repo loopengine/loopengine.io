@@ -1,0 +1,95 @@
+---
+title: OpenClaw
+description: Loop Engine as the decision governance layer for OpenClaw agentic workflows — policy enforcement at the runtime level.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-featured">★ Featured Partner</span>
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-openclaw</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="https://docs.openclaw.ai">OpenClaw docs →</a>
+  <a className="docs-quick-link" href="/docs/packages/adapter-openclaw">Package reference →</a>
+  <a className="docs-quick-link" href="/partners#openclaw">Partner page →</a>
+</div>
+
+## What it does
+
+Loop Engine provides the decision governance layer for OpenClaw workflows. OpenClaw handles agentic reasoning and tool orchestration; Loop Engine governs which actions are authorized, by whom, under what policy, and records full attribution for each transition.
+
+This is the Sense → Decide → Govern pattern in practice:
+
+- OpenClaw retrieves context and reasons over it (`Decide`)
+- Loop Engine evaluates policy and transition guards (`Govern`)
+- Action executes only after the loop permits it (`Execute`)
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-openclaw @loop-engine/sdk
+   ```
+
+2. **Wire Loop Engine into an OpenClaw workflow**
+
+   ```typescript
+   import { createLoopSystem } from "@loop-engine/sdk";
+   import { OpenClawAdapter } from "@loop-engine/adapter-openclaw";
+
+   const loopSystem = await createLoopSystem({
+     loops: [procurementLoop]
+   });
+
+   const openclaw = new OpenClawAdapter({ loopSystem });
+   ```
+
+3. **Define the governed decision point**
+
+   ```typescript
+   const proposal = await openclaw.proposeAction({
+     workflowId: "procurement-workflow",
+     action: "submit_purchase_order",
+     input: { vendor: "Acme Medical Devices", amount: 9200 }
+   });
+
+   await loopSystem.transition({
+     aggregateId: proposal.aggregateId,
+     signal: proposal.signalId,
+     actor: proposal.actor,
+     evidence: proposal.evidence
+   });
+   ```
+
+## How it works
+
+1. OpenClaw agent proposes an action
+2. Adapter maps proposal to a Loop Engine signal
+3. Runtime evaluates guards and policies
+4. Human approval gate pauses when required
+5. Approved transition executes and is fully audited
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `loopSystem` | `LoopSystem` | required | Runtime instance used for governed transitions |
+| `signalMap` | `Record<string, string>` | `{}` | Optional action-to-signal mapping override |
+| `defaultActor` | `Actor` | `ai-agent/openclaw` | Fallback actor attribution metadata |
+| `onProposal` | `(proposal) => Promise<void>` | — | Optional hook before transition submission |
+
+## Troubleshooting
+
+- **Signal mapping mismatch** — Ensure OpenClaw action IDs map to valid loop signals.
+- **Transition blocked by guard** — Inspect runtime decision and evidence payload in transition history.
+- **Approval not routing** — Confirm your approval notifier is subscribed to pending-state transitions.
+
+## Related
+
+- [Decision Governance](/docs/concepts/decision-governance)
+- [Agents and RAG](/docs/concepts/agents-and-rag)
+- [Human Approval Gates](/docs/ai-and-automation/human-approval-gates)
+- [OpenClaw docs](https://docs.openclaw.ai)

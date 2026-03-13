@@ -105,6 +105,24 @@ export function DocsSidebar() {
             </p>
             <div>
               {section.items.map((item) => {
+                if (item.isGroup) {
+                  return (
+                    <p
+                      key={`${section.label}-${item.title}`}
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "var(--text-xs)",
+                        color: "var(--color-ink-muted)",
+                        letterSpacing: "0.06em",
+                        padding: "10px 24px 4px",
+                        textTransform: "uppercase"
+                      }}
+                    >
+                      {item.title}
+                    </p>
+                  );
+                }
+
                 const active = isActive(pathname, item.href);
                 return (
                   <Link
@@ -116,7 +134,7 @@ export function DocsSidebar() {
                       fontFamily: "var(--font-body)",
                       fontSize: "var(--text-sm)",
                       color: active ? "var(--color-primary)" : "var(--color-ink-tertiary)",
-                      padding: "6px 24px",
+                      padding: item.indent ? "6px 24px 6px 36px" : "6px 24px",
                       borderLeft: active
                         ? "2px solid var(--color-primary)"
                         : "2px solid transparent",

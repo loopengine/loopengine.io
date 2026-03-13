@@ -1,0 +1,67 @@
+---
+title: HTTP Adapter
+description: Generic HTTP storage adapter — connect Loop Engine to any REST backend that implements the adapter protocol.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-community">Community</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-http</span>
+</div>
+
+## What it does
+
+Implements `LoopStorageAdapter` over HTTP. Any REST service that speaks the adapter protocol can back loop state storage. This is useful for integrating with existing services or remote storage planes.
+
+## Adapter protocol
+
+Expected backend endpoints:
+
+- `POST /loops/:id/start`
+- `GET /loops/:id`
+- `POST /loops/:id/transition`
+- `GET /loops/:id/events`
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-http
+   ```
+
+2. **Create adapter**
+
+   ```typescript
+   import { HttpAdapter } from "@loop-engine/adapter-http";
+
+   const storage = new HttpAdapter({
+     baseUrl: "https://storage-gateway.internal"
+   });
+   ```
+
+3. **Pass into runtime**
+
+   ```typescript
+   const loopSystem = await createLoopSystem({
+     loops: [procurementLoop],
+     storage
+   });
+   ```
+
+## Note
+
+If your backend is in the same process, implementing `LoopStorageAdapter` directly is usually simpler than standing up the HTTP protocol.
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `baseUrl` | `string` | required | Base URL for storage API |
+| `timeoutMs` | `number` | `5000` | Request timeout |
+| `headers` | `Record<string, string>` | — | Additional auth or routing headers |
+
+## Related
+
+- [Adapter interface](/docs/running-loops/adapters)
+- [Postgres integration](/docs/integrations/postgres)

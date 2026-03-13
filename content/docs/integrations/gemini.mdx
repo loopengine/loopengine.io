@@ -1,0 +1,88 @@
+---
+title: Google Gemini
+description: Use Gemini as a governed Loop Engine actor with confidence thresholds and auditable submissions.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-gemini</span>
+  <span className="docs-status-badge status-built-in">Provider: Google</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="/docs/packages/adapter-gemini">Package reference →</a>
+  <a className="docs-quick-link" href="https://www.npmjs.com/package/@loop-engine/adapter-gemini">npm →</a>
+  <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
+</div>
+
+## What it does
+
+`@loop-engine/adapter-gemini` wraps Gemini API calls as Loop Engine actor submissions. It returns structured decisions for runtime guard enforcement, preserving attribution and evidence on every transition.
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-gemini @google/generative-ai
+   ```
+
+2. **Create the actor**
+
+   ```typescript
+   import { createGeminiActorAdapter } from "@loop-engine/adapter-gemini";
+
+   const adapter = createGeminiActorAdapter(process.env.GOOGLE_AI_API_KEY!, {
+     modelId: "gemini-1.5-pro"
+   });
+   ```
+
+3. **Submit to a loop transition**
+
+   ```typescript
+   const { actor, decision } = await adapter.createSubmission({
+     loopId: "procurement",
+     loopName: "SCM Procurement",
+     currentState: "pending_analysis",
+     availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation", allowedActors: ["ai-agent"] }],
+     instruction: "Analyze demand data and recommend a purchase order.",
+     evidence: { demandForecast: 0.93, currentStock: 36 }
+   });
+
+   await loopSystem.transition({
+     aggregateId: "procurement-1",
+     signal: decision.signalId,
+     actor,
+     evidence: decision
+   });
+   ```
+
+## How it works
+
+1. Formats context using Loop Engine actor prompt shape
+2. Calls Gemini generate endpoint
+3. Parses decision JSON and validates fields
+4. Returns actor + decision for runtime guard evaluation
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `modelId` | `string` | `gemini-1.5-pro` | Gemini model (`gemini-1.5-flash`, `gemini-2.0-flash`) |
+| `maxOutputTokens` | `number` | `1024` | Max output tokens |
+| `systemPrompt` | `string` | — | Optional system prompt prepended to loop context |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0–1) |
+
+## Troubleshooting
+
+- `ActorDecisionError: PARSE_FAILED` — Gemini may wrap JSON in markdown fences; add "raw JSON only" to `systemPrompt`.
+- `ActorDecisionError: API_ERROR` — Verify `GOOGLE_AI_API_KEY` in AI Studio.
+- `ActorDecisionError: INVALID_CONFIDENCE` — Ensure response confidence is numeric between 0 and 1.
+
+## Related
+
+- [AI as Actor](/docs/ai-and-automation/ai-as-actor)
+- [OpenAI adapter](/docs/integrations/openai)
+- [Anthropic adapter](/docs/integrations/anthropic)
+- [Grok adapter](/docs/integrations/grok)

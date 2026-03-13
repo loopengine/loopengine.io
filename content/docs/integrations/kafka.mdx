@@ -1,0 +1,65 @@
+---
+title: Kafka
+description: Publish Loop Engine events to Kafka topics — event streaming for audit, analytics, and downstream integration.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-kafka</span>
+</div>
+
+## What it does
+
+Publishes Loop Engine events (`LoopTransitionedEvent`, `LoopStartedEvent`, `LoopCompletedEvent`, `LearningSignalEmittedEvent`) to Kafka topics. Use this for audit pipelines, analytics, and cross-system event triggers.
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-kafka kafkajs
+   ```
+
+2. **Create adapter**
+
+   ```typescript
+   import { KafkaAdapter } from "@loop-engine/adapter-kafka";
+
+   const kafka = new KafkaAdapter({
+     brokers: ["kafka-1:9092", "kafka-2:9092"],
+     topicPrefix: "loop-engine",
+     clientId: "procurement-service"
+   });
+   ```
+
+3. **Wire event emission**
+
+   ```typescript
+   const loopSystem = await createLoopSystem({
+     loops: [procurementLoop],
+     eventSinks: [kafka]
+   });
+   ```
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `brokers` | `string[]` | required | Kafka broker list |
+| `topicPrefix` | `string` | `loop-engine` | Prefix for emitted event topics |
+| `clientId` | `string` | `loop-engine` | Kafka client ID |
+| `ssl` | `boolean` | `false` | Enable TLS |
+| `sasl` | `object` | — | SASL credentials and mechanism |
+
+## Troubleshooting
+
+- **Connection timeout** — Check broker addresses and network policy/firewall.
+- **Authentication error** — Validate `sasl` mechanism/user/secret.
+- **Topic missing** — Enable topic auto-create or pre-create topics manually.
+
+## Related
+
+- [Event Streaming example](/docs/examples/event-streaming)
+- [Events package](/docs/packages/events)
+- [Postgres integration](/docs/integrations/postgres)

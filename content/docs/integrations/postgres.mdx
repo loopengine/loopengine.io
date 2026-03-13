@@ -1,0 +1,82 @@
+---
+title: Postgres
+description: Persist Loop Engine loop state and events to PostgreSQL — production-ready storage with full event history.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-postgres</span>
+</div>
+
+## What it does
+
+Swaps the in-memory adapter for PostgreSQL persistence. Loop state, transitions, and events are stored in Postgres through the same `LoopStorageAdapter` interface, so loop definitions and business logic remain unchanged.
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-postgres
+   ```
+
+2. **Create adapter**
+
+   ```typescript
+   import { PostgresAdapter } from "@loop-engine/adapter-postgres";
+
+   const storage = new PostgresAdapter({
+     connectionString: process.env.DATABASE_URL!,
+     maxConnections: 10,
+     ssl: false
+   });
+   ```
+
+3. **Pass into runtime (before/after)**
+
+   ```typescript
+   // Before
+   const loopSystemDev = await createLoopSystem({
+     loops: [procurementLoop]
+   });
+
+   // After
+   const loopSystemProd = await createLoopSystem({
+     loops: [procurementLoop],
+     storage
+   });
+   ```
+
+## Schema note
+
+On first startup, the adapter creates required persistence tables:
+
+- `loop_instances`
+- `loop_events`
+- `loop_transitions`
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `connectionString` | `string` | required | Postgres connection URL |
+| `maxConnections` | `number` | `10` | Connection pool size |
+| `ssl` | `boolean` | `false` | Enable SSL for connection |
+
+## Troubleshooting
+
+- **Connection refused** — Verify database host/port and credentials.
+- **Migration failed** — Adapter user requires `CREATE TABLE` privileges.
+- **Slow queries** — Add targeted indexes for your query paths, for example:
+
+  ```sql
+  CREATE INDEX IF NOT EXISTS idx_loop_instances_loop_id
+  ON loop_instances(loop_id);
+  ```
+
+## Related
+
+- [Postgres Persistence example](/docs/examples/postgres-persistence)
+- [Kafka integration](/docs/integrations/kafka)
+- [Adapter interface](/docs/running-loops/adapters)

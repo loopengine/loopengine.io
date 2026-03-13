@@ -151,18 +151,35 @@ export function MobileMenu({ open, onClose, triggerRef }: MobileMenuProps) {
               </p>
               <div className="space-y-1">
                 {section.items.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={onClose}
-                    style={{
-                      display: "block",
-                      fontSize: "var(--text-sm)",
-                      color: "var(--color-ink-tertiary)"
-                    }}
-                  >
-                    {item.title}
-                  </Link>
+                  item.isGroup ? (
+                    <p
+                      key={`${section.label}-${item.title}`}
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "var(--text-xs)",
+                        letterSpacing: "0.06em",
+                        textTransform: "uppercase",
+                        color: "var(--color-ink-muted)",
+                        marginTop: 10
+                      }}
+                    >
+                      {item.title}
+                    </p>
+                  ) : (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={onClose}
+                      style={{
+                        display: "block",
+                        fontSize: "var(--text-sm)",
+                        color: "var(--color-ink-tertiary)",
+                        paddingLeft: item.indent ? 12 : 0
+                      }}
+                    >
+                      {item.title}
+                    </Link>
+                  )
                 ))}
               </div>
             </div>

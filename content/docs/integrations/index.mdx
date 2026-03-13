@@ -1,0 +1,129 @@
+---
+title: Integrations
+description: Loop Engine integrations — AI providers, agentic platforms, storage adapters, observability, and commerce.
+section: Integrations
+---
+
+Connect Loop Engine to any AI provider, agentic platform, storage backend, or observability tool. Every integration preserves the same governance model — guards enforced, actors attributed, audit trail intact.
+
+## ⟩ AI Providers
+
+Use any major LLM as a governed actor. All four adapters produce the same `AIAgentActor` shape — switching providers requires changing one import.
+
+<div className="grid gap-4 md:grid-cols-2">
+  <IntegrationCard
+    name="Anthropic / Claude"
+    subtext="claude-opus-4-6, claude-sonnet-4-6"
+    status="certified"
+    logoPath="/logos/anthropic.svg"
+    href="/docs/integrations/anthropic"
+  />
+  <IntegrationCard
+    name="OpenAI"
+    subtext="gpt-4o, o-series models"
+    status="certified"
+    logoPath="/logos/openai.svg"
+    href="/docs/integrations/openai"
+  />
+  <IntegrationCard
+    name="Grok (xAI)"
+    subtext="grok-3, grok-3-mini via xAI API"
+    status="certified"
+    logoPath="/logos/xai.svg"
+    href="/docs/integrations/grok"
+  />
+  <IntegrationCard
+    name="Google Gemini"
+    subtext="gemini-1.5-pro, gemini-2.0-flash"
+    status="certified"
+    logoPath="/logos/gemini.svg"
+    href="/docs/integrations/gemini"
+  />
+</div>
+
+## ⟩ Agentic Platforms
+
+Loop Engine governs the decision boundary inside agentic workflows — AI reasoning happens in the platform, policy enforcement happens in the loop.
+
+<div className="grid gap-4 md:grid-cols-2">
+  <IntegrationCard
+    name="OpenClaw"
+    subtext="Agentic commerce platform — Loop Engine governs OpenClaw workflows"
+    status="featured"
+    logoPath="/logos/openclaw.svg"
+    href="/docs/integrations/openclaw"
+  />
+  <IntegrationCard
+    name="Vercel AI SDK"
+    subtext="Stream AI responses inside governed loop transitions"
+    status="certified"
+    logoPath="/logos/vercel.svg"
+    href="/docs/integrations/vercel-ai-sdk"
+  />
+</div>
+
+## ⟩ Storage Adapters
+
+Loop Engine's storage layer is an adapter interface. Swap backends without changing loop definitions or business logic.
+
+<div className="grid gap-4 md:grid-cols-2">
+  <IntegrationCard
+    name="In-Memory"
+    subtext="Zero-config store for development and testing"
+    status="built-in"
+    href="/docs/packages/adapter-memory"
+  />
+  <IntegrationCard
+    name="Postgres"
+    subtext="Persist loop state and events to PostgreSQL"
+    status="certified"
+    href="/docs/integrations/postgres"
+  />
+  <IntegrationCard
+    name="Kafka"
+    subtext="Event streaming — publish loop events to Kafka topics"
+    status="certified"
+    href="/docs/integrations/kafka"
+  />
+  <IntegrationCard
+    name="HTTP"
+    subtext="Generic HTTP adapter — connect any REST backend"
+    status="community"
+    href="/docs/integrations/http"
+  />
+</div>
+
+## ⟩ Observability & Alerting
+
+Loop Engine emits structured events at every transition. Wire them into your observability stack.
+
+<div className="grid gap-4 md:grid-cols-2">
+  <IntegrationCard
+    name="PagerDuty"
+    subtext="Incident-triggered loops — PagerDuty alerts start governed workflows"
+    status="certified"
+    logoPath="/logos/pagerduty.svg"
+    href="/docs/integrations/pagerduty"
+  />
+</div>
+
+## ⟩ Commerce
+
+Connect Loop Engine to commerce platforms and LLM commerce data layers.
+
+<div className="grid gap-4 md:grid-cols-2">
+  <IntegrationCard
+    name="Commerce Gateway"
+    subtext="LLM-accessible commerce data for AI actors inside procurement loops"
+    status="certified"
+    href="/docs/integrations/commerce-gateway"
+  />
+</div>
+
+## Building an integration?
+
+The Loop Engine adapter interface is open and documented. Any backend that implements `LoopStorageAdapter` is valid.
+
+- [Adapter interface docs →](/docs/running-loops/adapters)
+- [Apply for certification →](mailto:oss@betterdata.co)
+- [Open an RFC →](https://github.com/loopengine/loop-engine/discussions)

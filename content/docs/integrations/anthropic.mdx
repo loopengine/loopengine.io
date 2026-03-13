@@ -1,0 +1,98 @@
+---
+title: Anthropic / Claude
+description: Use Claude as a governed Loop Engine actor — confidence-gated, evidence-backed, fully attributed.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-anthropic</span>
+  <span className="docs-status-badge status-built-in">Provider: Anthropic</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="/docs/packages/adapter-anthropic">Package reference →</a>
+  <a className="docs-quick-link" href="https://www.npmjs.com/package/@loop-engine/adapter-anthropic">npm →</a>
+  <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
+</div>
+
+## What it does
+
+`@loop-engine/adapter-anthropic` wraps the Anthropic Messages API as a Loop Engine AI actor. The adapter calls Claude with loop context, parses the structured response, and returns an `AIAgentActor` plus `AIActorDecision` ready for runtime submission. Guards run after the adapter returns — Claude cannot bypass them.
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-anthropic
+   npm install @anthropic-ai/sdk
+   ```
+
+2. **Create the actor**
+
+   ```typescript
+   import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
+
+   const adapter = createAnthropicActorAdapter(process.env.ANTHROPIC_API_KEY!, {
+     modelId: "claude-opus-4-6",
+     confidenceThreshold: 0.75
+   });
+   ```
+
+3. **Submit to a loop transition**
+
+   ```typescript
+   const { actor, decision } = await adapter.createSubmission({
+     loopId: "procurement",
+     loopName: "SCM Procurement",
+     currentState: "pending_analysis",
+     availableSignals: [
+       {
+         signalId: "submit_recommendation",
+         name: "Submit Recommendation",
+         allowedActors: ["ai-agent"]
+       }
+     ],
+     instruction: "Analyze demand data and recommend a purchase order.",
+     evidence: { demandForecast: 0.91, currentStock: 38 }
+   });
+
+   await loopSystem.transition({
+     aggregateId: "procurement-1",
+     signal: decision.signalId,
+     actor,
+     evidence: decision
+   });
+   ```
+
+## How it works
+
+1. Builds a structured prompt from `LoopActorPromptContext`
+2. Calls `client.messages.create(...)` with loop context
+3. Parses JSON and validates `signalId` + `confidence`
+4. Computes SHA-256 `promptHash`
+5. Returns `AIAgentActor` (`provider: "anthropic"`) + `AIActorDecision`
+6. Caller submits to runtime and guards evaluate after submission
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `modelId` | `string` | `claude-opus-4-6` | Anthropic model ID |
+| `maxTokens` | `number` | `1024` | Max tokens in response |
+| `systemPrompt` | `string` | — | Optional system prompt prepended to loop context |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0–1) |
+
+## Troubleshooting
+
+- `ActorDecisionError: INVALID_SIGNAL` — Model returned a signal not present in `availableSignals`; tighten instruction language around allowed signals.
+- `ActorDecisionError: INVALID_CONFIDENCE` — Confidence was outside 0–1; include "confidence must be between 0 and 1" in `systemPrompt`.
+- `ActorDecisionError: API_ERROR` — Check `ANTHROPIC_API_KEY` and model ID validity.
+
+## Related
+
+- [AI as Actor](/docs/ai-and-automation/ai-as-actor)
+- [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)
+- [Human Approval Gates](/docs/ai-and-automation/human-approval-gates)
+- [OpenAI adapter](/docs/integrations/openai), [Grok adapter](/docs/integrations/grok), [Gemini adapter](/docs/integrations/gemini)

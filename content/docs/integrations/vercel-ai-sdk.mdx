@@ -1,0 +1,88 @@
+---
+title: Vercel AI SDK
+description: Stream AI responses inside governed Loop Engine transitions — use the Vercel AI SDK for model calls, Loop Engine for governance.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-vercel-ai</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="/docs/packages/adapter-openai">OpenAI package reference →</a>
+  <a className="docs-quick-link" href="https://www.npmjs.com/package/@loop-engine/adapter-vercel-ai">npm →</a>
+  <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
+</div>
+
+## What it does
+
+Vercel AI SDK handles streaming and model access. Loop Engine governs when and whether model-requested tool actions are authorized. Use Vercel AI SDK for model execution; use Loop Engine for guard enforcement, actor attribution, and audit trails.
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-vercel-ai ai
+   ```
+
+2. **Wrap a tool with governance**
+
+   ```typescript
+   import { streamText, tool } from "ai";
+   import { wrapTool } from "@loop-engine/adapter-vercel-ai";
+
+   const submitPurchaseOrder = wrapTool(
+     tool({
+       description: "Submit purchase order",
+       parameters: z.object({ vendor: z.string(), amount: z.number() }),
+       execute: async ({ vendor, amount }) => ({ orderId: "PO-0042", vendor, amount })
+     }),
+     {
+       loopDefinition: purchaseOrderLoop,
+       engine,
+       requiresApproval: ({ amount }) => amount > 5000
+     }
+   );
+   ```
+
+3. **Run with streaming**
+
+   ```typescript
+   await streamText({
+     model: openai("gpt-4o"),
+     tools: { submitPurchaseOrder },
+     prompt: "Submit a PO to Acme Medical for $9,200"
+   });
+   ```
+
+## How it works
+
+1. Model requests tool invocation
+2. Adapter starts and advances loop transitions
+3. Approval gates hold high-impact actions
+4. Human decision unblocks execution
+5. Execution and evidence are appended to history
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `loopDefinition` | `LoopDefinition` | required | Governance state machine for the tool |
+| `engine` | `LoopEngine` | required | Runtime instance |
+| `requiresApproval` | `(input) => boolean` | — | Predicate for human checkpointing |
+| `onApprovalRequired` | `(loopId, input) => Promise<void>` | — | Notification hook |
+| `actor` | `Actor` | `ai-agent` | Actor attribution for transition records |
+
+## Troubleshooting
+
+- **Streaming parse errors** — Enforce strict JSON response contracts in tool output.
+- **Model resolution errors** — Verify the selected model provider is available in your AI SDK config.
+- **Missing approvals** — Ensure `requiresApproval` returns true for high-risk tool inputs.
+
+## Related
+
+- [AI as Actor](/docs/ai-and-automation/ai-as-actor)
+- [Anthropic integration](/docs/integrations/anthropic)
+- [OpenAI integration](/docs/integrations/openai)

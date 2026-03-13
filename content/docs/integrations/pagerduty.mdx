@@ -1,120 +1,79 @@
 ---
 title: PagerDuty
-description: Trigger PagerDuty incidents from Loop Engine approval states and resolve them when decisions close.
+description: Incident-triggered loops — PagerDuty alerts start governed Loop Engine response workflows with full attribution.
 section: Integrations
 ---
 
-## Overview
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-pagerduty</span>
+</div>
 
-PagerDuty is the natural approval channel for enterprise AI actions because the on-call engineer already owns high-impact operational decisions. Loop Engine's `PENDING_HUMAN_APPROVAL` state maps directly to an incident: the system must pause until a human decides.
+## What it does
 
-`@loop-engine/adapter-pagerduty` pages the right responder using existing escalation policy, severity routing, and acknowledgement workflows. Teams stay inside PagerDuty while Loop Engine preserves state-machine constraints and audit history.
+PagerDuty incidents can trigger Loop Engine workflows, turning urgent alerts into governed and attributable response loops. The adapter maps incident events to loop signals, starts a loop per incident, and keeps human decisions in-policy.
 
-## Demo scenario (purchase order)
+## Use case
 
-Use this scenario for partner outreach: AI requests a `$9,200` PO, PagerDuty incident triggers, on-call engineer approves, loop executes, incident resolves.
+PagerDuty fires a `SEV-2` database incident:
 
-- Incident title: `AI requested $9,200 PO to Acme Medical Devices`
-- Approval link deep-links to loop decision UI
-- Decision closes both loop state and PagerDuty incident
+1. Loop Engine starts `incident-response` loop
+2. On-call engineer acknowledges (human-only guard)
+3. Runbook automation executes
+4. Loop closes and emits learning signal
 
-## How it works
+## Quick setup
 
-1. AI tool call starts and `requiresApproval()` evaluates input risk.
-2. Loop transitions to `PENDING_HUMAN_APPROVAL`.
-3. `PagerDutyNotifier.notify()` triggers an incident.
-4. On-call engineer opens incident and follows approval URL.
-5. Human decision advances loop to `EXECUTING` then `EXECUTED` (or `REJECTED`).
-6. `PagerDutyNotifier.resolve()` auto-resolves the incident.
+1. **Install**
 
-## Narrative output to share
+   ```bash
+   npm install @loop-engine/adapter-pagerduty
+   ```
 
-```text
-Incident triggered: loop-engine-loop_po_0017 (severity=warning)
-On-call engineer opened approval URL from incident
-Decision: APPROVED
-Loop advanced: PENDING_HUMAN_APPROVAL -> EXECUTING -> EXECUTED
-Incident resolved: loop-engine-loop_po_0017
-```
+2. **Configure webhook endpoint**
 
-## Installation
+   ```text
+   POST https://your-app.example.com/hooks/pagerduty
+   ```
 
-```bash
-pnpm add @loop-engine/adapter-pagerduty
-# or npm/yarn equivalent
-```
+3. **Wire adapter**
 
-## Setup
+   ```typescript
+   import { PagerDutyAdapter } from "@loop-engine/adapter-pagerduty";
 
-1. Create a PagerDuty service with an Events API v2 integration.
-2. Copy the integration key.
-3. Set `PAGERDUTY_INTEGRATION_KEY` in your runtime environment.
-4. Follow PagerDuty integration docs for service setup:
-   - [PagerDuty Events API v2](https://developer.pagerduty.com/api-reference/b3A6Mjc0ODE0MQ-send-an-event-to-pager-duty)
+   const pagerduty = new PagerDutyAdapter({
+     webhookSecret: process.env.PAGERDUTY_WEBHOOK_SECRET!,
+     incidentLoopId: "incident-response"
+   });
+   ```
 
-## Quick start
+4. **Define incident loop**
 
-```ts
-import { PagerDutyNotifier } from "@loop-engine/adapter-pagerduty";
-import { wrapTool } from "@loop-engine/adapter-vercel-ai";
+   ```yaml
+   loopId: incident-response
+   initialState: triage
+   states:
+     - stateId: triage
+       transitions:
+         - signalId: acknowledge_incident
+           toState: executing
+   ```
 
-const pagerduty = new PagerDutyNotifier({
-  integrationKey: process.env.PAGERDUTY_INTEGRATION_KEY!,
-  severity: "warning", // can also be a function by input context
-  serviceContext: "Loop Engine / Procurement Agent",
-  approvalUrl: (loopId) => `https://app.betterdata.co/loops/${loopId}`
-});
+## Configuration reference
 
-const submitPurchaseOrder = wrapTool(purchaseOrderTool, {
-  loopDefinition: purchaseOrderLoop,
-  engine,
-  requiresApproval: ({ amount }) => amount > 5000,
-  onApprovalRequired: async (loopId, input) => {
-    const dedupKey = await pagerduty.notify(loopId, {
-      loopId,
-      loopName: "purchase-order",
-      actor: { type: "ai-agent", id: "procurement-agent" as never },
-      input,
-      summary: `AI requested $${input.amount} PO to ${input.vendor}`
-    });
-    storeDedupKey(loopId, dedupKey);
-  },
-  actor: { type: "ai-agent", id: "procurement-agent" as never }
-});
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `webhookSecret` | `string` | required | PagerDuty webhook signing secret |
+| `incidentLoopId` | `string` | required | Loop definition ID to start on incident |
+| `severityMap` | `object` | — | Map PagerDuty severity to loop signals |
 
-// Later, after human decision:
-await pagerduty.resolve(dedupKey, "approved");
-```
+## Troubleshooting
 
-## Severity routing
+- **Webhook signature invalid** — Ensure `webhookSecret` matches PagerDuty integration settings.
+- **Loop not starting** — Verify `incidentLoopId` is registered in runtime.
 
-Use severity routing to map action impact to escalation policies:
+## Related
 
-```ts
-const pagerduty = new PagerDutyNotifier({
-  integrationKey: process.env.PAGERDUTY_INTEGRATION_KEY!,
-  severity: (context) => {
-    const amount = Number((context.input as { amount?: number }).amount ?? 0);
-    return amount > 50000 ? "critical" : amount > 5000 ? "warning" : "info";
-  }
-});
-```
-
-Example policy tiers:
-
-- `critical` for actions over `$50k`
-- `warning` for `$5k–$50k`
-- `info` for under `$5k`
-
-## API reference
-
-| API | Description |
-|---|---|
-| `new PagerDutyNotifier(options)` | Creates notifier bound to one PagerDuty integration key. |
-| `options.integrationKey` | PagerDuty Events API v2 routing key. |
-| `options.severity` | Static severity or `(context) => severity` function. |
-| `options.serviceContext` | Incident source label (default `Loop Engine`). |
-| `options.approvalUrl(loopId)` | Optional deep-link to approval UI. |
-| `options.customDetails(context)` | Additional custom details merged into incident payload. |
-| `notify(loopId, context)` | Triggers incident and returns `dedupKey`. |
-| `resolve(dedupKey, resolution)` | Resolves incident when loop leaves pending state. |
+- [Infrastructure Change Approval example](/docs/examples/infrastructure-change-approval)
+- [Human Approval Gates](/docs/ai-and-automation/human-approval-gates)
+- [PagerDuty webhook docs](https://developer.pagerduty.com/docs/webhooks)

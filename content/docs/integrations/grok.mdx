@@ -1,0 +1,89 @@
+---
+title: Grok (xAI)
+description: Use Grok as a governed Loop Engine actor through xAI's OpenAI-compatible API.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-grok</span>
+  <span className="docs-status-badge status-built-in">Provider: xAI</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="/docs/packages/adapter-grok">Package reference →</a>
+  <a className="docs-quick-link" href="https://www.npmjs.com/package/@loop-engine/adapter-grok">npm →</a>
+  <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
+</div>
+
+## What it does
+
+`@loop-engine/adapter-grok` uses the OpenAI SDK pointed at `https://api.x.ai/v1`. Grok's API is OpenAI-compatible, so the adapter follows the same structural pattern while attributing `provider: "grok"` in actor records.
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-grok openai
+   ```
+
+2. **Create the actor**
+
+   ```typescript
+   import { createGrokActorAdapter } from "@loop-engine/adapter-grok";
+
+   const adapter = createGrokActorAdapter(process.env.XAI_API_KEY!, {
+     modelId: "grok-3",
+     baseURL: "https://api.x.ai/v1"
+   });
+   ```
+
+3. **Submit to a loop transition**
+
+   ```typescript
+   const { actor, decision } = await adapter.createSubmission({
+     loopId: "procurement",
+     loopName: "SCM Procurement",
+     currentState: "pending_analysis",
+     availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation", allowedActors: ["ai-agent"] }],
+     instruction: "Analyze demand data and recommend a purchase order.",
+     evidence: { demandForecast: 0.87, currentStock: 41 }
+   });
+
+   await loopSystem.transition({
+     aggregateId: "procurement-1",
+     signal: decision.signalId,
+     actor,
+     evidence: decision
+   });
+   ```
+
+## How it works
+
+1. Builds loop prompt context
+2. Calls xAI endpoint through OpenAI-compatible SDK
+3. Parses and validates structured response
+4. Returns attributed actor + decision for runtime guard enforcement
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `modelId` | `string` | `grok-3` | xAI model ID (`grok-3-mini`, `grok-2`, `grok-2-mini`) |
+| `baseURL` | `string` | `https://api.x.ai/v1` | Override endpoint (useful for testing) |
+| `maxTokens` | `number` | `1024` | Max tokens in response |
+| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0–1) |
+
+## Troubleshooting
+
+- `ActorDecisionError: API_ERROR` — Verify `XAI_API_KEY` in xAI console and endpoint availability.
+- `ActorDecisionError: INVALID_SIGNAL` — Clarify `availableSignals` in instruction.
+- OpenAI SDK-flavored errors are expected because Grok adapter uses the OpenAI client shape.
+
+## Related
+
+- [AI as Actor](/docs/ai-and-automation/ai-as-actor)
+- [OpenAI adapter](/docs/integrations/openai)
+- [Anthropic adapter](/docs/integrations/anthropic)
+- [Gemini adapter](/docs/integrations/gemini)

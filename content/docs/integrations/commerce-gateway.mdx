@@ -1,0 +1,89 @@
+---
+title: Commerce Gateway
+description: LLM-accessible commerce data for AI actors inside Loop Engine procurement and demand loops.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-certified">✓ Certified</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-commerce-gateway</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="https://commercegateway.io">commercegateway.io →</a>
+  <a className="docs-quick-link" href="https://commercegateway.io/docs">Commerce Gateway docs →</a>
+  <a className="docs-quick-link" href="/docs/examples/ai-replenishment">AI Replenishment example →</a>
+</div>
+
+## What it does
+
+Commerce Gateway provides LLM-accessible commerce data, including product catalog, pricing, inventory, and supplier context through a unified API. AI actors in Loop Engine procurement and demand loops use this data as evidence before submitting governed recommendations.
+
+- Without Commerce Gateway: AI actors lack structured commerce context.
+- With Commerce Gateway: actors query commerce data, attach evidence, and submit decisions into runtime guards.
+
+## Use case
+
+SCM Procurement loop at `ANALYZING`:
+
+1. AI actor queries Commerce Gateway for suppliers on `SKU-4892`
+2. Gateway returns structured supplier + inventory data
+3. Actor submits recommendation with attached evidence
+4. Confidence guard and human approval gates evaluate transition
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-commerce-gateway
+   ```
+
+2. **Create adapter**
+
+   ```typescript
+   import { CommerceGatewayAdapter } from "@loop-engine/adapter-commerce-gateway";
+
+   const gateway = new CommerceGatewayAdapter({
+     gatewayUrl: process.env.COMMERCE_GATEWAY_URL!,
+     apiKey: process.env.COMMERCE_GATEWAY_API_KEY!,
+     timeout: 5000
+   });
+   ```
+
+3. **Use inside actor submission**
+
+   ```typescript
+   const commerceEvidence = await gateway.query({
+     query: "top suppliers for SKU-4892 and current lead times"
+   });
+
+   const { actor, decision } = await adapter.createSubmission({
+     loopId: "scm-procurement",
+     loopName: "SCM Procurement",
+     currentState: "analyzing",
+     availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation", allowedActors: ["ai-agent"] }],
+     instruction: "Recommend supplier and order quantity.",
+     evidence: commerceEvidence
+   });
+   ```
+
+## Configuration reference
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `gatewayUrl` | `string` | required | Commerce Gateway endpoint |
+| `apiKey` | `string` | required | Commerce Gateway API key |
+| `timeout` | `number` | `5000` | Request timeout in milliseconds |
+
+## Troubleshooting
+
+- **401 Unauthorized** — Verify API key and gateway environment.
+- **Product not found** — Confirm SKU/GTIN format matches gateway schema.
+- **Timeout** — Increase timeout or inspect gateway availability.
+
+## Related
+
+- [AI Replenishment example](/docs/examples/ai-replenishment)
+- [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)
+- [Commerce Gateway docs](https://commercegateway.io/docs)
