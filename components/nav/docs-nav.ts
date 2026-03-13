@@ -57,30 +57,7 @@ export const docsSections: DocsNavSection[] = [
   },
   {
     label: "Packages",
-    items: [
-      { title: "@loop-engine/sdk", href: "/docs/packages/sdk" },
-      { title: "@loop-engine/core", href: "/docs/packages/core" },
-      { title: "@loop-engine/dsl", href: "/docs/packages/dsl" },
-      { title: "@loop-engine/runtime", href: "/docs/packages/runtime" },
-      { title: "@loop-engine/events", href: "/docs/packages/events" },
-      { title: "@loop-engine/guards", href: "/docs/packages/guards" },
-      { title: "@loop-engine/actors", href: "/docs/packages/actors" },
-      { title: "@loop-engine/signals", href: "/docs/packages/signals" },
-      { title: "@loop-engine/observability", href: "/docs/packages/observability" },
-      { title: "@loop-engine/registry-client", href: "/docs/packages/registry-client" },
-      { title: "@loop-engine/ui-devtools", href: "/docs/packages/ui-devtools" },
-      { title: "@loop-engine/adapter-anthropic", href: "/docs/packages/adapter-anthropic" },
-      { title: "@loop-engine/adapter-commerce-gateway", href: "/docs/packages/adapter-commerce-gateway" },
-      { title: "@loop-engine/adapter-gemini", href: "/docs/packages/adapter-gemini" },
-      { title: "@loop-engine/adapter-grok", href: "/docs/packages/adapter-grok" },
-      { title: "@loop-engine/adapter-http", href: "/docs/packages/adapter-http" },
-      { title: "@loop-engine/adapter-kafka", href: "/docs/packages/adapter-kafka" },
-      { title: "@loop-engine/adapter-memory", href: "/docs/packages/adapter-memory" },
-      { title: "@loop-engine/adapter-openclaw", href: "/docs/packages/adapter-openclaw" },
-      { title: "@loop-engine/adapter-openai", href: "/docs/packages/adapter-openai" },
-      { title: "@loop-engine/adapter-postgres", href: "/docs/packages/adapter-postgres" },
-      { title: "All packages", href: "/docs/packages/all-packages" }
-    ]
+    items: [{ title: "Packages", href: "/docs/packages" }]
   },
   {
     label: "Examples",
