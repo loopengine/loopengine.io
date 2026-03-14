@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from "next/font/google";
 import { TopNav } from "@/components/nav/TopNav";
 import { Footer } from "@/components/site/Footer";
@@ -112,6 +113,18 @@ export default function RootLayout({
         <TopNav />
         <main id="main-content">{children}</main>
         <Footer />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-NRGKK7RK22"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-NRGKK7RK22');
+          `}
+        </Script>
       </body>
     </html>
   );
