@@ -72,9 +72,14 @@ const evidence = await procurementActor({ instance: { data: { sku: 'LMB-BRS-001'
 
 ## The governance boundary
 
-Commerce Gateway owns structured commerce data and operation APIs. It executes reads and writes for inventory, demand, suppliers, pricing, and orders.
+Commerce Gateway handles data access and commerce operations. Loop Engine governs the workflow around those operations.
 
-Loop Engine owns workflow progression, actor attribution, guard outcomes, human approval transitions, transition history, and learning feedback from outcomes.
+| System | Owns |
+|------|------|
+| Commerce Gateway | Commerce data (inventory, pricing, orders, catalog), LLM tool definitions for commerce operations, and commerce API execution |
+| Loop Engine | Workflow state, actor attribution, guard enforcement, human approval gates, transition audit trail, and learning signals |
+
+Neither system needs to know the internal workings of the other. The adapter is the only coupling point.
 
 ## Full procurement walkthrough
 
