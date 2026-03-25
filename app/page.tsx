@@ -28,6 +28,14 @@ type IntegrationCard = {
   featured?: boolean;
 };
 
+type RelatedPost = {
+  id: string;
+  title: string;
+  slug: string;
+  publishedAt?: string;
+  tags?: string[];
+};
+
 const integrations: IntegrationCard[] = [
   {
     name: "OpenClaw",
@@ -156,6 +164,35 @@ async function getGitHubStars(): Promise<number> {
   }
 }
 
+async function getRelatedLoopEnginePosts(): Promise<RelatedPost[]> {
+  try {
+    const response = await fetch("https://betterdata.co/blog/tags/loop-engine/feed", {
+      next: { revalidate: 3600 },
+    });
+    if (!response.ok) {
+      return [];
+    }
+
+    const data = (await response.json()) as { posts?: Array<{ id?: string; title?: string; slug?: string; publishedAt?: string; tags?: string[] }> };
+    if (!data.posts?.length) {
+      return [];
+    }
+
+    return data.posts
+      .filter((post) => post.id && post.title && post.slug)
+      .slice(0, 4)
+      .map((post) => ({
+        id: post.id as string,
+        title: post.title as string,
+        slug: post.slug as string,
+        publishedAt: post.publishedAt,
+        tags: post.tags ?? [],
+      }));
+  } catch {
+    return [];
+  }
+}
+
 export default function Home() {
   const architecture = ["SIGNAL", "LOOP ENGINE", "ACTOR", "TRANSITION", "EVIDENCE", "LEARNING"];
 
@@ -166,6 +203,7 @@ export default function Home() {
 
 async function HomeContent({ architecture }: { architecture: string[] }) {
   const stars = await getGitHubStars();
+  const relatedPosts = await getRelatedLoopEnginePosts();
   const homeJsonLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -276,6 +314,18 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
               Loop Engine gives AI finite states, deterministic guards, and structured feedback.
               Not improvisation - control.
             </p>
+            <p
+              className="fade-in-up mt-3"
+              style={{
+                animationDelay: "200ms",
+                fontSize: "var(--text-sm)",
+                color: "var(--color-ink-secondary)",
+                fontFamily: "var(--font-mono)",
+                letterSpacing: "0.02em",
+              }}
+            >
+              Install only what you govern.
+            </p>
 
             <div
               className="fade-in-up mt-9 flex flex-col items-stretch gap-3 min-[480px]:items-center min-[480px]:flex-row min-[480px]:flex-wrap"
@@ -339,6 +389,272 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        style={{
+          background: "var(--color-surface)",
+          borderTop: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "72px 0"
+        }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)"
+            }}
+          >
+            System context
+          </p>
+          <h2 className="mt-3">How Loop Engine fits into real systems</h2>
+          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            Loop Engine is the execution and control layer inside a larger operational stack. It does
+            not replace your data warehouse, ERP, or application UI. It sits where decisions become
+            actions, enforces bounded transitions, and records evidence on every state change.
+          </p>
+          <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            In practice: signals detect change, decision logic selects next action, Loop Engine
+            executes inside explicit guardrails, evidence is captured for each transition, and the
+            resulting feedback improves future decisions. This pattern is used in production systems,
+            including the Better Data platform.
+          </p>
+
+          <div className="mt-8 grid gap-4 lg:grid-cols-2">
+            <article
+              style={{
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--radius-lg)",
+                background: "var(--color-surface-alt)",
+                padding: "20px 18px"
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-xs)",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--color-ink-muted)"
+                }}
+              >
+                Loop Engine model
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {["Signal", "Loop Engine", "Actor", "Transition", "Evidence", "Learning"].map((item, idx, arr) => (
+                  <div key={item} className="flex items-center gap-2">
+                    <span
+                      style={{
+                        border: "1px solid var(--color-border)",
+                        borderRadius: 999,
+                        padding: "6px 10px",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "var(--text-xs)",
+                        background: item === "Loop Engine" ? "var(--color-primary-light)" : "var(--color-surface)"
+                      }}
+                    >
+                      {item}
+                    </span>
+                    {idx < arr.length - 1 ? (
+                      <span style={{ color: "var(--color-primary-mid)" }} aria-hidden>
+                        →
+                      </span>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article
+              style={{
+                border: "1px solid var(--color-border)",
+                borderRadius: "var(--radius-lg)",
+                background: "var(--color-surface-alt)",
+                padding: "20px 18px"
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-xs)",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "var(--color-ink-muted)"
+                }}
+              >
+                Better Data system model
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {["Sense", "Decide", "Execute", "Govern", "Improve"].map((item, idx, arr) => (
+                  <div key={item} className="flex items-center gap-2">
+                    <span
+                      style={{
+                        border: "1px solid var(--color-border)",
+                        borderRadius: 999,
+                        padding: "6px 10px",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "var(--text-xs)",
+                        background: item === "Execute" ? "var(--color-primary-light)" : "var(--color-surface)"
+                      }}
+                    >
+                      {item}
+                    </span>
+                    {idx < arr.length - 1 ? (
+                      <span style={{ color: "var(--color-primary-mid)" }} aria-hidden>
+                        →
+                      </span>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+              <p style={{ marginTop: 10, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
+                Loop Engine anchors the execution boundary while preserving full transition evidence.
+              </p>
+            </article>
+          </div>
+
+          <div className="mt-8 flex flex-col items-start gap-3 min-[520px]:flex-row min-[520px]:items-center">
+            <Link
+              href="/docs/getting-started/architecture"
+              className="inline-flex items-center"
+              style={{
+                background: "var(--color-primary)",
+                color: "#fff",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-sm)"
+              }}
+            >
+              See architecture guide
+            </Link>
+            <a
+              href="https://betterdata.co/product"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center"
+              style={{
+                border: "1px solid var(--color-border)",
+                color: "var(--color-ink-secondary)",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-sm)"
+              }}
+            >
+              See system context in Better Data
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section
+        style={{
+          background: "var(--color-surface)",
+          borderTop: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "72px 0",
+        }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+            }}
+          >
+            Related from Better Data
+          </p>
+          <h2 className="mt-3">Architecture notes and rollout updates</h2>
+          <p style={{ marginTop: 12, maxWidth: 820, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            Loop Engine stays standalone and OSS-first. Cross-module architecture updates, hosted path guidance, and launch context are published on the Better Data blog.
+          </p>
+
+          <div className="mt-8 grid gap-4 md:grid-cols-2">
+            {(relatedPosts.length > 0
+              ? relatedPosts
+              : [
+                  {
+                    id: "fallback-1",
+                    title: "From Firefighting to Flow",
+                    slug: "from-firefighting-to-flow",
+                    publishedAt: "2026-01-12T22:28:00.000Z",
+                    tags: ["loop-engine", "architecture"],
+                  },
+                ]
+            ).map((post) => (
+              <a
+                key={post.id}
+                href={`https://betterdata.co/blog/${post.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  border: "1px solid var(--color-border)",
+                  borderRadius: "var(--radius-lg)",
+                  background: "var(--color-surface-alt)",
+                  padding: "18px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                }}
+              >
+                <p style={{ fontSize: "var(--text-lg)", color: "var(--color-ink-primary)" }}>{post.title}</p>
+                <p style={{ color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
+                  {post.publishedAt
+                    ? new Intl.DateTimeFormat("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      }).format(new Date(post.publishedAt))
+                    : "Recent post"}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {(post.tags ?? []).slice(0, 2).map((tag) => (
+                    <span
+                      key={tag}
+                      style={{
+                        border: "1px solid var(--color-border)",
+                        borderRadius: 999,
+                        padding: "3px 8px",
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "var(--text-xs)",
+                        color: "var(--color-ink-secondary)",
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-4">
+            <a
+              href="https://betterdata.co/blog/tags/loop-engine"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
+            >
+              View Loop Engine tag →
+            </a>
+            <a
+              href="https://betterdata.co/blog/tags/architecture"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
+            >
+              View architecture posts →
+            </a>
           </div>
         </div>
       </section>

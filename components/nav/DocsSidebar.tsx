@@ -37,10 +37,12 @@ export function DocsSidebar() {
         top: 56,
         height: "calc(100vh - 56px)",
         overflowY: "auto",
+        overscrollBehavior: "contain",
+        WebkitOverflowScrolling: "touch",
         background: "var(--color-surface)",
         borderRight: "1px solid var(--color-border)",
         padding: "24px 0",
-        scrollbarWidth: "none"
+        scrollbarWidth: "thin"
       }}
     >
       <nav aria-label="Documentation sidebar">

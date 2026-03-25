@@ -59,7 +59,11 @@ export const docsSections: DocsNavSection[] = [
   },
   {
     label: "Packages",
-    items: [{ title: "Packages", href: "/docs/packages" }]
+    items: [{ title: "Overview", href: "/docs/packages" }]
+  },
+  {
+    label: "Registry",
+    items: [{ title: "Overview", href: "/docs/registry" }]
   },
   {
     label: "Examples",

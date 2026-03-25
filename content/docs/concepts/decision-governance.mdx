@@ -47,6 +47,30 @@ Loop Engine is not an agent framework. It does not orchestrate tool calls or man
 
 Loop Engine governs the boundary between reasoning and action. It enforces who can do what, under what conditions, with what evidence.
 
+## How the governance weighting works
+
+Loop Engine uses three types of weighting in sequence — all must pass for a transition to execute.
+
+1. **Confidence threshold (numeric gate)**  
+   Every AI actor submission carries a `0–1` confidence score. The guard blocks the transition if the score falls below the configured threshold. In the fraud review example, `0.60` triggers escalation to human review and `0.80` allows auto-dismiss — two thresholds, two different outcomes from the same loop state.
+
+2. **Guard priority (hard vs soft)**  
+   Guards have a failure mode: `hard` or `soft`. Hard failures block the transition regardless of everything else. Soft failures warn and continue. A human-only guard on an approval transition is an absolute block — no confidence score overrides it. This is intentional: policy is enforced at the runtime level, not in prompts.
+
+3. **Evidence completeness (structural gate)**  
+   The evidence-required guard checks for the presence of specific fields before allowing a transition. The infrastructure change example requires `blast_radius_score`, `affected_services`, and `rollback_plan` — missing any one field blocks the transition. This ensures AI actors cannot submit incomplete reasoning.
+
+### Evaluation order
+
+1. Actor authorized for this signal?
+2. Required evidence fields present?
+3. Confidence score above threshold?
+4. All hard guards pass?
+
+Any failure stops the sequence. The transition only executes when all checks pass.
+
+The key design principle is compositional governance. You stack guards, each with its own failure mode and parameters. Simple loops use one or two. Complex regulated workflows use four or five.
+
 ## Related
 
 - [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)

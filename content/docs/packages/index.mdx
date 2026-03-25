@@ -1,0 +1,72 @@
+---
+title: Package taxonomy
+description: Canonical layer map for selecting Loop Engine packages by capability.
+section: Packages
+---
+
+Loop Engine is installed in layers. The minimum viable install is always one command.
+Every additional package is opt-in based on your stack.
+
+## Layer table
+
+| Layer | What it is | Required | Current packages | Planned packages |
+| --- | --- | --- | --- | --- |
+| Core | Canonical types, runtime execution, DSL, guards, actors, events, signals. Everything else depends on these. | always | sdk, core, runtime, dsl, guards, actors, events, signals | — |
+| Stores | Pluggable persistence for loop state. Swap without changing loop logic. Default to adapter-memory in dev. | pick one | adapter-memory, adapter-postgres, adapter-kafka | adapter-redis, adapter-sqlite, adapter-dynamodb |
+| AI adapters | Governed LLM actors with confidence scoring, prompt attribution, and hard guard enforcement at runtime. | pick one per LLM | adapter-anthropic, adapter-openai, adapter-gemini, adapter-grok | adapter-ollama, adapter-cohere, adapter-mistral |
+| Routing adapters | Consume PENDING_HUMAN_APPROVAL events and route them to where the human already lives. | pick one for human approval delivery | adapter-pagerduty, adapter-openclaw, adapter-vercel-ai | adapter-slack, adapter-teams, adapter-discord, adapter-webhook |
+| Framework adapters | Drop Loop Engine into your existing tool-call layer with zero rebuild. requiresApproval() gates wrap any tool call structurally. | optional | adapter-vercel-ai, adapter-openclaw | adapter-n8n, adapter-temporal, adapter-langchain |
+| Observability | Metrics, event timelines, replay, and devtools. Consumes the event bus — no changes to loop definitions needed. | optional | observability, ui-devtools, playground, registry-client | adapter-datadog, adapter-grafana |
+| Verticals | Pre-assembled, domain-specific loop definitions for regulated industries. An enterprise installs one package instead of assembling manually. | optional | — (in development) | loops-healthcare, loops-fintech, loops-supply-chain, loops-hr-ops, loops-legaltech, loops-construction |
+
+## Minimum install
+
+```bash
+npm install @loop-engine/sdk
+```
+
+This is always the floor. Add layers as your stack demands them.
+
+## Common install recipes
+
+### 1. Governed Claude tool calls on Vercel
+
+```bash
+npm install @loop-engine/sdk @loop-engine/adapter-anthropic @loop-engine/adapter-vercel-ai
+```
+
+### 2. Durable human approvals via PagerDuty
+
+```bash
+npm install @loop-engine/sdk @loop-engine/adapter-pagerduty @loop-engine/adapter-memory
+```
+
+### 3. Production loop with Postgres persistence
+
+```bash
+npm install @loop-engine/sdk @loop-engine/adapter-postgres @loop-engine/adapter-anthropic @loop-engine/adapter-pagerduty
+```
+
+### 4. Multi-model loop (Claude + GPT-4o in same definition)
+
+```bash
+npm install @loop-engine/sdk @loop-engine/adapter-anthropic @loop-engine/adapter-openai @loop-engine/adapter-postgres
+```
+
+### 5. Full observability stack
+
+```bash
+npm install @loop-engine/sdk @loop-engine/observability @loop-engine/ui-devtools
+```
+
+## Dependency direction
+
+The layers form a dependency gradient: Core has no Loop Engine upstream dependencies.
+Every other layer depends on Core. Verticals depend on everything below them.
+Treat this table as a menu, not a checklist — start at Core, then add one package per capability you need.
+
+<Callout variant="warning" title="What's coming">
+The vertical layer is under active development. If you need a domain-specific loop definition for healthcare, fintech, or supply chain, open a GitHub discussion — we prioritize based on demand.
+
+<a href="https://github.com/loopengine/loop-engine/discussions" target="_blank" rel="noreferrer">Open a discussion →</a>
+</Callout>

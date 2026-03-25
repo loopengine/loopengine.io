@@ -18,7 +18,7 @@ export const featuredPartner: Partner = {
     "The agentic commerce platform - Loop Engine provides the decision governance layer for OpenClaw workflows.",
   integrationType: "featured",
   docsPath: "/docs/integrations/openclaw",
-  externalUrl: "https://openclaw.com",
+  externalUrl: "https://openclaw.ai",
   adapterPackage: "@loop-engine/adapter-openclaw",
   certificationStatus: "certified",
 };

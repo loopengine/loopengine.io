@@ -1,0 +1,33 @@
+---
+title: Registry
+description: Discovery and trust layer for governed Loop Engine definitions.
+section: Registry
+---
+
+The Loop Engine registry at `registry.betterdata.co` is the discovery layer for governed loop definitions.
+Think of it as npm for AI approval workflows: same versioning model, same CLI ergonomics, plus semantic search instead of keyword-only search.
+
+## Trust model
+
+The registry uses three trust tiers:
+
+1. **Core** — Loop Engine maintained definitions.
+2. **Verified Partner** — signed publisher identity with reviewed definitions.
+3. **Community** — open publish surface, use-at-own-risk.
+
+## Security properties
+
+Every published loop definition declares its actor types, guard registrations, transition surface, and external service calls in a machine-readable manifest.
+This is designed to prevent hidden behavior and make review/audit straightforward.
+
+## CLI preview (coming soon)
+
+```bash
+loop registry search "hipaa approval"
+loop registry install @betterdata/loops-healthcare
+loop registry publish
+```
+
+<Callout variant="info" title="Private beta">
+The registry is in private beta. Join the waitlist at <a href="https://loopengine.io/registry" target="_blank" rel="noreferrer">loopengine.io/registry</a>.
+</Callout>

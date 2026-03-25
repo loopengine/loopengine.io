@@ -73,7 +73,15 @@ export default function PartnersPage() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Visit openclaw.com →
+            Visit openclaw.ai →
+          </a>
+          <a
+            href="https://clawhub.ai/betterdataco/loop-engine-governance"
+            className="text-[var(--color-primary-dark)] underline underline-offset-4"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            OpenClaw skill on ClawHub →
           </a>
         </div>
       </section>

@@ -267,16 +267,19 @@
 }
 
 .docs-integration-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 12px;
+  row-gap: 8px;
 }
 
 .docs-integration-title-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  min-width: 0;
 }
 
 .docs-integration-logo {
@@ -286,17 +289,24 @@
 }
 
 .docs-integration-name {
+  display: block;
   margin: 0;
   font-family: var(--font-body);
   font-size: var(--text-base);
   font-weight: 600;
+  line-height: 1.35;
   color: var(--color-ink);
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .docs-integration-subtext {
   margin: 10px 0 0;
   font-size: var(--text-sm);
   color: var(--color-ink-tertiary);
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .docs-status-badge {
@@ -310,6 +320,13 @@
   line-height: 1.1;
   padding: 4px 8px;
   white-space: nowrap;
+  flex-shrink: 0;
+  align-self: start;
+}
+
+.docs-content .docs-integration-card,
+.docs-content .docs-integration-card * {
+  word-break: normal !important;
 }
 
 .status-certified {

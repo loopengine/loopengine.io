@@ -14,7 +14,6 @@ const navItems: NavItem[] = [
   { label: "Docs", href: "/docs", matchPrefix: "/docs" },
   { label: "Examples", href: "/docs/examples", matchPrefix: "/docs/examples" },
   { label: "Packages", href: "/docs/packages", matchPrefix: "/docs/packages" },
-  { label: "Blog", href: "/blog", matchPrefix: "/blog" },
   { label: "Partners", href: "/partners", matchPrefix: "/partners" },
   { label: "Registry", href: "/registry", matchPrefix: "/registry" },
 ];
@@ -49,6 +48,22 @@ export function TopNav() {
             </Link>
           ))}
           <a
+            className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
+            href="https://betterdata.co/blog/tags/loop-engine"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Blog
+          </a>
+          <a
+            className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
+            href="https://github.com/loopengine/loop-engine/releases"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Changelog
+          </a>
+          <a
             className="rounded border border-[var(--color-border)] px-3 py-1.5 font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-alt)]"
             href="https://github.com/loopengine/loop-engine"
             target="_blank"
@@ -69,6 +84,22 @@ export function TopNav() {
                   {item.label}
                 </Link>
               ))}
+              <a
+                className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
+                href="https://betterdata.co/blog/tags/loop-engine"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Blog
+              </a>
+              <a
+                className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
+                href="https://github.com/loopengine/loop-engine/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Changelog
+              </a>
               <a
                 className="rounded border border-[var(--color-border)] px-2 py-1.5 text-center font-medium text-[var(--color-ink)]"
                 href="https://github.com/loopengine/loop-engine"
