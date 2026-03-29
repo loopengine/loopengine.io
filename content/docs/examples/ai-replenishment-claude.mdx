@@ -17,6 +17,10 @@ github.com/loopengine/loop-examples/tree/main/ai-actors/claude
 </a>
 </Callout>
 
+<Callout variant="info" title="Commerce Chain production path">
+  This walkthrough uses the Loop Engine SDK directly. For Commerce Chain module integration (inventory, procurement, demand) and participant manifests, see [Loop participation](https://commercechain.io/docs/getting-started/loop-participation), [Runtime configuration](https://commercechain.io/docs/getting-started/runtime-configuration), and the [SCM](https://commercechain.io/docs/scm/overview) / [DCM](https://commercechain.io/docs/dcm/overview) overviews.
+</Callout>
+
 ## What this example shows
 
 An AI actor using `@loop-engine/adapter-anthropic` analyzes inventory evidence and submits a replenishment recommendation. A confidence threshold gate keeps low-confidence decisions from reaching execution. A human approval transition remains required for final ordering.

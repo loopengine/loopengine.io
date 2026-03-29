@@ -69,6 +69,17 @@ export const aiProviderPartners: Partner[] = [
 
 export const ecosystemPartners: Partner[] = [
   {
+    name: "Commerce Chain",
+    slug: "commerce-chain",
+    logoPath: "/logos/commerce-chain.svg",
+    description:
+      "Supply chain and demand chain modules on Loop Engine — SCM/DCM loops, participant manifests, and the CCO platform.",
+    integrationType: "ecosystem",
+    docsPath: "https://commercechain.io/docs",
+    externalUrl: "https://commercechain.io",
+    certificationStatus: "community",
+  },
+  {
     name: "Vercel AI SDK",
     slug: "vercel-ai-sdk",
     logoPath: "/logos/vercel.svg",

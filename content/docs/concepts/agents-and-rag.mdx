@@ -84,6 +84,16 @@ await engine.transition({
 });
 ```
 
+## Commerce Chain and Loop Engine
+
+Loop Engine is the runtime that powers the [Commerce Chain](https://commercechain.io) platform. Each `@betterdata/scm-*` and `@betterdata/dcm-*` module declares how it participates in loops using a **`LoopParticipantManifest`** from `@betterdata/loop-definitions`—a typed map of which domain events the module handles and which loop IDs it joins.
+
+Canonical loop IDs and domain event names live in **`@betterdata/loop-definitions`** (`LoopIds`, `EventNames`) so modules and the host runtime stay aligned.
+
+- [Commerce Chain](https://commercechain.io)
+- [Loop participation guide](https://commercechain.io/docs/getting-started/loop-participation)
+- [Architecture](https://commercechain.io/docs/getting-started/architecture)
+
 ## Related
 
 - [AI as Actor](/docs/ai-and-automation/ai-as-actor)
