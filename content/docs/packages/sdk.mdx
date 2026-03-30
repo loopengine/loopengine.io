@@ -23,6 +23,25 @@ Source-verified exports include:
 - `computeMetrics` and `buildTimeline`
 - `localRegistry` and `httpRegistry`
 - core types: `LoopDefinition`, `LoopInstance`, `TransitionRecord`, `Signal`
+- `createAIActor` for provider-switched AI actor creation
+
+## createAIActor
+
+`createAIActor()` gives a single SDK entrypoint for `anthropic`, `openai`, `gemini`, and `grok`.
+Switching providers is a config change only:
+
+```ts
+import { createAIActor } from "@loop-engine/sdk"
+
+const actor = createAIActor({
+  provider: "gemini",
+  model: "gemini-1.5-pro",
+  apiKey: process.env.GOOGLE_AI_API_KEY ?? ""
+})
+```
+
+If the underlying provider SDK is missing, it throws a targeted install command.
+Power users can still import individual adapter packages for custom client wiring.
 
 ## createLoopSystem
 

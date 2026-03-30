@@ -11,7 +11,7 @@ Every additional package is opt-in based on your stack.
 
 | Layer | What it is | Required | Current packages | Planned packages |
 | --- | --- | --- | --- | --- |
-| Core | Canonical types, runtime execution, DSL, guards, actors, events, signals. Everything else depends on these. | always | sdk, core, runtime, dsl, guards, actors, events, signals | — |
+| Core | Canonical types and runtime execution. Everything else depends on these. | always | sdk, runtime | Internal (not published): core, dsl, guards, actors, events, signals |
 | Stores | Pluggable persistence for loop state. Swap without changing loop logic. Default to adapter-memory in dev. | pick one | adapter-memory, adapter-postgres, adapter-kafka | adapter-redis, adapter-sqlite, adapter-dynamodb |
 | AI adapters | Governed LLM actors with confidence scoring, prompt attribution, and hard guard enforcement at runtime. | pick one per LLM | adapter-anthropic, adapter-openai, adapter-gemini, adapter-grok | adapter-ollama, adapter-cohere, adapter-mistral |
 | Routing adapters | Consume PENDING_HUMAN_APPROVAL events and route them to where the human already lives. | pick one for human approval delivery | adapter-pagerduty, adapter-openclaw, adapter-vercel-ai | adapter-slack, adapter-teams, adapter-discord, adapter-webhook |
@@ -26,6 +26,8 @@ npm install @loop-engine/sdk
 ```
 
 This is always the floor. Add layers as your stack demands them.
+
+Core primitives are bundled in `@loop-engine/sdk`. The internal packages are available in the monorepo for contributors.
 
 ## Common install recipes
 
