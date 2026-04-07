@@ -90,15 +90,19 @@ export function Footer() {
         </div>
         <div>
           <p style={headingStyle}>Better Data</p>
+          <ExternalFooterLink href="https://www.betterdata.co/trust" label="Trust Center" style={linkStyle} />
           <ExternalFooterLink href="https://betterdata.co" label="Created by Better Data" style={linkStyle} />
           <ExternalFooterLink href="https://betterdata.co/docs" label="Platform docs" style={linkStyle} />
-          <ExternalFooterLink
-            href="https://betterdata.co/products/cco/commerce-gateway"
-            label="Commerce Gateway"
-            style={linkStyle}
-          />
-          <ExternalFooterLink href="https://commercegateway.io" label="LLM Commerce Gateway" style={linkStyle} />
-          <p style={{ ...plainTextStyle, marginTop: 14 }}>security@betterdata.co</p>
+          <ExternalFooterLink href="https://commercegateway.io" label="Commerce Gateway" style={linkStyle} />
+          <ExternalFooterLink href="https://commercechain.io" label="Commerce Chain" style={linkStyle} />
+          <ExternalFooterLink href="https://tagd.sh" label="Signal Tags" style={linkStyle} />
+          <a
+            href="mailto:security@betterdata.co"
+            className="block hover:text-[var(--color-ink)]"
+            style={{ ...linkStyle, marginTop: 14 }}
+          >
+            security@betterdata.co
+          </a>
         </div>
       </div>
       <div
@@ -129,6 +133,78 @@ export function Footer() {
             conduct@loopengine.io
           </a>
         </div>
+      </div>
+      <div
+        className="mx-auto flex w-full max-w-[var(--max-width-full)] flex-col items-center justify-center gap-2 px-[var(--space-8)] pb-6"
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "var(--text-xs)",
+          color: "var(--color-ink-muted)"
+        }}
+      >
+        <p className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2 text-center">
+          <a
+            className="hover:text-[var(--color-primary)]"
+            href="https://www.betterdata.co/trust/security"
+            rel="noopener noreferrer"
+            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+            target="_blank"
+          >
+            Security
+          </a>
+          <span aria-hidden className="select-none">
+            {' '}
+            ·{' '}
+          </span>
+          <a
+            className="hover:text-[var(--color-primary)]"
+            href="https://www.betterdata.co/privacy"
+            rel="noopener noreferrer"
+            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
+          <span aria-hidden className="select-none">
+            {' '}
+            ·{' '}
+          </span>
+          <a
+            className="hover:text-[var(--color-primary)]"
+            href="https://www.betterdata.co/terms"
+            rel="noopener noreferrer"
+            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+            target="_blank"
+          >
+            Terms of Service
+          </a>
+          <span aria-hidden className="select-none">
+            {' '}
+            ·{' '}
+          </span>
+          <a
+            className="hover:text-[var(--color-primary)]"
+            href="https://www.betterdata.co/cookies"
+            rel="noopener noreferrer"
+            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+            target="_blank"
+          >
+            Cookie Notice
+          </a>
+          <span aria-hidden className="select-none">
+            {' '}
+            ·{' '}
+          </span>
+          <a
+            className="hover:text-[var(--color-primary)]"
+            href="https://www.betterdata.co/trust/open-source"
+            rel="noopener noreferrer"
+            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+            target="_blank"
+          >
+            Open Source disclosures
+          </a>
+        </p>
       </div>
     </footer>
   );
