@@ -18,13 +18,21 @@ function Badge({ children, tone = "neutral" }: { children: string; tone?: "neutr
 }
 
 function PartnerCard({ partner, showCertified = true }: { partner: Partner; showCertified?: boolean }) {
+  const showCertBadge = showCertified && partner.certificationStatus === "certified";
+  const showInReviewBadge = showCertified && partner.certificationStatus === "in-review";
+  const showCommunityBadge = showCertified && partner.certificationStatus === "community";
   return (
     <article className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="relative h-8 w-28">
           <Image src={partner.logoPath} alt={`${partner.name} logo`} fill className="object-contain object-left" />
         </div>
-        {showCertified && partner.certificationStatus === "certified" ? <Badge tone="blue">Certified</Badge> : null}
+        <div className="flex flex-shrink-0 flex-wrap items-center justify-end gap-1.5">
+          {partner.marketingBadge ? <Badge tone="blue">{partner.marketingBadge}</Badge> : null}
+          {showCertBadge ? <Badge tone="blue">Certified</Badge> : null}
+          {showInReviewBadge ? <Badge>In review</Badge> : null}
+          {showCommunityBadge ? <Badge>Community</Badge> : null}
+        </div>
       </div>
       <h3 className="font-semibold text-[var(--color-ink)] text-lg">{partner.name}</h3>
       <p className="mt-2 text-[var(--color-ink-secondary)] text-sm leading-6">{partner.description}</p>
@@ -32,6 +40,9 @@ function PartnerCard({ partner, showCertified = true }: { partner: Partner; show
         <p className="mt-3 inline-block rounded border border-[var(--color-border)] px-2 py-1 font-mono text-[11px] text-[var(--color-ink-tertiary)]">
           {partner.adapterPackage}
         </p>
+      ) : null}
+      {partner.installCommand ? (
+        <p className="mt-2 font-mono text-[11px] text-[var(--color-ink-muted)]">{partner.installCommand}</p>
       ) : null}
       <p className="mt-4">
         <Link href={partner.docsPath} className="text-[var(--color-primary)] text-sm underline underline-offset-4">
@@ -87,12 +98,12 @@ export default function PartnersPage() {
       </section>
 
       <section className="mx-auto mt-12 max-w-6xl">
-        <h2 className="font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-2xl)]">AI Provider Adapters</h2>
+        <h2 className="font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-2xl)]">Adapters</h2>
         <p className="mt-3 max-w-3xl text-[var(--color-ink-secondary)] text-sm leading-6">
-          Certified adapters for every major AI provider. All adapters produce the same AIAgentActor shape - switching providers
-          requires changing one import.
+          Governed LLM actors, grounded retrieval with citations, and incident routing. Provider adapters share the same governance
+          model; Sonar covers research-heavy steps; PagerDuty carries approvals and escalations into your on-call surface.
         </p>
-        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
           {aiProviderPartners.map((partner) => (
             <PartnerCard key={partner.slug} partner={partner} />
           ))}

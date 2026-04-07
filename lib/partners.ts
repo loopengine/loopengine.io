@@ -8,6 +8,10 @@ export type Partner = {
   externalUrl?: string;
   adapterPackage?: string;
   certificationStatus?: "certified" | "in-review" | "community";
+  /** Shown next to the logo row (for example `NEW` while an adapter RC is open). */
+  marketingBadge?: string;
+  /** One-line install command shown on the partner card. */
+  installCommand?: string;
 };
 
 export const featuredPartner: Partner = {
@@ -65,6 +69,30 @@ export const aiProviderPartners: Partner[] = [
     adapterPackage: "@loop-engine/adapter-gemini",
     certificationStatus: "certified",
   },
+  {
+    name: "Perplexity Sonar",
+    slug: "perplexity",
+    logoPath: "/logos/perplexity.svg",
+    description:
+      "Grounded web retrieval with cited sources. Real-time research with attribution — built for compliance workflows that need verifiable outputs.",
+    integrationType: "integration",
+    docsPath: "/docs/adapters/perplexity",
+    adapterPackage: "@loop-engine/adapter-perplexity",
+    certificationStatus: "in-review",
+    marketingBadge: "NEW",
+    installCommand: "pnpm add @loop-engine/adapter-perplexity",
+  },
+  {
+    name: "PagerDuty",
+    slug: "pagerduty",
+    logoPath: "/logos/pagerduty.svg",
+    description:
+      "Incident-triggered loops — PagerDuty alerts start governed response workflows with full loop context.",
+    integrationType: "integration",
+    docsPath: "/docs/integrations/pagerduty",
+    adapterPackage: "@loop-engine/adapter-pagerduty",
+    certificationStatus: "community",
+  },
 ];
 
 export const ecosystemPartners: Partner[] = [
@@ -87,17 +115,6 @@ export const ecosystemPartners: Partner[] = [
       "Use Loop Engine alongside the Vercel AI SDK - streaming AI responses governed by loop policy.",
     integrationType: "ecosystem",
     docsPath: "/docs/integrations/vercel-ai-sdk",
-    certificationStatus: "community",
-  },
-  {
-    name: "PagerDuty",
-    slug: "pagerduty",
-    logoPath: "/logos/pagerduty.svg",
-    description:
-      "Incident-triggered loops - PagerDuty alerts start governed response workflows.",
-    integrationType: "ecosystem",
-    docsPath: "/docs/packages/adapter-pagerduty",
-    adapterPackage: "@loop-engine/adapter-pagerduty",
     certificationStatus: "community",
   },
 ];

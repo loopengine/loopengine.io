@@ -1,0 +1,56 @@
+---
+title: Perplexity Sonar
+description: Grounded web retrieval with citations — use Sonar inside Loop steps that need verifiable, real-time information.
+section: Integrations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge status-rc-draft">RC: Draft</span>
+  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-perplexity</span>
+  <span className="docs-status-badge status-built-in">Provider: Perplexity</span>
+</div>
+
+<div className="docs-quick-links md:grid-cols-3">
+  <a className="docs-quick-link" href="/docs/packages/adapter-perplexity">Package reference →</a>
+  <a className="docs-quick-link" href="/docs/integrations/perplexity-pagerduty">Governed incident pattern →</a>
+  <a className="docs-quick-link" href="/docs/ai-and-automation/confidence-evidence">Confidence + evidence →</a>
+</div>
+
+## What it does
+
+`@loop-engine/adapter-perplexity` implements `LLMAdapter.invoke()` against the Sonar chat API. You get answer text plus structured citations for audit and evidence attachment. Use it where provenance matters more than open-ended generation.
+
+## When to use it
+
+- Regulatory or policy research with domain allowlists
+- Supplier, market, or news checks inside a governed Loop
+- Any step where you must show **which sources** justified the output
+
+## Quick setup
+
+1. **Install**
+
+   ```bash
+   npm install @loop-engine/adapter-perplexity
+   ```
+
+2. **Create the adapter**
+
+   ```typescript
+   import { PerplexityAdapter } from "@loop-engine/adapter-perplexity";
+
+   const perplexity = new PerplexityAdapter({
+     apiKey: process.env.PERPLEXITY_API_KEY!,
+     defaultModel: "sonar-pro",
+     defaultSearchRecency: "month",
+   });
+   ```
+
+3. **Invoke from your Loop step**
+
+   See the full API, metadata keys, and error table on the [package reference](/docs/packages/adapter-perplexity).
+
+## Related
+
+- [Governed Incident Response with Perplexity and PagerDuty](/docs/integrations/perplexity-pagerduty)
+- [PagerDuty integration](/docs/integrations/pagerduty)

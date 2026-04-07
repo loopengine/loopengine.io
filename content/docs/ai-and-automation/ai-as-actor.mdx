@@ -112,6 +112,9 @@ The full dual-provider walkthrough is in `/docs/examples/ai-replenishment`, with
 | [`@loop-engine/adapter-openai`](/docs/packages/adapter-openai) | OpenAI (`gpt-4o`, o-series) |
 | [`@loop-engine/adapter-grok`](/docs/packages/adapter-grok) | Grok (`grok-3`, `grok-2`) via xAI |
 | [`@loop-engine/adapter-gemini`](/docs/packages/adapter-gemini) | Gemini (`gemini-1.5-pro`, `gemini-2.0-flash`) |
+| [`@loop-engine/adapter-perplexity`](/docs/packages/adapter-perplexity) | Perplexity Sonar (`sonar`, `sonar-pro`, …) — `LLMAdapter` with citations for research steps |
+
+The Perplexity package implements `LLMAdapter.invoke()` (text + citations), not the actor `createSubmission` flow. Use it where you need grounded retrieval inside a loop; use the actor adapters above for structured signal decisions.
 
 ## Related
 
@@ -119,3 +122,4 @@ The full dual-provider walkthrough is in `/docs/examples/ai-replenishment`, with
 - [Decision Governance](/docs/concepts/decision-governance)
 - [@loop-engine/adapter-grok](/docs/packages/adapter-grok)
 - [@loop-engine/adapter-gemini](/docs/packages/adapter-gemini)
+- [@loop-engine/adapter-perplexity](/docs/packages/adapter-perplexity)

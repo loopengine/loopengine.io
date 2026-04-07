@@ -14,6 +14,7 @@ const navItems: NavItem[] = [
   { label: "Docs", href: "/docs", matchPrefix: "/docs" },
   { label: "Examples", href: "/docs/examples", matchPrefix: "/docs/examples" },
   { label: "Packages", href: "/docs/packages", matchPrefix: "/docs/packages" },
+  { label: "Use cases", href: "/use-cases", matchPrefix: "/use-cases" },
   { label: "Partners", href: "/partners", matchPrefix: "/partners" },
   { label: "Registry", href: "/registry", matchPrefix: "/registry" },
 ];

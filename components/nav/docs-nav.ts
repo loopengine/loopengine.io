@@ -89,6 +89,7 @@ export const docsSections: DocsNavSection[] = [
       { title: "OpenAI", href: "/docs/integrations/openai", indent: true },
       { title: "Grok (xAI)", href: "/docs/integrations/grok", indent: true },
       { title: "Google Gemini", href: "/docs/integrations/gemini", indent: true },
+      { title: "Perplexity Sonar", href: "/docs/integrations/perplexity", indent: true },
       { title: "⟩ Agentic Platforms", href: "/docs/integrations/index", isGroup: true },
       { title: "OpenClaw", href: "/docs/integrations/openclaw", indent: true },
       { title: "Vercel AI SDK", href: "/docs/integrations/vercel-ai-sdk", indent: true },
@@ -98,6 +99,7 @@ export const docsSections: DocsNavSection[] = [
       { title: "HTTP", href: "/docs/integrations/http", indent: true },
       { title: "⟩ Observability", href: "/docs/integrations/index", isGroup: true },
       { title: "PagerDuty", href: "/docs/integrations/pagerduty", indent: true },
+      { title: "Governed incident (Perplexity + PD)", href: "/docs/integrations/perplexity-pagerduty", indent: true },
       { title: "⟩ Commerce", href: "/docs/integrations/index", isGroup: true },
       { title: "Commerce Gateway", href: "/docs/integrations/commerce-gateway", indent: true }
     ]
@@ -107,7 +109,8 @@ export const docsSections: DocsNavSection[] = [
     items: [
       { title: "License", href: "/docs/governance/license" },
       { title: "Contributing", href: "/docs/governance/contributing" },
-      { title: "RFC Process", href: "/docs/governance/rfc-process" }
+      { title: "RFC Process", href: "/docs/governance/rfc-process" },
+      { title: "Changelog", href: "/docs/governance/changelog" }
     ]
   }
 ];

@@ -38,6 +38,19 @@ type RelatedPost = {
 
 const integrations: IntegrationCard[] = [
   {
+    name: "Perplexity + PagerDuty",
+    badge: "Featured pattern",
+    description:
+      "Sonar grounds research with citations; Loop Engine runs the governed incident FSM; PagerDuty delivers human review and escalation. End-to-end audit trail on every step.",
+    capabilities: [
+      "Research steps use Sonar with domain filters and required citations",
+      "Risk classification and human gates before any PagerDuty trigger",
+      "Custom details on incidents include audit references for compliance review"
+    ],
+    docsHref: "/docs/integrations/perplexity-pagerduty",
+    featured: true
+  },
+  {
     name: "OpenClaw",
     badge: "Featured Integration",
     description:
@@ -48,8 +61,7 @@ const integrations: IntegrationCard[] = [
     ],
     docsHref: "/docs/examples/openclaw",
     npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-openclaw",
-    npmLabel: "@loop-engine/adapter-openclaw",
-    featured: true
+    npmLabel: "@loop-engine/adapter-openclaw"
   },
   {
     name: "Vercel AI SDK",
@@ -136,6 +148,19 @@ const integrations: IntegrationCard[] = [
     docsHref: "/docs/packages/adapter-gemini",
     npmHref: "https://www.npmjs.com/package/@loop-engine/adapter-gemini",
     npmLabel: "@loop-engine/adapter-gemini"
+  },
+  {
+    name: "Perplexity Sonar",
+    badge: "New adapter",
+    logoPath: "/logos/perplexity.svg",
+    description:
+      "Grounded web retrieval with cited sources for Loop steps that need verifiable, real-time information — regulatory lookups, supplier news, compliance research.",
+    capabilities: [
+      "Citations are first-class output for audit and evidence attachments",
+      "Domain filters and recency filters map directly to Sonar API parameters",
+      "Implements guardEvidence to mask pplx-* keys in logged payloads"
+    ],
+    docsHref: "/docs/packages/adapter-perplexity"
   },
   {
     name: "n8n",

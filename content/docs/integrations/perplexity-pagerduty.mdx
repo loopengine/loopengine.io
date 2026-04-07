@@ -1,0 +1,223 @@
+---
+title: Governed Incident Response with Perplexity and PagerDuty
+description: Research with citations, governance in Loop Engine, execution and escalation in PagerDuty — with a tamper-evident audit trail throughout.
+section: Integrations
+---
+
+## Introduction
+
+Perplexity Sonar can research and propose answers. PagerDuty can alert and escalate. Neither product, by itself, produces a compliance-grade record of what the AI did, what sources it used, and who approved the next action. Loop Engine closes that gap: you model the flow as explicit states and transitions, attach evidence at each step, and only then hand off to PagerDuty when policy allows.
+
+The architecture is linear: **Perplexity Sonar** supplies grounded text and citations; **Loop Engine** runs a finite-state loop (for example a `governed-incident-response` definition) with guards and human gates; **PagerDuty** receives Events API v2 triggers when the loop reaches an alerting state. The audit trail is written from the loop side — one entry per material step, with hashes and references you can tie back to incidents.
+
+## Architecture
+
+```text
+                    ┌── audit trail (tamper-evident entries per step)
+                    │
+Perplexity Sonar ──►│  Loop Engine — governed-incident-response FSM
+                    │
+                    └──► PagerDuty (Events API v2 — trigger / dedupe / custom_details)
+```
+
+## The `governed-incident-response` loop
+
+The catalog id `gov.governed-incident-response` (version `0.1.0`) uses the following state set and transitions. Your runtime should register the definition and drive transitions through the same actor boundaries.
+
+**States**
+
+```json
+[
+  "idle",
+  "researching",
+  "classifying",
+  "auto_approving",
+  "human_review",
+  "escalating",
+  "alerting",
+  "complete",
+  "rejected",
+  "blocked",
+  "failed"
+]
+```
+
+**Key states (annotated)**
+
+| State | Role |
+| --- | --- |
+| `researching` | Sonar call with domain filter and citation requirement (unless you pre-seed citations and skip research). |
+| `classifying` | Derive risk tier from Sonar output — typically **LOW**, **HIGH**, or **BLOCKED**. |
+| `human_review` | Configurable gate; timeout paths can escalate through PagerDuty or move to `escalating`. |
+| `blocked` | No PagerDuty alert; the audit trail records the block decision and rationale. |
+| `alerting` | Build an Events API payload (see below) including `audit_ref` in `custom_details`. |
+
+Full transition graph:
+
+```json
+{
+  "transitions": [
+    { "from": "idle", "to": "researching", "actor": "automation" },
+    { "from": "researching", "to": "classifying", "actor": "automation" },
+    { "from": "researching", "to": "failed", "actor": "automation" },
+    { "from": "classifying", "to": "auto_approving", "actor": "automation" },
+    { "from": "classifying", "to": "human_review", "actor": "automation" },
+    { "from": "classifying", "to": "blocked", "actor": "human" },
+    { "from": "auto_approving", "to": "alerting", "actor": "automation" },
+    { "from": "human_review", "to": "alerting", "actor": "human" },
+    { "from": "human_review", "to": "rejected", "actor": "human" },
+    { "from": "human_review", "to": "escalating", "actor": "automation" },
+    { "from": "escalating", "to": "human_review", "actor": "automation" },
+    { "from": "escalating", "to": "failed", "actor": "automation" },
+    { "from": "alerting", "to": "complete", "actor": "automation" },
+    { "from": "alerting", "to": "failed", "actor": "automation" }
+  ]
+}
+```
+
+## Code walkthrough
+
+### 1. Initialize adapters
+
+You wire `PerplexityAdapter` to Sonar and implement a small PagerDuty port that posts to the Events API with your routing key.
+
+```typescript
+import type { AdapterInput } from "@loop-engine/core";
+import type { PagerDutyEventPayload } from "@loop-engine/adapter-pagerduty";
+import { PerplexityAdapter } from "@loop-engine/adapter-perplexity";
+
+const perplexity = new PerplexityAdapter({
+  apiKey: process.env.PERPLEXITY_API_KEY!,
+  defaultModel: "sonar-pro",
+  defaultSearchRecency: "month",
+  timeout: 30_000,
+  retries: 3,
+});
+
+async function sendPagerDutyTrigger(payload: PagerDutyEventPayload): Promise<{ dedupKey: string }> {
+  const res = await fetch("https://events.pagerduty.com/v2/enqueue", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    throw new Error(`PagerDuty enqueue failed: ${res.status}`);
+  }
+  const body = (await res.json()) as { dedup_key?: string };
+  return { dedupKey: body.dedup_key ?? "" };
+}
+
+// Your governed-incident module composes { perplexity, pagerduty, auditTrail } into the FSM above.
+```
+
+### 2. Run one incident (pre-seeded citations)
+
+When you already have authoritative citations, you skip the live Sonar call and still run classify → gate → alert. The exact function name lives in **your** governed-AI layer; the inputs and outputs below match the pattern we use in production demos.
+
+```typescript
+type Citation = { url: string; title: string; snippet?: string };
+
+const result = await yourGovernedIncidentExecutor.run(
+  {
+    loopId: crypto.randomUUID(),
+    perplexitySessionId: "session-abc",
+    taskSummary: "PHI access outside approved hours",
+    preSeedCitations: [
+      { url: "https://www.hhs.gov/hipaa/for-professionals/breach-notification/index.html", title: "HIPAA Breach Notification" },
+    ],
+    tenantId: "your-tenant-id",
+    riskSignal: "unusual_off_hours_phi_access",
+  },
+  {
+    sonarModel: "sonar-pro",
+    skipResearchIfCitationsProvided: true,
+    euAiActLogging: true,
+    hipaaIncidentLogging: true,
+  },
+  {
+    perplexity,
+    pagerduty: { sendTrigger: sendPagerDutyTrigger },
+    auditTrail: yourAuditTrailWriter,
+  },
+);
+
+// result.state: 'complete' | 'awaiting_review' | 'blocked' | 'failed' | 'rejected'
+// result.auditRef: tamper-evident audit trail reference for the last persisted step
+```
+
+### 3. PagerDuty `custom_details`
+
+Include the audit reference so responders and downstream SIEM exports can correlate the incident with Loop evidence.
+
+```typescript
+const examplePayload: PagerDutyEventPayload = {
+  routing_key: process.env.PAGERDUTY_INTEGRATION_KEY!,
+  event_action: "trigger",
+  dedup_key: "loop-your-loop-id",
+  payload: {
+    summary: "Governed incident: PHI access outside approved hours",
+    severity: "critical",
+    source: "loop-engine/governed-incident-response",
+    custom_details: {
+      loop_id: "8b7c…",
+      audit_ref: "a1f2c3d4e5f67890",
+      risk_classification: "HIGH",
+      citation_count: 2,
+      reviewer_id: "auto-approved",
+      sonar_model: "sonar-pro",
+      prompt_tokens: 1200,
+      completion_tokens: 180,
+      eu_ai_act_logging: true,
+    },
+  },
+  links: [{ href: "https://www.hhs.gov/…", text: "HIPAA Breach Notification" }],
+};
+```
+
+## Audit trail fields
+
+Each row is what you persist per step (names align with common governed-AI implementations). Map them to your control framework columns in the same way you map any other security log schema.
+
+| Field | Compliance mapping (typical) |
+| --- | --- |
+| `loopId` | Correlation id across systems; ties PagerDuty dedupe to Loop execution |
+| `tenantId` | Tenant isolation evidence for multi-entity operators |
+| `stepName` | Which FSM phase produced the row (`researching`, `classifying`, `human_review`, …) |
+| `timestamp` | Ordering and retention policy scope |
+| `inputHash` / `outputHash` | Integrity — detects tampering of serialized step input/output |
+| `auditRef` | External reference surfaced in PagerDuty and executive reporting |
+| `perplexitySessionId` | Session-level trace for Sonar usage |
+| `sonarModel` | Model transparency (EU AI Act Art. 13 style disclosures) |
+| `sonarPromptTokens` / `sonarCompletionTokens` | Usage metering and cost attribution |
+| `citationCount` / `citationUrls` | Source provenance for verifiable AI outputs |
+| `riskClassification` | Policy outcome (LOW / HIGH / BLOCKED) |
+| `classificationBasis` | Textual rationale or structured reason code |
+| `humanInLoop` | Whether a human gate applied |
+| `reviewerId` / `reviewDecision` / `reviewDurationMs` | SOC 2 change / access review style evidence |
+| `pagerdutyIncidentId` | Back-link from Loop to on-call ticket |
+| `euAiActLogging` / `hipaaIncidentLogging` | Flags for jurisdiction-specific retention and DLP |
+| `error` | Failure capture for `failed` transitions |
+
+<Callout variant="important" title="Control mapping (examples)">
+  **EU AI Act Article 13** — `sonarModel`, `citationUrls`  
+  **SOC 2 CC7.2** — `auditRef`, `reviewerId`, `reviewDecision`  
+  **HIPAA §164.308(a)(6)** — `riskClassification`, `reviewDecision`, incident workflow linkage via `pagerdutyIncidentId`
+</Callout>
+
+## Environment variables
+
+```text
+PERPLEXITY_API_KEY=
+PERPLEXITY_DEFAULT_MODEL=sonar-pro
+PAGERDUTY_INTEGRATION_KEY=
+LOOP_ENGINE_REGISTRY_URL=
+LOOP_ENGINE_REGISTRY_ORG=
+LOOP_ENGINE_JWT_SECRET=
+LOOP_ENGINE_AUTH_ISSUER=
+```
+
+## Related
+
+- [Perplexity Sonar package](/docs/packages/adapter-perplexity)
+- [PagerDuty integration](/docs/integrations/pagerduty)
+- [IT / Governed AI use case](/use-cases)

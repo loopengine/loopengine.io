@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-type IntegrationStatus = "certified" | "featured" | "built-in" | "community" | "coming-soon";
+type IntegrationStatus = "certified" | "featured" | "built-in" | "community" | "coming-soon" | "rc-draft";
 
 type IntegrationCardProps = {
   name: string;
@@ -15,7 +15,8 @@ const statusLabel: Record<IntegrationStatus, string> = {
   featured: "★ Featured Partner",
   "built-in": "Built-in",
   community: "Community",
-  "coming-soon": "Coming Soon"
+  "coming-soon": "Coming Soon",
+  "rc-draft": "RC: Draft"
 };
 
 export function IntegrationCard({ name, subtext, status, logoPath, href }: IntegrationCardProps) {

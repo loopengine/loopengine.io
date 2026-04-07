@@ -8,7 +8,7 @@ Connect Loop Engine to any AI provider, agentic platform, storage backend, or ob
 
 ## ⟩ AI Providers
 
-Use any major LLM as a governed actor. All four adapters produce the same `AIAgentActor` shape — switching providers requires changing one import.
+Use any major LLM as a governed actor. Provider actor adapters produce the same `AIAgentActor` shape — switching providers requires changing one import. Perplexity Sonar covers **grounded retrieval with citations** as an `LLMAdapter` for research steps (see the package reference).
 
 <div className="grid gap-4 md:grid-cols-2">
   <IntegrationCard
@@ -38,6 +38,13 @@ Use any major LLM as a governed actor. All four adapters produce the same `AIAge
     status="certified"
     logoPath="/logos/gemini.svg"
     href="/docs/integrations/gemini"
+  />
+  <IntegrationCard
+    name="Perplexity Sonar"
+    subtext="sonar, sonar-pro, sonar-reasoning — citations + domain filters"
+    status="rc-draft"
+    logoPath="/logos/perplexity.svg"
+    href="/docs/integrations/perplexity"
   />
 </div>
 
@@ -104,6 +111,13 @@ Loop Engine emits structured events at every transition. Wire them into your obs
     status="certified"
     logoPath="/logos/pagerduty.svg"
     href="/docs/integrations/pagerduty"
+  />
+  <IntegrationCard
+    name="Governed incident (Perplexity + PagerDuty)"
+    subtext="Sonar research → Loop FSM → PagerDuty with audit_ref in custom_details"
+    status="certified"
+    logoPath="/logos/perplexity.svg"
+    href="/docs/integrations/perplexity-pagerduty"
   />
 </div>
 

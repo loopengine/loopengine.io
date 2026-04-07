@@ -1,0 +1,114 @@
+---
+title: "@loop-engine/adapter-perplexity"
+description: "Perplexity Sonar adapter — grounded retrieval with citations for Loop steps that need verifiable, real-time information."
+section: "packages"
+---
+
+<Callout variant="warning" title="Release candidate">
+  This package is staged for publication. Do not treat it as available on npm until its RC moves from **Draft** to **Locked**. The integration pattern in [Governed Incident Response with Perplexity and PagerDuty](/docs/integrations/perplexity-pagerduty) is safe to document independently.
+</Callout>
+
+## Overview
+
+`@loop-engine/adapter-perplexity` wraps the Perplexity Sonar chat API as a Loop Engine `LLMAdapter`. Sonar adds grounded web retrieval with cited sources. You use it for Loop steps that need real-time, verifiable information — regulatory lookups, compliance research, supplier or market news. It is not a general-purpose generation adapter; for broad LLM actor flows, use [Anthropic](/docs/packages/adapter-anthropic) or [OpenAI](/docs/packages/adapter-openai) actor adapters.
+
+## Installation
+
+```bash
+npm install @loop-engine/adapter-perplexity
+```
+
+## Configuration
+
+```typescript
+import { PerplexityAdapter } from "@loop-engine/adapter-perplexity";
+
+const adapter = new PerplexityAdapter({
+  apiKey: process.env.PERPLEXITY_API_KEY,
+  defaultModel: "sonar-pro", // sonar | sonar-pro | sonar-reasoning | sonar-reasoning-pro
+  defaultSearchRecency: "month", // day | week | month
+  timeout: 30_000,
+  retries: 3,
+});
+```
+
+## Basic usage
+
+```typescript
+import { PerplexityAdapter } from "@loop-engine/adapter-perplexity";
+import type { AdapterInput } from "@loop-engine/core";
+
+const adapter = new PerplexityAdapter({ apiKey: process.env.PERPLEXITY_API_KEY! });
+
+const input: AdapterInput = {
+  prompt:
+    "What are the HIPAA breach notification requirements for PHI accessed outside approved hours?",
+  model: "sonar-pro",
+  metadata: {
+    returnCitations: true,
+    searchDomainFilter: ["hhs.gov", "nist.gov"],
+    searchRecencyFilter: "month",
+  },
+};
+
+const result = await adapter.invoke(input);
+
+console.log(result.text); // Sonar answer text
+console.log(result.citations); // { url, title, snippet }[]
+```
+
+## Citation handling
+
+Citations are a first-class output on `SonarResult`. Each entry includes `url`, `title`, and `snippet` (for example derived from search metadata).
+
+```typescript
+const result = await adapter.invoke({
+  prompt: "Summarize recent FDA guidance on AI/ML SaMD change control.",
+  metadata: { returnCitations: true, searchRecencyFilter: "month" },
+});
+
+for (const citation of result.citations) {
+  console.log(citation.url);
+  console.log(citation.title);
+}
+```
+
+<Callout variant="important" title="Compliance evidence">
+  Always persist citations to your Loop audit trail. A Sonar result without citations is an unverifiable AI output — citations are the compliance evidence.
+</Callout>
+
+## Supported models
+
+| Model | Use case | Speed |
+| --- | --- | --- |
+| `sonar` | Fast retrieval, change detection | Fastest |
+| `sonar-pro` | Research, regulatory lookup | Fast |
+| `sonar-reasoning` | Multi-step analysis | Medium |
+| `sonar-reasoning-pro` | Policy classification, complex inference | Slower |
+
+## guardEvidence
+
+`PerplexityAdapter` implements `guardEvidence` from `@loop-engine/core`, masking `pplx-*` API keys (and common secret field names) in payloads you log or export. You do not configure this — call `adapter.guardEvidence(payload)` before persisting raw request/response objects.
+
+## Error handling
+
+| Error | Retryable | Description |
+| --- | --- | --- |
+| `PerplexityAdapterError` (400) | No | Bad prompt or parameter |
+| `PerplexityAdapterError` (401) | No | Invalid or missing API key |
+| `RateLimitError` (429) | Yes | Exponential backoff, up to `retries` (default 3) |
+| `PerplexityAdapterError` (500, 503) | Yes | Upstream or service errors — same backoff |
+| Timeout / network | Yes | Treated like a retryable failure when attempts remain |
+
+## Environment variables
+
+```text
+PERPLEXITY_API_KEY=pplx-...
+PERPLEXITY_BASE_URL=https://api.perplexity.ai   # optional
+PERPLEXITY_DEFAULT_MODEL=sonar-pro               # optional
+```
+
+## Links
+
+- [Source](https://github.com/loopengine/loop-engine/tree/main/packages/adapter-perplexity)
+- Related: [Perplexity integration overview](/docs/integrations/perplexity), [PagerDuty](/docs/integrations/pagerduty), [Governed incident response guide](/docs/integrations/perplexity-pagerduty)
