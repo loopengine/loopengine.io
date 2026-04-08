@@ -30,6 +30,16 @@ const nextConfig: NextConfig = {
         destination: "/docs/packages/adapter-perplexity",
         permanent: false,
       },
+      {
+        source: "/docs/registry",
+        destination: "/docs/catalog",
+        permanent: true,
+      },
+      {
+        source: "/registry",
+        destination: "/catalog",
+        permanent: true,
+      },
     ];
   },
   async headers() {

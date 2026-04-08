@@ -62,8 +62,8 @@ export const docsSections: DocsNavSection[] = [
     items: [{ title: "Overview", href: "/docs/packages" }]
   },
   {
-    label: "Registry",
-    items: [{ title: "Overview", href: "/docs/registry" }]
+    label: "Loop catalog",
+    items: [{ title: "Overview", href: "/docs/catalog" }]
   },
   {
     label: "Examples",

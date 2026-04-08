@@ -1,0 +1,35 @@
+---
+title: Loop catalog
+description: Discovery and trust layer for governed Loop Engine definitions — not related to the Commerce Gateway Registry.
+section: Loop catalog
+---
+
+The **Loop Engine catalog** at `registry.betterdata.co` is the discovery layer for governed loop definitions.
+We call it a **catalog** to distinguish it from registries in other products (for example, the [Commerce Gateway Registry](https://commercegateway.io/registry), which handles gateway discovery and domain verification under the Commerce Registry Protocol).
+
+Think of the loop catalog as **npm for AI approval workflows**: same versioning model, same CLI ergonomics (planned), plus semantic search instead of keyword-only search.
+
+## Trust model
+
+The catalog uses three trust tiers:
+
+1. **Core** — Loop Engine maintained definitions.
+2. **Verified Partner** — signed publisher identity with reviewed definitions.
+3. **Community** — open publish surface, use-at-own-risk.
+
+## Security properties
+
+Every published loop definition declares its actor types, guard registrations, transition surface, and external service calls in a machine-readable manifest.
+This is designed to prevent hidden behavior and make review/audit straightforward.
+
+## CLI preview (coming soon)
+
+```bash
+loop catalog search "hipaa approval"
+loop catalog install @betterdata/loops-healthcare
+loop catalog publish
+```
+
+<Callout variant="info" title="Private beta">
+  The catalog is in private beta. Join the waitlist at <a href="https://loopengine.io/catalog" target="_blank" rel="noreferrer">loopengine.io/catalog</a>.
+</Callout>

@@ -16,7 +16,7 @@ Every additional package is opt-in based on your stack.
 | AI adapters | Governed LLM actors with confidence scoring, prompt attribution, and hard guard enforcement at runtime; Sonar for grounded retrieval with citations. | pick one per LLM / use-case | adapter-anthropic, adapter-openai, adapter-gemini, adapter-grok, adapter-perplexity | adapter-ollama, adapter-cohere, adapter-mistral |
 | Routing adapters | Consume PENDING_HUMAN_APPROVAL events and route them to where the human already lives. | pick one for human approval delivery | adapter-pagerduty, adapter-openclaw, adapter-vercel-ai | adapter-slack, adapter-teams, adapter-discord, adapter-webhook |
 | Framework adapters | Drop Loop Engine into your existing tool-call layer with zero rebuild. requiresApproval() gates wrap any tool call structurally. | optional | adapter-vercel-ai, adapter-openclaw | adapter-n8n, adapter-temporal, adapter-langchain |
-| Observability | Metrics, event timelines, replay, and devtools. Consumes the event bus — no changes to loop definitions needed. | optional | observability, ui-devtools, playground, registry-client | adapter-datadog, adapter-grafana |
+| Observability | Metrics, event timelines, replay, and devtools. Consumes the event bus — no changes to loop definitions needed. | optional | observability, ui-devtools, playground, registry-client (loop catalog) | adapter-datadog, adapter-grafana |
 | Verticals | Pre-assembled, domain-specific loop definitions for regulated industries. An enterprise installs one package instead of assembling manually. | optional | — (in development) | loops-healthcare, loops-fintech, loops-supply-chain, loops-hr-ops, loops-legaltech, loops-construction |
 
 ## Minimum install

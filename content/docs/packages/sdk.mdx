@@ -64,8 +64,8 @@ Behavior from source:
 - `store` defaults to `memoryStore()`
 - `guards` defaults to `guardRegistry`
 - `signals: true` adds a `SignalEngine`
-- `registry` is additive; local `loops[]` win on ID conflicts
-- registry load failures log a warning and fall back to local loops
+- `registry` (loop **catalog** client, type `LoopRegistry`) is additive; local `loops[]` win on ID conflicts
+- catalog load failures log a warning and fall back to local loops
 
 ```ts
 import { aggregateId, transitionId } from "@loop-engine/core"

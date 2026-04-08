@@ -16,7 +16,7 @@ const navItems: NavItem[] = [
   { label: "Packages", href: "/docs/packages", matchPrefix: "/docs/packages" },
   { label: "Use cases", href: "/use-cases", matchPrefix: "/use-cases" },
   { label: "Partners", href: "/partners", matchPrefix: "/partners" },
-  { label: "Registry", href: "/registry", matchPrefix: "/registry" },
+  { label: "Catalog", href: "/catalog", matchPrefix: "/catalog" },
 ];
 
 function isItemActive(pathname: string, item: NavItem): boolean {

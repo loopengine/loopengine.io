@@ -20,6 +20,8 @@ createLoopEngine(options: LoopEngineOptions): LoopEngine
 
 `LoopEngineOptions`:
 
+The `registry` field is your **loop catalog** client (`LoopRegistry` in types) — definitions loaded from disk, HTTP, or Better Data, not the Commerce Gateway Registry.
+
 ```ts
 interface LoopEngineOptions {
   registry: LoopRegistry

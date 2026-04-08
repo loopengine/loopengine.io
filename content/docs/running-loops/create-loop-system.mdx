@@ -1,6 +1,6 @@
 ---
 title: createLoopSystem
-description: The createLoopSystem factory wires together a LoopEngine, event bus, and optional registry in a single call.
+description: The createLoopSystem factory wires together a LoopEngine, event bus, and optional loop catalog client in a single call.
 section: Running Loops
 ---
 
@@ -22,11 +22,11 @@ createLoopSystem(options: {
 }>
 ```
 
-- `loops` is required and becomes the in-memory registry.
+- `loops` is required and becomes the in-memory set of definitions.
 - `store` defaults to `memoryStore()`.
 - `guards` defaults to `defaultRegistry` from `@loop-engine/guards`.
 - `signals: true` adds a default `SignalEngine`.
-- `registry` is optional; if `registry.list()` fails, startup falls back to `loops[]`.
+- `registry` is the optional **loop catalog** client (`LoopRegistry`); if `registry.list()` fails, startup falls back to `loops[]`.
 
 ## Pattern 1: zero-config
 

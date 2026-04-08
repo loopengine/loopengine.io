@@ -21,7 +21,7 @@ Learning signals feed back into AI model improvement.
 - @loop-engine/actors - actor types, authorization, evidence building
 - @loop-engine/signals - SignalEngine + built-in signal detection rules
 - @loop-engine/observability - LoopMetrics, LoopTimeline, replay
-- @loop-engine/registry-client - loop definition registry (local, HTTP, Better Data)
+- @loop-engine/registry-client - loop catalog client: local, HTTP, Better Data (npm name unchanged)
 - @loop-engine/adapter-memory - in-memory LoopStore (default, works in browser)
 - @loop-engine/adapter-postgres - PostgreSQL LoopStore (peerDep: pg)
 - @loop-engine/adapter-kafka - Kafka EventBus (peerDep: kafkajs)

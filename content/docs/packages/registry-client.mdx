@@ -1,8 +1,10 @@
 ---
 title: "@loop-engine/registry-client"
-description: Local and HTTP registry adapters load LoopDefinition objects, with Better Data support behind a subpath export.
+description: Local and HTTP adapters for the loop catalog — load LoopDefinition objects, with Better Data support behind a subpath export.
 section: Packages
 ---
+
+**Terminology:** In product docs we call this the **loop catalog** (versioned loop definitions for Loop Engine). The npm package remains `@loop-engine/registry-client` and TypeScript types still use the name `LoopRegistry`. That is **not** the [Commerce Gateway Registry](https://commercegateway.io/registry) (gateway discovery and verification).
 
 `@loop-engine/registry-client` provides local-first loop definition lookup with optional network adapters.
 
@@ -12,7 +14,7 @@ section: Packages
 npm install @loop-engine/registry-client
 ```
 
-## Local registry
+## Local catalog
 
 ```ts
 import { localRegistry } from "@loop-engine/registry-client"
@@ -28,7 +30,7 @@ const registry = localRegistry({
 - `loopsDir` loads `.yaml`, `.yml`, and `.json` definitions in Node.
 - Browser usage with `loopsDir` logs a warning and ignores filesystem mode.
 
-## HTTP registry
+## HTTP catalog
 
 ```ts
 import { httpRegistry } from "@loop-engine/registry-client"
@@ -66,7 +68,9 @@ const registry = betterDataRegistry({
 The Better Data adapter is intentionally excluded from the main package entrypoint. Import it from `@loop-engine/registry-client/betterdata`.
 </Callout>
 
-## Registry interface
+## `LoopRegistry` interface
+
+The runtime type is still named `LoopRegistry`:
 
 ```ts
 interface LoopRegistry {
@@ -81,4 +85,4 @@ interface LoopRegistry {
 
 ## SDK integration
 
-`createLoopSystem({ loops, registry })` merges registry results with local loops. Local `loops[]` definitions override matching registry IDs, and registry failures fall back to local-only startup.
+`createLoopSystem({ loops, registry })` merges **catalog** results with local loops. Local `loops[]` definitions override matching catalog IDs, and catalog load failures fall back to local-only startup.

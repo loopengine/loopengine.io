@@ -54,21 +54,35 @@ const canonicalLoops: CanonicalLoop[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "Loop Registry - Loop Engine",
-  description: "The Loop Engine loop registry - canonical and community loop definitions.",
+  title: "Loop catalog - Loop Engine",
+  description:
+    "The Loop Engine loop catalog — canonical and community loop definitions. Not the Commerce Gateway Registry.",
   robots: { index: false, follow: false },
 };
 
-export default function RegistryPage() {
+export default function CatalogPage() {
   return (
     <main className="px-4 py-12">
       <section className="mx-auto max-w-6xl">
-        <h1 className="font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-4xl)]">Loop Registry</h1>
+        <h1 className="font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-4xl)]">Loop catalog</h1>
         <p className="mt-3 max-w-3xl text-[var(--color-ink-secondary)] text-base">
           Canonical loop definitions for common enterprise patterns. Import any loop into your system with one line.
         </p>
+        <p className="mt-2 max-w-3xl text-[var(--color-ink-tertiary)] text-sm leading-6">
+          This catalog lists <strong className="text-[var(--color-ink-secondary)]">governed workflow definitions</strong> for Loop
+          Engine. It is unrelated to the{" "}
+          <a
+            className="text-[var(--color-primary)] underline underline-offset-4"
+            href="https://commercegateway.io/registry"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Commerce Gateway Registry
+          </a>{" "}
+          (gateway discovery and verification).
+        </p>
         <span className="mt-4 inline-block rounded-full bg-amber-100 px-3 py-1 font-mono text-[11px] text-amber-800 uppercase tracking-wide">
-          Registry in development
+          Catalog in development
         </span>
       </section>
 
@@ -111,10 +125,10 @@ export default function RegistryPage() {
       <section className="mx-auto mt-10 max-w-6xl rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
         <h2 className="font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-2xl)]">Coming soon</h2>
         <p className="mt-3 text-[var(--color-ink-secondary)] text-sm leading-7">
-          <code>registry.loopengine.io</code> will be a searchable index of canonical and community-contributed loop definitions.
+          <code>catalog.loopengine.io</code> will be a searchable index of canonical and community-contributed loop definitions.
         </p>
         <p className="mt-4 text-[var(--color-ink-secondary)] text-sm">
-          Want to list your loop definition in the registry?{" "}
+          Want to list your loop definition in the catalog?{" "}
           <a
             className="text-[var(--color-primary)] underline underline-offset-4"
             href="https://github.com/loopengine/loop-engine/issues/new"
