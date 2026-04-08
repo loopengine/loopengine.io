@@ -112,6 +112,10 @@ export const docsSections: DocsNavSection[] = [
       { title: "RFC Process", href: "/docs/governance/rfc-process" },
       { title: "Changelog", href: "/docs/governance/changelog" }
     ]
+  },
+  {
+    label: "Project",
+    items: [{ title: "Changelog", href: "/docs/changelog" }]
   }
 ];
 

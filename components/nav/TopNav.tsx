@@ -62,6 +62,14 @@ export function TopNav() {
             target="_blank"
             rel="noopener noreferrer"
           >
+            Releases
+          </a>
+          <a
+            className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
+            href="https://betterdata.co/changelog?module=loop-engine"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Changelog
           </a>
           <a
@@ -96,6 +104,14 @@ export function TopNav() {
               <a
                 className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
                 href="https://github.com/loopengine/loop-engine/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Releases
+              </a>
+              <a
+                className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
+                href="https://betterdata.co/changelog?module=loop-engine"
                 target="_blank"
                 rel="noopener noreferrer"
               >
