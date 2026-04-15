@@ -581,6 +581,86 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
 
       <section
         style={{
+          background: "var(--color-surface-alt)",
+          borderTop: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "72px 0",
+        }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)",
+            }}
+          >
+            Used with Commerce Gateway
+          </p>
+          <h2 className="mt-3">Governance sits on execution — not beside it</h2>
+          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            Loop Engine governs actions that are executed through Commerce Gateway. It is a control layer for policy, guards,
+            and audit — not a standalone automation tool that replaces your gateway or operators.
+          </p>
+          <div
+            className="mt-8 rounded-xl border p-6"
+            style={{
+              borderColor: "var(--color-border)",
+              background: "var(--color-surface)",
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-sm)",
+              color: "var(--color-ink-secondary)",
+              lineHeight: 1.8,
+            }}
+          >
+            <p className="mb-3" style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
+              Commerce Agent pattern (illustrative — a composition, not a separate product):
+            </p>
+            <p>
+              Agent → Registry (discover) → Gateway (execute) → Loop Engine (govern) → Recorded outcome
+            </p>
+          </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="https://commercegateway.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center"
+              style={{
+                background: "var(--color-primary)",
+                color: "#fff",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-sm)",
+              }}
+            >
+              Commerce Gateway
+            </a>
+            <a
+              href="https://app.betterdata.co/sign-up?utm_source=loopengine.io&utm_medium=site&utm_campaign=oss_handoff"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center"
+              style={{
+                border: "1px solid var(--color-border)",
+                color: "var(--color-ink-secondary)",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-sm)",
+              }}
+            >
+              Open in Better Data
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section
+        style={{
           background: "var(--color-surface)",
           borderTop: "1px solid var(--color-border)",
           borderBottom: "1px solid var(--color-border)",
@@ -743,10 +823,10 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
           >
             Integrations
           </p>
-          <h2 className="mt-3">Works with the agentic ecosystem</h2>
+          <h2 className="mt-3">Integrations across the agentic ecosystem</h2>
           <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
-            Loop Engine governs what your AI agents are allowed to do - across every framework they run
-            in.
+            Adapters plug into the control layer — Loop Engine is not a generic “do anything” automation runner. Pair with
+            Commerce Gateway when commerce execution needs the same guardrails.
           </p>
 
           <div className="mt-8 grid gap-4 lg:grid-cols-3">
