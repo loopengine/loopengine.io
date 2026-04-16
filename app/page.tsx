@@ -314,6 +314,19 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 Open Infrastructure · Apache-2.0
               </span>
             </p>
+            <p className="fade-in-up mt-2" style={{ animationDelay: "40ms" }}>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-xs)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--color-ink-tertiary)"
+                }}
+              >
+                Without governance, AI agents improvise — no approval gates, no audit trail, no accountability.
+              </span>
+            </p>
             <h1
               className="fade-in-up mt-3"
               style={{
@@ -340,9 +353,22 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
               Not improvisation - control.
             </p>
             <p
-              className="fade-in-up mt-3"
+              className="fade-in-up mt-4"
               style={{
                 animationDelay: "200ms",
+                fontSize: "var(--text-sm)",
+                color: "var(--color-ink-muted)",
+                maxWidth: 620,
+                lineHeight: 1.65
+              }}
+            >
+              A Loop is a named finite state machine — with typed actors, guard policies, and an immutable evidence
+              trail on every transition.
+            </p>
+            <p
+              className="fade-in-up mt-3"
+              style={{
+                animationDelay: "240ms",
                 fontSize: "var(--text-sm)",
                 color: "var(--color-ink-secondary)",
                 fontFamily: "var(--font-mono)",
@@ -354,7 +380,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
 
             <div
               className="fade-in-up mt-9 flex flex-col items-stretch gap-3 min-[480px]:items-center min-[480px]:flex-row min-[480px]:flex-wrap"
-              style={{ animationDelay: "240ms" }}
+              style={{ animationDelay: "280ms" }}
             >
               <Link
                 href="/docs/getting-started"
@@ -391,7 +417,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
               </div>
             </div>
 
-            <div className="fade-in-up mt-14 flex flex-wrap items-center gap-2 md:gap-3" style={{ animationDelay: "400ms" }}>
+            <div className="fade-in-up mt-14 flex flex-wrap items-center gap-2 md:gap-3" style={{ animationDelay: "440ms" }}>
               {architecture.map((node, index) => (
                 <div key={node} className="flex items-center gap-2">
                   <span
@@ -440,6 +466,11 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
           </p>
           <h2 className="mt-3">How Loop Engine fits into real systems</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            Most enterprise AI projects hit the same wall: a capable model, a data source it&apos;s not allowed to touch
+            directly, and no structure for what happens between a signal and a recorded outcome. Loop Engine is the layer
+            that sits in that gap.
+          </p>
+          <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
             Loop Engine is the execution and control layer inside a larger operational stack. It does
             not replace your data warehouse, ERP, or application UI. It sits where decisions become
             actions, enforces bounded transitions, and records evidence on every state change.
@@ -827,6 +858,19 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
           <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
             Adapters plug into the control layer — Loop Engine is not a generic “do anything” automation runner. Pair with
             Commerce Gateway when commerce execution needs the same guardrails.
+          </p>
+          <p
+            style={{
+              marginTop: 14,
+              maxWidth: 760,
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              lineHeight: 1.65,
+              color: "var(--color-ink-muted)"
+            }}
+          >
+            Apache-2.0 with explicit patent grant — the only governed execution layer in this space with a fully
+            permissive, OSI-approved, patent-safe license. Temporal and Inngest ship under SSPL.
           </p>
 
           <div className="mt-8 grid gap-4 lg:grid-cols-3">
