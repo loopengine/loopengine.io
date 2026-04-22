@@ -1,10 +1,10 @@
 ---
 title: "@loop-engine/signals"
-description: SignalEngine evaluates event streams with rule functions and emits Signal records for detection workflows.
+description: SignalRegistry is the current signal-spec surface; SignalEngine pattern detection lands in 1.1.0 as experimental.
 section: Packages
 ---
 
-`@loop-engine/signals` detects patterns from `LoopEvent[]` and emits typed `Signal` objects.
+`@loop-engine/signals` ships `SignalRegistry` for declaring and validating signal specs. The pattern-detection engine (`SignalEngine`) is on the roadmap for `1.1.0+`.
 
 ## Install
 
@@ -12,7 +12,55 @@ section: Packages
 npm install @loop-engine/signals
 ```
 
-## Engine API
+## SignalRegistry
+
+The current public surface is a registry that declares each signal's identity, optional Zod schema, and human-readable metadata. Runtime code uses it to look up and validate signal payloads.
+
+```ts
+class SignalRegistry {
+  register(spec: SignalSpec): void
+  get(signalId: SignalId): SignalSpec | undefined
+  validatePayload(signalId: SignalId, payload: unknown): { valid: boolean; error?: string }
+  list(): SignalSpec[]
+}
+
+interface SignalSpec {
+  signalId: SignalId
+  name: string
+  description?: string
+  schema?: ZodType
+  tags?: string[]
+}
+```
+
+```ts
+import { z } from "zod"
+import { SignalRegistry } from "@loop-engine/signals"
+import { signalId } from "@loop-engine/core"
+
+const registry = new SignalRegistry()
+registry.register({
+  signalId: signalId("expense.submitted"),
+  name: "Expense submitted",
+  description: "A user has submitted an expense report for review.",
+  schema: z.object({
+    amount: z.number().positive(),
+    currency: z.string().length(3)
+  })
+})
+
+const check = registry.validatePayload(signalId("expense.submitted"), {
+  amount: 1200,
+  currency: "USD"
+})
+// => { valid: true }
+```
+
+## SignalEngine (experimental, 1.1.0+)
+
+<Callout variant="warning" title="Roadmap surface">
+`SignalEngine`, `createSignalEngine()`, and the built-in rule factories listed below are slated for `1.1.0+` as experimental APIs and are **not** present in the current release. The shapes shown here are roadmap intent, not a contract — expect them to change before they ship.
+</Callout>
 
 ```ts
 interface SignalEngine {
@@ -20,39 +68,17 @@ interface SignalEngine {
   process(events: LoopEvent[]): Signal[]
   subscribe(handler: (signal: Signal) => void): () => void
 }
-```
 
-Factory:
-
-```ts
 createSignalEngine(): SignalEngine
 ```
 
-`createSignalEngine()` pre-registers:
+Planned built-in rule factories:
 
-- `threshold-breach`
-- `state-dwell`
-- `repeated-guard-failure`
-- `loop-not-started`
+- `thresholdBreachRule(config: ThresholdRuleConfig): SignalRule`
+- `stateDwellRule(config: StateDwellRuleConfig): SignalRule`
+- `repeatedGuardFailureRule(config: RepeatedGuardFailureConfig): SignalRule`
+- `loopNotStartedRule(config: LoopNotStartedConfig): SignalRule`
 
-## Built-in rule factories
+## Detection model
 
-```ts
-thresholdBreachRule(config: ThresholdRuleConfig): SignalRule
-stateDwellRule(config: StateDwellRuleConfig): SignalRule
-repeatedGuardFailureRule(config: RepeatedGuardFailureConfig): SignalRule
-loopNotStartedRule(config: LoopNotStartedConfig): SignalRule
-```
-
-```ts
-import { createSignalEngine } from "@loop-engine/signals"
-
-const signalEngine = createSignalEngine()
-signalEngine.subscribe((signal) => {
-  console.log(signal.type, signal.subject, signal.confidence)
-})
-```
-
-## Detection flow
-
-Signals are detections, not actors. Application code decides what to do with them, including whether to start or transition loops.
+Signals are detections, not actors. Application code decides what to do with them — including whether to start or transition loops in response.

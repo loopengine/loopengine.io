@@ -17,28 +17,24 @@ npm install @loop-engine/actors
 ```ts
 interface HumanActor extends ActorRef {
   type: "human"
-  sessionId: string
+  userId: string
+  displayName: string
+  roles?: string[]
 }
 
 interface AutomationActor extends ActorRef {
   type: "automation"
   serviceId: string
+  version?: string
 }
 
 interface AIAgentActor extends ActorRef {
   type: "ai-agent"
-  agentId: string
-  gatewaySessionId: string
-  recommendedBy?: string
-}
-
-interface WebhookActor extends ActorRef {
-  type: "webhook"
-  source: string
-}
-
-interface SystemActor extends ActorRef {
-  type: "system"
+  modelId: string
+  provider: string
+  confidence?: number
+  promptHash?: string
+  toolsUsed?: string[]
 }
 ```
 

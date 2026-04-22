@@ -11,12 +11,12 @@ Every additional package is opt-in based on your stack.
 
 | Layer | What it is | Required | Current packages | Planned packages |
 | --- | --- | --- | --- | --- |
-| Core | Canonical types and runtime execution. Everything else depends on these. | always | sdk, runtime | Internal (not published): core, dsl, guards, actors, events, signals |
+| Core | Canonical types and runtime execution. Everything else depends on these. | always | sdk, runtime, core, dsl, guards, actors, events, signals | — |
 | Stores | Pluggable persistence for loop state. Swap without changing loop logic. Default to adapter-memory in dev. | pick one | adapter-memory, adapter-postgres, adapter-kafka | adapter-redis, adapter-sqlite, adapter-dynamodb |
 | AI adapters | Governed LLM actors with confidence scoring, prompt attribution, and hard guard enforcement at runtime; Sonar for grounded retrieval with citations. | pick one per LLM / use-case | adapter-anthropic, adapter-openai, adapter-gemini, adapter-grok, adapter-perplexity | adapter-ollama, adapter-cohere, adapter-mistral |
 | Routing adapters | Consume PENDING_HUMAN_APPROVAL events and route them to where the human already lives. | pick one for human approval delivery | adapter-pagerduty, adapter-openclaw, adapter-vercel-ai | adapter-slack, adapter-teams, adapter-discord, adapter-webhook |
-| Framework adapters | Drop Loop Engine into your existing tool-call layer with zero rebuild. requiresApproval() gates wrap any tool call structurally. | optional | adapter-vercel-ai, adapter-openclaw | adapter-n8n, adapter-temporal, adapter-langchain |
-| Observability | Metrics, event timelines, replay, and devtools. Consumes the event bus — no changes to loop definitions needed. | optional | observability, ui-devtools, playground, registry-client (loop catalog) | adapter-datadog, adapter-grafana |
+| Framework adapters | Drop Loop Engine into your existing tool-call layer with zero rebuild. requiresApproval() gates wrap any tool call structurally. | optional | adapter-vercel-ai, adapter-openclaw, adapter-commerce-gateway | adapter-n8n, adapter-temporal, adapter-langchain |
+| Observability | Metrics, event timelines, replay, and devtools. Consumes the event bus — no changes to loop definitions needed. | optional | observability, ui-devtools, registry-client (loop catalog) | adapter-datadog, adapter-grafana |
 | Verticals | Pre-assembled, domain-specific loop definitions for regulated industries. An enterprise installs one package instead of assembling manually. | optional | — (in development) | loops-healthcare, loops-fintech, loops-supply-chain, loops-hr-ops, loops-legaltech, loops-construction |
 
 ## Minimum install
@@ -27,7 +27,7 @@ npm install @loop-engine/sdk
 
 This is always the floor. Add layers as your stack demands them.
 
-Core primitives are bundled in `@loop-engine/sdk`. The internal packages are available in the monorepo for contributors.
+Core primitives are bundled in `@loop-engine/sdk`. They are also published as standalone `@loop-engine/*` packages for consumers that want to install only the layers they need.
 
 ## Common install recipes
 

@@ -16,15 +16,14 @@ subscribe(handler: (event: LoopEvent) => Promise<void>): () => void
 ## Event types
 
 - `loop.started`
+- `loop.completed`
+- `loop.cancelled`
+- `loop.failed`
 - `loop.transition.requested`
 - `loop.transition.executed`
 - `loop.transition.blocked`
 - `loop.guard.failed`
-- `loop.completed`
-- `loop.error`
-- `loop.spawned`
 - `loop.signal.received`
-- `loop.outcome.recorded`
 
 ## Subscribe patterns
 
@@ -37,7 +36,7 @@ eventBus.subscribe(async (event) => {
 ```ts
 eventBus.subscribe(async (event) => {
   if (event.type === 'loop.completed') {
-    console.log('Closed:', event.outcomeId, `${event.durationMs}ms`)
+    console.log('Closed:', event.finalState, `${event.durationMs}ms`)
   }
 })
 ```
