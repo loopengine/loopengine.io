@@ -11,7 +11,7 @@ section: Integrations
 
 ## What it does
 
-Implements `LoopStorageAdapter` over HTTP. Any REST service that speaks the adapter protocol can back loop state storage. This is useful for integrating with existing services or remote storage planes.
+Implements `LoopStore` over HTTP. Any REST service that speaks the adapter protocol can back loop state storage. This is useful for integrating with existing services or remote storage planes.
 
 ## Adapter protocol
 
@@ -51,7 +51,7 @@ Expected backend endpoints:
 
 ## Note
 
-If your backend is in the same process, implementing `LoopStorageAdapter` directly is usually simpler than standing up the HTTP protocol.
+If your backend is in the same process, implementing `LoopStore` directly is usually simpler than standing up the HTTP protocol.
 
 ## Configuration reference
 

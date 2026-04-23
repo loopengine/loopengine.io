@@ -50,13 +50,13 @@ const checked = validateLoopDefinition(definition)
 if (!checked.valid) {
   throw new Error(checked.errors.map((e) => e.message).join('; '))
 }`,
-  run: `import { createMemoryLoopStorageAdapter } from '@loop-engine/adapter-memory'
+  run: `import { memoryStore } from '@loop-engine/adapter-memory'
 import { createLoopSystem } from '@loop-engine/sdk'
 
 // assumes \`definition\` from the Define tab
 const { engine } = await createLoopSystem({
   loops: [definition],
-  storage: createMemoryLoopStorageAdapter()
+  store: memoryStore()
 })
 
 await engine.start({
@@ -74,7 +74,7 @@ await engine.transition({
   events: `// assumes \`createLoopSystem\` returned \`eventBus\` alongside \`engine\`
 const { engine, eventBus } = await createLoopSystem({
   loops: [definition],
-  storage: createMemoryLoopStorageAdapter()
+  store: memoryStore()
 })
 
 eventBus.subscribe(async (event) => {
@@ -99,7 +99,7 @@ function renderHighlighted(code: string) {
     '<span class="kw">$1</span>'
   );
   return withKeywords.replace(
-    /\b(parseLoopYaml|validateLoopDefinition|createLoopSystem|createMemoryLoopStorageAdapter)\b/g,
+    /\b(parseLoopYaml|validateLoopDefinition|createLoopSystem|memoryStore)\b/g,
     '<span class="type">$1</span>'
   );
 }
