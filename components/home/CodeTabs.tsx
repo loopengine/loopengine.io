@@ -59,7 +59,7 @@ const { engine } = await createLoopSystem({
   storage: createMemoryLoopStorageAdapter()
 })
 
-await engine.startLoop({
+await engine.start({
   loopId: 'expense.approval',
   aggregateId: 'EXP-001',
   actor: { type: 'system', id: 'intake' }

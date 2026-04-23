@@ -76,7 +76,7 @@ This is the Sense → Decide → Govern pattern in practice:
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `loopSystem` | `LoopSystem` | required | Runtime instance used for governed transitions |
+| `loopSystem` | `LoopEngine` | required | Runtime instance used for governed transitions |
 | `signalMap` | `Record<string, string>` | `{}` | Optional action-to-signal mapping override |
 | `defaultActor` | `Actor` | `ai-agent/openclaw` | Fallback actor attribution metadata |
 | `onProposal` | `(proposal) => Promise<void>` | — | Optional hook before transition submission |
