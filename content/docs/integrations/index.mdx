@@ -6,6 +6,8 @@ section: Integrations
 
 Connect Loop Engine to any AI provider, agentic platform, storage backend, or observability tool. Every integration preserves the same governance model — guards enforced, actors attributed, audit trail intact.
 
+Integrations group into four archetypes — **Store**, **Registry**, **AI**, and **EventBus**. Each archetype is a pluggable interface from `@loop-engine/runtime` (or `@loop-engine/registry-client`). See the [IntegrationAdapter archetype reference](/docs/concepts/integration-adapter) for the meta-pattern.
+
 ## ⟩ AI Providers
 
 Use any major LLM as a governed actor. Provider actor adapters produce the same `AIAgentActor` shape — switching providers requires changing one import. Perplexity Sonar covers **grounded retrieval with citations** as a `ToolAdapter` for research steps (see the package reference).
@@ -136,8 +138,9 @@ Connect Loop Engine to commerce platforms and LLM commerce data layers.
 
 ## Building an integration?
 
-The Loop Engine adapter interface is open and documented. Any backend that implements `LoopStore` is valid.
+The Loop Engine adapter interface is open and documented. Any backend that implements one of the four archetype interfaces is valid.
 
+- [IntegrationAdapter archetype →](/docs/concepts/integration-adapter)
 - [Adapter interface docs →](/docs/running-loops/adapters)
 - [Apply for certification →](mailto:oss@betterdata.co)
 - [Open an RFC →](https://github.com/loopengine/loop-engine/discussions)
