@@ -50,9 +50,9 @@ section: Integrations
      evidence: { demandForecast: 0.93, currentStock: 36 }
    });
 
-   await loopSystem.transition({
+   await loopSystem.engine.transition({
      aggregateId: "procurement-1",
-     signal: decision.signalId,
+     transitionId: decision.transitionId,
      actor,
      evidence: decision
    });

@@ -55,9 +55,9 @@ const { actor, decision } = await adapter.createSubmission({
 })
 
 // Submit to the runtime — guards evaluate after this point
-const result = await loopSystem.transition({
+const result = await loopSystem.engine.transition({
   aggregateId,
-  signal: decision.signalId,
+  transitionId: decision.transitionId,
   actor,
   evidence: decision,
 })
