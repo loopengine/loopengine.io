@@ -42,8 +42,14 @@ const transition = transitionId("approve")
 ## Loop definition types
 
 ```ts
-export type ActorType = "human" | "automation" | "ai-agent" | "webhook" | "system"
-export type LoopStatus = "OPEN" | "IN_PROGRESS" | "CLOSED" | "ERROR" | "CANCELLED"
+export type ActorType = "human" | "automation" | "ai-agent" | "system"
+export type LoopStatus =
+  | "pending"
+  | "active"
+  | "completed"
+  | "failed"
+  | "cancelled"
+  | "suspended"
 
 export interface GuardSpec {
   id: GuardId
@@ -102,22 +108,22 @@ export interface LoopInstance {
   currentState: StateId
   status: LoopStatus
   startedAt: string
-  closedAt?: string
-  correlationId?: CorrelationId
+  updatedAt: string
+  correlationId?: string
+  completedAt?: string
   metadata?: Record<string, unknown>
 }
 
 export interface TransitionRecord {
-  id: string
-  loopId: LoopId
   aggregateId: AggregateId
+  loopId: LoopId
   transitionId: TransitionId
+  signal: SignalId
   fromState: StateId
   toState: StateId
   actor: ActorRef
-  evidence: Evidence
   occurredAt: string
-  durationMs?: number
+  evidence?: Record<string, unknown>
 }
 ```
 
