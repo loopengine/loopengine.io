@@ -26,8 +26,8 @@ SUBMITTED -> UNDER_REVIEW -> APPROVED
 - `isTerminal?: boolean` (default false)
 - `isError?: boolean` (default false)
 
-Terminal states close the loop (`status: "CLOSED"`).  
-Error states set `status: "ERROR"`.
+Terminal states close the loop (`status: "completed"`).  
+Error states set `status: "failed"`.
 
 ## 3) Actors
 
@@ -123,7 +123,7 @@ const instance = await engine.getState(aggregate)
 const history = await engine.getHistory(aggregate)
 
 console.log(instance?.currentState) // branded StateId
-console.log(instance?.status)       // OPEN | IN_PROGRESS | CLOSED | ERROR | CANCELLED
+console.log(instance?.status)       // pending | active | completed | failed | cancelled | suspended
 
 // TransitionRecord fields
 for (const row of history) {

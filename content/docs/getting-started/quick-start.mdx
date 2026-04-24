@@ -83,7 +83,7 @@ await engine.transition({
 
 const state = await engine.getState(aggregateId('EXP-2026-001'))
 console.log(state?.currentState) // APPROVED
-console.log(state?.status)       // CLOSED
+console.log(state?.status)       // completed
 ```
 
 ## What just happened
@@ -92,7 +92,7 @@ console.log(state?.status)       // CLOSED
 - The loop moved through 3 states (`SUBMITTED -> UNDER_REVIEW -> APPROVED`)
 - 2 actor types were used (`automation`, `human`)
 - Each successful transition emitted `loop.transition.executed`
-- Reaching a terminal state sets loop status to `CLOSED`
+- Reaching a terminal state sets loop status to `completed`
 </Callout>
 
 ## Next steps
