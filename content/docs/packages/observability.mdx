@@ -15,14 +15,31 @@ npm install @loop-engine/observability
 ## Metrics
 
 ```ts
-computeMetrics(
+interface LoopMetrics {
+  loopId: LoopId
+  period: { from: string; to: string }
+  totalInstances: number
+  openInstances: number
+  closedInstances: number
+  errorInstances: number
+  avgDurationMs: number
+  medianDurationMs: number
+  p95DurationMs: number
+  completionRate: number
+  guardFailureRate: number
+  aiActorRate: number
+  humanActorRate: number
+  avgTransitionCount: number
+}
+
+declare function computeMetrics(
   instances: LoopInstance[],
   history: TransitionRecord[],
   period: { from: string; to: string }
 ): LoopMetrics
 ```
 
-`LoopMetrics` includes `loopId`, `period`, `totalInstances`, `openInstances`, `closedInstances`, `errorInstances`, `avgDurationMs`, `medianDurationMs`, `p95DurationMs`, `completionRate`, `guardFailureRate`, `aiActorRate`, `humanActorRate`, and `avgTransitionCount`.
+The open/closed/error instance counters reflect `LoopStatus` groupings: `openInstances` counts `pending | active | suspended`, `closedInstances` counts `completed | cancelled`, and `errorInstances` counts `failed`.
 
 ```ts
 import { computeMetrics } from "@loop-engine/observability"
@@ -36,16 +53,22 @@ const metrics = computeMetrics(instances, history, {
 ## Timeline
 
 ```ts
-buildTimeline(instance: LoopInstance, history: TransitionRecord[]): LoopTimeline
-getStateResidency(timeline: LoopTimeline): StateResidency[]
+declare function buildTimeline(
+  instance: LoopInstance,
+  history: TransitionRecord[]
+): LoopTimeline
+
+declare function getStateResidency(
+  timeline: LoopTimeline
+): StateResidency[]
 ```
 
-Use timeline output to power audit UIs and state-duration debugging.
+`LoopTimeline` surfaces the ordered sequence of state entries and transitions for a single instance; `StateResidency` reports total duration spent in each state. Use them to power audit UIs and state-duration debugging.
 
 ## Replay
 
 ```ts
-replayLoop(
+declare function replayLoop(
   definition: LoopDefinition,
   history: TransitionRecord[]
 ): { valid: boolean; errors: string[] }
