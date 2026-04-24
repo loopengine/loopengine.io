@@ -97,7 +97,6 @@ const { engine } = createLoopSystem({ loops: [approval] })
 await engine.start({
   loopId: 'expense.approval',
   aggregateId: aggregate,
-  orgId: 'acme',
   actor: { type: 'system', id: 'system:intake' }, // StartOptions.actor
   metadata: { source: 'expense_form' } // optional StartOptions.metadata
 })

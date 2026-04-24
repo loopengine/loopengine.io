@@ -13,7 +13,7 @@ getInstance(aggregateId: AggregateId): Promise<LoopInstance | null>
 saveInstance(instance: LoopInstance): Promise<void>
 getTransitionHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
 saveTransitionRecord(record: TransitionRecord): Promise<void>
-listOpenInstances(loopId: LoopId, orgId: string): Promise<LoopInstance[]>
+listOpenInstances(loopId: LoopId): Promise<LoopInstance[]>
 ```
 
 ## `@loop-engine/adapter-memory`
