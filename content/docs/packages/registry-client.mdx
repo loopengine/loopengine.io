@@ -86,3 +86,39 @@ interface LoopRegistry {
 ## SDK integration
 
 `createLoopSystem({ loops, registry })` merges **catalog** results with local loops. Local `loops[]` definitions override matching catalog IDs, and catalog load failures fall back to local-only startup.
+
+## Error classes
+
+The package exports three typed errors. Catch by class to distinguish missing definitions from conflicts and from network/IO failures.
+
+```ts
+import {
+  RegistryNotFoundError,
+  RegistryConflictError,
+  RegistryNetworkError
+} from "@loop-engine/registry-client"
+```
+
+### RegistryNotFoundError
+
+Thrown by `get()` and `getVersion()` when a loop (or specific version) is not found. Exposes `loopId` and optional `version`.
+
+### RegistryConflictError
+
+Thrown by `register()` when a loop with the same `loopId@version` already exists. Pass `{ force: true }` (development only) to overwrite. Exposes `loopId` and `version`.
+
+### RegistryNetworkError
+
+Thrown by `httpRegistry` and the Better Data adapter on network or HTTP failures. Exposes `url`, optional `statusCode`, and the underlying `cause` when available.
+
+```ts
+try {
+  await registry.register(definition)
+} catch (error) {
+  if (error instanceof RegistryConflictError) {
+    console.warn(`Already registered: ${error.loopId}@${error.version}`)
+    return
+  }
+  throw error
+}
+```

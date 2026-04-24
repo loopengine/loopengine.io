@@ -14,29 +14,28 @@ npm install @loop-engine/events
 
 ## Event catalog
 
-The exported `LOOP_EVENT_TYPES` constants map to:
+The exported `LOOP_EVENT_TYPES` constant enumerates the nine canonical lifecycle events:
 
 - `loop.started`
+- `loop.completed`
+- `loop.cancelled`
+- `loop.failed`
 - `loop.transition.requested`
 - `loop.transition.executed`
 - `loop.transition.blocked`
 - `loop.guard.failed`
-- `loop.completed`
-- `loop.error`
-- `loop.spawned`
 - `loop.signal.received`
-- `loop.outcome.recorded`
 
 Every event extends:
 
 ```ts
 interface LoopEventBase {
   eventId: string
+  type: string
   loopId: LoopId
   aggregateId: AggregateId
-  orgId: string
   occurredAt: string
-  correlationId: CorrelationId
+  correlationId?: string
   causationId?: string
 }
 ```
@@ -70,9 +69,10 @@ unsubscribe()
 ```ts
 extractLearningSignal(
   completed: LoopCompletedEvent,
-  history: TransitionRecord[],
-  predicted?: Record<string, unknown>
+  history: LoopTransitionExecutedEvent[],
+  definition: LoopDefinitionLike,
+  predicted?: Record<string, number>
 ): LearningSignal
 ```
 
-This helper derives `actual`, `predicted`, and numeric `delta` fields from completion history.
+The helper derives `actual`, `predicted`, and numeric `delta` fields from the completed event, the executed-transition history, and the loop definition's declared business metrics. `predicted` keys not declared in `definition.outcome.businessMetrics` are dropped with a warning.

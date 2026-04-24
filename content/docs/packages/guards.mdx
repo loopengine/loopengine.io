@@ -31,40 +31,37 @@ interface GuardResult {
 
 ```ts
 class GuardRegistry {
-  register(guardId: GuardId, fn: GuardFunction): void
-  get(guardId: GuardId): GuardFunction | undefined
-  createEvaluator(): GuardEvaluator
+  register(guardId: string, evaluator: GuardEvaluator): void
+  get(guardId: string): GuardEvaluator | undefined
+  registerBuiltIns(): void
 }
 ```
+
+`registerBuiltIns()` populates the registry with every guard exported from `@loop-engine/guards` (see "Built-in guards" below). Call it once on a fresh registry, or use the pre-populated `defaultRegistry` constant.
 
 ```ts
 import { createGuardRegistry } from "@loop-engine/guards"
 import { guardId } from "@loop-engine/core"
 
 const registry = createGuardRegistry()
-registry.register(guardId("budget_available"), async (context) => ({
-  passed: context.evidence.budget_ok === true,
-  message: "Budget check failed"
-}))
+registry.register(guardId("budget_available"), {
+  async evaluate(context) {
+    return {
+      passed: context.evidence?.budget_ok === true,
+      message: "Budget check failed"
+    }
+  }
+})
 ```
 
 ## Built-in guards
 
-`defaultRegistry` pre-registers:
+`defaultRegistry` (and `GuardRegistry.registerBuiltIns()`) pre-registers:
 
-- `actor_has_permission` (`actorPermissionGuard`)
-- `approval_obtained` (`approvalObtainedGuard`)
-- `deadline_not_exceeded` (`deadlineNotExceededGuard`)
-- `duplicate_check_passed` (`duplicateCheckPassedGuard`)
-- `field_value_constraint` (`fieldValueConstraintGuard`)
-
-Built-in evidence keys:
-
-- `approval_obtained` reads `evidence.approved === true`
-- `actor_has_permission` reads `required_role` and `roles`
-- `deadline_not_exceeded` reads `deadline_iso`
-- `duplicate_check_passed` reads `duplicate_found`
-- `field_value_constraint` reads `constraint` with operators `eq | gt | lt | in`
+- `confidence-threshold` (`ConfidenceThresholdGuard`)
+- `human-only` (`HumanOnlyGuard`)
+- `evidence-required` (`EvidenceRequiredGuard`)
+- `cooldown` (`CooldownGuard`)
 
 ## Hard and soft behavior
 

@@ -38,7 +38,9 @@ Use at least:
 
 ## Install packages individually
 
-If you do not want the SDK aggregate package, install only what you need:
+If you do not want the SDK aggregate package, install only what you need.
+
+Core primitives:
 
 - `@loop-engine/core` - domain model types and branded IDs
 - `@loop-engine/dsl` - `LoopBuilder`, parser, schema validation
@@ -50,10 +52,28 @@ If you do not want the SDK aggregate package, install only what you need:
 - `@loop-engine/observability` - metrics, timelines, replay
 - `@loop-engine/registry-client` - remote/local **loop catalog** client (package name retains `registry-client`)
 - `@loop-engine/ui-devtools` - React devtools components
+
+Stores:
+
 - `@loop-engine/adapter-memory` - in-memory `LoopStore`
 - `@loop-engine/adapter-postgres` - PostgreSQL `LoopStore` adapter
 - `@loop-engine/adapter-kafka` - Kafka `EventBus` adapter
 - `@loop-engine/adapter-http` - HTTP webhook `EventBus` adapter
+
+AI adapters:
+
+- `@loop-engine/adapter-anthropic` - Claude actor adapter
+- `@loop-engine/adapter-openai` - GPT actor adapter
+- `@loop-engine/adapter-gemini` - Gemini actor adapter
+- `@loop-engine/adapter-grok` - Grok actor adapter
+- `@loop-engine/adapter-perplexity` - Sonar grounded-search adapter
+
+Routing and framework adapters:
+
+- `@loop-engine/adapter-pagerduty` - PagerDuty approval routing
+- `@loop-engine/adapter-openclaw` - OpenClaw skill / approval bridge
+- `@loop-engine/adapter-vercel-ai` - Vercel AI SDK tool-call governance
+- `@loop-engine/adapter-commerce-gateway` - Commerce Gateway tool routing
 
 ## Runtime requirements
 

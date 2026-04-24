@@ -29,7 +29,7 @@ Builder methods implemented in source:
 - `.build(): LoopDefinition`
 
 <Callout variant="warning" title="Current builder surface">
-`guard()`, `signal()`, and `actor()` are not LoopBuilder methods in `v0.1.0`. Guards are added inside `.transition({ guards: [...] })`.
+`guard()`, `signal()`, and `actor()` are slated for `1.1.0+` as experimental builder methods and are not implemented in the current release. Guards are added today inside `.transition({ guards: [...] })`.
 </Callout>
 
 ## Fluent example
@@ -128,9 +128,9 @@ See `/docs/defining-loops/yaml-format` for the full format reference.
 ```ts
 import {
   parseLoopJson,
-  parseLoopFile,
-  serializeToJson,
-  serializeToYaml,
+  parseLoopYaml,
+  serializeLoopJson,
+  serializeLoopYaml,
   validateLoopDefinition
 } from "@loop-engine/dsl"
 ```
@@ -138,7 +138,18 @@ import {
 Validation signature:
 
 ```ts
-validateLoopDefinition(input: unknown): { valid: boolean; errors: string[]; definition?: LoopDefinition }
+validateLoopDefinition(definition: LoopDefinition): ValidationResult
+
+interface ValidationResult {
+  valid: boolean
+  errors: ValidationError[]
+}
+
+interface ValidationError {
+  code: string
+  message: string
+  path?: string
+}
 ```
 
 Validation failure example:
@@ -146,6 +157,12 @@ Validation failure example:
 ```ts
 {
   valid: false,
-  errors: ["initialState: initialState must exist in states"]
+  errors: [
+    {
+      code: "INVALID_INITIAL_STATE",
+      message: 'initialState "DRAFT" does not exist in states',
+      path: "initialState"
+    }
+  ]
 }
 ```

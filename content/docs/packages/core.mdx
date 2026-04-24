@@ -99,12 +99,11 @@ export interface ActorRef {
 export interface LoopInstance {
   loopId: LoopId
   aggregateId: AggregateId
-  orgId: string
   currentState: StateId
   status: LoopStatus
   startedAt: string
   closedAt?: string
-  correlationId: CorrelationId
+  correlationId?: CorrelationId
   metadata?: Record<string, unknown>
 }
 

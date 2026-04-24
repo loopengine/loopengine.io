@@ -38,18 +38,18 @@ QUERY STATE ---> READ INSTANCE + READ HISTORY
 
 ```ts
 import { createLoopSystem } from "@loop-engine/sdk";
-import { createPostgresStore, createSchema } from "@loop-engine/adapter-postgres";
-import { createMemoryLoopStorageAdapter } from "@loop-engine/adapter-memory";
+import { postgresStore, createSchema } from "@loop-engine/adapter-postgres";
+import { memoryStore } from "@loop-engine/adapter-memory";
 import { Pool } from "pg";
 
 // Version A: in-memory (default local dev)
-const memoryStore = createMemoryLoopStorageAdapter();
-const memoryRuntime = await createLoopSystem({ loops: [definition], store: memoryStore });
+const memStore = memoryStore();
+const memoryRuntime = await createLoopSystem({ loops: [definition], store: memStore });
 
 // Version B: postgres (durable)
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 await createSchema(pool);
-const pgStore = createPostgresStore(pool);
+const pgStore = postgresStore(pool);
 const postgresRuntime = await createLoopSystem({ loops: [definition], store: pgStore });
 
 // Loop definitions + transition calls are unchanged across adapters.
@@ -79,5 +79,5 @@ pnpm dev
 ```
 
 <Callout variant="info" title="Adapter pattern">
-The same contract pattern extends to `adapter-kafka` and `adapter-http`. Any backend implementing `LoopStorageAdapter` can be used.
+The same contract pattern extends to `adapter-kafka` and `adapter-http`. Any backend implementing `LoopStore` can be used.
 </Callout>

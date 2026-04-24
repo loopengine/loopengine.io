@@ -22,7 +22,7 @@ computeMetrics(
 ): LoopMetrics
 ```
 
-`LoopMetrics` includes `completionRate`, `avgDurationMs`, `medianDurationMs`, `p95DurationMs`, `aiActorRate`, `humanActorRate`, and `avgTransitionCount`.
+`LoopMetrics` includes `loopId`, `period`, `totalInstances`, `openInstances`, `closedInstances`, `errorInstances`, `avgDurationMs`, `medianDurationMs`, `p95DurationMs`, `completionRate`, `guardFailureRate`, `aiActorRate`, `humanActorRate`, and `avgTransitionCount`.
 
 ```ts
 import { computeMetrics } from "@loop-engine/observability"

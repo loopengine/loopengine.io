@@ -65,20 +65,19 @@ eventBus.subscribe(async (event) => console.log(event.type))
 await engine.start({
   loopId: 'expense.approval',
   aggregateId: aggregateId('EXP-2026-001'),
-  orgId: 'acme',
-  actor: { type: 'system', id: 'system:intake' }
+  actor: { type: 'automation', id: 'system:intake', serviceId: 'intake' }
 })
 
 await engine.transition({
   aggregateId: aggregateId('EXP-2026-001'),
   transitionId: transitionId('start_review'),
-  actor: { type: 'automation', id: 'system:router' }
+  actor: { type: 'automation', id: 'system:router', serviceId: 'router' }
 })
 
 await engine.transition({
   aggregateId: aggregateId('EXP-2026-001'),
   transitionId: transitionId('approve'),
-  actor: { type: 'human', id: 'manager@acme.com' },
+  actor: { type: 'human', id: 'manager@acme.com', userId: 'manager-1', displayName: 'Manager' },
   evidence: { comment: 'Approved for Q1 budget' }
 })
 
@@ -91,7 +90,7 @@ console.log(state?.status)       // CLOSED
 
 <Callout variant="info" title="Execution summary">
 - The loop moved through 3 states (`SUBMITTED -> UNDER_REVIEW -> APPROVED`)
-- 3 actor types were used (`system`, `automation`, `human`)
+- 2 actor types were used (`automation`, `human`)
 - Each successful transition emitted `loop.transition.executed`
 - Reaching a terminal state sets loop status to `CLOSED`
 </Callout>

@@ -39,7 +39,7 @@ start(options: StartOptions): Promise<LoopInstance>
 transition(options: TransitionOptions): Promise<TransitionResult>
 getState(aggregateId: AggregateId): Promise<LoopInstance | null>
 getHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
-listOpen(loopId: string, orgId: string): Promise<LoopInstance[]>
+listOpen(loopId: string): Promise<LoopInstance[]>
 registerSideEffectHandler(sideEffectId: string, handler: SideEffectHandler): void
 ```
 
@@ -71,7 +71,7 @@ interface LoopStore {
   saveInstance(instance: LoopInstance): Promise<void>
   getTransitionHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
   saveTransitionRecord(record: TransitionRecord): Promise<void>
-  listOpenInstances(loopId: LoopId, orgId: string): Promise<LoopInstance[]>
+  listOpenInstances(loopId: LoopId): Promise<LoopInstance[]>
 }
 
 interface EventBus {
