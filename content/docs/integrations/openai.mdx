@@ -16,6 +16,8 @@ section: Integrations
   <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
 </div>
 
+**Archetype:** [AI](/docs/concepts/integration-adapter#ai--llm-adapter) (Actor) — returns `AIAgentActor` + `AIActorDecision` for governed `engine.transition(...)` submission.
+
 ## What it does
 
 `@loop-engine/adapter-openai` uses OpenAI chat completions with `response_format: { type: "json_object" }` to produce structured actor decisions. It returns an `AIAgentActor` and `AIActorDecision` for runtime submission where policy guards are enforced.

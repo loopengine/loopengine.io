@@ -9,6 +9,8 @@ section: Integrations
   <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-kafka</span>
 </div>
 
+**Archetype:** [EventBus](/docs/concepts/integration-adapter#eventbus-adapter) — routes lifecycle events to Kafka topics, slotted at `options.eventBus`.
+
 ## What it does
 
 Publishes Loop Engine events (`LoopTransitionedEvent`, `LoopStartedEvent`, `LoopCompletedEvent`, `LearningSignalEmittedEvent`) to Kafka topics. Use this for audit pipelines, analytics, and cross-system event triggers.

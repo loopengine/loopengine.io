@@ -4,6 +4,8 @@ description: Local and HTTP adapters for the loop catalog — load LoopDefinitio
 section: Packages
 ---
 
+**Archetype:** [Registry](/docs/concepts/integration-adapter#registry-adapter) — implements `LoopRegistry`, slotted at `options.registry` on `LoopEngineOptions` / `createLoopSystem`.
+
 **Terminology:** In product docs we call this the **loop catalog** (versioned loop definitions for Loop Engine). The npm package remains `@loop-engine/registry-client` and TypeScript types still use the name `LoopRegistry`. That is **not** the [Commerce Gateway Registry](https://commercegateway.io/registry) (gateway discovery and verification).
 
 `@loop-engine/registry-client` provides local-first loop definition lookup with optional network adapters.

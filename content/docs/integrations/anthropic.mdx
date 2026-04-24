@@ -16,6 +16,8 @@ section: Integrations
   <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
 </div>
 
+**Archetype:** [AI](/docs/concepts/integration-adapter#ai--llm-adapter) (Actor) — returns `AIAgentActor` + `AIActorDecision` for governed `engine.transition(...)` submission.
+
 ## What it does
 
 `@loop-engine/adapter-anthropic` wraps the Anthropic Messages API as a Loop Engine AI actor. The adapter calls Claude with loop context, parses the structured response, and returns an `AIAgentActor` plus `AIActorDecision` ready for runtime submission. Guards run after the adapter returns — Claude cannot bypass them.
