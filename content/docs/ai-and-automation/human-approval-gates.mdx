@@ -28,16 +28,12 @@ If an AI actor attempts this transition, authorization returns `requiresApproval
 `AIActorConstraints` in `@loop-engine/actors`:
 
 ```ts
-{
-  canRecommendTransitions: true
-  canExecuteTransitions: boolean
-  requiresHumanApprovalFor: TransitionId[]
-  maxConsecutiveAITransitions: number
-  currentConsecutiveAITransitions?: number
+interface AIActorConstraints {
+  requiresHumanApprovalFor?: TransitionId[]
 }
 ```
 
-When limits are exceeded, `canActorExecuteTransition()` returns unauthorized with approval required.
+When an `ai-agent` actor attempts a transition whose ID appears in `requiresHumanApprovalFor`, `canActorExecuteTransition()` returns unauthorized with `requiresApproval: true`.
 
 ## Pending approval sequence
 
@@ -56,6 +52,6 @@ await engine.transition({
 })
 ```
 
-<Callout variant="important" title="Circuit breaker">
-`maxConsecutiveAITransitions` has no implicit default in source. You set and track it in your application by passing `currentConsecutiveAITransitions` to authorization checks.
+<Callout variant="important" title="Per-transition gating only">
+`AIActorConstraints` ships with a single field, `requiresHumanApprovalFor`. Loop Engine does not provide a built-in consecutive-AI-transition circuit breaker. Track that policy in your application and translate it into per-transition entries on this list (or into `allowedActors` exclusions).
 </Callout>
