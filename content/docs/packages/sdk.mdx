@@ -100,8 +100,7 @@ eventBus.subscribe(async (event) => {
 await engine.start({
   loopId: "expense.approval",
   aggregateId: aggregateId("EXP-1"),
-  actor: { type: "system", id: "system:intake" },
-  metadata: { orgId: "acme" }
+  actor: { type: "system", id: "system:intake" }
 })
 
 await engine.transition({

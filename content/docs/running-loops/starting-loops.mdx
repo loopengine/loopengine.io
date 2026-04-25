@@ -12,7 +12,6 @@ Signature (from runtime source):
 start(options: {
   loopId: string
   aggregateId: AggregateId
-  orgId: string
   actor: { type: "human" | "automation" | "ai-agent" | "system"; id: string }
   correlationId?: CorrelationId
   metadata?: Record<string, unknown>
@@ -38,7 +37,6 @@ import { aggregateId } from '@loop-engine/core'
 const instance = await engine.start({
   loopId: 'scm.procurement',
   aggregateId: aggregateId('PO-001'),
-  orgId: 'acme',
   actor: { type: 'system', id: 'system:intake' },
   metadata: { source: 'erp_sync' }
 })
@@ -50,7 +48,6 @@ const instance = await engine.start({
 {
   loopId,
   aggregateId,
-  orgId,
   currentState,
   status,       // OPEN | IN_PROGRESS | CLOSED | ERROR | CANCELLED
   startedAt,

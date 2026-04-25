@@ -48,7 +48,7 @@ canActorExecuteTransition(
 ): { authorized: boolean; requiresApproval: boolean; reason?: string }
 ```
 
-`canActorExecuteTransition()` validates `transition.allowedActors` and optional AI safety constraints (`requiresHumanApprovalFor`, `maxConsecutiveAITransitions`, and `canExecuteTransitions`).
+`canActorExecuteTransition()` validates `transition.allowedActors` and the optional `AIActorConstraints.requiresHumanApprovalFor` list for `ai-agent` actors.
 
 ```ts
 // @no-typecheck
