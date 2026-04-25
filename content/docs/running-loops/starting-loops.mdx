@@ -13,7 +13,7 @@ start(options: {
   loopId: string
   aggregateId: AggregateId
   orgId: string
-  actor: { type: "human" | "automation" | "ai-agent" | "webhook" | "system"; id: string }
+  actor: { type: "human" | "automation" | "ai-agent" | "system"; id: string }
   correlationId?: CorrelationId
   metadata?: Record<string, unknown>
 }): Promise<LoopInstance>
