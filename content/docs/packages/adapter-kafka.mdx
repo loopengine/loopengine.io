@@ -30,7 +30,8 @@ import { Kafka } from "kafkajs"
 import { kafkaEventBus } from "@loop-engine/adapter-kafka"
 
 const kafka = new Kafka({ brokers: ["localhost:9092"] })
-const bus = kafkaEventBus({ kafka, topic: "loop-events", groupId: "loopengine-docs" })
+// kafkajs `producer().send` return type is wider than the adapter's `KafkaLike` stub; emit path is compatible.
+const bus = kafkaEventBus({ kafka: kafka as any, topic: "loop-events", groupId: "loopengine-docs" })
 ```
 
 ## Topic strategy

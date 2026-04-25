@@ -37,15 +37,15 @@ PagerDuty fires a `SEV-2` database incident:
    POST https://your-app.example.com/hooks/pagerduty
    ```
 
-3. **Wire adapter**
+3. **Wire a `PagerDutyNotifier` (Events v2 key)**
 
    ```typescript
-   import { PagerDutyAdapter } from "@loop-engine/adapter-pagerduty";
+   import { PagerDutyNotifier } from "@loop-engine/adapter-pagerduty";
 
-   const pagerduty = new PagerDutyAdapter({
-     webhookSecret: process.env.PAGERDUTY_WEBHOOK_SECRET!,
-     incidentLoopId: "incident-response"
+   const notifier = new PagerDutyNotifier({
+     integrationKey: process.env.PAGERDUTY_INTEGRATION_KEY!
    });
+   void notifier;
    ```
 
 4. **Define incident loop**

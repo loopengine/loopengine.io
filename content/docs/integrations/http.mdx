@@ -11,7 +11,7 @@ section: Integrations
 
 ## What it does
 
-Implements `LoopStore` over HTTP. Any REST service that speaks the adapter protocol can back loop state storage. This is useful for integrating with existing services or remote storage planes.
+The `@1.0.0-rc.0` package exports `httpEventBus` — a webhook-oriented `EventBus` that can emit loop lifecycle events to an HTTP endpoint. (A generic `LoopStore` over HTTP is not in this release surface.)
 
 ## Adapter protocol
 
@@ -30,23 +30,16 @@ Expected backend endpoints:
    npm install @loop-engine/adapter-http
    ```
 
-2. **Create adapter**
+2. **Create an `httpEventBus` for outbound webhook emission**
 
    ```typescript
-   import { HttpAdapter } from "@loop-engine/adapter-http";
+   import { httpEventBus } from "@loop-engine/adapter-http";
 
-   const storage = new HttpAdapter({
-     baseUrl: "https://storage-gateway.internal"
+   const events = httpEventBus({
+     webhookUrl: "https://observability.internal/loop-engine/events"
    });
-   ```
-
-3. **Pass into runtime**
-
-   ```typescript
-   const loopSystem = await createLoopSystem({
-     loops: [procurementLoop],
-     storage
-   });
+   // Wire `events` with your `LoopEngine` / `InMemoryEventBus` composition in application code.
+   void events;
    ```
 
 ## Note

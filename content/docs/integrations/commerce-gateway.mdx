@@ -42,42 +42,33 @@ SCM Procurement loop at `ANALYZING`:
    npm install @loop-engine/adapter-commerce-gateway
    ```
 
-2. **Create adapter**
+2. **Create a `CommerceGatewayClient`**
 
    ```typescript
-   import { CommerceGatewayAdapter } from "@loop-engine/adapter-commerce-gateway";
+   import { CommerceGatewayClient } from "@loop-engine/adapter-commerce-gateway";
 
-   const gateway = new CommerceGatewayAdapter({
-     gatewayUrl: process.env.COMMERCE_GATEWAY_URL!,
-     apiKey: process.env.COMMERCE_GATEWAY_API_KEY!,
-     timeout: 5000
+   const gateway = new CommerceGatewayClient({
+     baseUrl: process.env.COMMERCE_GATEWAY_URL!,
+     apiKey: process.env.COMMERCE_GATEWAY_API_KEY!
    });
    ```
 
-3. **Use inside actor submission**
+3. **Query commerce context (typed client surface)**
 
    ```typescript
-   const commerceEvidence = await gateway.query({
-     query: "top suppliers for SKU-4892 and current lead times"
-   });
-
-   const { actor, decision } = await adapter.createSubmission({
-     loopId: "scm-procurement",
-     loopName: "SCM Procurement",
-     currentState: "analyzing",
-     availableSignals: [{ signalId: "submit_recommendation", name: "Submit Recommendation", allowedActors: ["ai-agent"] }],
-     instruction: "Recommend supplier and order quantity.",
-     evidence: commerceEvidence
-   });
+   // @no-typecheck
+   // Illustrative: fetch inventory + price before you attach evidence to a governed transition
+   const inv = await gateway.getInventory("SKU-4892");
+   const price = await gateway.getCurrentPrice("SKU-4892");
+   void { inv, price };
    ```
 
 ## Configuration reference
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `gatewayUrl` | `string` | required | Commerce Gateway endpoint |
+| `baseUrl` | `string` | required | Commerce Gateway base URL |
 | `apiKey` | `string` | required | Commerce Gateway API key |
-| `timeout` | `number` | `5000` | Request timeout in milliseconds |
 
 ## Troubleshooting
 

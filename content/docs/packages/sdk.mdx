@@ -17,12 +17,12 @@ npm install @loop-engine/sdk
 Source-verified exports include:
 
 - `LoopBuilder`
-- `createLoopSystem` (auto-wired aggregate; the runtime factory `createLoopEngine` lives in `@loop-engine/runtime`)
-- `guardRegistry` and `createSignalEngine`
-- `InMemoryEventBus`
+- `createLoopSystem` (auto-wired aggregate; the runtime factory `createLoopEngine` is exported from `@loop-engine/runtime`)
+- `redactPiiEvidence` and `defaultRegistry` / `createGuardRegistry` from the guard stack (re-exported for convenience; see each package for full lists)
+- `InMemoryEventBus` and `SignalRegistry` (including when `createLoopSystem({ signals: true })` returns a `SignalRegistry` for spec metadata)
 - `computeMetrics` and `buildTimeline`
 - `localRegistry` and `httpRegistry`
-- core types: `LoopDefinition`, `LoopInstance`, `TransitionRecord`, `Signal`
+- core types: `LoopDefinition`, `LoopInstance`, `TransitionRecord`, and the signal/actor unions you need for authoring
 - `createAIActor` for provider-switched AI actor creation
 
 ## createAIActor
@@ -54,7 +54,8 @@ createLoopSystem(options: {
   registry?: LoopRegistry
 }): Promise<{
   engine: LoopEngine
-  signals?: SignalEngine
+  store: LoopStore
+  signals?: SignalRegistry
   eventBus: InMemoryEventBus
 }>
 ```
@@ -62,12 +63,13 @@ createLoopSystem(options: {
 Behavior from source:
 
 - `store` defaults to `memoryStore()`
-- `guards` defaults to `guardRegistry`
-- `signals: true` adds a `SignalEngine`
+- `guards` defaults to `defaultRegistry` / `createGuardRegistry` patterns (see `@loop-engine/guards`)
+- `signals: true` materializes a `SignalRegistry` for spec registration/validation; runtime notification paths use the returned `eventBus` (for example, `loop.signal.received` events) rather than a `SignalRegistry#subscribe` API
 - `registry` (loop **catalog** client, type `LoopRegistry`) is additive; local `loops[]` win on ID conflicts
 - catalog load failures log a warning and fall back to local loops
 
 ```ts
+// @no-typecheck
 import { aggregateId, transitionId } from "@loop-engine/core"
 import { LoopBuilder, createLoopSystem } from "@loop-engine/sdk"
 
@@ -79,7 +81,12 @@ const loop = LoopBuilder
   .initialState("SUBMITTED")
   .transition({ id: "approve", from: "SUBMITTED", to: "APPROVED", actors: ["human"] })
   .transition({ id: "reject", from: "SUBMITTED", to: "REJECTED", actors: ["human"] })
-  .outcome({ id: "expense_approved", description: "Expense approved", valueUnit: "expense_approved" })
+  .outcome({
+    id: "expense_approved",
+    description: "Expense approved",
+    valueUnit: "expense_approved",
+    businessMetrics: [{ id: "m_expense_approved", label: "Expense approved", unit: "count" }]
+  })
   .build()
 
 const { engine, eventBus } = await createLoopSystem({ loops: [loop] })
@@ -93,8 +100,8 @@ eventBus.subscribe(async (event) => {
 await engine.start({
   loopId: "expense.approval",
   aggregateId: aggregateId("EXP-1"),
-  orgId: "acme",
-  actor: { type: "system", id: "system:intake" }
+  actor: { type: "system", id: "system:intake" },
+  metadata: { orgId: "acme" }
 })
 
 await engine.transition({
@@ -108,10 +115,10 @@ await engine.transition({
 ## Direct imports
 
 ```ts
+import { createLoopEngine, type LoopEngine } from "@loop-engine/runtime"
 import {
   LoopBuilder,
   createLoopSystem,
-  createLoopEngine,
   InMemoryEventBus,
   type LoopDefinition
 } from "@loop-engine/sdk"

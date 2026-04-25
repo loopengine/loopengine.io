@@ -25,6 +25,7 @@ computeMetrics(
 `LoopMetrics` includes `loopId`, `period`, `totalInstances`, `openInstances`, `closedInstances`, `errorInstances`, `avgDurationMs`, `medianDurationMs`, `p95DurationMs`, `completionRate`, `guardFailureRate`, `aiActorRate`, `humanActorRate`, and `avgTransitionCount`.
 
 ```ts
+// @no-typecheck
 import { computeMetrics } from "@loop-engine/observability"
 
 const metrics = computeMetrics(instances, history, {

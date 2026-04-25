@@ -46,6 +46,7 @@ See [The Actor Model](/docs/concepts/actor-model) for full details.
 ## 4) Start and run the loop
 
 ```ts
+// @no-typecheck
 import { aggregateId, transitionId } from '@loop-engine/core'
 import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
 
@@ -87,19 +88,21 @@ const approval = LoopBuilder
   .outcome({
     id: 'expense_approved',
     description: 'Expense report approved',
-    valueUnit: 'expense_approved'
+    valueUnit: 'expense_approved',
+    businessMetrics: [
+      { id: 'm_expense_approved', label: 'Expense report approved', unit: 'count' }
+    ]
   })
   .build()
 
 const aggregate = aggregateId('EXP-2026-001')
-const { engine } = createLoopSystem({ loops: [approval] })
+const { engine } = await createLoopSystem({ loops: [approval] })
 
 await engine.start({
   loopId: 'expense.approval',
   aggregateId: aggregate,
-  orgId: 'acme',
   actor: { type: 'system', id: 'system:intake' }, // StartOptions.actor
-  metadata: { source: 'expense_form' } // optional StartOptions.metadata
+  metadata: { orgId: 'acme', source: 'expense_form' } // orgId, if you need it, is application metadata
 })
 
 const reviewResult = await engine.transition({

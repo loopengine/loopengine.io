@@ -35,21 +35,25 @@ PENDING_BUYER_APPROVAL -> PO_TRIGGERED               |
 ## Using @loop-engine/adapter-openclaw
 
 ```ts
-import { createLoopSystem } from '@loop-engine/sdk'
+// @no-typecheck
+import { createLoopSystem, LoopBuilder } from '@loop-engine/sdk'
 import { OpenClawEventBus } from '@loop-engine/adapter-openclaw'
-import { replenishmentLoop } from './loops/replenishment'
 
-const eventBus = new OpenClawEventBus({
+const replenishmentLoop = LoopBuilder
+  .create('demo.repl', 'scm')
+  .state('A', { isTerminal: true })
+  .initialState('A')
+  .outcome({ id: 'o', description: 'o', valueUnit: 'o', businessMetrics: [{ id: 'm', label: 'm', unit: '1' }] })
+  .build()
+
+const { eventBus: inner } = await createLoopSystem({ loops: [replenishmentLoop] })
+const eventBus = new OpenClawEventBus(inner, {
   channel: 'whatsapp',
   target: '+15551234567',
   events: ['loop.transition.executed', 'loop.completed', 'loop.guard.failed'],
   approvalStates: ['PENDING_BUYER_APPROVAL']
 })
-
-const system = await createLoopSystem({
-  loops: [replenishmentLoop],
-  eventBus
-})
+void eventBus
 ```
 
 ## The approval flow

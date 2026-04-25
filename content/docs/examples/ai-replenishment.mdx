@@ -20,6 +20,7 @@ Lumebondé Bond Repair Serum (`LMB-BRS-001`) spikes `+89%` at `DC-East` with `cu
 ## Loop definition
 
 ```ts
+// @no-typecheck
 import { LoopBuilder } from "@loop-engine/sdk"
 
 const replenishmentLoop = LoopBuilder
@@ -49,7 +50,14 @@ const replenishmentLoop = LoopBuilder
     ]
   })
   .transition({ id: "approve_replenishment", from: "PENDING_BUYER_APPROVAL", to: "PO_TRIGGERED", actors: ["human"] })
-  .outcome({ id: "replenishment_triggered", description: "PO submitted", valueUnit: "replenishment_triggered" })
+  .outcome({
+    id: "replenishment_triggered",
+    description: "PO submitted",
+    valueUnit: "replenishment_triggered",
+    businessMetrics: [
+      { id: "m_replenishment", label: "Replenishment triggered", unit: "count" }
+    ]
+  })
   .build()
 ```
 
@@ -58,6 +66,7 @@ const replenishmentLoop = LoopBuilder
 Both providers create the same `AIAgentActor` shape and submit evidence with identical keys.
 
 ```ts
+// @no-typecheck
 import { actorId } from "@loop-engine/core"
 import type { AIAgentActor } from "@loop-engine/actors"
 

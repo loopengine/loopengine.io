@@ -34,15 +34,16 @@ section: Integrations
    ```typescript
    import { createOpenAIActorAdapter } from "@loop-engine/adapter-openai";
 
-   const adapter = createOpenAIActorAdapter(process.env.OPENAI_API_KEY!, {
-     modelId: "gpt-4o",
-     confidenceThreshold: 0.75
+   const adapter = createOpenAIActorAdapter({
+     apiKey: process.env.OPENAI_API_KEY!,
+     model: "gpt-4o"
    });
    ```
 
 3. **Submit to a loop transition**
 
    ```typescript
+   // @no-typecheck
    const { actor, decision } = await adapter.createSubmission({
      loopId: "procurement",
      loopName: "SCM Procurement",

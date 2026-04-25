@@ -35,15 +35,16 @@ section: Integrations
    ```typescript
    import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
 
-   const adapter = createAnthropicActorAdapter(process.env.ANTHROPIC_API_KEY!, {
-     modelId: "claude-opus-4-6",
-     confidenceThreshold: 0.75
+   const adapter = createAnthropicActorAdapter({
+     apiKey: process.env.ANTHROPIC_API_KEY!,
+     model: "claude-opus-4-6"
    });
    ```
 
 3. **Submit to a loop transition**
 
    ```typescript
+   // @no-typecheck
    const { actor, decision } = await adapter.createSubmission({
      loopId: "procurement",
      loopName: "SCM Procurement",

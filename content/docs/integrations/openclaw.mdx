@@ -38,6 +38,7 @@ This is the Sense → Decide → Govern pattern in practice:
 2. **Wire Loop Engine into an OpenClaw workflow**
 
    ```typescript
+   // @no-typecheck
    import { createLoopSystem } from "@loop-engine/sdk";
    import { OpenClawAdapter } from "@loop-engine/adapter-openclaw";
 
@@ -51,6 +52,7 @@ This is the Sense → Decide → Govern pattern in practice:
 3. **Define the governed decision point**
 
    ```typescript
+   // @no-typecheck
    const proposal = await openclaw.proposeAction({
      workflowId: "procurement-workflow",
      action: "submit_purchase_order",

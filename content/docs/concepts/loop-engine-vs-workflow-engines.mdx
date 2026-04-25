@@ -63,7 +63,7 @@ type TemporalActivityInput = {
 };
 
 export async function runApprovedOperation(input: TemporalActivityInput) {
-  const { engine } = createLoopSystem({ loops: [/* registered loop definitions */] });
+  const { engine } = await createLoopSystem({ loops: [/* registered loop definitions */] });
 
   const decision = await engine.transition({
     aggregateId: input.aggregateId as never,

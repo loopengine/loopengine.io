@@ -71,7 +71,10 @@ const approval = LoopBuilder
     id: "expense_approved",
     description: "Expense approved",
     valueUnit: "expense_approved",
-    measurable: true
+    measurable: true,
+    businessMetrics: [
+      { id: "m_expense_approved", label: "Expense approved", unit: "count" }
+    ]
   })
   .build()
 ```

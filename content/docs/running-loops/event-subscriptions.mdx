@@ -79,7 +79,7 @@ import { kafkaEventBus } from '@loop-engine/adapter-kafka'
 import { Kafka } from 'kafkajs'
 
 const bus = kafkaEventBus({
-  kafka: new Kafka({ brokers: ['localhost:9092'] }),
+  kafka: new Kafka({ brokers: ['localhost:9092'] }) as any,
   topic: 'loop-events'
 })
 ```

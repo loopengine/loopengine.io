@@ -51,6 +51,7 @@ canActorExecuteTransition(
 `canActorExecuteTransition()` validates `transition.allowedActors` and optional AI safety constraints (`requiresHumanApprovalFor`, `maxConsecutiveAITransitions`, and `canExecuteTransitions`).
 
 ```ts
+// @no-typecheck
 import { canActorExecuteTransition } from "@loop-engine/actors"
 
 const auth = canActorExecuteTransition(agentActor, transition)
@@ -62,22 +63,27 @@ if (!auth.authorized) {
 ## Evidence building
 
 ```ts
-buildActorEvidence(actor: Actor, baseEvidence: Evidence): Evidence
+buildAIActorEvidence(params: {
+  modelId: string
+  provider: string
+  reasoning: string
+  confidence: number
+  dataPoints?: Record<string, unknown>
+  rawResponse?: unknown
+  prompt?: string
+}): Promise<AIAgentSubmission["evidence"] & { modelId: string; provider: string; promptHash?: string }>
 ```
 
-The helper always adds:
-
-- `actor_type`
-- `actor_id`
-
-For `ai-agent` it also adds `ai_agent_id` and preserves `ai_confidence` and `ai_reasoning` when present.
+Use `buildAIActorEvidence` when you have model metadata and need structured, attributable AI evidence to attach to a transition.
 
 ```ts
-import { buildActorEvidence } from "@loop-engine/actors"
+import { buildAIActorEvidence } from "@loop-engine/actors"
 
-const evidence = buildActorEvidence(aiActor, {
-  ai_confidence: 0.82,
-  ai_reasoning: "Demand spike at DC-East",
-  recommended_qty: 500
+const evidence = await buildAIActorEvidence({
+  modelId: "gpt-4o",
+  provider: "openai",
+  reasoning: "Demand spike at DC-East",
+  confidence: 0.82,
+  dataPoints: { recommended_qty: 500 }
 })
 ```

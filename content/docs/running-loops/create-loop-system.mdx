@@ -17,20 +17,22 @@ createLoopSystem(options: {
   registry?: LoopRegistry
 }): Promise<{
   engine: LoopEngine
+  store: LoopStore
   eventBus: InMemoryEventBus
-  signals?: SignalEngine
+  signals?: SignalRegistry
 }>
 ```
 
 - `loops` is required and becomes the in-memory set of definitions.
 - `store` defaults to `memoryStore()`.
 - `guards` defaults to `defaultRegistry` from `@loop-engine/guards`.
-- `signals: true` adds a default `SignalEngine`.
+- `signals: true` materializes a `SignalRegistry` for spec registration/validation; use the returned `eventBus` to observe `loop.*` and `loop.signal.received` events in this release.
 - `registry` is the optional **loop catalog** client (`LoopRegistry`); if `registry.list()` fails, startup falls back to `loops[]`.
 
 ## Pattern 1: zero-config
 
 ```ts
+// @no-typecheck
 import { createLoopSystem } from '@loop-engine/sdk'
 
 const { engine, eventBus } = await createLoopSystem({ loops: [definition] })
@@ -39,6 +41,7 @@ const { engine, eventBus } = await createLoopSystem({ loops: [definition] })
 ## Pattern 2: custom store (PostgreSQL adapter)
 
 ```ts
+// @no-typecheck
 import { createLoopSystem } from '@loop-engine/sdk'
 import { postgresStore } from '@loop-engine/adapter-postgres'
 import { Pool } from 'pg'
@@ -52,15 +55,23 @@ const { engine } = await createLoopSystem({
 
 ## Pattern 3: signals enabled
 
+`SignalRegistry` in `1.0.0-rc.0` is for spec registration/validation. React to live signal flow through the returned `eventBus` (for example, `loop.signal.received`).
+
 ```ts
+// @no-typecheck
 import { createLoopSystem } from '@loop-engine/sdk'
 
-const { signals } = await createLoopSystem({
+const { signals, eventBus } = await createLoopSystem({
   loops: [definition],
   signals: true
 })
 
-signals?.subscribe((signal) => {
-  console.log(signal.type, signal.subject)
+// Optional: register or inspect specs on `signals` (instance of `SignalRegistry`).
+void signals?.list()
+
+eventBus.subscribe(async (event) => {
+  if (event.type === "loop.signal.received") {
+    console.log(event.signal, event.aggregateId)
+  }
 })
 ```
