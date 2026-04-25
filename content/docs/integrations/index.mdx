@@ -14,35 +14,45 @@ Use any major LLM as a governed actor. Provider actor adapters produce the same 
   <IntegrationCard
     name="Anthropic / Claude"
     subtext="claude-opus-4-6, claude-sonnet-4-6"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     logoPath="/logos/anthropic.svg"
     href="/docs/integrations/anthropic"
   />
   <IntegrationCard
     name="OpenAI"
     subtext="gpt-4o, o-series models"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     logoPath="/logos/openai.svg"
     href="/docs/integrations/openai"
   />
   <IntegrationCard
     name="Grok (xAI)"
     subtext="grok-3, grok-3-mini via xAI API"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     logoPath="/logos/xai.svg"
     href="/docs/integrations/grok"
   />
   <IntegrationCard
     name="Google Gemini"
     subtext="gemini-1.5-pro, gemini-2.0-flash"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     logoPath="/logos/gemini.svg"
     href="/docs/integrations/gemini"
   />
   <IntegrationCard
     name="Perplexity Sonar"
     subtext="sonar, sonar-pro, sonar-reasoning — citations + domain filters"
-    status="rc-draft"
+    tier="official"
+    status="rc"
+    attributes={["built-in"]}
     logoPath="/logos/perplexity.svg"
     href="/docs/integrations/perplexity"
   />
@@ -56,14 +66,18 @@ Loop Engine governs the decision boundary inside agentic workflows — AI reason
   <IntegrationCard
     name="OpenClaw"
     subtext="Agentic commerce platform — Loop Engine governs OpenClaw workflows"
-    status="featured"
+    tier="official"
+    status="stable"
+    attributes={["featured"]}
     logoPath="/logos/openclaw.svg"
     href="/docs/integrations/openclaw"
   />
   <IntegrationCard
     name="Vercel AI SDK"
     subtext="Stream AI responses inside governed loop transitions"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     logoPath="/logos/vercel.svg"
     href="/docs/integrations/vercel-ai-sdk"
   />
@@ -77,25 +91,31 @@ Loop Engine's storage layer is an adapter interface. Swap backends without chang
   <IntegrationCard
     name="In-Memory"
     subtext="Zero-config store for development and testing"
-    status="built-in"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     href="/docs/packages/adapter-memory"
   />
   <IntegrationCard
     name="Postgres"
     subtext="Persist loop state and events to PostgreSQL"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     href="/docs/integrations/postgres"
   />
   <IntegrationCard
     name="Kafka"
     subtext="Event streaming — publish loop events to Kafka topics"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     href="/docs/integrations/kafka"
   />
   <IntegrationCard
     name="HTTP"
     subtext="Generic HTTP adapter — connect any REST backend"
-    status="community"
+    tier="community"
     href="/docs/integrations/http"
   />
 </div>
@@ -108,14 +128,18 @@ Loop Engine emits structured events at every transition. Wire them into your obs
   <IntegrationCard
     name="PagerDuty"
     subtext="Incident-triggered loops — PagerDuty alerts start governed workflows"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     logoPath="/logos/pagerduty.svg"
     href="/docs/integrations/pagerduty"
   />
   <IntegrationCard
     name="Governed incident (Perplexity + PagerDuty)"
     subtext="Sonar research → Loop FSM → PagerDuty with audit_ref in custom_details"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     logoPath="/logos/perplexity.svg"
     href="/docs/integrations/perplexity-pagerduty"
   />
@@ -129,7 +153,9 @@ Connect Loop Engine to commerce platforms and LLM commerce data layers.
   <IntegrationCard
     name="Commerce Gateway"
     subtext="LLM-accessible commerce data for AI actors inside procurement loops"
-    status="certified"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
     href="/docs/integrations/commerce-gateway"
   />
 </div>
