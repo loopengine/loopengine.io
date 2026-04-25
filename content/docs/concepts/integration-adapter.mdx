@@ -1,0 +1,109 @@
+---
+title: IntegrationAdapter Archetype
+description: A package that implements a pluggable runtime interface and slots into LoopEngineOptions. Four canonical archetypes — Store, Registry, AI, EventBus.
+section: Core Concepts
+---
+
+## What is an IntegrationAdapter?
+
+An **IntegrationAdapter** is a package that implements one of Loop Engine's pluggable interfaces and slots into `LoopEngineOptions` (or the matching registry-client option). Every adapter preserves the same governance model — guards enforced, actors attributed, audit trail intact — and is swappable without changing loop definitions or business logic.
+
+At rc.0 there are four canonical archetypes. All four share the same shape:
+
+1. An **interface contract** exported from a runtime package.
+2. An **options slot** on `LoopEngineOptions` (or `createLoopSystem` options) that accepts an implementation of that interface.
+3. One or more **shipped adapters** that fulfill the interface.
+4. A **"build your own"** path if the shipped adapters don't cover your backend.
+
+```ts
+interface LoopEngineOptions {
+  registry: LoopRegistry   // Registry archetype
+  store: LoopStore         // Store archetype
+  eventBus?: EventBus      // EventBus archetype
+  guardEvaluator?: GuardEvaluator
+  clock?: () => string
+}
+```
+
+The AI archetype sits slightly outside this shape — AI adapters are invoked from transition execution paths rather than slotted into `LoopEngineOptions` directly — but follows the same "interface + shipped implementations + build-your-own" pattern.
+
+## The four archetypes
+
+### Store adapter
+
+| | |
+|---|---|
+| Interface | `LoopStore` from `@loop-engine/runtime` |
+| Slot | `options.store` |
+| Shipped | `memoryStore()` from `@loop-engine/adapter-memory`; PlanetScale store from `betterdata-loops` (proprietary) |
+| Docs | [`@loop-engine/adapter-memory`](/docs/packages/adapter-memory) · [In-Memory integration](/docs/integrations/memory) · [Postgres integration](/docs/integrations/postgres) |
+
+Store adapters persist loop instances and transition history. Swap backends without changing loop definitions.
+
+### Registry adapter
+
+| | |
+|---|---|
+| Interface | `LoopRegistry` from `@loop-engine/registry-client` |
+| Slot | `options.registry` |
+| Shipped | `localRegistry`, `httpRegistry`, `betterDataRegistry` (from `@loop-engine/registry-client` and its `/betterdata` subpath) |
+| Docs | [`@loop-engine/registry-client`](/docs/packages/registry-client) |
+
+Registry adapters load `LoopDefinition` objects. Use `localRegistry` for in-process registration, `httpRegistry` for remote JSON catalogs, or `betterDataRegistry` for the Better Data catalog API.
+
+### AI / LLM adapter
+
+| | |
+|---|---|
+| Interface | LLM-step contract — `AIActorAdapter.createSubmission(...)` returning `{ actor: AIAgentActor, decision: AIActorDecision }`; tool adapters implement `ToolAdapter.invoke(...)` |
+| Slot | Invoked from transition execution paths (not a `LoopEngineOptions` field) |
+| Shipped | `@loop-engine/adapter-anthropic`, `@loop-engine/adapter-openai`, `@loop-engine/adapter-gemini`, `@loop-engine/adapter-grok`, `@loop-engine/adapter-perplexity` (tool/retrieval) |
+| Docs | [AI as Actor](/docs/ai-and-automation/ai-as-actor) · [`createAIActor`](/docs/packages/sdk#createaiactor) · per-provider integration pages |
+
+Actor adapters return a structured decision that the runtime submits through `engine.transition(...)`. Guards evaluate after submission — an AI actor cannot bypass policy.
+
+### EventBus adapter
+
+| | |
+|---|---|
+| Interface | `EventBus` from `@loop-engine/runtime` |
+| Slot | `options.eventBus` |
+| Shipped | `InMemoryEventBus` from `@loop-engine/events`; `OpenClawEventBus` from `@loop-engine/adapter-openclaw`; Kafka adapter (`@loop-engine/adapter-kafka`) |
+| Docs | [Event subscriptions](/docs/running-loops/event-subscriptions) · [Events package](/docs/packages/events) |
+
+EventBus adapters route lifecycle events (`loop.started`, `loop.transition.executed`, `loop.completed`, ...) to downstream consumers. The in-memory bus is the default; swap it for Kafka, OpenClaw, or a custom sink.
+
+## Choosing between adapters
+
+| Situation | Store | Registry | EventBus |
+|---|---|---|---|
+| Local dev, tests | `memoryStore()` | `localRegistry` | `InMemoryEventBus` (default) |
+| Single-service prod | `PostgresAdapter` | `localRegistry` (definitions in code) | `InMemoryEventBus` or Kafka |
+| Multi-service catalog | `PostgresAdapter` | `httpRegistry` or `betterDataRegistry` | Kafka or OpenClaw |
+| Audit streaming | — | — | Kafka, OpenClaw |
+
+For AI adapters, switch on the provider API you have access to and whether you need tool-style grounding (Perplexity) or open-ended reasoning (Anthropic/OpenAI/Gemini/Grok).
+
+## Cross-archetype patterns
+
+- **Zero-config dev**: `memoryStore()` + `localRegistry` + default `InMemoryEventBus` — no persistence, no network, fast feedback loop.
+- **Production single-service**: Postgres store + local registry + Kafka event bus — durable state, definitions live in code, events stream to analytics.
+- **Multi-tenant catalog**: Postgres store + `betterDataRegistry` + Kafka — definitions centrally managed, per-tenant loops, events replayable.
+- **Governed AI workflow**: any Store + any Registry + any AI adapter + Kafka or OpenClaw EventBus — AI decisions become governed transitions with full audit trail.
+
+## Build your own
+
+Each archetype's interface is documented as the single-point-of-truth contract:
+
+- [`LoopStore` interface](/docs/running-loops/adapters#loopstore-interface)
+- [`LoopRegistry` and shipped registries](/docs/packages/registry-client)
+- [`EventBus` and event subscription model](/docs/running-loops/event-subscriptions)
+- AI actor adapter shape — see any of the provider integration pages; the per-provider `createXActorAdapter(...)` + `createSubmission(...)` contract is uniform across Anthropic, OpenAI, Gemini, and Grok.
+
+Implement the interface, pass your implementation into `createLoopSystem` or construct a `LoopEngine` directly with `createLoopEngine`.
+
+## Related
+
+- [Adapters reference](/docs/running-loops/adapters) — interface signatures with code examples
+- [Integrations index](/docs/integrations) — every shipped adapter, grouped by archetype
+- [`createLoopSystem`](/docs/running-loops/create-loop-system) — the factory that wires options into a running engine

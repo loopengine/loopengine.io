@@ -17,6 +17,8 @@ section: Integrations
   <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
 </div>
 
+**Archetype:** [AI](/docs/concepts/integration-adapter#ai--llm-adapter) (Actor) — returns `AIAgentActor` + `AIActorDecision` for governed `engine.transition(...)` submission.
+
 ## What it does
 
 `@loop-engine/adapter-gemini` wraps Gemini API calls as Loop Engine actor submissions. It returns structured decisions for runtime guard enforcement, preserving attribution and evidence on every transition.
@@ -51,9 +53,9 @@ section: Integrations
      evidence: { demandForecast: 0.93, currentStock: 36 }
    });
 
-   await loopSystem.transition({
+   await loopSystem.engine.transition({
      aggregateId: "procurement-1",
-     signal: decision.signalId,
+     transitionId: decision.transitionId,
      actor,
      evidence: decision
    });

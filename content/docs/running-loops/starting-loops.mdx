@@ -21,11 +21,11 @@ start(options: {
 ## Behavior
 
 - Throws if `loopId` is not registered.
-- Throws if an open instance already exists for the same `aggregateId`.
+- Throws if an active instance already exists for the same `aggregateId` (source check: `status === "active"`).
 - Creates instance with:
   - `currentState = definition.initialState`
-  - `status = "OPEN"`
-  - `startedAt` timestamp
+  - `status = "active"`
+  - `startedAt` timestamp (also sets `updatedAt` to the same value)
   - generated correlation ID when omitted
 - Emits `loop.started`.
 
@@ -49,10 +49,11 @@ const instance = await engine.start({
   loopId,
   aggregateId,
   currentState,
-  status,       // OPEN | IN_PROGRESS | CLOSED | ERROR | CANCELLED
+  status,            // pending | active | completed | failed | cancelled | suspended
   startedAt,
-  closedAt?,
-  correlationId,
+  updatedAt,
+  correlationId?,
+  completedAt?,
   metadata?
 }
 ```
