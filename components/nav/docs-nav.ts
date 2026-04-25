@@ -24,6 +24,7 @@ export const docsSections: DocsNavSection[] = [
     label: "Core Concepts",
     items: [
       { title: "What is a Loop?", href: "/docs/concepts/what-is-a-loop" },
+      { title: "IntegrationAdapter", href: "/docs/concepts/integration-adapter" },
       { title: "The Actor Model", href: "/docs/concepts/actor-model" },
       { title: "Guards and Policy", href: "/docs/concepts/guards-and-policy" },
       { title: "Signals", href: "/docs/concepts/signals" },
