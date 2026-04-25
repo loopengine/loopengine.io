@@ -1,15 +1,15 @@
 ---
-title: "@loop-engine/dsl"
+title: "@loop-engine/loop-definition"
 description: LoopBuilder plus YAML and JSON parsing produce validated LoopDefinition objects from fluent or file-based authoring.
 section: Packages
 ---
 
-`@loop-engine/dsl` turns fluent TypeScript or YAML/JSON documents into validated `LoopDefinition` contracts.
+`@loop-engine/loop-definition` turns fluent TypeScript or YAML/JSON documents into validated `LoopDefinition` contracts.
 
 ## Install
 
 ```bash
-npm install @loop-engine/dsl
+npm install @loop-engine/loop-definition
 ```
 
 ## LoopBuilder
@@ -35,7 +35,7 @@ Builder methods implemented in source:
 ## Fluent example
 
 ```ts
-import { LoopBuilder } from "@loop-engine/dsl"
+import { LoopBuilder } from "@loop-engine/loop-definition"
 
 const approval = LoopBuilder
   .create("expense.approval", "finance")
@@ -79,7 +79,7 @@ const approval = LoopBuilder
 ## YAML parsing
 
 ```ts
-import { parseLoopYaml } from "@loop-engine/dsl"
+import { parseLoopYaml } from "@loop-engine/loop-definition"
 
 const definition = parseLoopYaml(yamlString)
 ```
@@ -132,7 +132,7 @@ import {
   serializeLoopJson,
   serializeLoopYaml,
   validateLoopDefinition
-} from "@loop-engine/dsl"
+} from "@loop-engine/loop-definition"
 ```
 
 Validation signature:
