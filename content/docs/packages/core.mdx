@@ -89,11 +89,10 @@ export interface LoopDefinition {
 
 ```ts
 export interface ActorRef {
-  type: ActorType
   id: ActorId
+  type: ActorType
   displayName?: string
-  sessionId?: string
-  agentId?: string
+  metadata?: Record<string, unknown>
 }
 
 export interface LoopInstance {
