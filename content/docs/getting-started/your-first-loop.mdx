@@ -102,7 +102,7 @@ await engine.start({
   loopId: 'expense.approval',
   aggregateId: aggregate,
   actor: { type: 'system', id: 'system:intake' }, // StartOptions.actor
-  metadata: { orgId: 'acme', source: 'expense_form' } // orgId, if you need it, is application metadata
+  metadata: { source: 'expense_form' } // optional application correlation (neutral keys only)
 })
 
 const reviewResult = await engine.transition({
