@@ -13,7 +13,7 @@ getInstance(aggregateId: AggregateId): Promise<LoopInstance | null>
 saveInstance(instance: LoopInstance): Promise<void>
 getTransitionHistory(aggregateId: AggregateId): Promise<TransitionRecord[]>
 saveTransitionRecord(record: TransitionRecord): Promise<void>
-listOpenInstances(loopId: LoopId, orgId: string): Promise<LoopInstance[]>
+listOpenInstances(loopId: LoopId): Promise<LoopInstance[]>
 ```
 
 ## `@loop-engine/adapter-memory`
@@ -28,21 +28,28 @@ Data resets on process restart.
 
 ## `@loop-engine/adapter-postgres`
 
-```ts
-import { postgresStore, createSchema } from '@loop-engine/adapter-postgres'
-import { Pool } from 'pg'
+<Callout variant="info" title="Version track">
+`@loop-engine/adapter-postgres` ships at `0.2.0` while the rest of the `@loop-engine/*` family is at `1.0.0-rc.0`. The API shape is stable; the version reflects pre-1.0 commit to the migration surface rather than contract drift. Consumers can pin `@loop-engine/adapter-postgres@^0.2.0` alongside `1.0.0-rc.0` runtime packages.
+</Callout>
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
-await createSchema(pool)
+```ts
+import { postgresStore, createSchema, createPool, runMigrations } from '@loop-engine/adapter-postgres'
+
+const pool = createPool({ connectionString: process.env.DATABASE_URL })
+await runMigrations(pool)
 const store = postgresStore(pool)
 ```
 
 Schema creates:
 
 - `loop_instances`
-  - `aggregate_id`, `loop_id`, `org_id`, `current_state`, `status`, `started_at`, `closed_at`, `correlation_id`, `metadata`
+  - `aggregate_id`, `loop_id`, `current_state`, `status`, `started_at`, `updated_at`, `completed_at`, `correlation_id`, `metadata`
 - `loop_transitions`
   - `id`, `loop_id`, `aggregate_id`, `transition_id`, `from_state`, `to_state`, `actor`, `evidence`, `occurred_at`, `duration_ms`
+- `schema_migrations`
+  - migration-tracking table managed by `runMigrations`
+
+Additional exports: `createSchema(pool)` (legacy DDL helper; prefer `runMigrations` for incremental upgrades), plus `Migration`, `MigrationRunResult`, `PoolOptions`, `PostgresStore` types and error classification utilities.
 
 Peer dependency: `pg@^8.0.0`.
 
