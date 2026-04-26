@@ -327,6 +327,7 @@
 .docs-content .docs-integration-card,
 .docs-content .docs-integration-card * {
   word-break: normal !important;
+  overflow-wrap: break-word !important;
 }
 
 .tier-official.status-stable {
