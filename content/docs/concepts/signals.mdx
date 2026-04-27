@@ -50,6 +50,8 @@ interface SignalRule {
 ## Create a signal engine
 
 ```ts
+// @no-typecheck
+// SR-024 will replace this block with the published `SignalRegistry` + event-bus flow. F-38 marker: legacy actor fields in related pages.
 import { createSignalEngine } from '@loop-engine/sdk'
 
 const signals = createSignalEngine()
@@ -61,14 +63,14 @@ signals.subscribe((signal) => {
 ## Connect signal detection to loop creation
 
 ```ts
+// @no-typecheck
 signals.subscribe(async (signal) => {
   if (signal.type !== 'THRESHOLD_BREACH') return
   await engine.start({
     loopId: 'scm.replenishment',
     aggregateId: aggregateId(`repl-${Date.now()}`),
-    orgId: 'acme',
     actor: { type: 'system', id: 'system:signal-router' },
-    metadata: { triggeredBy: signal.id }
+    metadata: { triggeredBy: signal.id, source: 'signal-router' }
   })
 })
 ```

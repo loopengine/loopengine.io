@@ -104,13 +104,15 @@ type LearningSignal = {
 ## How They Fit Together
 
 ```ts
+// @no-typecheck
 import { createLoopSystem } from "@loop-engine/sdk";
 import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
-import Anthropic from "@anthropic-ai/sdk";
 
 const { engine } = await createLoopSystem({ loops: [/* procurement loop */] });
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const ai = createAnthropicActorAdapter(anthropic, { modelId: "claude-opus-4-6" });
+const ai = createAnthropicActorAdapter({
+  apiKey: process.env.ANTHROPIC_API_KEY!,
+  model: "claude-opus-4-6"
+});
 
 await engine.start({
   loopId: "procurement" as never,

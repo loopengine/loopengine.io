@@ -34,7 +34,8 @@ function slugToFileCandidates(slug: string[]): string[] {
   return [direct, index];
 }
 
-function headingId(text: string): string {
+/** Canonical heading slug — shared by docs TOC and `scripts/verify-doc-anchors.ts`. */
+export function headingId(text: string): string {
   return text
     .toLowerCase()
     .replace(/[^\w\s-]/g, "")

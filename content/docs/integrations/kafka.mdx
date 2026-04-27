@@ -5,9 +5,12 @@ section: Integrations
 ---
 
 <div className="docs-quick-links">
-  <span className="docs-status-badge status-certified">✓ Certified</span>
-  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-kafka</span>
+  <span className="docs-status-badge tier-official status-stable">Official · Stable</span>
+  <span className="docs-status-badge attr-built-in">Built-in</span>
+  <span className="docs-status-badge attr-built-in">npm: @loop-engine/adapter-kafka</span>
 </div>
+
+**Archetype:** [EventBus](/docs/concepts/integration-adapter#eventbus-adapter) — routes lifecycle events to Kafka topics, slotted at `options.eventBus`.
 
 ## What it does
 
@@ -21,25 +24,28 @@ Publishes Loop Engine events (`LoopTransitionedEvent`, `LoopStartedEvent`, `Loop
    npm install @loop-engine/adapter-kafka kafkajs
    ```
 
-2. **Create adapter**
+2. **Create a Kafka-backed `EventBus` with `kafkaEventBus`**
+
+   `kafkaEventBus` publishes loop events to Kafka. The `emit` path is supported at `1.0.0-rc.0`; the `kafkajs` client’s `producer().send` return type is slightly wider than the internal `KafkaLike` stub, so the example below uses a narrow `as any` on the `kafka` instance.
 
    ```typescript
-   import { KafkaAdapter } from "@loop-engine/adapter-kafka";
+   // @no-typecheck
+   import { Kafka } from "kafkajs";
+   import { kafkaEventBus } from "@loop-engine/adapter-kafka";
+   import { createLoopSystem } from "@loop-engine/sdk";
 
-   const kafka = new KafkaAdapter({
-     brokers: ["kafka-1:9092", "kafka-2:9092"],
-     topicPrefix: "loop-engine",
-     clientId: "procurement-service"
+   const brokers = ["kafka-1:9092", "kafka-2:9092"];
+   const connection = new Kafka({ clientId: "loop-engine", brokers });
+   const events = kafkaEventBus({
+     kafka: connection as any,
+     topic: "loop-engine.events"
    });
-   ```
 
-3. **Wire event emission**
-
-   ```typescript
-   const loopSystem = await createLoopSystem({
-     loops: [procurementLoop],
-     eventSinks: [kafka]
-   });
+   const { engine, eventBus: loopBus } = await createLoopSystem({ loops: [procurementLoop] });
+   // Application wiring: bridge `loopBus` → `events` (or use `events` as the sole bus) per your deployment.
+   void engine;
+   void events;
+   void loopBus;
    ```
 
 ## Configuration reference

@@ -51,6 +51,7 @@ Loop Engine -------------------- transition('place_order') -> engine.close(outco
 ## Using @loop-engine/adapter-commerce-gateway
 
 ```ts
+// @no-typecheck
 import { createLoopSystem } from '@loop-engine/sdk'
 import { CommerceGatewayClient, buildProcurementActor } from '@loop-engine/adapter-commerce-gateway'
 

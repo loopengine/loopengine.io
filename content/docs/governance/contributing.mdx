@@ -51,6 +51,10 @@ Repository currently documents a BDFL model:
 - pass CI checks before review
 - breaking changes to core types require RFC issue (`[RFC]`)
 
+## Documentation: TypeScript fences
+
+Some MDX pages use fenced ` ```typescript` blocks for full runnable examples; others use the same fence for **partial** snippets (object shapes, type-only fragments, or multi-step fragments that are not meant to compile as a single file). Repository automation that type-checks doc examples only processes blocks that look like **module-style examples** (they contain `import` …) and **do not** start with an opt-out line. If a block is intentionally incomplete or non-compiling, put **`// @no-typecheck`** on the **first line inside the fence** so those checks skip it. That split matters: use the marker when the point is structure or pedagogy, not a copy-pastable import path. **When the intent is a real, copy-pastable example, fix the snippet to match the published API rather than adding the marker.**
+
 ## Versioning with changesets
 
 ```bash

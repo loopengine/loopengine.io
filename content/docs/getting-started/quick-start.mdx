@@ -14,10 +14,12 @@ Node.js 18+ and npm or pnpm.
 npm install @loop-engine/sdk
 ```
 
-## Define a loop
+## Define a loop and run it
 
 ```ts
-import { LoopBuilder } from '@loop-engine/sdk'
+// @no-typecheck
+import { aggregateId, transitionId } from '@loop-engine/core'
+import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
 
 const approval = LoopBuilder
   .create('expense.approval', 'finance')
@@ -48,18 +50,14 @@ const approval = LoopBuilder
   .outcome({
     id: 'expense_approved',
     description: 'Expense report approved',
-    valueUnit: 'expense_approved'
+    valueUnit: 'expense_approved',
+    businessMetrics: [
+      { id: 'm_expense_approved', label: 'Expense report approved', unit: 'count' }
+    ]
   })
   .build()
-```
 
-## Run it
-
-```ts
-import { aggregateId, transitionId } from '@loop-engine/core'
-import { createLoopSystem } from '@loop-engine/sdk'
-
-const { engine, eventBus } = createLoopSystem({ loops: [approval] })
+const { engine, eventBus } = await createLoopSystem({ loops: [approval] })
 eventBus.subscribe(async (event) => console.log(event.type))
 
 await engine.start({
@@ -83,7 +81,7 @@ await engine.transition({
 
 const state = await engine.getState(aggregateId('EXP-2026-001'))
 console.log(state?.currentState) // APPROVED
-console.log(state?.status)       // CLOSED
+console.log(state?.status)       // completed
 ```
 
 ## What just happened
@@ -92,7 +90,7 @@ console.log(state?.status)       // CLOSED
 - The loop moved through 3 states (`SUBMITTED -> UNDER_REVIEW -> APPROVED`)
 - 2 actor types were used (`automation`, `human`)
 - Each successful transition emitted `loop.transition.executed`
-- Reaching a terminal state sets loop status to `CLOSED`
+- Reaching a terminal state sets loop status to `completed`
 </Callout>
 
 ## Next steps

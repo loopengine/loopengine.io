@@ -23,21 +23,27 @@ Vercel AI SDK handles streaming and model access. Loop Engine governs when and w
 2. **Wrap a tool with governance**
 
    ```typescript
+   import { z } from "zod";
    import { streamText, tool } from "ai";
-   import { wrapTool } from "@loop-engine/adapter-vercel-ai";
+   import { actorId, type ActorRef } from "@loop-engine/core";
+   import { wrapTool, type CoreTool } from "@loop-engine/adapter-vercel-ai";
 
-   const submitPurchaseOrder = wrapTool(
-     tool({
-       description: "Submit purchase order",
-       parameters: z.object({ vendor: z.string(), amount: z.number() }),
-       execute: async ({ vendor, amount }) => ({ orderId: "PO-0042", vendor, amount })
-     }),
-     {
-       loopDefinition: purchaseOrderLoop,
-       engine,
-       requiresApproval: ({ amount }) => amount > 5000
-     }
-   );
+   const baseTool = tool({
+     description: "Submit purchase order",
+     inputSchema: z.object({ vendor: z.string(), amount: z.number() }),
+     execute: async ({ vendor, amount }) => ({ orderId: "PO-0042", vendor, amount })
+   });
+   const submitPurchaseOrder = wrapTool(baseTool as unknown as CoreTool<{ vendor: string; amount: number }, { orderId: string; vendor: string; amount: number }>, {
+     loopDefinition: purchaseOrderLoop,
+     engine,
+     actor: {
+       type: "ai-agent",
+       id: actorId("ai:vercel-tool"),
+       modelId: "gpt-4o",
+       provider: "openai"
+     } as ActorRef,
+     requiresApproval: (input) => input.amount > 5000
+   });
    ```
 
 3. **Run with streaming**

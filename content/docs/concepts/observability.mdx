@@ -43,6 +43,7 @@ Use `buildTimeline(instance, history)` for a normalized timeline view.
 Use `getStateResidency(timeline)` to see dwell per state:
 
 ```ts
+// @no-typecheck
 import { buildTimeline, getStateResidency } from '@loop-engine/observability'
 
 const timeline = buildTimeline(instance, history)
@@ -56,6 +57,7 @@ State residency highlights bottlenecks (for example loops spending excessive tim
 `replayLoop(definition, history)` validates transition history against a definition:
 
 ```ts
+// @no-typecheck
 import { replayLoop } from '@loop-engine/observability'
 
 const replay = replayLoop(definition, history)

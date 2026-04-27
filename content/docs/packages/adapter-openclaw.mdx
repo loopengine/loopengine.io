@@ -21,19 +21,34 @@ npm install @loop-engine/adapter-openclaw ws
 
 ## createLoopSystem usage
 
+`createLoopSystem` always wires an in-memory `InMemoryEventBus` today. To forward events to OpenClaw, wrap the bus returned from `createLoopSystem` with `OpenClawEventBus`:
+
 ```ts
 import { createLoopSystem } from '@loop-engine/sdk'
 import { OpenClawEventBus } from '@loop-engine/adapter-openclaw'
-import { replenishmentLoop } from './loops/replenishment'
+import { LoopBuilder } from '@loop-engine/sdk'
 
-const bus = new OpenClawEventBus({
+const loop = LoopBuilder
+  .create('demo.forward', 'demo')
+  .state('A', { isTerminal: true })
+  .initialState('A')
+  .outcome({
+    id: 'done',
+    description: 'done',
+    valueUnit: 'done',
+    businessMetrics: [{ id: 'm_done', label: 'Done', unit: 'count' }]
+  })
+  .build()
+
+const { eventBus: inner } = await createLoopSystem({ loops: [loop] })
+
+const forward = new OpenClawEventBus(inner, {
   channel: 'whatsapp',
   target: '+15551234567',
   events: ['loop.transition.executed', 'loop.completed'],
   approvalStates: ['PENDING_BUYER_APPROVAL']
 })
-
-const system = await createLoopSystem({ loops: [replenishmentLoop], eventBus: bus })
+void forward
 ```
 
 ## OpenClawAdapterOptions

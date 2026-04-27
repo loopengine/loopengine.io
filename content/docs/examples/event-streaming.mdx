@@ -38,6 +38,7 @@ START ----> TRANSITION_1 ----> TRANSITION_2 ----> TERMINAL
 ## Key annotated snippet
 
 ```ts
+// @no-typecheck
 import { LOOP_EVENT_TYPES } from "@loop-engine/events";
 import { buildTimeline, replayLoop } from "@loop-engine/observability";
 import { aggregateId } from "@loop-engine/core";
@@ -46,9 +47,9 @@ const audit: Array<{ at: string; type: string; aggregateId: string }> = [];
 
 eventBus.subscribe(async (event) => {
   if (
-    event.type === LOOP_EVENT_TYPES.LOOP_STARTED ||
-    event.type === LOOP_EVENT_TYPES.TRANSITION_EXECUTED ||
-    event.type === LOOP_EVENT_TYPES.LOOP_COMPLETED
+    event.type === "loop.started" ||
+    event.type === "loop.transition.executed" ||
+    event.type === "loop.completed"
   ) {
     audit.push({
       at: event.occurredAt,

@@ -1,25 +1,55 @@
 import Link from "next/link";
 
-type IntegrationStatus = "certified" | "featured" | "built-in" | "community" | "coming-soon" | "rc-draft";
+type IntegrationTier = "official" | "community";
+type IntegrationLifecycleStatus = "experimental" | "rc" | "stable" | "deprecated";
+type IntegrationAttribute = "featured" | "built-in";
 
 type IntegrationCardProps = {
   name: string;
   subtext: string;
-  status: IntegrationStatus;
+  tier?: IntegrationTier;
+  status?: IntegrationLifecycleStatus;
+  attributes?: IntegrationAttribute[];
   logoPath?: string;
   href: string;
 };
 
-const statusLabel: Record<IntegrationStatus, string> = {
-  certified: "✓ Certified",
-  featured: "★ Featured Partner",
-  "built-in": "Built-in",
-  community: "Community",
-  "coming-soon": "Coming Soon",
-  "rc-draft": "RC: Draft"
-};
+function badgeLabel({
+  tier,
+  status,
+  attributes,
+}: {
+  tier?: IntegrationTier;
+  status?: IntegrationLifecycleStatus;
+  attributes?: IntegrationAttribute[];
+}): string {
+  if (attributes?.includes("featured")) return "★ Featured";
+  if (attributes?.includes("built-in")) return "Built-in";
+  if (tier === "community") return "Community";
+  if (tier === "official" && status === "rc") return "Official · RC";
+  if (tier === "official" && status === "stable") return "Official · Stable";
+  if (tier === "official" && status === "experimental") return "Official · Experimental";
+  if (tier === "official" && status === "deprecated") return "Deprecated";
+  return "Official";
+}
 
-export function IntegrationCard({ name, subtext, status, logoPath, href }: IntegrationCardProps) {
+function badgeClassName({
+  tier,
+  status,
+  attributes,
+}: {
+  tier?: IntegrationTier;
+  status?: IntegrationLifecycleStatus;
+  attributes?: IntegrationAttribute[];
+}): string {
+  const classes = ["docs-status-badge"];
+  if (tier) classes.push(`tier-${tier}`);
+  if (status) classes.push(`status-${status}`);
+  (attributes ?? []).forEach((attr) => classes.push(`attr-${attr}`));
+  return classes.join(" ");
+}
+
+export function IntegrationCard({ name, subtext, tier, status, attributes, logoPath, href }: IntegrationCardProps) {
   return (
     <Link className="docs-integration-card" href={href}>
       <div className="docs-integration-head">
@@ -30,7 +60,7 @@ export function IntegrationCard({ name, subtext, status, logoPath, href }: Integ
           ) : null}
           <p className="docs-integration-name">{name}</p>
         </div>
-        <span className={`docs-status-badge status-${status}`}>{statusLabel[status]}</span>
+        <span className={badgeClassName({ tier, status, attributes })}>{badgeLabel({ tier, status, attributes })}</span>
       </div>
       <p className="docs-integration-subtext">{subtext}</p>
     </Link>

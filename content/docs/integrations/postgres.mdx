@@ -5,9 +5,12 @@ section: Integrations
 ---
 
 <div className="docs-quick-links">
-  <span className="docs-status-badge status-certified">✓ Certified</span>
-  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-postgres</span>
+  <span className="docs-status-badge tier-official status-stable">Official · Stable</span>
+  <span className="docs-status-badge attr-built-in">Built-in</span>
+  <span className="docs-status-badge attr-built-in">npm: @loop-engine/adapter-postgres</span>
 </div>
+
+**Archetype:** [Store](/docs/concepts/integration-adapter#store-adapter) — implements `LoopStore`, slotted at `options.store`.
 
 ## What it does
 
@@ -21,31 +24,28 @@ Swaps the in-memory adapter for PostgreSQL persistence. Loop state, transitions,
    npm install @loop-engine/adapter-postgres
    ```
 
-2. **Create adapter**
+2. **Create a `LoopStore` with `postgresStore`**
 
    ```typescript
-   import { PostgresAdapter } from "@loop-engine/adapter-postgres";
+   // @no-typecheck
+   import { createPool, postgresStore } from "@loop-engine/adapter-postgres";
+   import { createLoopSystem } from "@loop-engine/sdk";
 
-   const storage = new PostgresAdapter({
-     connectionString: process.env.DATABASE_URL!,
-     maxConnections: 10,
-     ssl: false
+   const pool = createPool({ connectionString: process.env.DATABASE_URL! });
+   const store = postgresStore(pool);
+   const { engine } = await createLoopSystem({
+     loops: [procurementLoop],
+     store
    });
    ```
 
-3. **Pass into runtime (before/after)**
+3. **Local vs production pattern**
 
    ```typescript
-   // Before
-   const loopSystemDev = await createLoopSystem({
-     loops: [procurementLoop]
-   });
+   // Dev: in-memory (default) — omit `store`
+   const dev = await createLoopSystem({ loops: [procurementLoop] });
 
-   // After
-   const loopSystemProd = await createLoopSystem({
-     loops: [procurementLoop],
-     storage
-   });
+   // Prod: pass `store: postgresStore(pool)` as above
    ```
 
 ## Schema note

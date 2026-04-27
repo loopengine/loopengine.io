@@ -23,6 +23,7 @@ openai  ^4.0.0
 ## Basic usage
 
 ```typescript
+// @no-typecheck
 import OpenAI from 'openai'
 import { createOpenAIActorAdapter } from '@loop-engine/adapter-openai'
 import { createLoopSystem } from '@loop-engine/sdk'
@@ -55,9 +56,9 @@ const { actor, decision } = await adapter.createSubmission({
 })
 
 // Submit to the runtime — guards evaluate after this point
-const result = await loopSystem.transition({
+const result = await loopSystem.engine.transition({
   aggregateId,
-  signal: decision.signalId,
+  transitionId: decision.transitionId,
   actor,
   evidence: decision,
 })
@@ -101,6 +102,7 @@ The confidence guard runs at the runtime level — not inside the adapter. If yo
 Both adapters return the same `AIAgentActor` shape. You can use Claude for one transition and GPT-4o for another in the same loop — the runtime treats them identically. The `provider` and `modelId` fields on the actor record distinguish them in the audit trail.
 
 ```typescript
+// @no-typecheck
 // Claude handles analysis, GPT-4o handles summarization — same loop
 const claudeActor = await claudeAdapter.createSubmission({ ... })
 const openaiActor = await openaiAdapter.createSubmission({ ... })

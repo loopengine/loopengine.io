@@ -5,9 +5,10 @@ section: Integrations
 ---
 
 <div className="docs-quick-links">
-  <span className="docs-status-badge status-featured">★ Featured Partner</span>
-  <span className="docs-status-badge status-certified">✓ Certified</span>
-  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-openclaw</span>
+  <span className="docs-status-badge attr-featured">★ Featured</span>
+  <span className="docs-status-badge tier-official status-stable">Official · Stable</span>
+  <span className="docs-status-badge attr-built-in">Built-in</span>
+  <span className="docs-status-badge attr-built-in">npm: @loop-engine/adapter-openclaw</span>
 </div>
 
 <div className="docs-quick-links md:grid-cols-3">
@@ -15,6 +16,8 @@ section: Integrations
   <a className="docs-quick-link" href="/docs/packages/adapter-openclaw">Package reference →</a>
   <a className="docs-quick-link" href="/partners#openclaw">Partner page →</a>
 </div>
+
+**Archetype:** [EventBus](/docs/concepts/integration-adapter#eventbus-adapter) — `@loop-engine/adapter-openclaw` forwards selected loop events to OpenClaw's gateway; governed transitions go through `loopSystem.engine.transition(...)`.
 
 ## What it does
 
@@ -37,28 +40,31 @@ This is the Sense → Decide → Govern pattern in practice:
 2. **Wire Loop Engine into an OpenClaw workflow**
 
    ```typescript
+   // @no-typecheck
    import { createLoopSystem } from "@loop-engine/sdk";
    import { OpenClawAdapter } from "@loop-engine/adapter-openclaw";
 
    const loopSystem = await createLoopSystem({
      loops: [procurementLoop]
    });
+   // loopSystem is { engine: LoopEngine, signals?: SignalEngine, eventBus: InMemoryEventBus }
 
-   const openclaw = new OpenClawAdapter({ loopSystem });
+   const openclaw = new OpenClawAdapter({ engine: loopSystem.engine });
    ```
 
 3. **Define the governed decision point**
 
    ```typescript
+   // @no-typecheck
    const proposal = await openclaw.proposeAction({
      workflowId: "procurement-workflow",
      action: "submit_purchase_order",
      input: { vendor: "Acme Medical Devices", amount: 9200 }
    });
 
-   await loopSystem.transition({
+   await loopSystem.engine.transition({
      aggregateId: proposal.aggregateId,
-     signal: proposal.signalId,
+     transitionId: proposal.transitionId,
      actor: proposal.actor,
      evidence: proposal.evidence
    });
@@ -67,7 +73,7 @@ This is the Sense → Decide → Govern pattern in practice:
 ## How it works
 
 1. OpenClaw agent proposes an action
-2. Adapter maps proposal to a Loop Engine signal
+2. Adapter maps proposal to a Loop Engine transition
 3. Runtime evaluates guards and policies
 4. Human approval gate pauses when required
 5. Approved transition executes and is fully audited
@@ -76,14 +82,14 @@ This is the Sense → Decide → Govern pattern in practice:
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `loopSystem` | `LoopEngine` | required | Runtime instance used for governed transitions |
-| `signalMap` | `Record<string, string>` | `{}` | Optional action-to-signal mapping override |
+| `engine` | `LoopEngine` | required | Runtime instance used for governed transitions (pass `loopSystem.engine` from `createLoopSystem`) |
+| `transitionMap` | `Record<string, TransitionId>` | `{}` | Optional action-to-transition mapping override |
 | `defaultActor` | `Actor` | `ai-agent/openclaw` | Fallback actor attribution metadata |
 | `onProposal` | `(proposal) => Promise<void>` | — | Optional hook before transition submission |
 
 ## Troubleshooting
 
-- **Signal mapping mismatch** — Ensure OpenClaw action IDs map to valid loop signals.
+- **Transition mapping mismatch** — Ensure OpenClaw action IDs map to valid loop transition IDs.
 - **Transition blocked by guard** — Inspect runtime decision and evidence payload in transition history.
 - **Approval not routing** — Confirm your approval notifier is subscribed to pending-state transitions.
 

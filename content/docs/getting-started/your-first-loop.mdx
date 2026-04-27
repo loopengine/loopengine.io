@@ -26,8 +26,8 @@ SUBMITTED -> UNDER_REVIEW -> APPROVED
 - `isTerminal?: boolean` (default false)
 - `isError?: boolean` (default false)
 
-Terminal states close the loop (`status: "CLOSED"`).  
-Error states set `status: "ERROR"`.
+Terminal states close the loop (`status: "completed"`).  
+Error states set `status: "failed"`.
 
 ## 3) Actors
 
@@ -46,6 +46,7 @@ See [The Actor Model](/docs/concepts/actor-model) for full details.
 ## 4) Start and run the loop
 
 ```ts
+// @no-typecheck
 import { aggregateId, transitionId } from '@loop-engine/core'
 import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
 
@@ -87,19 +88,21 @@ const approval = LoopBuilder
   .outcome({
     id: 'expense_approved',
     description: 'Expense report approved',
-    valueUnit: 'expense_approved'
+    valueUnit: 'expense_approved',
+    businessMetrics: [
+      { id: 'm_expense_approved', label: 'Expense report approved', unit: 'count' }
+    ]
   })
   .build()
 
 const aggregate = aggregateId('EXP-2026-001')
-const { engine } = createLoopSystem({ loops: [approval] })
+const { engine } = await createLoopSystem({ loops: [approval] })
 
 await engine.start({
   loopId: 'expense.approval',
   aggregateId: aggregate,
-  orgId: 'acme',
   actor: { type: 'system', id: 'system:intake' }, // StartOptions.actor
-  metadata: { source: 'expense_form' } // optional StartOptions.metadata
+  metadata: { source: 'expense_form' } // optional application correlation (neutral keys only)
 })
 
 const reviewResult = await engine.transition({
@@ -123,7 +126,7 @@ const instance = await engine.getState(aggregate)
 const history = await engine.getHistory(aggregate)
 
 console.log(instance?.currentState) // branded StateId
-console.log(instance?.status)       // OPEN | IN_PROGRESS | CLOSED | ERROR | CANCELLED
+console.log(instance?.status)       // pending | active | completed | failed | cancelled | suspended
 
 // TransitionRecord fields
 for (const row of history) {

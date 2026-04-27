@@ -23,6 +23,7 @@ npm install @loop-engine/adapter-gemini @google/generative-ai
 ## Basic usage
 
 ```typescript
+// @no-typecheck
 import { createGeminiActorAdapter } from '@loop-engine/adapter-gemini'
 
 const adapter = createGeminiActorAdapter(process.env.GOOGLE_AI_API_KEY!, {

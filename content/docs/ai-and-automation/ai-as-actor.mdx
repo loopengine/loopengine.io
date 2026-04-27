@@ -35,6 +35,8 @@ interface AIAgentActor extends ActorRef {
 ## AI submission flow
 
 ```ts
+// @no-typecheck
+// F-38: canonical `AIAgentActor` + submission types are being realigned in SR-024; this block stays illustrative.
 import { actorId, transitionId } from '@loop-engine/core'
 import { canActorExecuteTransition, buildActorEvidence, type AIAgentActor } from '@loop-engine/actors'
 

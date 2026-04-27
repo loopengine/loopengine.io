@@ -12,7 +12,7 @@ Signature:
 transition(options: {
   aggregateId: AggregateId
   transitionId: TransitionId
-  actor: { type: "human" | "automation" | "ai-agent" | "webhook" | "system"; id: string }
+  actor: { type: "human" | "automation" | "ai-agent" | "system"; id: string }
   evidence?: Evidence
   correlationId?: CorrelationId
 }): Promise<TransitionResult>

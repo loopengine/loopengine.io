@@ -37,11 +37,15 @@ Use optional fields (`participants`, `spawnableLoops`, `metadata`) only when nee
 
 ## Lifecycle (`LoopStatus`)
 
+`LoopStatus` values: `pending | active | completed | failed | cancelled | suspended`.
+
 ```text
-OPEN -> IN_PROGRESS -> CLOSED
-OPEN -> IN_PROGRESS -> ERROR
-OPEN -> IN_PROGRESS -> CANCELLED
+pending -> active -> completed
+pending -> active -> failed
+pending -> active -> cancelled
 ```
+
+User-defined state IDs (like `OPEN`, `PO_CONFIRMED`, `SETTLED` below) are independent of `LoopStatus` — `LoopStatus` tracks the lifecycle of the instance itself, while state IDs track position within a specific loop definition.
 
 ## Real example (abbreviated from `loops/scm/procurement.yaml`)
 

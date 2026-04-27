@@ -4,7 +4,7 @@ description: LoopBuilder provides a fluent, type-guided way to define loops with
 section: Defining Loops
 ---
 
-## `LoopBuilder` API (`@loop-engine/dsl`)
+## `LoopBuilder` API (`@loop-engine/loop-definition`)
 
 `LoopBuilder` is a fluent authoring API that validates on `.build()`.
 
@@ -42,7 +42,7 @@ build(): LoopDefinition
 ## Example: procurement-style loop in TypeScript
 
 ```ts
-import { LoopBuilder } from '@loop-engine/dsl'
+import { LoopBuilder } from '@loop-engine/loop-definition'
 
 const procurement = LoopBuilder
   .create('scm.procurement', 'scm')
@@ -73,7 +73,10 @@ const procurement = LoopBuilder
     id: 'po_settled',
     description: 'Purchase order settled',
     valueUnit: 'po_settled',
-    measurable: true
+    measurable: true,
+    businessMetrics: [
+      { id: 'm_po_settled', label: 'PO settled', unit: 'count' }
+    ]
   })
   .build()
 ```

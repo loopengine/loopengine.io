@@ -5,9 +5,10 @@ section: Integrations
 ---
 
 <div className="docs-quick-links">
-  <span className="docs-status-badge status-certified">✓ Certified</span>
-  <span className="docs-status-badge status-built-in">npm: @loop-engine/adapter-grok</span>
-  <span className="docs-status-badge status-built-in">Provider: xAI</span>
+  <span className="docs-status-badge tier-official status-stable">Official · Stable</span>
+  <span className="docs-status-badge attr-built-in">Built-in</span>
+  <span className="docs-status-badge attr-built-in">npm: @loop-engine/adapter-grok</span>
+  <span className="docs-status-badge attr-built-in">Provider: xAI</span>
 </div>
 
 <div className="docs-quick-links md:grid-cols-3">
@@ -15,6 +16,8 @@ section: Integrations
   <a className="docs-quick-link" href="https://www.npmjs.com/package/@loop-engine/adapter-grok">npm →</a>
   <a className="docs-quick-link" href="/docs/ai-and-automation/ai-as-actor">AI as Actor →</a>
 </div>
+
+**Archetype:** [AI](/docs/concepts/integration-adapter#ai-llm-adapter) (Actor) — returns `AIAgentActor` + `AIActorDecision` for governed `engine.transition(...)` submission.
 
 ## What it does
 
@@ -51,9 +54,9 @@ section: Integrations
      evidence: { demandForecast: 0.87, currentStock: 41 }
    });
 
-   await loopSystem.transition({
+   await loopSystem.engine.transition({
      aggregateId: "procurement-1",
-     signal: decision.signalId,
+     transitionId: decision.transitionId,
      actor,
      evidence: decision
    });
