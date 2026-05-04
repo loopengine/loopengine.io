@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { DocNavSection } from "@/lib/docs";
+import { DOCS_SEARCH_OPEN_EVENT } from "@/lib/docs-search-events";
 
 type DocsSidebarProps = {
   sections: DocNavSection[];
@@ -50,6 +51,43 @@ export function DocsSidebar({ sections }: DocsSidebarProps) {
     >
       <nav aria-label="Documentation sidebar">
         <div style={{ padding: "4px 24px 12px" }}>
+          <span
+            style={{
+              display: "block",
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-ink-muted)",
+              marginBottom: 8
+            }}
+          >
+            Search
+          </span>
+          <button
+            type="button"
+            onClick={() =>
+              window.dispatchEvent(
+                new CustomEvent(DOCS_SEARCH_OPEN_EVENT, { detail: { source: "sidebar" } }),
+              )
+            }
+            style={{
+              width: "100%",
+              border: "1px solid var(--color-border)",
+              borderRadius: 8,
+              padding: "8px 10px",
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              color: "var(--color-ink-secondary)",
+              background: "var(--color-surface-alt)",
+              cursor: "pointer",
+              textAlign: "left"
+            }}
+          >
+            Open search <span style={{ opacity: 0.7 }}>⌘K</span>
+          </button>
+        </div>
+        <div style={{ padding: "4px 24px 12px" }}>
           <label
             htmlFor="docs-search"
             style={{
@@ -62,7 +100,7 @@ export function DocsSidebar({ sections }: DocsSidebarProps) {
               marginBottom: 8
             }}
           >
-            Search docs
+            Filter pages
           </label>
           <input
             id="docs-search"

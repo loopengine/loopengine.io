@@ -15,7 +15,7 @@ type DocsShellProps = {
 export function DocsShell({ sectionLabel, title, headings, filePath, children }: DocsShellProps) {
   return (
     <div className="docs-shell">
-      <article className="docs-content">
+      <article className="docs-content" data-pagefind-body>
         <div className="mb-2 flex flex-wrap items-start justify-between gap-4">
           <div>
             <p className="docs-eyebrow">{sectionLabel}</p>

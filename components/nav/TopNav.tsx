@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { LoopEngineLogo } from "@/components/logo";
 import { inferPageType } from "@/lib/analytics/posthog";
 import { trackOutboundClicked, trackCtaClicked } from "@/lib/analytics/events";
+import { DOCS_SEARCH_OPEN_EVENT } from "@/lib/docs-search-events";
 
 type NavItem = {
   label: string;
@@ -38,6 +39,12 @@ export function TopNav() {
   const pathname = usePathname();
   const pageType = inferPageType(pathname);
 
+  const openDocsSearch = () => {
+    window.dispatchEvent(
+      new CustomEvent(DOCS_SEARCH_OPEN_EVENT, { detail: { source: "header" as const } }),
+    );
+  };
+
   return (
     <header className="border-[var(--color-border)] border-b bg-[var(--color-surface)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
@@ -45,7 +52,27 @@ export function TopNav() {
           <LoopEngineLogo size="sm" />
         </Link>
 
+        {pathname.startsWith("/docs") ? (
+          <button
+            type="button"
+            className="rounded border border-[var(--color-border)] px-2.5 py-1 text-xs text-[var(--color-ink-secondary)] hover:bg-[var(--color-surface-alt)] md:hidden"
+            onClick={openDocsSearch}
+          >
+            Search
+          </button>
+        ) : null}
+
         <nav className="hidden items-center gap-5 text-sm md:flex">
+          {pathname.startsWith("/docs") ? (
+            <button
+              type="button"
+              className="rounded border border-[var(--color-border)] px-2.5 py-1 text-sm text-[var(--color-ink-secondary)] hover:bg-[var(--color-surface-alt)]"
+              onClick={openDocsSearch}
+            >
+              Search{" "}
+              <span className="font-mono text-[10px] text-[var(--color-ink-muted)]">⌘K</span>
+            </button>
+          ) : null}
           {navItems.map((item) => (
             <Link
               key={item.label}
