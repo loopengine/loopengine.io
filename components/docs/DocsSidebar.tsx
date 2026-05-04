@@ -3,30 +3,33 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
-import { docsSections } from "./docs-nav";
+import type { DocNavSection } from "@/lib/docs";
+
+type DocsSidebarProps = {
+  sections: DocNavSection[];
+};
 
 function isActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function DocsSidebar() {
+export function DocsSidebar({ sections }: DocsSidebarProps) {
   const pathname = usePathname();
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
 
   const visibleSections = useMemo(() => {
-    if (!normalizedQuery) return docsSections;
-    return docsSections
+    if (!normalizedQuery) return sections;
+    return sections
       .map((section) => ({
         ...section,
         items: section.items.filter(
           (item) =>
-            item.title.toLowerCase().includes(normalizedQuery) ||
-            item.href.toLowerCase().includes(normalizedQuery)
+            item.title.toLowerCase().includes(normalizedQuery) || item.href.toLowerCase().includes(normalizedQuery)
         )
       }))
       .filter((section) => section.items.length > 0);
-  }, [normalizedQuery]);
+  }, [normalizedQuery, sections]);
 
   return (
     <aside
@@ -107,24 +110,6 @@ export function DocsSidebar() {
             </p>
             <div>
               {section.items.map((item) => {
-                if (item.isGroup) {
-                  return (
-                    <p
-                      key={`${section.label}-${item.title}`}
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "var(--text-xs)",
-                        color: "var(--color-ink-muted)",
-                        letterSpacing: "0.06em",
-                        padding: "10px 24px 4px",
-                        textTransform: "uppercase"
-                      }}
-                    >
-                      {item.title}
-                    </p>
-                  );
-                }
-
                 const active = isActive(pathname, item.href);
                 return (
                   <Link
@@ -136,10 +121,8 @@ export function DocsSidebar() {
                       fontFamily: "var(--font-body)",
                       fontSize: "var(--text-sm)",
                       color: active ? "var(--color-primary)" : "var(--color-ink-tertiary)",
-                      padding: item.indent ? "6px 24px 6px 36px" : "6px 24px",
-                      borderLeft: active
-                        ? "2px solid var(--color-primary)"
-                        : "2px solid transparent",
+                      padding: "6px 24px",
+                      borderLeft: active ? "2px solid var(--color-primary)" : "2px solid transparent",
                       background: active ? "var(--color-primary-glow)" : "transparent",
                       transition: "all var(--dur-fast) var(--ease-out)"
                     }}

@@ -1,0 +1,28 @@
+{
+  "order": [
+    "index",
+    "sdk",
+    "core",
+    "runtime",
+    "loop-definition",
+    "events",
+    "signals",
+    "guards",
+    "actors",
+    "observability",
+    "all-packages",
+    "registry-client",
+    "ui-devtools",
+    "adapter-anthropic",
+    "adapter-openai",
+    "adapter-gemini",
+    "adapter-grok",
+    "adapter-perplexity",
+    "adapter-postgres",
+    "adapter-kafka",
+    "adapter-memory",
+    "adapter-http",
+    "adapter-openclaw",
+    "adapter-commerce-gateway"
+  ]
+}

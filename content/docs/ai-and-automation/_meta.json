@@ -1,0 +1,3 @@
+{
+  "order": ["ai-as-actor", "confidence-evidence", "human-approval-gates"]
+}

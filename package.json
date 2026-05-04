@@ -10,12 +10,14 @@
     "verify:anchors": "tsx scripts/verify-doc-anchors.ts"
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.577.0",
     "next": "16.1.6",
     "next-mdx-remote": "^6.0.0",
     "posthog-js": "^1.372.8",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

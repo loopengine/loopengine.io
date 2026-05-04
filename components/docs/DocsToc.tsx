@@ -3,11 +3,11 @@
 import { useEffect, useMemo, useState } from "react";
 import type { TocHeading } from "@/lib/docs";
 
-type DocTocProps = {
+type DocsTocProps = {
   headings: TocHeading[];
 };
 
-export function DocToc({ headings }: DocTocProps) {
+export function DocsToc({ headings }: DocsTocProps) {
   const [active, setActive] = useState<string | null>(headings[0]?.id ?? null);
 
   useEffect(() => {

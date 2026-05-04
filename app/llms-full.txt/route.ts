@@ -7,25 +7,6 @@ export const revalidate = 3600;
 export async function GET() {
   const docs = await getAllDocs();
 
-  const ORDER = [
-    "getting-started",
-    "concepts",
-    "defining-loops",
-    "running-loops",
-    "ai-and-automation",
-    "packages",
-    "governance"
-  ];
-
-  const sorted = [...docs].sort((a, b) => {
-    const aSection = a.slug.split("/")[0];
-    const bSection = b.slug.split("/")[0];
-    const aIdx = ORDER.indexOf(aSection);
-    const bIdx = ORDER.indexOf(bSection);
-    if (aIdx !== bIdx) return (aIdx === -1 ? 99 : aIdx) - (bIdx === -1 ? 99 : bIdx);
-    return a.slug.localeCompare(b.slug);
-  });
-
   const header = [
     "# Loop Engine - Full Documentation",
     "> https://loopengine.io | Apache-2.0 Licensed | Created by Better Data (https://betterdata.co)",
@@ -37,19 +18,19 @@ export async function GET() {
     "Structured summary: https://loopengine.io/llms.txt",
     "",
     "---",
-    ""
+    "",
   ].join("\n");
 
-  const body = sorted
+  const body = docs
     .map((doc) => {
-      const lines = [`## ${doc.frontmatter.title ?? doc.slug}`, `URL: https://loopengine.io/docs/${doc.slug}`];
+      const lines = [`## ${doc.title}`, `URL: https://loopengine.io/docs/${doc.slugPath}`];
       if (doc.frontmatter.description) {
         lines.push(`Summary: ${doc.frontmatter.description}`);
       }
       if (doc.frontmatter.section) {
         lines.push(`Section: ${doc.frontmatter.section}`);
       }
-      lines.push("", doc.content, "", "---", "");
+      lines.push("", doc.source, "", "---", "");
       return lines.join("\n");
     })
     .join("\n");
@@ -60,7 +41,7 @@ export async function GET() {
     headers: {
       "Content-Type": "text/plain; charset=utf-8",
       "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
-      "X-Robots-Tag": "noindex"
-    }
+      "X-Robots-Tag": "noindex",
+    },
   });
 }

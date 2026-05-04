@@ -1,0 +1,16 @@
+{
+  "order": [
+    "index",
+    "expense-approval",
+    "ai-replenishment",
+    "ai-replenishment-claude",
+    "ai-replenishment-openai",
+    "demand-signal",
+    "postgres-persistence",
+    "event-streaming",
+    "infrastructure-change-approval",
+    "fraud-review",
+    "openclaw",
+    "commerce-gateway"
+  ]
+}

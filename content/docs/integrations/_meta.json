@@ -1,0 +1,20 @@
+{
+  "order": [
+    "index",
+    "anthropic",
+    "openai",
+    "grok",
+    "gemini",
+    "perplexity",
+    "openclaw",
+    "vercel-ai-sdk",
+    "vercel-ai",
+    "postgres",
+    "kafka",
+    "http",
+    "memory",
+    "pagerduty",
+    "perplexity-pagerduty",
+    "commerce-gateway"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "order": [
+    "create-loop-system",
+    "starting-loops",
+    "transitions",
+    "event-subscriptions",
+    "adapters"
+  ]
+}

@@ -1,0 +1,3 @@
+{
+  "order": ["yaml-format", "typescript-builder", "loop-library", "guards-reference"]
+}

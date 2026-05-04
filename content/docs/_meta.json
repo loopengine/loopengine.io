@@ -1,0 +1,15 @@
+{
+  "order": [
+    "getting-started",
+    "concepts",
+    "ai-and-automation",
+    "defining-loops",
+    "running-loops",
+    "packages",
+    "catalog",
+    "examples",
+    "integrations",
+    "governance",
+    "changelog"
+  ]
+}

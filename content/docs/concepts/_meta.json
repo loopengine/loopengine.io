@@ -1,0 +1,15 @@
+{
+  "order": [
+    "what-is-a-loop",
+    "integration-adapter",
+    "actor-model",
+    "guards-and-policy",
+    "signals",
+    "observability",
+    "learning-signals",
+    "decision-governance",
+    "loop-engine-vs-workflow-engines",
+    "agents-and-rag",
+    "when-to-use"
+  ]
+}

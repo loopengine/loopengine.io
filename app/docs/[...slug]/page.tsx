@@ -1,26 +1,37 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { Metadata } from "next";
-import { DocLayout } from "@/components/docs/DocLayout";
+import { DocsPageView } from "@/components/docs/DocsPageView";
+import { DocsPrevNext } from "@/components/docs/DocsPrevNext";
+import { DocsShell } from "@/components/docs/DocsShell";
 import { mdxComponents } from "@/components/docs/MDXComponents";
-import { loadDoc } from "@/lib/docs";
+import { getAllDocSlugs, getDocBySlug, getPrevNext } from "@/lib/docs";
 
 type DocsSlugPageProps = {
   params: Promise<{ slug: string[] }>;
 };
 
+const SITE = "https://loopengine.io";
+
+export async function generateStaticParams() {
+  const slugs = await getAllDocSlugs();
+  return slugs.map((s) => ({ slug: s.split("/").filter(Boolean) }));
+}
+
 export async function generateMetadata({ params }: DocsSlugPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const doc = await loadDoc(slug);
+  const doc = await getDocBySlug(slug);
 
   const title = doc.title ?? "Docs";
   const description = doc.description ?? "";
   const section = doc.sectionLabel ?? "Docs";
-  const joinedSlug = doc.slug.join("/");
+  const joinedSlug = doc.slugPath;
 
-  const ogUrl = new URL("/og", "https://loopengine.io");
+  const ogUrl = new URL("/og", SITE);
   ogUrl.searchParams.set("title", title);
   if (description) ogUrl.searchParams.set("description", description);
   ogUrl.searchParams.set("section", section);
+
+  const canonical = doc.frontmatter.canonical ?? `${SITE}/docs/${joinedSlug}`;
 
   return {
     title,
@@ -28,33 +39,35 @@ export async function generateMetadata({ params }: DocsSlugPageProps): Promise<M
     openGraph: {
       title: `${title} · Loop Engine`,
       description,
-      url: `https://loopengine.io/docs/${joinedSlug}`,
+      url: `${SITE}/docs/${joinedSlug}`,
       images: [
         {
           url: ogUrl.toString(),
           width: 1200,
           height: 630,
-          alt: `${title} · Loop Engine`
-        }
-      ]
+          alt: `${title} · Loop Engine`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${title} · Loop Engine`,
       description,
-      images: [ogUrl.toString()]
+      images: [ogUrl.toString()],
     },
     alternates: {
-      canonical: `https://loopengine.io/docs/${joinedSlug}`
-    }
+      canonical,
+    },
   };
 }
 
 export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
   const { slug } = await params;
-  const doc = await loadDoc(slug);
+  const doc = await getDocBySlug(slug);
   const slugPath = doc.slugPath;
   const packageName = slug[0] === "packages" ? slug[1] : undefined;
+  const { prev, next } = await getPrevNext(slug);
+
   const jsonLd =
     packageName != null
       ? {
@@ -66,19 +79,19 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
           codeRepository: `https://github.com/loopengine/loop-engine/tree/main/packages/${packageName}`,
           programmingLanguage: {
             "@type": "ComputerLanguage",
-            name: "TypeScript"
+            name: "TypeScript",
           },
           license: "https://www.apache.org/licenses/LICENSE-2.0",
           author: {
             "@type": "Organization",
             name: "Better Data, Inc.",
-            url: "https://betterdata.co"
+            url: "https://betterdata.co",
           },
           offers: {
             "@type": "Offer",
             price: "0",
-            priceCurrency: "USD"
-          }
+            priceCurrency: "USD",
+          },
         }
       : {
           "@context": "https://schema.org",
@@ -91,7 +104,7 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
           author: {
             "@type": "Organization",
             name: "Better Data, Inc.",
-            url: "https://betterdata.co"
+            url: "https://betterdata.co",
           },
           publisher: {
             "@type": "Organization",
@@ -99,22 +112,24 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
             url: "https://loopengine.io",
             logo: {
               "@type": "ImageObject",
-              url: "https://loopengine.io/brand/logo.svg"
-            }
+              url: "https://loopengine.io/brand/logo.svg",
+            },
           },
           isPartOf: {
             "@type": "WebSite",
-            "@id": "https://loopengine.io/#website"
-          }
+            "@id": "https://loopengine.io/#website",
+          },
         };
 
   return (
-    <DocLayout sectionLabel={doc.sectionLabel} title={doc.title} headings={doc.headings}>
+    <DocsShell sectionLabel={doc.sectionLabel} title={doc.title} headings={doc.headings} filePath={doc.filePath}>
+      <DocsPageView slugPath={slugPath} title={doc.title} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <MDXRemote source={doc.source} components={mdxComponents} />
-    </DocLayout>
+      <DocsPrevNext prev={prev} next={next} />
+    </DocsShell>
   );
 }

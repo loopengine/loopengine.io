@@ -1,16 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { docsOrder } from "./docs-nav";
 
-export function DocsPager() {
-  const pathname = usePathname();
-  const currentIndex = docsOrder.findIndex((item) => item.href === pathname);
-  const previous = currentIndex > 0 ? docsOrder[currentIndex - 1] : null;
-  const next = currentIndex >= 0 && currentIndex < docsOrder.length - 1 ? docsOrder[currentIndex + 1] : null;
+export type DocsPrevNextProps = {
+  prev: { title: string; href: string } | null;
+  next: { title: string; href: string } | null;
+};
 
-  if (!previous && !next) {
+export function DocsPrevNext({ prev, next }: DocsPrevNextProps) {
+  if (!prev && !next) {
     return null;
   }
 
@@ -24,8 +22,8 @@ export function DocsPager() {
       }}
     >
       <div>
-        {previous ? (
-          <Link href={previous.href}>
+        {prev ? (
+          <Link href={prev.href}>
             <span
               style={{
                 display: "block",
@@ -38,9 +36,7 @@ export function DocsPager() {
             >
               Previous
             </span>
-            <span style={{ fontSize: "var(--text-sm)", color: "var(--color-ink-secondary)" }}>
-              {previous.title}
-            </span>
+            <span style={{ fontSize: "var(--text-sm)", color: "var(--color-ink-secondary)" }}>{prev.title}</span>
           </Link>
         ) : null}
       </div>

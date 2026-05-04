@@ -4,14 +4,10 @@ import { CodeBlock } from "./CodeBlock";
 import { IntegrationCard } from "./IntegrationCard";
 import { LoopDiagram } from "./LoopDiagram";
 import { PackageCard } from "./PackageCard";
+import { headingId } from "@/lib/docs";
 
 function toHeadingId(children: ReactNode): string {
-  const text = String(children ?? "");
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
+  return headingId(String(children ?? ""));
 }
 
 export const mdxComponents = {

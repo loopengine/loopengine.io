@@ -3,7 +3,6 @@
 import Link from "next/link";
 import type { RefObject } from "react";
 import { useEffect, useRef } from "react";
-import { docsSections } from "./docs-nav";
 
 type MobileMenuProps = {
   open: boolean;
@@ -134,56 +133,6 @@ export function MobileMenu({ open, onClose, triggerRef }: MobileMenuProps) {
               )
             )}
           </div>
-
-          {docsSections.map((section) => (
-            <div key={section.label} className="mb-6">
-              <p
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "var(--text-xs)",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  color: "var(--color-ink-muted)",
-                  marginBottom: 8
-                }}
-              >
-                {section.label}
-              </p>
-              <div className="space-y-1">
-                {section.items.map((item) => (
-                  item.isGroup ? (
-                    <p
-                      key={`${section.label}-${item.title}`}
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "var(--text-xs)",
-                        letterSpacing: "0.06em",
-                        textTransform: "uppercase",
-                        color: "var(--color-ink-muted)",
-                        marginTop: 10
-                      }}
-                    >
-                      {item.title}
-                    </p>
-                  ) : (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={onClose}
-                      style={{
-                        display: "block",
-                        fontSize: "var(--text-sm)",
-                        color: "var(--color-ink-tertiary)",
-                        paddingLeft: item.indent ? 12 : 0
-                      }}
-                    >
-                      {item.title}
-                    </Link>
-                  )
-                ))}
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>
