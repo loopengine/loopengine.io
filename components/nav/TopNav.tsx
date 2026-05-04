@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LoopEngineLogo } from "@/components/logo";
+import { inferPageType } from "@/lib/analytics/posthog";
+import { trackOutboundClicked, trackCtaClicked } from "@/lib/analytics/events";
 
 type NavItem = {
   label: string;
@@ -34,6 +36,7 @@ function navLinkClass(active: boolean): string {
 
 export function TopNav() {
   const pathname = usePathname();
+  const pageType = inferPageType(pathname);
 
   return (
     <header className="border-[var(--color-border)] border-b bg-[var(--color-surface)]">
@@ -44,7 +47,23 @@ export function TopNav() {
 
         <nav className="hidden items-center gap-5 text-sm md:flex">
           {navItems.map((item) => (
-            <Link key={item.label} href={item.href} className={navLinkClass(isItemActive(pathname, item))}>
+            <Link
+              key={item.label}
+              href={item.href}
+              data-ph-cta={item.href === "/docs" ? "view_docs" : undefined}
+              onClick={
+                item.href === "/docs"
+                  ? () =>
+                      trackCtaClicked({
+                        cta: "view_docs",
+                        location: "top_nav_desktop",
+                        destination: item.href,
+                        pageType,
+                      })
+                  : undefined
+              }
+              className={navLinkClass(isItemActive(pathname, item))}
+            >
               {item.label}
             </Link>
           ))}
@@ -53,6 +72,15 @@ export function TopNav() {
             href="https://betterdata.co/blog/tags/loop-engine"
             target="_blank"
             rel="noopener noreferrer"
+            data-ph-cta="read_blog"
+            onClick={() =>
+              trackOutboundClicked({
+                label: "blog",
+                destination: "https://betterdata.co/blog/tags/loop-engine",
+                location: "top_nav_desktop",
+                pageType,
+              })
+            }
           >
             Blog
           </a>
@@ -61,6 +89,15 @@ export function TopNav() {
             href="https://github.com/loopengine/loop-engine/releases"
             target="_blank"
             rel="noopener noreferrer"
+            data-ph-cta="releases"
+            onClick={() =>
+              trackOutboundClicked({
+                label: "releases",
+                destination: "https://github.com/loopengine/loop-engine/releases",
+                location: "top_nav_desktop",
+                pageType,
+              })
+            }
           >
             Releases
           </a>
@@ -69,6 +106,15 @@ export function TopNav() {
             href="https://betterdata.co/changelog?module=loop-engine"
             target="_blank"
             rel="noopener noreferrer"
+            data-ph-cta="read_changelog"
+            onClick={() =>
+              trackOutboundClicked({
+                label: "changelog",
+                destination: "https://betterdata.co/changelog?module=loop-engine",
+                location: "top_nav_desktop",
+                pageType,
+              })
+            }
           >
             Changelog
           </a>
@@ -77,6 +123,15 @@ export function TopNav() {
             href="https://github.com/loopengine/loop-engine"
             target="_blank"
             rel="noopener noreferrer"
+            data-ph-cta="github"
+            onClick={() =>
+              trackOutboundClicked({
+                label: "github",
+                destination: "https://github.com/loopengine/loop-engine",
+                location: "top_nav_desktop",
+                pageType,
+              })
+            }
           >
             GitHub
           </a>
@@ -89,7 +144,23 @@ export function TopNav() {
           <div className="absolute right-4 z-20 mt-2 w-56 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3 shadow-md">
             <div className="flex flex-col gap-2 text-sm">
               {navItems.map((item) => (
-                <Link key={item.label} href={item.href} className={navLinkClass(isItemActive(pathname, item))}>
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  data-ph-cta={item.href === "/docs" ? "view_docs" : undefined}
+                  onClick={
+                    item.href === "/docs"
+                      ? () =>
+                          trackCtaClicked({
+                            cta: "view_docs",
+                            location: "top_nav_mobile",
+                            destination: item.href,
+                            pageType,
+                          })
+                      : undefined
+                  }
+                  className={navLinkClass(isItemActive(pathname, item))}
+                >
                   {item.label}
                 </Link>
               ))}
@@ -98,6 +169,15 @@ export function TopNav() {
                 href="https://betterdata.co/blog/tags/loop-engine"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-ph-cta="read_blog"
+                onClick={() =>
+                  trackOutboundClicked({
+                    label: "blog",
+                    destination: "https://betterdata.co/blog/tags/loop-engine",
+                    location: "top_nav_mobile",
+                    pageType,
+                  })
+                }
               >
                 Blog
               </a>
@@ -106,6 +186,15 @@ export function TopNav() {
                 href="https://github.com/loopengine/loop-engine/releases"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-ph-cta="releases"
+                onClick={() =>
+                  trackOutboundClicked({
+                    label: "releases",
+                    destination: "https://github.com/loopengine/loop-engine/releases",
+                    location: "top_nav_mobile",
+                    pageType,
+                  })
+                }
               >
                 Releases
               </a>
@@ -114,6 +203,15 @@ export function TopNav() {
                 href="https://betterdata.co/changelog?module=loop-engine"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-ph-cta="read_changelog"
+                onClick={() =>
+                  trackOutboundClicked({
+                    label: "changelog",
+                    destination: "https://betterdata.co/changelog?module=loop-engine",
+                    location: "top_nav_mobile",
+                    pageType,
+                  })
+                }
               >
                 Changelog
               </a>
@@ -122,6 +220,15 @@ export function TopNav() {
                 href="https://github.com/loopengine/loop-engine"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-ph-cta="github"
+                onClick={() =>
+                  trackOutboundClicked({
+                    label: "github",
+                    destination: "https://github.com/loopengine/loop-engine",
+                    location: "top_nav_mobile",
+                    pageType,
+                  })
+                }
               >
                 GitHub
               </a>

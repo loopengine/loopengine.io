@@ -26,6 +26,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/blog/:slug",
+        destination: "https://betterdata.co/blog/:slug",
+        permanent: true,
+      },
+      {
+        source: "/blog",
+        destination: "https://betterdata.co/blog/tags/loop-engine",
+        permanent: true,
+      },
+      {
         source: "/docs/adapters/perplexity",
         destination: "/docs/packages/adapter-perplexity",
         permanent: false,

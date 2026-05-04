@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from "next/font/google";
+import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { TopNav } from "@/components/nav/TopNav";
 import { Footer } from "@/components/site/Footer";
 import "./globals.css";
@@ -96,6 +97,9 @@ export const metadata: Metadata = {
   }
 };
 
+const GA_MEASUREMENT_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "G-NRGKK7RK22";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -110,11 +114,13 @@ export default function RootLayout({
         <a className="skip-link" href="#main-content">
           Skip to main content
         </a>
-        <TopNav />
-        <main id="main-content">{children}</main>
-        <Footer />
+        <PostHogProvider>
+          <TopNav />
+          <main id="main-content">{children}</main>
+          <Footer />
+        </PostHogProvider>
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-NRGKK7RK22"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -122,7 +128,7 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-NRGKK7RK22');
+            gtag('config', '${GA_MEASUREMENT_ID}');
           `}
         </Script>
       </body>
