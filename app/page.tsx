@@ -4,6 +4,7 @@ import { NpmInstallChip } from "@/components/home/NpmInstallChip";
 import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { BETTERDATA_CCO_URL, LOOP_ENGINE_CCO_LINE } from "@/lib/betterdata-ecosystem";
 
 const packages = [
   { name: "@loop-engine/sdk", slug: "sdk", description: "High-level entry point for loop systems." },
@@ -377,6 +378,18 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
             >
               Install only what you govern.
             </p>
+            <p
+              className="fade-in-up mt-4"
+              style={{
+                animationDelay: "260ms",
+                fontSize: "var(--text-sm)",
+                color: "var(--color-ink-tertiary)",
+                maxWidth: 620,
+                lineHeight: 1.65,
+              }}
+            >
+              {LOOP_ENGINE_CCO_LINE}
+            </p>
 
             <div
               className="fade-in-up mt-9 flex flex-col items-stretch gap-3 min-[480px]:items-center min-[480px]:flex-row min-[480px]:flex-wrap"
@@ -411,6 +424,22 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 }}
               >
                 View on GitHub
+              </a>
+              <a
+                href={BETTERDATA_CCO_URL}
+                rel="noopener noreferrer"
+                target="_blank"
+                className="inline-flex items-center"
+                style={{
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-ink)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "12px 28px",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-sm)"
+                }}
+              >
+                See Commerce Chain Optimization
               </a>
               <div className="max-w-full overflow-x-auto">
                 <NpmInstallChip />
@@ -712,7 +741,8 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
           </p>
           <h2 className="mt-3">Architecture notes and rollout updates</h2>
           <p style={{ marginTop: 12, maxWidth: 820, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Loop Engine stays standalone and OSS-first. Cross-module architecture updates, hosted path guidance, and launch context are published on the Better Data blog.
+            Loop Engine is Apache-2.0 open operational infrastructure with a first-class path on Better Data. Cross-module
+            architecture updates, hosted path guidance, and launch context are published on the Better Data blog.
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
