@@ -2,6 +2,11 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import type { CSSProperties } from "react";
 import { LoopEngineLogo } from "@/components/logo";
+import {
+  BETTERDATA_CCO_URL,
+  BETTERDATA_OPEN_INFRA_URL,
+  ECOSYSTEM_STRIP,
+} from "@/lib/betterdata-ecosystem";
 
 function ExternalFooterLink({
   href,
@@ -90,6 +95,8 @@ export function Footer() {
         </div>
         <div>
           <p style={headingStyle}>Better Data</p>
+          <ExternalFooterLink href={BETTERDATA_CCO_URL} label="Commerce Chain Optimization (hosted)" style={linkStyle} />
+          <ExternalFooterLink href={BETTERDATA_OPEN_INFRA_URL} label="Open operational infrastructure hub" style={linkStyle} />
           <ExternalFooterLink href="https://www.betterdata.co/trust" label="Trust Center" style={linkStyle} />
           <ExternalFooterLink href="https://betterdata.co" label="Created by Better Data" style={linkStyle} />
           <ExternalFooterLink href="https://betterdata.co/docs" label="Platform docs" style={linkStyle} />
@@ -106,7 +113,7 @@ export function Footer() {
         </div>
       </div>
       <div
-        className="mx-auto mt-8 flex w-full max-w-[var(--max-width-full)] flex-col items-center justify-between gap-3 md:flex-row"
+        className="mx-auto mt-8 w-full max-w-[var(--max-width-full)]"
         style={{
           borderTop: "1px solid var(--color-border)",
           paddingTop: 16,
@@ -116,22 +123,27 @@ export function Footer() {
           color: "var(--color-ink-muted)"
         }}
       >
-        <p>Apache-2.0 Licensed · © Loop Engine Contributors</p>
-        <div className="flex items-center gap-4">
-          <Link
-            className="hover:text-[var(--color-primary)]"
-            href="/docs/governance/license"
-            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
-          >
-            Trademark policy
-          </Link>
-          <a
-            className="hover:text-[var(--color-primary)]"
-            href="mailto:conduct@loopengine.io"
-            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
-          >
-            conduct@loopengine.io
-          </a>
+        <p className="mx-auto max-w-3xl text-center leading-relaxed md:text-left" style={{ marginBottom: 16 }}>
+          {ECOSYSTEM_STRIP}
+        </p>
+        <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-center sm:text-left">Apache-2.0 Licensed · © Loop Engine Contributors</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
+            <Link
+              className="hover:text-[var(--color-primary)]"
+              href="/docs/governance/license"
+              style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+            >
+              Trademark policy
+            </Link>
+            <a
+              className="hover:text-[var(--color-primary)]"
+              href="mailto:conduct@loopengine.io"
+              style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+            >
+              conduct@loopengine.io
+            </a>
+          </div>
         </div>
       </div>
       <div
