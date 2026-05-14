@@ -1,0 +1,36 @@
+---
+title: Loop Engine Cloud (hosted HTTP API)
+description: Managed Loop Engine HTTP API at loops.betterdata.co — auth, routes, and links to the canonical reference in bd-forge-main.
+section: Integrations
+order: 15
+sidebar_label: Loop Engine Cloud API
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge tier-community">Hosted</span>
+  <span className="docs-status-badge attr-built-in">Production: loops.betterdata.co</span>
+</div>
+
+## What this is
+
+The **OSS Loop Engine** (this site, `@loop-engine/*` on npm) defines the runtime model: states, signals, guards, transitions, and events. **Loop Engine Cloud** is Better Data’s **managed** deployment that exposes the same execution contract over **HTTPS** with tenancy, API keys, connectors, and product entitlements.
+
+- **Developers & integrations** → HTTP API at **`https://loops.betterdata.co`** (Bearer JWT for first-party services, **`le_` API keys** for external automation).
+- **Operators** → the **Automation** rail at **`app.betterdata.co/automation`** (same loops conceptually; product UX does not use engine marketing names in the nav).
+
+## Canonical reference
+
+The versioned, route-by-route contract (request/response shapes, errors, connectors, baseline routes, key management) is maintained **in the monorepo** alongside the `apps/hosted-loops` implementation:
+
+**[Loop Engine Cloud HTTP API reference (source)](https://github.com/betterdata-platform/bd-forge-main/blob/main/apps/hosted-loops/docs/api.md)**
+
+That file is the **developer contract** for paths under `/api/v1/*`. Update pull requests that change route handlers should update `apps/hosted-loops/docs/api.md` in the same change-set when the public JSON contract moves.
+
+## Related OSS docs
+
+- [HTTP adapter](/docs/integrations/http) — webhook-style **outbound** adapter from the OSS runtime; not the same as Loop Engine Cloud ingress.
+- [Architecture](/docs/getting-started/architecture) — core Loop Engine concepts reused by the hosted service.
+
+## Pricing
+
+Commercial packaging is described on the product site (do not hardcode prices in integration guides): **[betterdata.co/pricing](https://betterdata.co/pricing)**.
