@@ -4,6 +4,7 @@ import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from "next/font/google";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { TopNav } from "@/components/nav/TopNav";
 import { DocsSearchModalHost } from "@/components/docs/DocsSearchModalHost";
+import { EcosystemBanner } from "@/components/site/EcosystemBanner";
 import { Footer } from "@/components/site/Footer";
 import "./globals.css";
 import "../styles/tokens.css";
@@ -116,6 +117,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <PostHogProvider>
+          <EcosystemBanner />
           <TopNav />
           <DocsSearchModalHost />
           <main id="main-content">{children}</main>
