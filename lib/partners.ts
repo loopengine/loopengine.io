@@ -19,7 +19,7 @@ export const featuredPartner: Partner = {
   slug: "openclaw",
   logoPath: "/logos/openclaw.svg",
   description:
-    "The agentic commerce platform - Loop Engine provides the decision governance layer for OpenClaw workflows.",
+    "The agentic commerce platform — Loop Engine provides the decision governance layer for OpenClaw agent operations.",
   integrationType: "featured",
   docsPath: "/docs/integrations/openclaw",
   externalUrl: "https://openclaw.ai",
@@ -87,7 +87,7 @@ export const aiProviderPartners: Partner[] = [
     slug: "pagerduty",
     logoPath: "/logos/pagerduty.svg",
     description:
-      "Incident-triggered loops — PagerDuty alerts start governed response workflows with full loop context.",
+      "Incident-triggered loops — PagerDuty alerts start governed response loops with full operational context.",
     integrationType: "integration",
     docsPath: "/docs/integrations/pagerduty",
     adapterPackage: "@loop-engine/adapter-pagerduty",
