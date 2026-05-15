@@ -166,12 +166,13 @@ const integrations: IntegrationCard[] = [
   {
     name: "n8n",
     badge: "Coming soon",
-    description: "Stateful approval checkpoints and auditable loop orchestration for n8n automations."
+    description: "Approval gates and operational evidence layered onto n8n automations."
   },
   {
     name: "Temporal",
     badge: "Coming soon",
-    description: "Loop Engine governance hooks for long-running Temporal workflows and human gates."
+    description:
+      "Governance and decision control layered onto Temporal execution — policy gates and evidence around long-running workflows."
   }
 ];
 
@@ -239,7 +240,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         url: "https://loopengine.io",
         name: "Loop Engine",
         description:
-          "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+          "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
         publisher: { "@id": "https://loopengine.io/#org" }
       },
       {
@@ -258,13 +259,13 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         "@id": "https://loopengine.io/#software",
         name: "Loop Engine",
         applicationCategory: "DeveloperApplication",
-        applicationSubCategory: "Runtime Library",
+        applicationSubCategory: "Operational Decision Control",
         operatingSystem: "Node.js 18+",
         url: "https://loopengine.io",
         downloadUrl: "https://npmjs.com/package/@loop-engine/sdk",
         softwareVersion: "0.1.0",
         description:
-          "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+          "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
         license: "https://www.apache.org/licenses/LICENSE-2.0",
         author: { "@id": "https://loopengine.io/#org" },
         offers: {
@@ -274,7 +275,8 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         },
         codeRepository: "https://github.com/loopengine/loop-engine",
         programmingLanguage: "TypeScript",
-        keywords: "runtime, state machine, workflow, AI actor, enterprise, TypeScript, open source"
+        keywords:
+          "operational decision control, governed operational state, deterministic guards, operational evidence, governed transitions, AI operational governance, typed actors, state machine runtime, operational loops, TypeScript, open source"
       }
     ]
   };

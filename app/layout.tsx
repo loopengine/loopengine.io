@@ -37,20 +37,24 @@ const BASE_URL = "https://loopengine.io";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Loop Engine",
+    default: "Loop Engine — Operational decision control",
     template: "%s · Loop Engine"
   },
   description:
-    "Open runtime for constrained, observable, and improvable enterprise operational loops. Apache-2.0 licensed.",
+    "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition. Apache-2.0 licensed.",
   keywords: [
-    "loop engine",
-    "enterprise runtime",
-    "state machine",
-    "AI actor",
+    "operational decision control",
+    "governed operational state",
+    "deterministic guards",
+    "operational evidence",
+    "governed transitions",
+    "AI operational governance",
+    "typed actors",
+    "state machine runtime",
     "operational loops",
+    "loop engine",
     "open source",
-    "TypeScript",
-    "workflow engine"
+    "TypeScript"
   ],
   authors: [{ name: "Better Data, Inc.", url: "https://betterdata.co" }],
   creator: "Better Data, Inc.",
@@ -59,23 +63,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: BASE_URL,
     siteName: "Loop Engine",
-    title: "Loop Engine",
+    title: "Loop Engine — Operational decision control",
     description:
-      "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+      "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
     images: [
       {
         url: "/og",
         width: 1200,
         height: 630,
-        alt: "Loop Engine — Open Runtime"
+        alt: "Loop Engine — Operational decision control"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Loop Engine",
+    title: "Loop Engine — Operational decision control",
     description:
-      "Open runtime for constrained, observable, and improvable enterprise operational loops.",
+      "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
     images: ["/og"],
     creator: "@loopengineio",
     site: "@loopengineio"

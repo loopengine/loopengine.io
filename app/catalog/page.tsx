@@ -69,8 +69,11 @@ export default function CatalogPage() {
           Canonical loop definitions for common enterprise patterns. Import any loop into your system with one line.
         </p>
         <p className="mt-2 max-w-3xl text-[var(--color-ink-tertiary)] text-sm leading-6">
-          This catalog lists <strong className="text-[var(--color-ink-secondary)]">governed workflow definitions</strong> for Loop
-          Engine. It is unrelated to the{" "}
+          This catalog lists{" "}
+          <strong className="text-[var(--color-ink-secondary)]">
+            catalog-backed loop definitions with policy gates and evidence
+          </strong>{" "}
+          for Loop Engine. It is unrelated to the{" "}
           <a
             className="text-[var(--color-primary)] underline underline-offset-4"
             href="https://commercegateway.io/registry"
