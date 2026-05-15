@@ -20,6 +20,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@betterdata/site-links"],
   turbopack: {
     root: __dirname,
   },

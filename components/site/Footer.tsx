@@ -1,6 +1,14 @@
 import Link from "next/link";
+import { Fragment } from "react";
 import { ExternalLink } from "lucide-react";
 import type { CSSProperties } from "react";
+import {
+  BETTER_DATA_DOCS_FOOTER_SECONDARY_LINKS,
+  BETTER_DATA_ECOSYSTEM,
+  BETTER_DATA_LEGAL_FOOTER_LINKS,
+  BETTER_DATA_SUPPORT_FOOTER,
+} from "@betterdata/site-links";
+import { BetterDataFooterSocialIcons } from "@betterdata/site-links/social-icons";
 import { LoopEngineLogo } from "@/components/logo";
 import {
   BETTERDATA_CCO_URL,
@@ -97,9 +105,9 @@ export function Footer() {
           <p style={headingStyle}>Better Data</p>
           <ExternalFooterLink href={BETTERDATA_CCO_URL} label="Commerce Chain Optimization (hosted)" style={linkStyle} />
           <ExternalFooterLink href={BETTERDATA_OPEN_INFRA_URL} label="Open operational infrastructure hub" style={linkStyle} />
-          <ExternalFooterLink href="https://www.betterdata.co/trust" label="Trust Center" style={linkStyle} />
-          <ExternalFooterLink href="https://betterdata.co" label="Created by Better Data" style={linkStyle} />
-          <ExternalFooterLink href="https://betterdata.co/docs" label="Platform docs" style={linkStyle} />
+          <ExternalFooterLink href={BETTER_DATA_ECOSYSTEM.trustCenter} label="Trust Center" style={linkStyle} />
+          <ExternalFooterLink href={BETTER_DATA_ECOSYSTEM.marketingSite} label="Created by Better Data" style={linkStyle} />
+          <ExternalFooterLink href={BETTER_DATA_ECOSYSTEM.docsBrowse} label="Platform docs" style={linkStyle} />
           <ExternalFooterLink href="https://commercegateway.io" label="Commerce Gateway" style={linkStyle} />
           <ExternalFooterLink href="https://commercechain.io" label="Commerce Chain" style={linkStyle} />
           <ExternalFooterLink href="https://tagd.sh" label="Signal Tags" style={linkStyle} />
@@ -110,6 +118,38 @@ export function Footer() {
           >
             security@betterdata.co
           </a>
+        </div>
+      </div>
+      <div
+        className="mx-auto grid w-full max-w-[var(--max-width-full)] gap-4 border-t px-0 py-6 md:grid-cols-2"
+        style={{ borderColor: "var(--color-border)" }}
+      >
+        <a
+          href={BETTER_DATA_SUPPORT_FOOTER.href}
+          rel="noopener noreferrer"
+          target="_blank"
+          className="hover:text-[var(--color-primary)]"
+          style={{ ...linkStyle, marginBottom: 0 }}
+        >
+          {BETTER_DATA_SUPPORT_FOOTER.label}
+        </a>
+        <BetterDataFooterSocialIcons
+          navClassName="flex flex-wrap items-center gap-2 md:justify-end"
+          linkClassName="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-[var(--color-ink-muted)] transition-colors hover:bg-[var(--color-surface-dark-alt)] hover:text-[var(--color-primary)]"
+        />
+        <div className="flex flex-wrap gap-x-4 gap-y-2 md:col-span-2">
+          {BETTER_DATA_DOCS_FOOTER_SECONDARY_LINKS.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              rel="noopener noreferrer"
+              target="_blank"
+              className="hover:text-[var(--color-primary)]"
+              style={{ ...linkStyle, marginBottom: 0 }}
+            >
+              {item.label}
+            </a>
+          ))}
         </div>
       </div>
       <div
@@ -155,67 +195,25 @@ export function Footer() {
         }}
       >
         <p className="flex flex-wrap items-center justify-center gap-x-1 gap-y-2 text-center">
-          <a
-            className="hover:text-[var(--color-primary)]"
-            href="https://www.betterdata.co/trust/security"
-            rel="noopener noreferrer"
-            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
-            target="_blank"
-          >
-            Security
-          </a>
-          <span aria-hidden className="select-none">
-            {' '}
-            ·{' '}
-          </span>
-          <a
-            className="hover:text-[var(--color-primary)]"
-            href="https://www.betterdata.co/privacy"
-            rel="noopener noreferrer"
-            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
-            target="_blank"
-          >
-            Privacy Policy
-          </a>
-          <span aria-hidden className="select-none">
-            {' '}
-            ·{' '}
-          </span>
-          <a
-            className="hover:text-[var(--color-primary)]"
-            href="https://www.betterdata.co/terms"
-            rel="noopener noreferrer"
-            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
-            target="_blank"
-          >
-            Terms of Service
-          </a>
-          <span aria-hidden className="select-none">
-            {' '}
-            ·{' '}
-          </span>
-          <a
-            className="hover:text-[var(--color-primary)]"
-            href="https://www.betterdata.co/cookies"
-            rel="noopener noreferrer"
-            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
-            target="_blank"
-          >
-            Cookie Notice
-          </a>
-          <span aria-hidden className="select-none">
-            {' '}
-            ·{' '}
-          </span>
-          <a
-            className="hover:text-[var(--color-primary)]"
-            href="https://www.betterdata.co/trust/open-source"
-            rel="noopener noreferrer"
-            style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
-            target="_blank"
-          >
-            Open Source disclosures
-          </a>
+          {BETTER_DATA_LEGAL_FOOTER_LINKS.map((item, i) => (
+            <Fragment key={item.href}>
+              {i > 0 ? (
+                <span aria-hidden className="select-none">
+                  {' '}
+                  ·{' '}
+                </span>
+              ) : null}
+              <a
+                className="hover:text-[var(--color-primary)]"
+                href={item.href}
+                rel="noopener noreferrer"
+                style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
+                target="_blank"
+              >
+                {item.label}
+              </a>
+            </Fragment>
+          ))}
         </p>
       </div>
     </footer>

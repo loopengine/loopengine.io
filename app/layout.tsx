@@ -90,9 +90,6 @@ export const metadata: Metadata = {
       "max-snippet": -1
     }
   },
-  icons: {
-    icon: [{ url: "/brand/favicon.svg", type: "image/svg+xml" }]
-  },
   manifest: "/site.webmanifest",
   alternates: {
     canonical: BASE_URL
