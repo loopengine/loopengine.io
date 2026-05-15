@@ -246,7 +246,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
       {
         "@type": "Organization",
         "@id": "https://loopengine.io/#org",
-        name: "Better Data, Inc.",
+        name: "Better Data",
         url: "https://betterdata.co",
         sameAs: [
           "https://github.com/loopengine",

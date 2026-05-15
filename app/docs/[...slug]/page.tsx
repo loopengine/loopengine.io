@@ -84,7 +84,7 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
           license: "https://www.apache.org/licenses/LICENSE-2.0",
           author: {
             "@type": "Organization",
-            name: "Better Data, Inc.",
+            name: "Better Data",
             url: "https://betterdata.co",
           },
           offers: {
@@ -103,13 +103,13 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
           inLanguage: "en-US",
           author: {
             "@type": "Organization",
-            name: "Better Data, Inc.",
+            name: "Better Data",
             url: "https://betterdata.co",
           },
           publisher: {
             "@type": "Organization",
-            name: "Loop Engine",
-            url: "https://loopengine.io",
+            name: "Better Data",
+            url: "https://betterdata.co",
             logo: {
               "@type": "ImageObject",
               url: "https://loopengine.io/brand/logo.svg",

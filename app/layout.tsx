@@ -56,8 +56,9 @@ export const metadata: Metadata = {
     "open source",
     "TypeScript"
   ],
-  authors: [{ name: "Better Data, Inc.", url: "https://betterdata.co" }],
-  creator: "Better Data, Inc.",
+  authors: [{ name: "Better Data", url: "https://betterdata.co" }],
+  creator: "Better Data",
+  publisher: "Better Data",
   openGraph: {
     type: "website",
     locale: "en_US",
