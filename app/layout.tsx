@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { PostHogProvider } from "@/components/analytics/PostHogProvider";
 import { TopNav } from "@/components/nav/TopNav";
 import { DocsSearchModalHost } from "@/components/docs/DocsSearchModalHost";
@@ -125,18 +125,7 @@ export default function RootLayout({
           <main id="main-content">{children}</main>
           <Footer />
         </PostHogProvider>
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}');
-          `}
-        </Script>
+        <GoogleAnalytics />
       </body>
     </html>
   );
