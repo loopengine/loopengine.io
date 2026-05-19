@@ -1,9 +1,14 @@
 import Script from "next/script";
-import { formatGaLinkerDomainsForScript, getGaMeasurementId } from "@/lib/analytics/gtag";
+import {
+  formatGaLinkerDomainsForScript,
+  getGaLoaderScriptId,
+  getGaMeasurementId,
+} from "@/lib/analytics/gtag";
 
 export function GoogleAnalytics() {
   const measurementId = getGaMeasurementId();
-  if (!measurementId) {
+  const loaderId = getGaLoaderScriptId();
+  if (!measurementId || !loaderId) {
     return null;
   }
 
@@ -12,7 +17,7 @@ export function GoogleAnalytics() {
   return (
     <>
       <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${loaderId}`}
         strategy="afterInteractive"
       />
       <Script id="ga4-loop-engine" strategy="afterInteractive">
