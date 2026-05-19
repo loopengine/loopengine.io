@@ -26,5 +26,5 @@ export function formatGaLinkerDomainsForScript(): string {
 /** @deprecated Use inline template in `GoogleAnalytics` — multiline strings break as Script children. */
 export function buildGtagInitScript(measurementId: string): string {
   const linkerDomains = GA_LINKER_DOMAINS.map((domain) => `'${domain}'`).join(", ");
-  return `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${measurementId}',{linker:{domains:[${linkerDomains}]}});`;
+  return `window.dataLayer=window.dataLayer||[];window.gtag=function gtag(){window.dataLayer.push(arguments);};window.gtag('js',new Date());window.gtag('config','${measurementId}',{linker:{domains:[${linkerDomains}]}});`;
 }
