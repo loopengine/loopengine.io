@@ -1,5 +1,5 @@
 import Script from "next/script";
-import { GA_LINKER_DOMAINS, getGaMeasurementId } from "@/lib/analytics/gtag";
+import { formatGaLinkerDomainsForScript, getGaMeasurementId } from "@/lib/analytics/gtag";
 
 export function GoogleAnalytics() {
   const measurementId = getGaMeasurementId();
@@ -7,7 +7,7 @@ export function GoogleAnalytics() {
     return null;
   }
 
-  const linkerDomains = GA_LINKER_DOMAINS.map((domain) => `'${domain}'`).join(",\n          ");
+  const linkerDomains = formatGaLinkerDomainsForScript();
 
   return (
     <>
