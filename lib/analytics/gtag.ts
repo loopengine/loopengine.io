@@ -3,6 +3,7 @@ export const GA_LINKER_DOMAINS = [
   "betterdata.co",
   "docs.betterdata.co",
   "loopengine.io",
+  "www.loopengine.io",
   "commercegateway.io",
   "commercechain.io",
   "tagd.sh",
@@ -13,16 +14,8 @@ export function getGaMeasurementId(): string | undefined {
   return measurementId || undefined;
 }
 
+/** @deprecated Prefer inline template in `GoogleAnalytics` — multiline strings break when passed as Script children. */
 export function buildGtagInitScript(measurementId: string): string {
   const linkerDomains = GA_LINKER_DOMAINS.map((domain) => `'${domain}'`).join(", ");
-  return `
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '${measurementId}', {
-      linker: {
-        domains: [${linkerDomains}],
-      },
-    });
-  `.trim();
+  return `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${measurementId}',{linker:{domains:[${linkerDomains}]}});`;
 }
