@@ -5,6 +5,10 @@ section: Core Concepts
 order: 20
 ---
 
+<Callout variant="info" title="Buyer-facing taxonomy">
+Public docs use [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) terms — **Providers**, **Channels**, and **Integrations**. This page maps **developer** adapter archetypes (`Store`, `Registry`, `AI`, `EventBus`) to those surfaces.
+</Callout>
+
 ## What is an IntegrationAdapter?
 
 An **IntegrationAdapter** is a package that implements one of Loop Engine's pluggable interfaces and slots into `LoopEngineOptions` (or the matching registry-client option). Every adapter preserves the same governance model — guards enforced, actors attributed, audit trail intact — and is swappable without changing loop definitions or business logic.

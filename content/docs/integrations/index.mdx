@@ -1,18 +1,22 @@
 ---
-title: Integrations
-description: Loop Engine integrations — AI providers, agentic platforms, storage adapters, observability, and commerce.
+title: Runtime Connections
+description: Connect Loop Engine to Providers (intelligence), Channels (human surfaces), and Integrations (operational systems).
 section: Integrations
 ---
 
-Connect Loop Engine to any AI provider, agentic platform, storage backend, or observability tool. Every integration preserves the same governance model — guards enforced, actors attributed, audit trail intact.
+Connect Loop Engine through three public categories — **[Providers](/docs/concepts/runtime-taxonomy#providers)**, **[Channels](/docs/concepts/runtime-taxonomy#channels)**, and **[Integrations](/docs/concepts/runtime-taxonomy#integrations)**. Every adapter preserves the same governance model: **guards enforced**, **actors attributed**, **evidence** on each transition.
 
-**Hosted HTTP API (Better Data Cloud):** For the **managed** multi-tenant service at `loops.betterdata.co` (JWT + `le_` API keys, `/api/v1/*`), see **[Loop Engine Cloud (hosted HTTP API)](/docs/integrations/loop-engine-cloud-api)** — full contract lives in the `bd-forge-main` repo beside `apps/hosted-loops`.
+→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture)
 
-Integrations group into four archetypes — **Store**, **Registry**, **AI**, and **EventBus**. Each archetype is a pluggable interface from `@loop-engine/runtime` (or `@loop-engine/registry-client`). See the [IntegrationAdapter archetype reference](/docs/concepts/integration-adapter) for the meta-pattern.
+**Hosted governance:** [Loop Engine Cloud (HTTP API)](/docs/integrations/loop-engine-cloud-api) at `loops.betterdata.co` — multi-tenant connectors and API keys. **OSS runtime:** self-host with `@loop-engine/sdk` in your infrastructure.
 
-## ⟩ AI Providers
+**Developer note:** npm packages implement [IntegrationAdapter archetypes](/docs/concepts/integration-adapter) (`Store`, `Registry`, `AI`, `EventBus`). Public grouping below follows the product taxonomy, not package folder names.
 
-Use any major LLM as a governed actor. Provider actor adapters produce the same `AIAgentActor` shape — switching providers requires changing one import. Perplexity Sonar covers **grounded retrieval with citations** as a `ToolAdapter` for research steps (see the package reference).
+## ⟩ Providers
+
+Intelligence sources and AI systems participating as governed actors (or tool steps for retrieval).
+
+Use any major LLM as a governed actor. Provider actor adapters produce the same `AIAgentActor` shape — switching providers requires changing one import. Perplexity Sonar covers **grounded retrieval with citations** as a `ToolAdapter` for research steps.
 
 <div className="grid gap-4 md:grid-cols-2">
   <IntegrationCard
@@ -60,25 +64,9 @@ Use any major LLM as a governed actor. Provider actor adapters produce the same 
     logoPath="/logos/perplexity.svg"
     href="/docs/integrations/perplexity"
   />
-</div>
-
-## ⟩ Agentic Platforms
-
-Loop Engine governs the decision boundary inside agentic workflows — AI reasoning happens in the platform, policy enforcement happens in the loop.
-
-<div className="grid gap-4 md:grid-cols-2">
-  <IntegrationCard
-    name="OpenClaw"
-    subtext="Agentic commerce platform — Loop Engine governs OpenClaw workflows"
-    tier="official"
-    status="stable"
-    attributes={["featured"]}
-    logoPath="/logos/openclaw.svg"
-    href="/docs/integrations/openclaw"
-  />
   <IntegrationCard
     name="Vercel AI SDK"
-    subtext="Stream AI responses inside governed loop transitions"
+    subtext="Governed tool calls and streams inside loop transitions"
     tier="official"
     status="stable"
     attributes={["built-in"]}
@@ -87,9 +75,31 @@ Loop Engine governs the decision boundary inside agentic workflows — AI reason
   />
 </div>
 
-## ⟩ Storage Adapters
+## ⟩ Channels
 
-Loop Engine's storage layer is an adapter interface. Swap backends without changing loop definitions or business logic.
+Human interaction surfaces — where operators approve, reject, or escalate governed transitions.
+
+<div className="grid gap-4 md:grid-cols-2">
+  <IntegrationCard
+    name="OpenClaw"
+    subtext="Route PENDING_HUMAN_APPROVAL to WhatsApp, Telegram, Slack, or Discord"
+    tier="official"
+    status="stable"
+    attributes={["featured"]}
+    logoPath="/logos/openclaw.svg"
+    href="/docs/integrations/openclaw"
+  />
+</div>
+
+<Callout variant="info" title="Slack, Teams, and hosted connectors">
+Slack and Microsoft Teams connectors are available on **Loop Engine Cloud** for dual-surface approval patterns. OSS `adapter-slack` / `adapter-teams` are planned — see [changelog](/docs/changelog).
+</Callout>
+
+## ⟩ Integrations
+
+Operational systems and persistence — side effects and context **after** guards pass.
+
+### Persistence and events
 
 <div className="grid gap-4 md:grid-cols-2">
   <IntegrationCard
@@ -110,7 +120,7 @@ Loop Engine's storage layer is an adapter interface. Swap backends without chang
   />
   <IntegrationCard
     name="Kafka"
-    subtext="Event streaming — publish loop events to Kafka topics"
+    subtext="Publish loop events to Kafka topics"
     tier="official"
     status="stable"
     attributes={["built-in"]}
@@ -124,14 +134,12 @@ Loop Engine's storage layer is an adapter interface. Swap backends without chang
   />
 </div>
 
-## ⟩ Observability & Alerting
-
-Loop Engine emits structured events at every transition. Wire them into your observability stack.
+### Operations and commerce
 
 <div className="grid gap-4 md:grid-cols-2">
   <IntegrationCard
     name="PagerDuty"
-    subtext="Incident-triggered loops — PagerDuty alerts start governed workflows"
+    subtext="Incident-triggered governed loops with on-call human steps"
     tier="official"
     status="stable"
     attributes={["built-in"]}
@@ -140,35 +148,36 @@ Loop Engine emits structured events at every transition. Wire them into your obs
   />
   <IntegrationCard
     name="Governed incident (Perplexity + PagerDuty)"
-    subtext="Sonar research → Loop FSM → PagerDuty with audit_ref in custom_details"
+    subtext="Sonar research → governed loop → PagerDuty with audit_ref"
     tier="official"
     status="stable"
     attributes={["built-in"]}
     logoPath="/logos/perplexity.svg"
     href="/docs/integrations/perplexity-pagerduty"
   />
-</div>
-
-## ⟩ Commerce
-
-Connect Loop Engine to commerce platforms and LLM commerce data layers.
-
-<div className="grid gap-4 md:grid-cols-2">
   <IntegrationCard
     name="Commerce Gateway"
-    subtext="LLM-accessible commerce data for AI actors inside procurement loops"
+    subtext="Controlled connectivity for AI tool execution in operational loops"
     tier="official"
     status="stable"
     attributes={["built-in"]}
     href="/docs/integrations/commerce-gateway"
   />
+  <IntegrationCard
+    name="Loop Engine Cloud API"
+    subtext="Hosted multi-tenant runtime, connectors, and governance API"
+    tier="official"
+    status="stable"
+    attributes={["built-in"]}
+    href="/docs/integrations/loop-engine-cloud-api"
+  />
 </div>
 
-## Building an integration?
+## Building an adapter?
 
-The Loop Engine adapter interface is open and documented. Any backend that implements one of the four archetype interfaces is valid.
+Implement one of the four [IntegrationAdapter](/docs/concepts/integration-adapter) archetype interfaces. Tag your integration page with the public taxonomy when contributing docs.
 
-- [IntegrationAdapter archetype →](/docs/concepts/integration-adapter)
+- [Runtime Taxonomy](/docs/concepts/runtime-taxonomy)
 - [Adapter interface docs →](/docs/running-loops/adapters)
 - [Apply for certification →](mailto:oss@betterdata.co)
 - [Open an RFC →](https://github.com/loopengine/loop-engine/discussions)
