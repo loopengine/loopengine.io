@@ -1,7 +1,7 @@
 ---
 title: Runtime Connections
 description: Connect Loop Engine to Providers (intelligence), Channels (human surfaces), and Integrations (operational systems).
-section: Integrations
+section: Runtime Connections
 ---
 
 Connect Loop Engine through three public categories — **[Providers](/docs/concepts/runtime-taxonomy#providers)**, **[Channels](/docs/concepts/runtime-taxonomy#channels)**, and **[Integrations](/docs/concepts/runtime-taxonomy#integrations)**. Every adapter preserves the same governance model: **guards enforced**, **actors attributed**, **evidence** on each transition.
@@ -173,9 +173,19 @@ Operational systems and persistence — side effects and context **after** guard
   />
 </div>
 
+## Coverage map (one category per page)
+
+| Connection | Taxonomy | Developer primitive |
+| --- | --- | --- |
+| Anthropic, OpenAI, Gemini, Grok, Perplexity, Vercel AI SDK | Provider | `ActorAdapter` / `ToolAdapter` |
+| OpenClaw | Channel | Human-surface `EventBus` routing |
+| Memory, Postgres, Kafka, HTTP, PagerDuty, Commerce Gateway, Loop Engine Cloud API | Integration | `LoopStore` / `EventBus` / operational adapters |
+| Perplexity + PagerDuty (composite) | Integration | Provider step + ops trigger in one pattern |
+| Vercel AI (`/docs/integrations/vercel-ai`) | Provider | Alias → [vercel-ai-sdk](/docs/integrations/vercel-ai-sdk) |
+
 ## Building an adapter?
 
-Implement one of the four [IntegrationAdapter](/docs/concepts/integration-adapter) archetype interfaces. Tag your integration page with the public taxonomy when contributing docs.
+Implement [IntegrationAdapter](/docs/concepts/integration-adapter) archetypes. Set `taxonomy:` in frontmatter (`provider` \| `channel` \| `integration`) so nav and indexes stay aligned.
 
 - [Runtime Taxonomy](/docs/concepts/runtime-taxonomy)
 - [Adapter interface docs →](/docs/running-loops/adapters)

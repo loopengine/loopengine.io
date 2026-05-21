@@ -1,7 +1,8 @@
 ---
 title: Loop Engine Cloud (hosted HTTP API)
 description: Managed Loop Engine HTTP API at loops.betterdata.co — auth, routes, and links to the canonical reference in bd-forge-main.
-section: Integrations
+section: Runtime Connections
+taxonomy: integration
 order: 15
 sidebar_label: Loop Engine Cloud API
 ---
@@ -9,14 +10,25 @@ sidebar_label: Loop Engine Cloud API
 <div className="docs-quick-links">
   <span className="docs-status-badge tier-community">Hosted</span>
   <span className="docs-status-badge attr-built-in">Production: loops.betterdata.co</span>
+  <span className="docs-status-badge attr-built-in">Taxonomy: Integration (hosted control plane)</span>
 </div>
 
 ## What this is
 
-The **OSS Loop Engine** (this site, `@loop-engine/*` on npm) defines the runtime model: states, signals, guards, transitions, and events. **Loop Engine Cloud** is Better Data’s **managed** deployment that exposes the same execution contract over **HTTPS** with tenancy, API keys, connectors, and product entitlements.
+**loopengine.io** documents the **OSS governed runtime** (`@loop-engine/*`). **Loop Engine Cloud** is the **hosted Integration** path: same loop/guard/evidence model, operated by Better Data with tenancy, API keys, and managed connectors (Slack, Google, …).
 
-- **Developers & integrations** → HTTP API at **`https://loops.betterdata.co`** (Bearer JWT for first-party services, **`le_` API keys** for external automation).
-- **Operators** → the **Automation** rail at **`app.betterdata.co/automation`** (same loops conceptually; product UX does not use engine marketing names in the nav).
+| Surface | Where to read |
+| --- | --- |
+| Loop Engine runtime, taxonomy, adapters | **loopengine.io** (this site) |
+| Loop Engine Cloud HTTP contract | This page + monorepo `apps/hosted-loops/docs/api.md` |
+| Better Data company, SCM, CCO applications | **[docs.betterdata.co](https://docs.betterdata.co)** — not loopengine.io |
+
+**OSS runtime** defines states, signals, guards, transitions, and events in **your** infrastructure. **Loop Engine Cloud** exposes the execution contract over **HTTPS** when you want managed governance operations.
+
+- **Developers & integrations** → **`https://loops.betterdata.co`** (Bearer JWT for first-party services, **`le_` API keys** for external automation).
+- **Operators** → **Automation** at **`app.betterdata.co/automation`** (product UX; same loops conceptually).
+
+We document **shipped** Cloud capabilities here and in the monorepo API reference. We do not imply undelivered OSS parity (Studio, multi-service compose, full connector matrix on npm) — see [changelog](/docs/changelog).
 
 ## Canonical reference
 

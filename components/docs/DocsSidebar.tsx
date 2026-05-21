@@ -132,46 +132,71 @@ export function DocsSidebar({ sections }: DocsSidebarProps) {
             No matching docs pages.
           </p>
         )}
-        {visibleSections.map((section, sectionIndex) => (
-          <div key={section.label}>
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "var(--text-xs)",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "var(--color-ink-muted)",
-                padding: sectionIndex === 0 ? "8px 24px 8px" : "16px 24px 8px"
-              }}
-            >
-              {section.label}
-            </p>
-            <div>
-              {section.items.map((item) => {
-                const active = isActive(pathname, item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    className="le-doc-item"
-                    href={item.href}
-                    style={{
-                      display: "block",
-                      fontFamily: "var(--font-body)",
-                      fontSize: "var(--text-sm)",
-                      color: active ? "var(--color-primary)" : "var(--color-ink-tertiary)",
-                      padding: "6px 24px",
-                      borderLeft: active ? "2px solid var(--color-primary)" : "2px solid transparent",
-                      background: active ? "var(--color-primary-glow)" : "transparent",
-                      transition: "all var(--dur-fast) var(--ease-out)"
-                    }}
-                  >
-                    {item.title}
-                  </Link>
-                );
-              })}
+        {visibleSections.map((section, sectionIndex) => {
+          const renderLink = (item: (typeof section.items)[number]) => {
+            const active = isActive(pathname, item.href);
+            return (
+              <Link
+                key={item.href}
+                className="le-doc-item"
+                href={item.href}
+                style={{
+                  display: "block",
+                  fontFamily: "var(--font-body)",
+                  fontSize: "var(--text-sm)",
+                  color: active ? "var(--color-primary)" : "var(--color-ink-tertiary)",
+                  padding: "6px 24px 6px 32px",
+                  borderLeft: active ? "2px solid var(--color-primary)" : "2px solid transparent",
+                  background: active ? "var(--color-primary-glow)" : "transparent",
+                  transition: "all var(--dur-fast) var(--ease-out)"
+                }}
+              >
+                {item.title}
+              </Link>
+            );
+          };
+
+          const useGroups = section.groups && section.groups.length > 0 && !normalizedQuery;
+
+          return (
+            <div key={section.label}>
+              <p
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "var(--text-xs)",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "var(--color-ink-muted)",
+                  padding: sectionIndex === 0 ? "8px 24px 8px" : "16px 24px 8px"
+                }}
+              >
+                {section.label}
+              </p>
+              {useGroups ? (
+                section.groups!.map((group) => (
+                  <div key={`${section.label}-${group.label}`}>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "10px",
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "var(--color-ink-muted)",
+                        padding: "10px 24px 4px 28px",
+                        opacity: 0.85
+                      }}
+                    >
+                      {group.label}
+                    </p>
+                    <div>{group.items.map(renderLink)}</div>
+                  </div>
+                ))
+              ) : (
+                <div>{section.items.map(renderLink)}</div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </nav>
     </aside>
   );
