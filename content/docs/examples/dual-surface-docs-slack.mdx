@@ -1,0 +1,61 @@
+---
+title: Google Docs + Slack (dual-surface)
+description: AI-generated proposal in Google Docs, human approval in Slack, governed transition before any write — Loop Engine Cloud pattern.
+section: Examples
+complexity: Advanced
+runnable: false
+---
+
+<Callout variant="warning" title="Narrative pattern — not an OSS clone-and-run example">
+This walkthrough describes the **Loop Engine Cloud** dual-surface model (Google work surface + Slack decision surface). It does **not** ship as a standalone repo in `loop-examples`. Connectors and templates are operated via **[Loop Engine Cloud](/docs/integrations/loop-engine-cloud-api)** — see [changelog](/docs/changelog) for shipped capabilities.
+</Callout>
+
+## Runtime flow
+
+| Stage | Role in this pattern |
+| --- | --- |
+| **Provider** | LLM drafts or revises proposal content (summary, rationale, risk notes) from Doc context |
+| **Loop + Guards** | Versioned loop definition; `evidence-required`, tier guards, optional `confidence-threshold` |
+| **Channel** | **Slack** — approver receives interactive approval; unmapped Slack users are rejected |
+| **Integration** | **Google Docs** — snapshot/hash evidence; apply or publish only after approved transition |
+| **Evidence** | Doc revision hash, prompt attribution, Slack actor mapping → platform `actorId`, transition audit |
+
+```text
+Google Doc (work)          Slack (decisions)           Loop Engine Cloud
+      │                          │                            │
+      │  context + draft         │  approve / reject          │  guards + state
+      └──────────────────────────┴────────────────────────────┘
+                                        │
+                                        ▼
+                              Evidence on each transition
+```
+
+## What this teaches
+
+- **Governance before writes** — Docs are a *work surface*; the loop decides whether content may be applied or published.
+- **Human escalation in Channel** — Slack is where tenant approvers act; not a chatbot that auto-commits.
+- **Deterministic boundaries** — Automation and Providers cannot take `human-only` transitions even if prompts ask them to.
+- **Evidence for disputes** — Each step records hashes and actor attribution suitable for audit, not chat logs.
+
+## What this is not
+
+- A Slack bot that “just approves” AI output without a loop instance and guards.
+- Un governed direct Google API writes from the model.
+- An OSS `adapter-slack` quickstart (planned on npm — use Cloud connectors today).
+
+## Architecture (hosted)
+
+Better Data’s dual-surface MVP runs on **`apps/hosted-loops`** with tenant-scoped OAuth:
+
+1. **Work surface** — read Doc context; stage proposed changes; attach content-hash evidence to signals.
+2. **Decision surface** — Slack Events + interactivity → `engine.transition(...)` with resolved platform actor.
+3. **Apply gate** — destructive or customer-visible writes occur only in post-approval integration steps.
+
+Company and connector operations docs: **[docs.betterdata.co](https://docs.betterdata.co)**. Runtime taxonomy and OSS primitives: **loopengine.io**.
+
+## Related
+
+- [Google Sheets + Slack](/docs/examples/dual-surface-sheets-slack) — staging/apply pattern for spreadsheets
+- [Runtime Taxonomy — Channels](/docs/concepts/runtime-taxonomy#channels)
+- [Loop Engine Cloud API](/docs/integrations/loop-engine-cloud-api)
+- [Human approval gates](/docs/ai-and-automation/human-approval-gates)

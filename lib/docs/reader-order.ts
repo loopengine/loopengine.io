@@ -87,17 +87,21 @@ const INTEGRATIONS_SLUG_RANK: Record<string, number> = (() => {
 const EXAMPLES_SLUG_RANK: Record<string, number> = (() => {
   const segments = [
     "examples",
-    "examples/expense-approval",
-    "examples/ai-replenishment",
+    "examples/dual-surface-docs-slack",
+    "examples/dual-surface-sheets-slack",
+    "examples/pagerduty-incident-loop",
+    "examples/workflow-plus-loop",
     "examples/ai-replenishment-claude",
     "examples/ai-replenishment-openai",
+    "examples/infrastructure-change-approval",
+    "examples/fraud-review",
+    "examples/expense-approval",
+    "examples/openclaw",
+    "examples/commerce-gateway",
+    "examples/ai-replenishment",
     "examples/demand-signal",
     "examples/postgres-persistence",
     "examples/event-streaming",
-    "examples/infrastructure-change-approval",
-    "examples/fraud-review",
-    "examples/openclaw",
-    "examples/commerce-gateway",
   ];
   const m: Record<string, number> = {};
   segments.forEach((s, i) => {

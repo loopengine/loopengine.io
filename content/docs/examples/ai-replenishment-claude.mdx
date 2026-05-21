@@ -21,9 +21,23 @@ github.com/loopengine/loop-examples/tree/main/ai-actors/claude
   This walkthrough uses the Loop Engine SDK directly. For the Commerce Chain–oriented version (participant manifests, `configure*Runtime`, SCM/DCM modules), see **[AI Replenishment on commercechain.io](https://commercechain.io/docs/examples/ai-replenishment)** — plus [Loop participation](https://commercechain.io/docs/getting-started/loop-participation) and [Runtime configuration](https://commercechain.io/docs/getting-started/runtime-configuration).
 </Callout>
 
+## Runtime flow
+
+| Stage | In this example |
+| --- | --- |
+| **Provider** | Claude (`@loop-engine/adapter-anthropic`) — `submit_recommendation` with confidence + evidence |
+| **Loop + Guards** | Replenishment loop — `confidence-threshold`, state machine enforcement |
+| **Channel** | Buyer approver (human actor) — `human-only` on `approve` / `reject` |
+| **Integration** | Downstream order/ERP trigger after `ORDERED` (your system of record) |
+| **Evidence** | SKU context, model confidence, recommendation fields on each transition |
+
+```text
+Provider (Claude) → Loop + Guards → Channel (buyer) → Integration (order) → Evidence
+```
+
 ## What this example shows
 
-An AI actor using `@loop-engine/adapter-anthropic` analyzes inventory evidence and submits a replenishment recommendation. A confidence threshold gate keeps low-confidence decisions from reaching execution. A human approval transition remains required for final ordering.
+An AI actor using `@loop-engine/adapter-anthropic` analyzes inventory evidence and submits a replenishment recommendation. A confidence threshold gate keeps low-confidence decisions from reaching execution. A human approval transition remains required for final ordering — **not** autonomous purchasing.
 
 ## Loop diagram
 

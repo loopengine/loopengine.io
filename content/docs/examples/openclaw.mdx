@@ -4,6 +4,20 @@ description: Use OpenClaw as the human approval channel for Loop Engine and rout
 section: Examples
 ---
 
+## Runtime flow
+
+| Stage | In this example |
+| --- | --- |
+| **Provider** | Optional — agent reasoning may live in OpenClaw; governed transitions still pass through Loop Engine |
+| **Loop + Guards** | Approval loop — `allowedActors: ['human']`, `approval_obtained` |
+| **Channel** | **OpenClaw** — WhatsApp/Telegram/Slack/Discord delivery of approval prompts |
+| **Integration** | Downstream PO / ERP trigger after approved transition |
+| **Evidence** | Transition events + messenger reply attribution |
+
+```text
+Provider (optional) → Loop + Guards → Channel (OpenClaw) → Integration → Evidence
+```
+
 ## Overview
 
 OpenClaw handles delivery and replies across messaging channels, while Loop Engine owns state transitions, actor constraints, and guard decisions.

@@ -15,6 +15,18 @@ github.com/loopengine/loop-examples/tree/main/expense-approval
 </a>
 </Callout>
 
+## Runtime flow
+
+| Stage | In this example |
+| --- | --- |
+| **Provider** | — (no AI; optional automation submits expense only) |
+| **Loop + Guards** | Expense loop — `human-only` on approval transition |
+| **Channel** | Approver (human actor) |
+| **Integration** | Payment/ERP post after `APPROVED` |
+| **Evidence** | Submission fields + approver attribution |
+
+Teaches **governance without a Provider** — policy and human escalation still apply.
+
 ## What this example shows
 
 The foundational Loop Engine pattern. An expense submission enters a two-step approval loop. A human-only guard on the approval transition ensures automation and AI actors can never self-approve.

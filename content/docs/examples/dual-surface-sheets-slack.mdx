@@ -1,0 +1,60 @@
+---
+title: Google Sheets + Slack (spreadsheet approval)
+description: Stage spreadsheet changes, approve in Slack, apply rows only after governed transition — dual-surface Loop Engine Cloud pattern.
+section: Examples
+complexity: Advanced
+runnable: false
+---
+
+<Callout variant="warning" title="Narrative pattern — not an OSS clone-and-run example">
+Spreadsheet **staging + gated apply** is a **Loop Engine Cloud** dual-surface pattern. There is no `loop-examples` directory that reproduces tenant Google OAuth and Slack installs end-to-end. Use this page for architecture; use Cloud connectors when available in your environment.
+</Callout>
+
+## Runtime flow
+
+| Stage | Role in this pattern |
+| --- | --- |
+| **Provider** | Optional — AI may propose row-level changes or classifications from sheet context |
+| **Loop + Guards** | Explicit states (e.g. `STAGED` → `PENDING_APPROVAL` → `APPLIED`); **no blind writes** during loop execution |
+| **Channel** | **Slack** — human approves or rejects staged diff; idempotent interactive handling |
+| **Integration** | **Google Sheets** — **stage** proposed edits; **apply** workbook updates only after approved transition |
+| **Evidence** | Staging snapshot, row keys, approver attribution, apply receipt hash |
+
+```text
+Sheet (staging)     Slack (approve/reject)     Loop + Guards
+     │                      │                      │
+     │  propose rows        │  human signal        │  commit transition?
+     └──────────────────────┴──────────────────────┘
+                               │
+                               ▼ (only if approved)
+                         Apply to Sheets
+                               │
+                               ▼
+                         Evidence + events
+```
+
+## Governance rules (non-negotiable)
+
+1. **Sheets = staging** — proposed edits land in a staging representation; production rows are not overwritten mid-loop.
+2. **Apply = Integration step** — runs only after guards pass and a human Channel action records approval.
+3. **Actors = platform identity** — Slack user ids map to tenant users; unmapped users cannot approve.
+4. **Evidence on transition** — not a post-hoc spreadsheet of chat messages.
+
+## What this teaches
+
+- **Deterministic boundaries** — guards block apply transitions without approval evidence.
+- **Human escalation** — high-impact row changes stay in `PENDING_*` until Slack action.
+- **AI assistance without magic** — a Provider may *recommend* staging content; it cannot call `apply` directly.
+
+## What this is not
+
+- A formula macro or Apps Script that auto-writes on model output.
+- A chatbot in Slack that edits Sheets without loop state.
+- Proof that OSS npm packages alone replicate tenant Google + Slack OAuth (that is Cloud/hosted-loops scope).
+
+## Related
+
+- [Google Docs + Slack](/docs/examples/dual-surface-docs-slack) — Doc snapshot / publish pattern
+- [Runtime Taxonomy — Integrations](/docs/concepts/runtime-taxonomy#integrations)
+- [Guards and Policy](/docs/concepts/guards-and-policy)
+- [Loop Engine Cloud API](/docs/integrations/loop-engine-cloud-api)
