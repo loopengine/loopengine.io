@@ -1,13 +1,16 @@
 import { LoopEngineIcon } from "@/components/logo";
 import { CodeTabs } from "@/components/home/CodeTabs";
 import { NpmInstallChip } from "@/components/home/NpmInstallChip";
+import { RuntimeFlowDiagram } from "@/components/home/RuntimeFlowDiagram";
 import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import {
   BETTERDATA_CCO_URL,
   LOOP_ENGINE_CCO_LINE,
+  LOOP_ENGINE_HERO_HEADLINE,
   LOOP_ENGINE_META_DESCRIPTION,
+  LOOP_ENGINE_PRIMARY,
   LOOP_ENGINE_SUPPORTING
 } from "@/lib/betterdata-ecosystem";
 
@@ -226,14 +229,10 @@ async function getRelatedLoopEnginePosts(): Promise<RelatedPost[]> {
 }
 
 export default function Home() {
-  const architecture = ["SIGNAL", "LOOP ENGINE", "ACTOR", "TRANSITION", "EVIDENCE", "LEARNING"];
-
-  return (
-    <HomeContent architecture={architecture} />
-  );
+  return <HomeContent />;
 }
 
-async function HomeContent({ architecture }: { architecture: string[] }) {
+async function HomeContent() {
   const stars = await getGitHubStars();
   const relatedPosts = await getRelatedLoopEnginePosts();
   const homeJsonLd = {
@@ -343,7 +342,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 maxWidth: 720
               }}
             >
-              Governed operational runtime for AI-assisted enterprise systems
+              {LOOP_ENGINE_HERO_HEADLINE}
             </h1>
             <p
               className="fade-in-up mt-5"
@@ -451,28 +450,8 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
               </div>
             </div>
 
-            <div className="fade-in-up mt-14 flex flex-wrap items-center gap-2 md:gap-3" style={{ animationDelay: "440ms" }}>
-              {architecture.map((node, index) => (
-                <div key={node} className="flex items-center gap-2">
-                  <span
-                    style={{
-                      border: "1px solid var(--color-border)",
-                      borderRadius: 999,
-                      padding: "8px 12px",
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "var(--text-xs)",
-                      letterSpacing: "0.04em"
-                    }}
-                  >
-                    {node}
-                  </span>
-                  {index < architecture.length - 1 ? (
-                    <span style={{ color: "var(--color-primary-mid)" }} aria-hidden>
-                      →
-                    </span>
-                  ) : null}
-                </div>
-              ))}
+            <div className="fade-in-up mt-14" style={{ animationDelay: "440ms" }}>
+              <RuntimeFlowDiagram variant="hero" />
             </div>
           </div>
         </div>
@@ -481,6 +460,168 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
       <section
         style={{
           background: "var(--color-surface)",
+          borderTop: "1px solid var(--color-border)",
+          borderBottom: "1px solid var(--color-border)",
+          padding: "72px 0"
+        }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)"
+            }}
+          >
+            Runtime platform
+          </p>
+          <h2 className="mt-3">Governed decision runtime</h2>
+          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            Loop Engine is the operational substrate where AI-assisted work becomes accountable. Intelligence proposes;
+            loops and guards decide whether a transition may commit; channels carry human oversight; integrations execute
+            only after policy passes. Evidence is recorded at the moment of the decision — not rebuilt from logs later.
+          </p>
+
+          <div
+            className="mt-8 rounded-xl border p-6 md:p-8"
+            style={{
+              borderColor: "var(--color-border)",
+              background: "var(--color-surface-alt)"
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-xs)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--color-ink-muted)"
+              }}
+            >
+              Canonical runtime flow
+            </p>
+            <div className="mt-4">
+              <RuntimeFlowDiagram />
+            </div>
+            <p style={{ marginTop: 14, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)", lineHeight: 1.65 }}>
+              Providers never bypass governance. Integrations do not call models directly without a governed loop
+              transition. Durable workflow engines may execute approved work — loops govern whether that work is allowed.
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            <PlatformPillar
+              title="Runtime connections"
+              items={[
+                {
+                  label: "Providers",
+                  body: "LLMs and AI systems participate as governed actors — not unconstrained agents."
+                },
+                {
+                  label: "Channels",
+                  body: "Slack, Teams, email, and messenger surfaces where humans approve or escalate."
+                },
+                {
+                  label: "Integrations",
+                  body: "PagerDuty, Google Workspace, commerce systems, and data stores — side effects after guards pass."
+                }
+              ]}
+            />
+            <PlatformPillar
+              title="Governance"
+              items={[
+                {
+                  label: "Guards",
+                  body: "Deterministic policy at runtime — enforce rules, constrain execution, require evidence."
+                },
+                {
+                  label: "Evidence",
+                  body: "Structured context on every transition for audit and operational learning."
+                },
+                {
+                  label: "Human oversight",
+                  body: "Human actors use the same attribution and guard model as automation and AI agents."
+                }
+              ]}
+            />
+          </div>
+
+          <article
+            className="mt-8"
+            style={{
+              border: "1px solid var(--color-border)",
+              borderRadius: "var(--radius-lg)",
+              background: "var(--color-surface-alt)",
+              padding: "20px 18px"
+            }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-xs)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--color-ink-muted)"
+              }}
+            >
+              Workflows vs loops
+            </p>
+            <p style={{ marginTop: 10, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
+              <strong style={{ color: "var(--color-ink-primary)" }}>Workflows define the path.</strong>{" "}
+              Temporal, n8n, and application orchestration coordinate durable steps.
+            </p>
+            <p style={{ marginTop: 8, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
+              <strong style={{ color: "var(--color-ink-primary)" }}>Loops govern the transitions.</strong>{" "}
+              Loop Engine decides who may move state, under which guards, with what evidence — before side effects land in
+              your systems.
+            </p>
+            <Link
+              href="/docs/concepts/loop-engine-vs-workflow-engines"
+              className="mt-4 inline-block"
+              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)" }}
+            >
+              Loop Engine vs workflow engines →
+            </Link>
+          </article>
+
+          <div className="mt-8 flex flex-col items-start gap-3 min-[520px]:flex-row min-[520px]:items-center">
+            <Link
+              href="/docs/getting-started/quick-start"
+              className="inline-flex items-center"
+              style={{
+                background: "var(--color-primary)",
+                color: "#fff",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-sm)"
+              }}
+            >
+              Self-host with the SDK
+            </Link>
+            <Link
+              href="/docs/integrations/loop-engine-cloud-api"
+              className="inline-flex items-center"
+              style={{
+                border: "1px solid var(--color-border)",
+                color: "var(--color-ink-secondary)",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-sm)"
+              }}
+            >
+              Loop Engine Cloud (hosted) →
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section
+        style={{
+          background: "var(--color-surface-alt)",
           borderTop: "1px solid var(--color-border)",
           borderBottom: "1px solid var(--color-border)",
           padding: "72px 0"
@@ -534,30 +675,10 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                   color: "var(--color-ink-muted)"
                 }}
               >
-                Loop Engine model
+                Governed runtime path
               </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                {["Signal", "Loop Engine", "Actor", "Transition", "Evidence", "Learning"].map((item, idx, arr) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <span
-                      style={{
-                        border: "1px solid var(--color-border)",
-                        borderRadius: 999,
-                        padding: "6px 10px",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "var(--text-xs)",
-                        background: item === "Loop Engine" ? "var(--color-primary-light)" : "var(--color-surface)"
-                      }}
-                    >
-                      {item}
-                    </span>
-                    {idx < arr.length - 1 ? (
-                      <span style={{ color: "var(--color-primary-mid)" }} aria-hidden>
-                        →
-                      </span>
-                    ) : null}
-                  </div>
-                ))}
+              <div className="mt-3">
+                <RuntimeFlowDiagram variant="hero" />
               </div>
             </article>
 
@@ -840,12 +961,22 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
       >
         <div className="mx-auto grid w-full max-w-[1200px] gap-5 px-6 md:grid-cols-3 md:px-10">
           <FeatureCard
-            title="Structure, not improvisation"
+            title="Guards enforce policy"
             icon={<LoopEngineIcon size={32} color="var(--color-primary)" />}
-            body="AI works best when decisions are bounded, outcomes are measurable, and every action leaves evidence. Loop Engine provides that structure."
+            body="Hard and soft guards run in the runtime — not in prompts. Transitions that fail policy do not advance; denials are recorded for audit."
           />
           <FeatureCard
-            title="Every actor accounted for"
+            title="Evidence on every transition"
+            icon={
+              <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
+                <rect x="6" y="8" width="20" height="16" rx="2" stroke="var(--color-primary)" strokeWidth="2" fill="none" />
+                <path d="M10 14h12M10 18h8" stroke="var(--color-primary-mid)" strokeWidth="2" />
+              </svg>
+            }
+            body="Structured evidence explains why a decision was allowed — inputs, confidence, approvals, and citations where applicable."
+          />
+          <FeatureCard
+            title="Human oversight built in"
             icon={
               <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
                 <circle cx="8" cy="16" r="4" fill="var(--color-primary-mid)" />
@@ -853,18 +984,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 <circle cx="24" cy="16" r="4" fill="var(--color-primary-dark)" />
               </svg>
             }
-            body="Human, automation, AI agent - the actor model treats all three identically. No action is anonymous. Every transition has attributed evidence."
-          />
-          <FeatureCard
-            title="Loops learn"
-            icon={
-              <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
-                <path d="M6 19c2-6 7-8 11-8 3 0 6 1 9 4" stroke="var(--color-primary)" strokeWidth="2" fill="none" />
-                <path d="M22 6l4 1-2 4" stroke="var(--color-primary)" strokeWidth="2" fill="none" />
-                <path d="M7 24h18" stroke="var(--color-border-dark)" strokeWidth="2" />
-              </svg>
-            }
-            body="Each closed loop emits structured training signals. Forecasts improve. Lead times sharpen. The system gets better automatically."
+            body="Human, automation, and AI agent actors share one model. Channels deliver approval gates; integrations execute only after governance passes."
           />
         </div>
       </section>
@@ -887,12 +1007,13 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
               color: "var(--color-primary)"
             }}
           >
-            Integrations
+            Runtime connections
           </p>
-          <h2 className="mt-3">Integrations across the agentic ecosystem</h2>
+          <h2 className="mt-3">Providers, channels, and integrations</h2>
           <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
-            Adapters plug into the control layer — Loop Engine is not a generic “do anything” automation runner. Pair with
-            Commerce Gateway when commerce execution needs the same guardrails.
+            Adapters connect intelligence, human surfaces, and enterprise systems into the same governance model. Loop
+            Engine is not a generic integration platform or Slack bot — every connection routes through decision loops and
+            guards.
           </p>
           <p
             style={{
@@ -1078,6 +1199,47 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         </div>
       </section>
     </>
+  );
+}
+
+function PlatformPillar({
+  title,
+  items
+}: {
+  title: string;
+  items: Array<{ label: string; body: string }>;
+}) {
+  return (
+    <article
+      style={{
+        border: "1px solid var(--color-border)",
+        borderRadius: "var(--radius-lg)",
+        background: "var(--color-surface-alt)",
+        padding: "22px 20px"
+      }}
+    >
+      <h3 style={{ fontSize: "var(--text-lg)" }}>{title}</h3>
+      <ul className="mt-4 space-y-4">
+        {items.map((item) => (
+          <li key={item.label}>
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-xs)",
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "var(--color-primary)"
+              }}
+            >
+              {item.label}
+            </p>
+            <p style={{ marginTop: 6, color: "var(--color-ink-tertiary)", lineHeight: 1.65, fontSize: "var(--text-sm)" }}>
+              {item.body}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </article>
   );
 }
 

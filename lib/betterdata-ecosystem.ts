@@ -1,4 +1,7 @@
 /** Phase 0B canonical copy — keep in sync with bd-forge glossary lock. */
+export const LOOP_ENGINE_HERO_HEADLINE =
+  "The governed operational runtime platform for AI-assisted enterprise systems.";
+
 export const LOOP_ENGINE_PRIMARY =
   "Loop Engine is an open governed operational runtime platform for AI-assisted enterprise systems.";
 
