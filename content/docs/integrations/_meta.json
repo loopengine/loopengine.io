@@ -1,4 +1,5 @@
 {
+  "title": "Runtime Connections",
   "order": [
     "index",
     "anthropic",
@@ -6,15 +7,16 @@
     "grok",
     "gemini",
     "perplexity",
-    "openclaw",
     "vercel-ai-sdk",
     "vercel-ai",
+    "openclaw",
     "postgres",
     "kafka",
     "http",
     "memory",
     "pagerduty",
     "perplexity-pagerduty",
-    "commerce-gateway"
+    "commerce-gateway",
+    "loop-engine-cloud-api"
   ]
 }

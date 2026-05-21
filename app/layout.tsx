@@ -6,6 +6,7 @@ import { TopNav } from "@/components/nav/TopNav";
 import { DocsSearchModalHost } from "@/components/docs/DocsSearchModalHost";
 import { EcosystemBanner } from "@/components/site/EcosystemBanner";
 import { Footer } from "@/components/site/Footer";
+import { LOOP_ENGINE_META_DESCRIPTION } from "@/lib/betterdata-ecosystem";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/globals.css";
@@ -37,21 +38,19 @@ const BASE_URL = "https://loopengine.io";
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Loop Engine — Operational decision control",
+    default: "Loop Engine — Governed operational runtime",
     template: "%s · Loop Engine"
   },
-  description:
-    "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition. Apache-2.0 licensed.",
+  description: LOOP_ENGINE_META_DESCRIPTION,
   keywords: [
-    "operational decision control",
-    "governed operational state",
+    "governed operational runtime",
+    "operational decision runtime",
+    "decision loops",
     "deterministic guards",
     "operational evidence",
     "governed transitions",
     "AI operational governance",
     "typed actors",
-    "state machine runtime",
-    "operational loops",
     "loop engine",
     "open source",
     "TypeScript"
@@ -64,23 +63,21 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: BASE_URL,
     siteName: "Loop Engine",
-    title: "Loop Engine — Operational decision control",
-    description:
-      "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
+    title: "Loop Engine — Governed operational runtime",
+    description: LOOP_ENGINE_META_DESCRIPTION,
     images: [
       {
         url: "/og",
         width: 1200,
         height: 630,
-        alt: "Loop Engine — Operational decision control"
+        alt: "Loop Engine — Governed operational runtime"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Loop Engine — Operational decision control",
-    description:
-      "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
+    title: "Loop Engine — Governed operational runtime",
+    description: LOOP_ENGINE_META_DESCRIPTION,
     images: ["/og"],
     creator: "@loopengineio",
     site: "@loopengineio"

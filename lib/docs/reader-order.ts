@@ -11,7 +11,7 @@ export const SECTION_LABEL_ORDER: string[] = [
   "Packages",
   "Loop catalog",
   "Examples",
-  "Integrations",
+  "Runtime Connections",
   "Governance",
   "Project",
 ];
@@ -34,21 +34,21 @@ const PACKAGES_SLUG_RANK: Record<string, number> = (() => {
     "packages/signals",
     "packages/guards",
     "packages/actors",
-    "packages/observability",
-    "packages/all-packages",
-    "packages/registry-client",
-    "packages/ui-devtools",
     "packages/adapter-anthropic",
     "packages/adapter-openai",
     "packages/adapter-gemini",
     "packages/adapter-grok",
     "packages/adapter-perplexity",
+    "packages/adapter-openclaw",
+    "packages/adapter-memory",
     "packages/adapter-postgres",
     "packages/adapter-kafka",
-    "packages/adapter-memory",
     "packages/adapter-http",
-    "packages/adapter-openclaw",
     "packages/adapter-commerce-gateway",
+    "packages/observability",
+    "packages/registry-client",
+    "packages/ui-devtools",
+    "packages/all-packages",
   ];
   const m: Record<string, number> = {};
   segments.forEach((s, i) => {
@@ -65,9 +65,9 @@ const INTEGRATIONS_SLUG_RANK: Record<string, number> = (() => {
     "integrations/grok",
     "integrations/gemini",
     "integrations/perplexity",
-    "integrations/openclaw",
     "integrations/vercel-ai-sdk",
     "integrations/vercel-ai",
+    "integrations/openclaw",
     "integrations/postgres",
     "integrations/kafka",
     "integrations/http",
@@ -75,6 +75,7 @@ const INTEGRATIONS_SLUG_RANK: Record<string, number> = (() => {
     "integrations/pagerduty",
     "integrations/perplexity-pagerduty",
     "integrations/commerce-gateway",
+    "integrations/loop-engine-cloud-api",
   ];
   const m: Record<string, number> = {};
   segments.forEach((s, i) => {
@@ -86,17 +87,21 @@ const INTEGRATIONS_SLUG_RANK: Record<string, number> = (() => {
 const EXAMPLES_SLUG_RANK: Record<string, number> = (() => {
   const segments = [
     "examples",
-    "examples/expense-approval",
-    "examples/ai-replenishment",
+    "examples/dual-surface-docs-slack",
+    "examples/dual-surface-sheets-slack",
+    "examples/pagerduty-incident-loop",
+    "examples/workflow-plus-loop",
     "examples/ai-replenishment-claude",
     "examples/ai-replenishment-openai",
+    "examples/infrastructure-change-approval",
+    "examples/fraud-review",
+    "examples/expense-approval",
+    "examples/openclaw",
+    "examples/commerce-gateway",
+    "examples/ai-replenishment",
     "examples/demand-signal",
     "examples/postgres-persistence",
     "examples/event-streaming",
-    "examples/infrastructure-change-approval",
-    "examples/fraud-review",
-    "examples/openclaw",
-    "examples/commerce-gateway",
   ];
   const m: Record<string, number> = {};
   segments.forEach((s, i) => {
@@ -109,7 +114,7 @@ function rankInStaticLists(sectionLabel: string, slugPath: string): number | nul
   if (sectionLabel === "Packages" && slugPath in PACKAGES_SLUG_RANK) {
     return PACKAGES_SLUG_RANK[slugPath]!;
   }
-  if (sectionLabel === "Integrations" && slugPath in INTEGRATIONS_SLUG_RANK) {
+  if (sectionLabel === "Runtime Connections" && slugPath in INTEGRATIONS_SLUG_RANK) {
     return INTEGRATIONS_SLUG_RANK[slugPath]!;
   }
   if (sectionLabel === "Examples" && slugPath in EXAMPLES_SLUG_RANK) {

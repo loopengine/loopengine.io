@@ -1,0 +1,65 @@
+---
+title: PagerDuty incident loop
+description: AI classification inside a governed loop, human escalation, PagerDuty alerting — full Provider → Channel → Integration flow with evidence.
+section: Examples
+complexity: Advanced
+packages:
+  - "@loop-engine/sdk"
+  - "@loop-engine/adapter-perplexity"
+  - "@loop-engine/adapter-pagerduty"
+runnable: partial
+---
+
+<Callout variant="info" title="Implementation detail">
+Step-by-step adapter configuration, Events API payloads, and the `governed-incident-response` transition graph live on **[Governed incident response (Perplexity + PagerDuty)](/docs/integrations/perplexity-pagerduty)**. This page teaches the **runtime flow** that page implements.
+</Callout>
+
+## Runtime flow
+
+| Stage | Role in this pattern |
+| --- | --- |
+| **Provider** | **Perplexity Sonar** (`ToolAdapter`) — grounded research + citations for classification input |
+| **Loop + Guards** | `governed-incident-response` (or equivalent) — risk tier, `human_review`, `blocked` without alert |
+| **Channel** | On-call human in PagerDuty UI / escalation policy — approves escalate vs. auto-path |
+| **Integration** | **PagerDuty** Events API v2 — trigger only when loop reaches `alerting` (with `audit_ref` in `custom_details`) |
+| **Evidence** | Sonar citations hash, classification rationale, human decision, alert payload reference |
+
+```text
+Provider (Sonar research)
+        ↓
+Loop + Guards (classify, gate, human_review)
+        ↓
+Channel (on-call human decision)
+        ↓
+Integration (PagerDuty alert)
+        ↓
+Evidence (tamper-evident trail)
+```
+
+## What this teaches
+
+- **Governance** — Neither Sonar nor PagerDuty alone produces a compliance-grade decision record; the loop binds them.
+- **Deterministic boundaries** — `blocked` and low-tier paths **do not** emit PagerDuty alerts; guards enforce that.
+- **Human escalation** — `human_review` timeout paths escalate through policy, not model discretion.
+- **AI assistance** — Provider supplies research; it does not page on-call by itself.
+
+## What this is not
+
+- “AI incident bot” that posts to PagerDuty without loop state.
+- A replacement for PagerDuty scheduling — Loop Engine governs **when** alerting is allowed.
+- A claim that every catalog loop id is pre-installed in your account — register definitions per environment.
+
+## Runnable scope
+
+| Piece | OSS today |
+| --- | --- |
+| Loop definition + `engine.transition` | Yes — `@loop-engine/sdk` |
+| Sonar + PagerDuty adapters | Yes — see integration guide |
+| End-to-end hosted template + tenant connectors | Loop Engine Cloud / operator setup |
+
+## Related
+
+- [Perplexity + PagerDuty integration](/docs/integrations/perplexity-pagerduty)
+- [PagerDuty connection](/docs/integrations/pagerduty)
+- [Perplexity Provider](/docs/integrations/perplexity)
+- [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)

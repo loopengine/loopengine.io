@@ -9,20 +9,20 @@
     "signals",
     "guards",
     "actors",
-    "observability",
-    "all-packages",
-    "registry-client",
-    "ui-devtools",
     "adapter-anthropic",
     "adapter-openai",
     "adapter-gemini",
     "adapter-grok",
     "adapter-perplexity",
+    "adapter-openclaw",
+    "adapter-memory",
     "adapter-postgres",
     "adapter-kafka",
-    "adapter-memory",
     "adapter-http",
-    "adapter-openclaw",
-    "adapter-commerce-gateway"
+    "adapter-commerce-gateway",
+    "observability",
+    "registry-client",
+    "ui-devtools",
+    "all-packages"
   ]
 }

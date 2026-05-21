@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { RUNTIME_TAXONOMY } from "./taxonomy";
 
 /** Single source of truth for public MDX frontmatter (validated at load time). */
 export const docFrontmatterSchema = z.object({
@@ -7,6 +8,8 @@ export const docFrontmatterSchema = z.object({
   section: z.string().optional(),
   sidebar_label: z.string().optional(),
   sidebar_group: z.string().optional(),
+  /** Public runtime taxonomy — Providers, Channels, Integrations (plus runtime-core / platform for packages). */
+  taxonomy: z.enum(RUNTIME_TAXONOMY).optional(),
   order: z.number().optional(),
   draft: z.boolean().optional(),
   canonical: z.string().optional(),

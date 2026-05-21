@@ -1,0 +1,97 @@
+---
+title: Workflow engine + Loop Engine
+description: Temporal or Salesforce durable execution with Loop Engine governing transitions — Provider → Guards → Channel → Integration (activity).
+section: Examples
+complexity: Advanced
+runnable: false
+---
+
+<Callout variant="warning" title="Narrative pattern">
+This is an **architecture composition** example. It does not ship as a single `loop-examples` folder. Combine OSS Loop Engine with your workflow engine using explicit transition gates — see [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines) for contracts.
+</Callout>
+
+## Runtime flow
+
+| Stage | Role in this pattern |
+| --- | --- |
+| **Provider** | AI agent inside a workflow activity proposes a transition (recommendation + evidence) |
+| **Loop + Guards** | Loop Engine evaluates policy **before** the workflow schedules downstream side effects |
+| **Channel** | Human approval activity (Slack, ticketing UI, or in-app) resumes workflow only after governed transition |
+| **Integration** | **Temporal** activity / **Salesforce** flow step executes durable work **after** `executed` status |
+| **Evidence** | Loop transition evidence linked to workflow run id / Salesforce record id for audit |
+
+```text
+Workflow (Temporal / Salesforce)
+        │
+        ├─ activity: propose AI decision
+        │       ↓
+        │   Provider
+        │       ↓
+        │   Loop + Guards  ←── Loop Engine (governance)
+        │       ↓
+        │   Channel (human)
+        │       ↓
+        └─ activity: execute approved work  ←── Integration (durable execution)
+                ↓
+            Evidence (both layers)
+```
+
+## Temporal composition
+
+**Temporal** owns: retries, timers, sagas, long-running coordination.
+
+**Loop Engine** owns: whether a named transition may commit, with which actor, and with what evidence.
+
+Typical sequence:
+
+1. Workflow reaches a decision checkpoint activity.
+2. Activity calls Provider adapter → submits transition candidate.
+3. `engine.transition` runs guards; may return `pending` for human Channel step.
+4. On `executed`, workflow continues to side-effect activities (deploy, CRM update, ticket close).
+
+```ts
+// @no-typecheck
+// After Loop Engine returns executed — Temporal runs durable side effects.
+const decision = await engine.transition({
+  aggregateId: workflowRunId as never,
+  transitionId: "approve_change" as never,
+  actor: resolvedHumanActor,
+  evidence: { workflowId: ctx.workflowId, runId: ctx.runId }
+});
+
+if (decision.status !== "executed") {
+  throw new ApplicationFailure("Governance blocked", "GOVERNANCE_BLOCKED");
+}
+// continue workflow: call external Integration APIs
+```
+
+## Salesforce composition
+
+**Salesforce Flow / Apex** often owns record updates and UI. Loop Engine governs **approval transitions** that Flow must not bypass:
+
+- Provider step: classify opportunity risk or draft terms (AI agent actor).
+- Loop + Guards: credit-policy guards, evidence-required fields.
+- Channel: approver in Salesforce approval process **or** Slack via Cloud connector.
+- Integration: Flow updates Opportunity only when loop instance is in approved state.
+
+Same rule: **Flow executes; Loop governs commit.**
+
+## What this teaches
+
+- **Governance differentiation** — workflows coordinate; loops **authorize** state changes.
+- **Deterministic boundaries** — activities must check `executed` vs. blocked/pending.
+- **Human escalation** — workflow waits on Channel, not on model stream end.
+- **Evidence** — audit ties workflow id to loop transition evidence.
+
+## What this is not
+
+- Loop Engine as a workflow engine replacement.
+- Salesforce or Temporal “plugins” that hide guards behind prompts.
+- An implied single npm package that embeds both runtimes — you compose explicitly.
+
+## Related
+
+- [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+- [What is a Loop?](/docs/concepts/what-is-a-loop)
+- [Architecture](/docs/getting-started/architecture)
+- [Infrastructure Change Approval](/docs/examples/infrastructure-change-approval) — SRE Channel + rollout Integration

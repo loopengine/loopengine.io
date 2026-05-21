@@ -1,0 +1,125 @@
+---
+title: Runtime Platform Direction
+description: Self-host operational runtime direction — what ships in OSS today, what Loop Engine Cloud adds, and roadmap-only extensions (constrained language).
+section: Core Concepts
+order: 8
+---
+
+Loop Engine is evolving toward a **self-host operational runtime platform**: a **local-first** stack and **operational governance substrate** you run in your infrastructure. This page states that direction honestly — what exists on npm **today**, what **Loop Engine Cloud** adds, and which components are **roadmap-only**.
+
+→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [Loop Engine Cloud API](/docs/integrations/loop-engine-cloud-api)
+
+## Positioning (locked)
+
+| Phrase | Meaning |
+| --- | --- |
+| **Self-host runtime platform** | You operate the governance runtime (`@loop-engine/sdk`, adapters, stores) in your processes or containers |
+| **Operational governance substrate** | Loops + guards + evidence sit **under** AI and workflow layers — they authorize transitions |
+| **Local-first runtime stack** | Default path is install SDK, wire adapters, run in your environment — not a required multi-tenant SaaS |
+
+We describe Loop Engine as infrastructure for **governed operational decisions**, not as a generic cloud suite or workflow marketplace.
+
+## What you can run today (OSS)
+
+| Capability | Status | How |
+| --- | --- | --- |
+| Loop definitions (YAML / TypeScript) | **Shipped** | `@loop-engine/sdk`, `@loop-engine/dsl` |
+| Transition execution + guards | **Shipped** | `@loop-engine/runtime`, `@loop-engine/guards` |
+| Actors, evidence, events | **Shipped** | `@loop-engine/actors`, `@loop-engine/events` |
+| Provider / Channel / Integration adapters | **Shipped** (per adapter) | See [runtime connections](/docs/integrations) |
+| In-process observability helpers | **Shipped** | `@loop-engine/observability`, `@loop-engine/ui-devtools` |
+| Remote registry client | **Shipped** | `@loop-engine/registry-client` (`localRegistry`, `httpRegistry`, …) |
+
+Typical **today** topology: one or more **application processes** embedding `createLoopSystem` with chosen `LoopStore` and `EventBus` adapters — not a mandatory multi-service mesh.
+
+```bash
+npm install @loop-engine/sdk
+```
+
+→ [Quick Start](/docs/getting-started/quick-start)
+
+## Runtime platform vs Loop Engine Cloud
+
+| | **OSS runtime (self-host)** | **Loop Engine Cloud (hosted)** |
+| --- | --- | --- |
+| **Runs where** | Your infrastructure | Better Data operated (`loops.betterdata.co`) |
+| **Primary job** | Govern transitions in **your** apps | Hosted governance API + managed connectors |
+| **Tenancy** | Your app’s isolation model | Multi-tenant control plane |
+| **Connectors** | You implement OAuth/secrets | Documented hosted connector paths (Slack, Google, …) |
+| **Docs surface** | **loopengine.io** (this site) | Cloud API page + **[docs.betterdata.co](https://docs.betterdata.co)** for company/apps |
+
+**Loop Engine Cloud does not replace the OSS runtime model** — it hosts governance operations when you want managed connectors and fleet-style control. **Better Data application documentation** (SCM, CCO, company products) lives on **docs.betterdata.co**, not loopengine.io.
+
+We do **not** claim **full self-host parity** with every Cloud connector or operator feature on day one.
+
+## Roadmap-only extensions (not available today)
+
+The following are **directional** components — **runtime extensions** and **governance layers**, not a sprawling separate cloud product. They may ship as optional services you run beside your app processes:
+
+| Component | Role (when shipped) | Category |
+| --- | --- | --- |
+| **Registry service** | Central loop catalog resolution (versioned definitions) | Runtime extension |
+| **Audit / event store** | Durable, queryable transition and guard history | Governance layer |
+| **Observability collector** | Fleet-wide metrics and timelines from loop events | Operational infrastructure |
+| **Replay service** | Reconstruct and analyze past transitions for audit | Governance layer |
+| **Studio** | Operator UI for loop inspection (scope TBD) | Governance layer |
+| **Docker Compose runtime** | Opinionated local/self-host bundle of OSS + optional services | Local-first stack |
+
+Until each item appears in [changelog](/docs/changelog) with a released version, treat it as **planned** — do not plan production dependencies on it.
+
+```text
+Today (typical)                 Direction (optional self-host services)
+─────────────────               ─────────────────────────────────────
+Your app + @loop-engine/sdk  →   + registry service (roadmap)
+       │                        + audit/event store (roadmap)
+       ├─ adapters              + observability collector (roadmap)
+       └─ your Postgres/Kafka    + replay (roadmap)
+                                 + Studio (roadmap, not announced GA)
+                                 + compose kit (roadmap)
+```
+
+## Language we avoid
+
+| Do not say | Why |
+| --- | --- |
+| “The Supabase for AI workflows” | Implies hosted DB + auth + realtime product parity we do not ship |
+| “Full self-host parity with Cloud” | Connectors and control-plane features differ by design |
+| “Multi-service runtime **today**” | OSS is embeddable; mesh is roadmap-only |
+| “Studio is available” | Unless changelog documents a release |
+| “X for Y” competitor mimicry | e.g. “Temporal for AI”, “Zapier for governance” — obscures the governance substrate |
+
+Prefer **concrete primitives**: loops, guards, evidence, Providers, Channels, Integrations.
+
+## How future services should read
+
+**Do** frame additions as:
+
+- **Runtime extensions** — optional processes that help definitions, events, or replay
+- **Governance layers** — audit, policy visibility, operator tooling
+- **Operational infrastructure** — collectors and stores **you** operate
+
+**Do not** frame as:
+
+- A second “AI workflow cloud” unrelated to transition governance
+- Mandatory microservices for every deployment
+- Replacement for your existing data plane or identity system
+
+## Choosing a path
+
+```text
+Need governed loops in your app now?
+    → OSS SDK + adapters (self-host)
+
+Need managed Slack/Google connectors + tenancy API?
+    → Loop Engine Cloud (hosted Integration path)
+
+Need company / SCM / CCO product docs?
+    → docs.betterdata.co (not loopengine.io)
+```
+
+## Related
+
+- [Architecture](/docs/getting-started/architecture) — evidence flow and boundaries
+- [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) — Providers, Channels, Integrations
+- [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines) — execution vs governance
+- [Package taxonomy](/docs/packages) — what to install today

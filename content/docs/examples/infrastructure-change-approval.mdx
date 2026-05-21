@@ -16,9 +16,23 @@ packages:
 </div>
 </Callout>
 
+## Runtime flow
+
+| Stage | In this example |
+| --- | --- |
+| **Provider** | Claude — blast-radius analysis (`submit_analysis`) |
+| **Loop + Guards** | Change-approval loop — `evidence-required`, `confidence-threshold`, state gates |
+| **Channel** | SRE approver — `human-only` on `approve_change` / `reject_change` |
+| **Integration** | Deploy controller automation — rollout **after** approved transition |
+| **Evidence** | Blast radius score, affected services, rollback plan on transitions |
+
+```text
+Provider (analysis) → Loop + Guards → Channel (SRE) → Integration (rollout) → Evidence
+```
+
 ## What this example shows
 
-Infrastructure change management is high risk by default. This pattern introduces explicit governance checkpoints: AI blast-radius analysis, human SRE approval, and then automation-controlled rollout. Every handoff carries evidence and attributed actors.
+Infrastructure change management is high risk by default. This pattern introduces explicit governance checkpoints: AI blast-radius analysis, human SRE approval, and then automation-controlled rollout. Every handoff carries evidence and attributed actors — **not** an AI that deploys without approval.
 
 ## Loop diagram
 

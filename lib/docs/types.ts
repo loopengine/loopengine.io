@@ -24,9 +24,16 @@ export type DocNavItem = {
   href: string;
 };
 
+export type DocNavGroup = {
+  label: string;
+  items: DocNavItem[];
+};
+
 export type DocNavSection = {
   label: string;
   items: DocNavItem[];
+  /** Taxonomy sub-groups (Providers / Channels / Integrations) within a section. */
+  groups?: DocNavGroup[];
 };
 
 /** Plain slug + body (e.g. `llms-full.txt` aggregate export). */

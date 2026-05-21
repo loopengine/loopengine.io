@@ -1,100 +1,134 @@
 ---
 title: Examples
-description: Production-style Loop Engine example patterns with architecture walkthroughs and links to runnable source.
+description: Runtime flow patterns — Provider, Loop + Guards, Channel, Integration, Evidence — not integration catalogs or chatbot demos.
 section: Examples
 ---
 
-Loop Engine examples demonstrate production-style patterns with minimal boilerplate and explicit operational constraints. Each example is a self-contained runnable project, and these pages explain the architecture and implementation pattern.
+Examples teach **how governed operational decisions move through the runtime**, not how to wire a single adapter. Each pattern names **who** may transition state, **what evidence** is required, and **where humans** intervene — before any side effect reaches an operational system.
 
-<Callout variant="info" title="Runnable source on GitHub">
-<div style={{ display: "grid", gap: "8px" }}>
-  <div>All runnable examples live in <code>github.com/loopengine/loop-examples</code>.</div>
-  <div style={{ color: "var(--color-ink-tertiary)" }}>
-    Each directory includes a README with setup and run instructions.
-  </div>
-  <div>
-    <a href="https://github.com/loopengine/loop-examples" target="_blank" rel="noreferrer">
-      View on GitHub →
-    </a>
-  </div>
-</div>
-</Callout>
+→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
 
-## Clone once, run any example
+## Canonical runtime flow
 
-```bash
-git clone https://github.com/loopengine/loop-examples
-cd loop-examples
-pnpm install
+Every priority pattern on this page follows the same spine:
+
+```text
+Provider (intelligence)
+        ↓
+Loop + Guards (governance)
+        ↓
+Channel (human surface)
+        ↓
+Integration (operational system)
+        ↓
+Evidence (audit + learning)
 ```
 
-## Example patterns
+**Providers** recommend or classify — they do not commit transitions alone. **Guards** enforce deterministic policy before state changes. **Channels** are where humans approve, reject, or escalate. **Integrations** persist state, trigger incidents, or apply approved writes. **Evidence** explains *why* each transition was allowed.
+
+<Callout variant="warning" title="What these examples are not">
+They are **not** simple automation recipes, chatbot demos, or “agent magic” that skips policy. Loop Engine governs **whether** a transition commits; workflow engines and apps **execute** work after approval.
+</Callout>
+
+## What examples demonstrate
+
+| Principle | In practice |
+| --- | --- |
+| **Governance** | `human-only`, `confidence-threshold`, `evidence-required` guards block unauthorized transitions |
+| **Evidence** | Structured fields on every material transition — not reconstructed logs |
+| **Deterministic boundaries** | Guards are runtime checks, not prompt instructions |
+| **Human escalation** | Low confidence or high risk → `PENDING_*` states routed to a **Channel** |
+| **AI assistance** | Providers submit **recommendations** inside the loop — never self-approve |
+
+## Priority patterns
 
 <div className="grid gap-4 md:grid-cols-2">
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
-    <h3><a href="/docs/examples/expense-approval">Expense Approval</a></h3>
-    <p>Human-only approval loop — the simplest governed pattern.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code></p>
-    <p><strong>Complexity:</strong> Starter</p>
-    <a href="/docs/examples/expense-approval">View pattern →</a>
+    <h3><a href="/docs/examples/dual-surface-docs-slack">Google Docs + Slack</a></h3>
+    <p>AI-generated proposal in Docs → Slack approval → governed transition → apply path.</p>
+    <p><strong>Flow:</strong> Provider → Loop + Guards → Channel (Slack) → Integration (Docs/Sheets)</p>
+    <p><strong>Surface:</strong> Loop Engine Cloud · Narrative pattern</p>
   </article>
 
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/dual-surface-sheets-slack">Google Sheets + Slack</a></h3>
+    <p>Spreadsheet staging → human approval in Slack → gated apply to Sheets.</p>
+    <p><strong>Flow:</strong> Provider (optional) → Loop + Guards → Channel → Integration</p>
+    <p><strong>Surface:</strong> Loop Engine Cloud · Narrative pattern</p>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/pagerduty-incident-loop">PagerDuty incident loop</a></h3>
+    <p>AI classification + guarded escalation + PagerDuty alerting with audit trail.</p>
+    <p><strong>Flow:</strong> Provider → Loop + Guards → Channel → Integration (PagerDuty)</p>
+    <p><strong>Surface:</strong> OSS adapters · <a href="/docs/integrations/perplexity-pagerduty">integration guide</a></p>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/workflow-plus-loop">Workflow + Loop</a></h3>
+    <p>Temporal or Salesforce durable steps with Loop Engine governing transitions.</p>
+    <p><strong>Flow:</strong> Provider → Loop + Guards → Channel → Integration (workflow activity)</p>
+    <p><strong>Surface:</strong> Narrative · complements workflow engines</p>
+  </article>
+</div>
+
+## OSS runnable patterns
+
+<Callout variant="info" title="Runnable source on GitHub">
+Some patterns ship in <a href="https://github.com/loopengine/loop-examples" target="_blank" rel="noreferrer"><code>loopengine/loop-examples</code></a>. Pages marked <strong>Coming soon</strong> are architecture walkthroughs only — no implied clone-and-run repo.
+</Callout>
+
+```bash
+git clone https://github.com/loopengine/loop-examples
+cd loop-examples && pnpm install
+```
+
+<div className="grid gap-4 md:grid-cols-2">
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
     <h3><a href="/docs/examples/ai-replenishment-claude">AI Replenishment (Claude)</a></h3>
-    <p>Anthropic AI actor recommends a reorder. Human approval gate enforces policy.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>signals</code> <code>adapter-anthropic</code></p>
-    <p><strong>Complexity:</strong> Intermediate</p>
-    <a href="/docs/examples/ai-replenishment-claude">View pattern →</a>
-  </article>
-
-  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
-    <h3><a href="/docs/examples/ai-replenishment-openai">AI Replenishment (OpenAI)</a></h3>
-    <p>Identical loop behavior with OpenAI actor — shows adapter interchangeability.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>signals</code> <code>adapter-openai</code></p>
-    <p><strong>Complexity:</strong> Intermediate</p>
-    <a href="/docs/examples/ai-replenishment-openai">View pattern →</a>
-  </article>
-
-  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
-    <h3><a href="/docs/examples/demand-signal">Demand Signal</a></h3>
-    <p>Rule-based signal detection that triggers loop start — no AI required.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>signals</code></p>
-    <p><strong>Complexity:</strong> Starter</p>
-    <a href="/docs/examples/demand-signal">View pattern →</a>
-  </article>
-
-  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
-    <h3><a href="/docs/examples/postgres-persistence">Postgres Persistence</a></h3>
-    <p>Swap the in-memory adapter for Postgres — adapter contract in practice.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>adapter-postgres</code></p>
-    <p><strong>Complexity:</strong> Intermediate</p>
-    <a href="/docs/examples/postgres-persistence">View pattern →</a>
-  </article>
-
-  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
-    <h3><a href="/docs/examples/event-streaming">Event Streaming</a></h3>
-    <p>Event subscriptions, timeline reconstruction, and replay utilities.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>events</code> <code>observability</code></p>
-    <p><strong>Complexity:</strong> Intermediate</p>
-    <a href="/docs/examples/event-streaming">View pattern →</a>
+    <p>Provider recommendation → confidence guard → human approval → order integration.</p>
+    <p><strong>Runnable:</strong> Yes · <code>loop-examples/ai-actors/claude</code></p>
   </article>
 
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
     <h3><a href="/docs/examples/infrastructure-change-approval">Infrastructure Change Approval</a></h3>
-    <p>AI blast-radius analysis + SRE approval gate + automated rollout.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>adapter-anthropic</code></p>
-    <p><strong>Complexity:</strong> Advanced</p>
-    <a href="/docs/examples/infrastructure-change-approval">View pattern →</a>
+    <p>Provider blast-radius analysis → SRE Channel → rollout Integration.</p>
+    <p><strong>Runnable:</strong> Coming soon</p>
   </article>
 
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
     <h3><a href="/docs/examples/fraud-review">Fraud Review</a></h3>
-    <p>AI fraud scoring with conditional escalation to human analyst.</p>
-    <p><strong>Packages:</strong> <code>sdk</code> <code>actors</code> <code>signals</code> <code>adapter-openai</code></p>
-    <p><strong>Complexity:</strong> Advanced</p>
-    <a href="/docs/examples/fraud-review">View pattern →</a>
+    <p>Provider scoring → analyst Channel → case disposition with evidence.</p>
+    <p><strong>Runnable:</strong> Coming soon</p>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/expense-approval">Expense Approval</a></h3>
+    <p>Loop + Guards + human Channel — governance baseline without an AI Provider.</p>
+    <p><strong>Runnable:</strong> Yes · <code>loop-examples/expense-approval</code></p>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/openclaw">OpenClaw Channel</a></h3>
+    <p>Messenger Channel routing for <code>PENDING_HUMAN_APPROVAL</code> — OSS adapter.</p>
+    <p><strong>Runnable:</strong> Pattern doc · see <a href="/docs/integrations/openclaw">OpenClaw integration</a></p>
+  </article>
+
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/commerce-gateway">Commerce Gateway</a></h3>
+    <p>Governed tool execution — Integration after policy passes (not a Provider).</p>
+    <p><strong>Runnable:</strong> See integration + examples repo index</p>
   </article>
 </div>
+
+## Supporting patterns
+
+| Pattern | Focus |
+| --- | --- |
+| [Demand Signal](/docs/examples/demand-signal) | Signals → loop start (no Provider) |
+| [Postgres Persistence](/docs/examples/postgres-persistence) | Integration (`LoopStore`) swap |
+| [Event Streaming](/docs/examples/event-streaming) | Evidence via event timeline |
+| [AI Replenishment (OpenAI)](/docs/examples/ai-replenishment-openai) | Same flow as Claude — adapter swap |
 
 ## Don't see your use case?
 

@@ -1,0 +1,170 @@
+---
+title: Runtime Taxonomy
+description: Canonical terms for Loop Engine — Providers, Channels, Integrations, Loops, Guards, Evidence, and Actors — plus runtime vs Loop Engine Cloud.
+section: Core Concepts
+order: 5
+---
+
+Loop Engine is a **governed operational runtime platform**. This page is the canonical glossary for public docs on [loopengine.io](https://loopengine.io). Package names (`@loop-engine/*`) and developer types (`ActorAdapter`, `ToolAdapter`) are implementation details — see [IntegrationAdapter archetype](/docs/concepts/integration-adapter) for the implementer map.
+
+## Runtime flow (read this first)
+
+```text
+Providers (intelligence)
+        ↓
+Decision loops + Guards
+        ↓
+Channels (human surfaces)
+        ↓
+Integrations (operational systems)
+        ↓
+Evidence + learning
+```
+
+**Rules this model enforces:**
+
+- Providers do **not** bypass guards or write directly to integrations.
+- Integrations do **not** call models without a governed loop transition.
+- Durable workflow engines may **execute** approved work; **loops govern** whether transitions commit.
+
+## Public taxonomy
+
+| Public term | Meaning |
+| --- | --- |
+| **Provider** | Intelligence source — LLMs and AI systems that participate as governed actors (or tool steps for retrieval). |
+| **Channel** | Human interaction surface — where people approve, reject, or escalate (Slack, Teams, email, messenger routing). |
+| **Integration** | Operational system — enterprise apps and infrastructure that receive side effects or supply context **after** policy passes. |
+| **Loop** | Governed decision cycle — explicit states, transitions, signals, and outcomes (not a generic BPM template). |
+| **Guard** | Deterministic runtime policy — evaluated before a transition commits; not prompt instructions. |
+| **Evidence** | Auditability layer — structured context explaining why a transition was allowed. |
+| **Actor** | Participant — human, automation, or AI agent (and engineering types such as webhook where documented). |
+
+## Providers
+
+**Providers** supply intelligence into a loop: recommendations, classifications, draft decisions, or research steps.
+
+**Includes:** Anthropic, OpenAI, Gemini, Grok, Vercel AI SDK–backed models.
+
+**Research steps:** Perplexity Sonar acts as a **tool** step (`ToolAdapter`) for grounded retrieval with citations — still governed by the same loop and guards.
+
+**Excludes:** MCP as a Provider. MCP is a [protocol/connectivity layer](#mcp-and-commerce-gateway) used with Commerce Gateway; Loop Engine governs whether operational transitions proceed.
+
+**npm adapters (examples):** `@loop-engine/adapter-anthropic`, `adapter-openai`, `adapter-gemini`, `adapter-grok`, `adapter-vercel-ai`, `adapter-perplexity`.
+
+## Channels
+
+**Channels** are where **humans** interact with a governed loop — not where ERP writes occur.
+
+**Includes:** Slack, Microsoft Teams, email, Discord/Telegram via OpenClaw routing, in-app approval UIs.
+
+**Not Loop Engine “Channels” (disambiguation):**
+
+| Term elsewhere | What it means |
+| --- | --- |
+| **DCM commerce channel** | Sales/marketplace channel in Commerce Chain (Shopify, Amazon, etc.) |
+| **Event-bus channel** | Internal module queue name in workers — engineering only |
+| **`@betterdata/dcm-channels`** | Commerce Chain package — not this taxonomy |
+
+**npm adapters (examples):** `@loop-engine/adapter-openclaw` (routing). Slack/Teams adapters are planned; hosted connectors may use Loop Engine Cloud APIs.
+
+## Integrations
+
+**Integrations** are operational systems and persistence layers that connect **after** governance:
+
+- Trigger or enrich loops (PagerDuty incidents, webhooks)
+- Persist state and events (Postgres, Kafka, memory store)
+- Execute commerce or tool calls (Commerce Gateway)
+- Apply approved writes (Google Workspace APIs in hosted patterns)
+
+Browse the [runtime connections index](/docs/integrations) grouped by this taxonomy.
+
+**npm adapters (examples):** `adapter-postgres`, `adapter-kafka`, `adapter-pagerduty`, `adapter-commerce-gateway`, `adapter-http`, `adapter-memory`.
+
+## Loops, guards, evidence, actors
+
+### Loop
+
+A **loop** is a versioned **governed decision cycle** with `LoopDefinition` states and transitions. Finite-state machinery is the runtime implementation — the product unit is the **decision loop**.
+
+→ [What is a Loop?](/docs/concepts/what-is-a-loop)
+
+### Guard
+
+**Guards** enforce policy at runtime: constrain execution, require evidence fields, escalate to humans, and block transitions that fail hard checks.
+
+→ [Guards and Policy](/docs/concepts/guards-and-policy)
+
+### Evidence
+
+**Evidence** is attached to transitions to support audit, dispute resolution, and operational learning. It is captured when the transition is evaluated — not assembled later from scattered logs.
+
+→ [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)
+
+### Actor
+
+Every transition names an **actor** (`human`, `automation`, `ai-agent`). Attribution is mandatory for governance.
+
+→ [Actor Model](/docs/concepts/actor-model)
+
+## MCP and Commerce Gateway
+
+**MCP (Model Context Protocol)** is a **protocol and controlled connectivity** pattern — not a Loop Engine Provider and not the runtime itself.
+
+Typical stack:
+
+1. **Registry / Gateway** — discover and execute tools against operational data.
+2. **Loop Engine** — govern whether operational **state** may change.
+3. **Integrations** — systems of record that receive approved side effects.
+
+→ [Commerce Gateway integration](/docs/integrations/commerce-gateway) · [Decision Governance](/docs/concepts/decision-governance)
+
+## Runtime platform vs Loop Engine Cloud
+
+Loop Engine can run **inside your infrastructure**, or connect to **hosted governance services** from Better Data.
+
+### Runtime platform (OSS)
+
+| Aspect | Description |
+| --- | --- |
+| **What** | Open governed operational runtime (`@loop-engine/sdk` and adapters) |
+| **Where** | Local execution in your environment — processes, containers, or services you operate |
+| **Primitives** | Loops, guards, actors, evidence, events, signals |
+| **Direction** | Self-host first; add Providers, Channels, and Integrations via adapters |
+| **Docs** | You are reading them on loopengine.io |
+
+Install and run:
+
+```bash
+npm install @loop-engine/sdk
+```
+
+→ [Quick Start](/docs/getting-started/quick-start) · [Architecture](/docs/getting-started/architecture)
+
+### Loop Engine Cloud (hosted)
+
+| Aspect | Description |
+| --- | --- |
+| **What** | Better Data hosted **governance control plane** |
+| **Where** | Multi-tenant service at [loops.betterdata.co](https://loops.betterdata.co) |
+| **Adds** | Tenant isolation, connector OAuth (e.g. Slack, Google), API keys, metering, retention/compliance-oriented operations |
+| **Direction** | Optional path when you want managed connectors and fleet-style operations without operating every adapter yourself |
+| **Contract** | [Loop Engine Cloud HTTP API](/docs/integrations/loop-engine-cloud-api) |
+
+We document **what is available today** on the Cloud API page. We do not imply undelivered surfaces (Studio, docker compose runtime, multi-service mesh, or full self-host parity with Cloud) — see [Runtime Platform Direction](/docs/concepts/runtime-platform-direction) and [changelog](/docs/changelog).
+
+## Workflows vs loops
+
+| | Workflows (Temporal, n8n, app code) | Loops (Loop Engine) |
+| --- | --- | --- |
+| **Job** | Coordinate durable steps and retries | Govern **whether** a transition may commit |
+| **Policy** | Often external or implicit | **Guards** in the runtime |
+| **Audit** | Reconstructed from logs | **Evidence** on each transition |
+
+→ [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+
+## Next steps
+
+- [Runtime Platform Direction](/docs/concepts/runtime-platform-direction) — self-host direction, roadmap-only services, forbidden claims
+- [Architecture](/docs/getting-started/architecture) — how primitives compose in one system
+- [Integrations](/docs/integrations) — Providers, Channels, and Integrations index
+- [IntegrationAdapter archetype](/docs/concepts/integration-adapter) — developer interface map

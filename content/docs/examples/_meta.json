@@ -1,16 +1,20 @@
 {
   "order": [
     "index",
-    "expense-approval",
-    "ai-replenishment",
+    "dual-surface-docs-slack",
+    "dual-surface-sheets-slack",
+    "pagerduty-incident-loop",
+    "workflow-plus-loop",
     "ai-replenishment-claude",
     "ai-replenishment-openai",
-    "demand-signal",
-    "postgres-persistence",
-    "event-streaming",
     "infrastructure-change-approval",
     "fraud-review",
+    "expense-approval",
     "openclaw",
-    "commerce-gateway"
+    "commerce-gateway",
+    "ai-replenishment",
+    "demand-signal",
+    "postgres-persistence",
+    "event-streaming"
   ]
 }

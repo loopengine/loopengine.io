@@ -17,9 +17,23 @@ packages:
 </div>
 </Callout>
 
+## Runtime flow
+
+| Stage | In this example |
+| --- | --- |
+| **Provider** | OpenAI scorer — fraud likelihood + patterns (`submit_score`) |
+| **Loop + Guards** | Review loop — `evidence-required`, `confidence-threshold` |
+| **Channel** | Analyst reviewer — `human-only` on `analyst_review` / disposition |
+| **Integration** | Case system / payment hold release after terminal states |
+| **Evidence** | `fraud_score`, flagged patterns, transaction context per transition |
+
+```text
+Provider (scorer) → Loop + Guards → Channel (analyst) → Integration (case system) → Evidence
+```
+
 ## What this example shows
 
-Fraud queues move faster than human teams can triage manually. This pattern uses AI scoring for prioritization and keeps final decision authority with a human analyst. Every escalation and disposition remains attributable for audit.
+Fraud queues move faster than human teams can triage manually. This pattern uses AI scoring for prioritization and keeps final decision authority with a human analyst. Every escalation and disposition remains attributable for audit — **not** auto-block without human path on escalated cases.
 
 ## Loop diagram
 

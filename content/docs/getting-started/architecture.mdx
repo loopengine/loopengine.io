@@ -1,27 +1,95 @@
 ---
 title: Architecture
-description: The Loop Engine model - actors, signals, guards, transitions, events, and learning signals in one place.
+description: Loop Engine runtime architecture — governance boundaries, evidence flow, Providers, Channels, Integrations, and runtime vs Cloud.
 section: Getting Started
 order: 40
 ---
 
-## The Core Model
+Loop Engine is a **governance runtime**, not a generic workflow orchestrator or AI automation builder. This page describes how the runtime composes **decision loops**, **deterministic guards**, and **evidence** with external **Providers**, **Channels**, and **Integrations**.
 
-A loop is a finite state machine with governed transitions. Every transition has a signal that triggers it, actors who can send it, and guards that must pass before it executes.
+→ Full glossary: [Runtime Taxonomy](/docs/concepts/runtime-taxonomy)
+
+## Governance runtime (center of the model)
+
+Every operational change that Loop Engine owns passes through the same boundary:
+
+1. A named **actor** requests a transition.
+2. **Guards** evaluate policy in the runtime (hard failures block; soft failures may warn).
+3. **Evidence** is attached to the allowed transition.
+4. An immutable **event** is emitted for audit and learning.
+
+AI does not “run the business” inside Loop Engine — it operates **inside** deterministic governance boundaries. Orchestration frameworks may run elsewhere; **loops govern the transitions**.
 
 ```text
-         signal
-State A --------> State B
-          ^
-    actor + guards
-      + evidence
+Providers (intelligence)
+        ↓
+Decision loops + Guards   ← governance runtime (Loop Engine)
+        ↓
+Channels (human surfaces)
+        ↓
+Integrations (operational systems)
+        ↓
+Evidence + learning
 ```
 
-## The Six Building Blocks
+### Evidence flow
 
-### 1) Loops
+Evidence is produced **at transition time**:
 
-Loops are the unit of governed work. They define states, transitions, and outcomes.
+- Inputs the actor used (scores, documents, approval notes)
+- Guard outcomes and soft warnings
+- Provider metadata (`modelId`, `provider`, `promptHash` for AI actors)
+
+Downstream analytics and learning signals consume events — they do not replace the runtime evidence contract.
+
+### Runtime boundaries
+
+| Boundary | Inside Loop Engine | Outside (but connected) |
+| --- | --- | --- |
+| Policy | Guards, allowed actors, transition graph | Prompt content alone is not policy |
+| State | Loop instance state, transition history | ERP/CRM records update via Integrations after approval |
+| Humans | Attribution + channel routing | Slack/Teams UIs are Channels |
+| Intelligence | Provider adapters submit decisions | Models do not call integrations directly |
+
+## Runtime platform vs Loop Engine Cloud
+
+**Loop Engine can run inside your infrastructure, or connect to hosted governance services from Better Data.** Full positioning constraints and roadmap language: **[Runtime Platform Direction](/docs/concepts/runtime-platform-direction)**.
+
+### OSS runtime platform (today)
+
+- **Local-first** — your Node.js process runs `createLoopSystem` with chosen stores and adapters (not a required multi-service mesh today).
+- **Self-host substrate** — operational governance in your stack: loops, guards, evidence, events via `@loop-engine/sdk`.
+- **Adapters** — Providers, Channels, and Integrations you wire and operate.
+
+→ [Quick Start](/docs/getting-started/quick-start) · [Runtime Platform Direction](/docs/concepts/runtime-platform-direction)
+
+### Loop Engine Cloud (hosted)
+
+- **Governance control plane** — multi-tenant HTTP API, connector credentials, documented `/api/v1` contract.
+- **Adds** — managed connector paths (e.g. Slack, Google) and fleet-style operations **without** replacing the OSS runtime model.
+- **Not claimed** — full OSS parity with every Cloud feature; Studio; docker compose kit; multi-service runtime **today**.
+
+→ [Loop Engine Cloud HTTP API](/docs/integrations/loop-engine-cloud-api)
+
+**Better Data company and application docs:** [docs.betterdata.co](https://docs.betterdata.co) — not loopengine.io.
+
+## Connection types (taxonomy summary)
+
+| Type | Role in architecture | Examples |
+| --- | --- | --- |
+| **Provider** | Intelligence into the loop | Claude, GPT-4o, Gemini, Grok |
+| **Channel** | Human approval / escalation surface | Slack, Teams, OpenClaw routing |
+| **Integration** | Systems and persistence after governance | Postgres, Kafka, PagerDuty, Commerce Gateway |
+
+See [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) for definitions and disambiguation (e.g. DCM “channels” vs human Channels).
+
+## Runtime primitives (implementation layer)
+
+These packages implement the governance runtime. They are **not** the product category names — they are how the engine executes loops.
+
+### Loops
+
+Loops are governed decision cycles: states, transitions, signals, and terminal outcomes. Transitions are triggered by **signals** and authorized by **actors** subject to **guards**.
 
 ```ts
 type LoopDefinition = {
@@ -32,29 +100,19 @@ type LoopDefinition = {
 };
 ```
 
-### 2) Signals
+### Signals
 
-Signals are the triggers for state transitions. They carry actor context and evidence.
+Signals name the intent to move between states. They carry actor context into guard evaluation.
 
-```ts
-type SignalSpec = {
-  signalId: string;
-  name: string;
-  description?: string;
-};
-```
-
-### 3) Actors
-
-Actors represent who initiated a transition. Loop Engine supports three primary actor classes.
+### Actors
 
 ```ts
 type ActorType = "human" | "automation" | "ai-agent";
 ```
 
-### 4) Guards
+→ [Actor Model](/docs/concepts/actor-model)
 
-Guards are policy checks evaluated before state advancement. Hard failures block. Soft failures warn.
+### Guards
 
 ```ts
 type GuardSpec = {
@@ -62,17 +120,13 @@ type GuardSpec = {
   severity: "hard" | "soft";
   evaluatedBy: "runtime" | "module" | "external";
 };
-
-declare function evaluateGuards(...args: unknown[]): Promise<{
-  hardFailures: unknown[];
-  softFailures: unknown[];
-  allPassed: boolean;
-}>;
 ```
 
-### 5) Events
+Hard guard failure emits `loop.guard.failed` and does not advance state.
 
-Every transition produces immutable events with actor attribution and evidence.
+→ [Guards and Policy](/docs/concepts/guards-and-policy)
+
+### Events
 
 ```ts
 type LoopTransitionExecutedEvent = {
@@ -87,22 +141,13 @@ type LoopTransitionExecutedEvent = {
 };
 ```
 
-### 6) Learning Signals
+### Learning signals
 
-When a loop closes, learning signals capture predicted vs actual outcomes for evaluation and model improvement.
+When a loop completes, learning signals compare predicted vs actual outcomes for improvement loops.
 
-```ts
-type LearningSignal = {
-  loopId: string;
-  aggregateId: string;
-  durationMs: number;
-  predicted?: Record<string, number>;
-  actual?: Record<string, number>;
-  delta?: Record<string, number>;
-};
-```
+→ [Learning Signals](/docs/concepts/learning-signals)
 
-## How They Fit Together
+## End-to-end example (Provider → guards → Channel → Integration)
 
 ```ts
 // @no-typecheck
@@ -115,12 +160,14 @@ const ai = createAnthropicActorAdapter({
   model: "claude-opus-4-6"
 });
 
+// Integration may have created the aggregate; automation opens the loop.
 await engine.start({
   loopId: "procurement" as never,
   aggregateId: "PO-2001" as never,
   actor: { type: "automation", id: "system:intake" }
 });
 
+// Provider: AI recommends a transition (does not bypass guards).
 const { actor, decision } = await ai.createSubmission({
   loopId: "procurement",
   loopName: "SCM Procurement",
@@ -137,14 +184,21 @@ await engine.transition({
   evidence: decision
 });
 
-// Runtime evaluates confidence guard.
-// Human approval transition executes next if required.
-// Terminal transition emits loop.completed + learning signal.
+// Guards run in runtime — e.g. confidence threshold.
+// Channel: human approval transition (Slack/OpenClaw/PagerDuty routing).
+// Integration: ERP/Commerce Gateway executes only after approved transition.
+// Terminal state emits loop.completed + learning signal.
 ```
 
-## Next Steps
+## What Loop Engine is not
 
+- **Not** a replacement for Temporal, n8n, or BPM suites — use [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines).
+- **Not** an AI automation builder that skips policy.
+- **Not** a Slack bot product — Slack is a **Channel** when used for human approval.
+
+## Next steps
+
+- [Runtime Taxonomy](/docs/concepts/runtime-taxonomy)
 - [Quick Start](/docs/getting-started/quick-start)
-- [The Actor Model](/docs/concepts/actor-model)
-- [Guards and Policy](/docs/concepts/guards-and-policy)
+- [Runtime connections](/docs/integrations)
 - [Decision Governance](/docs/concepts/decision-governance)
