@@ -1,0 +1,47 @@
+---
+title: Proposal approval loop (ABM / RevOps)
+description: AI drafts proposal in Google Docs, Slack approval for sales and legal, Salesforce opportunity advances — dual-surface governance.
+section: Examples
+complexity: Advanced
+runnable: false
+---
+
+<Callout variant="warning" title="Narrative pattern — dual-surface RevOps">
+Combines [Google Docs + Slack](/docs/examples/dual-surface-docs-slack) work/decision surfaces with CRM **Integration**. Requires **Loop Engine Cloud** for managed Google + Slack connectors; OSS SDK governs the loop definition.
+</Callout>
+
+## Runtime flow
+
+| Stage | In this pattern |
+| --- | --- |
+| **Provider** | LLM drafts proposal sections from opportunity context, pricing guardrails, and legal snippets |
+| **Loop + Guards** | `proposal.review` — brand/compliance guards, margin checks, `human-only` on customer-send |
+| **Channel** | **Slack** — AE + legal approve; **Docs comments** for inline questions (work surface, not governance) |
+| **Integration** | **Google Docs** snapshot/hash evidence; **Salesforce** stage → `Proposal Sent` after approval |
+| **Evidence + learning** | Doc revision hash, approver IDs, discount exceptions for win/loss analysis |
+
+```text
+Provider drafts in Docs → Loop + Guards → Channel: Slack (+ doc comments) → Integration: SFDC + publish → Evidence
+```
+
+## Operational scenario
+
+1. AE triggers `proposal.review` from opportunity id — Docs template cloned to work surface.
+2. **Provider** proposes pricing table and legal clauses — staged, not customer-visible.
+3. **Guards** fail transition if margin &lt; floor or missing legal ack.
+4. **Channel** routes `#deal-desk` approval in Slack; legal may comment in Docs (context only).
+5. Approved transition applies customer-visible publish + **Salesforce** stage advance.
+6. **Evidence** links Slack actor, doc hash, and opportunity id for audit.
+
+## Workflows vs loops
+
+| | Workflow (e.g. doc generation job) | Loop (Loop Engine) |
+| --- | --- | --- |
+| Job | Render PDF, sync attachments | Govern whether proposal may be sent |
+| Retry | Orchestrator retries API failures | Guards block illegal transitions |
+
+## Related
+
+- [Proposal path on dual-surface Docs](/docs/examples/dual-surface-docs-slack)
+- [Pricing exception loop](/docs/examples/pricing-exception-loop)
+- [Workflow + Loop](/docs/examples/workflow-plus-loop)

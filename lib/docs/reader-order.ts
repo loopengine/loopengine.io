@@ -87,6 +87,10 @@ const INTEGRATIONS_SLUG_RANK: Record<string, number> = (() => {
 const EXAMPLES_SLUG_RANK: Record<string, number> = (() => {
   const segments = [
     "examples",
+    "examples/sdr-qualification-loop",
+    "examples/proposal-approval-loop",
+    "examples/campaign-approval-loop",
+    "examples/pricing-exception-loop",
     "examples/dual-surface-docs-slack",
     "examples/dual-surface-sheets-slack",
     "examples/pagerduty-incident-loop",

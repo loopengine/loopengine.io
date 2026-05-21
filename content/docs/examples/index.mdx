@@ -24,7 +24,13 @@ Integration (operational system)
 Evidence (audit + learning)
 ```
 
-**Providers** recommend or classify — they do not commit transitions alone. **Guards** enforce deterministic policy before state changes. **Channels** are where humans approve, reject, or escalate. **Integrations** persist state, trigger incidents, or apply approved writes. **Evidence** explains *why* each transition was allowed.
+**Providers** (intelligence systems) recommend or classify — they do not commit transitions alone. **Guards** enforce deterministic policy before state changes. **Channels** (human coordination) are where operators approve, reject, or escalate — not where CRM writes occur. **Integrations** (systems of record) persist state and execute side effects after approval. **Evidence** explains *why* each transition was allowed.
+
+| Layer | Role in examples |
+| --- | --- |
+| Provider | Score, draft, classify |
+| Channel | Slack, Teams, doc review |
+| Integration | Salesforce, Sheets apply, PagerDuty, MAP |
 
 <Callout variant="warning" title="What these examples are not">
 They are **not** simple automation recipes, chatbot demos, or “agent magic” that skips policy. Loop Engine governs **whether** a transition commits; workflow engines and apps **execute** work after approval.
@@ -40,7 +46,34 @@ They are **not** simple automation recipes, chatbot demos, or “agent magic” 
 | **Human escalation** | Low confidence or high risk → `PENDING_*` states routed to a **Channel** |
 | **AI assistance** | Providers submit **recommendations** inside the loop — never self-approve |
 
-## Priority patterns
+## ABM and RevOps operational AI
+
+<span id="abm-revops-operational-ai" className="sr-only" aria-hidden="true" />
+
+GTM and revenue operations are where **operational AI** needs runtime governance: models draft and score, humans decide in Slack, systems of record update after policy passes.
+
+<div className="grid gap-4 md:grid-cols-2">
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/sdr-qualification-loop">SDR qualification loop</a></h3>
+    <p>Provider scores inbound lead → Slack escalation → SDR approves → CRM updated.</p>
+    <p><strong>Layers:</strong> Provider · Channel (Slack) · Integration (CRM)</p>
+  </article>
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/proposal-approval-loop">Proposal approval loop</a></h3>
+    <p>AI drafts in Google Docs → sales/legal approve in Slack → Salesforce advances.</p>
+    <p><strong>Dual-surface:</strong> Docs (work) + Slack (decisions)</p>
+  </article>
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/campaign-approval-loop">Campaign approval loop</a></h3>
+    <p>Outbound copy generation → brand/compliance guards → Slack → MAP executes.</p>
+  </article>
+  <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
+    <h3><a href="/docs/examples/pricing-exception-loop">Pricing exception loop</a></h3>
+    <p>Sheets staging → finance approval in Slack → ERP/CRM apply with evidence.</p>
+  </article>
+</div>
+
+## Dual-surface and platform patterns
 
 <div className="grid gap-4 md:grid-cols-2">
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>

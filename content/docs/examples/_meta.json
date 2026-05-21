@@ -1,6 +1,10 @@
 {
   "order": [
     "index",
+    "sdr-qualification-loop",
+    "proposal-approval-loop",
+    "campaign-approval-loop",
+    "pricing-exception-loop",
     "dual-surface-docs-slack",
     "dual-surface-sheets-slack",
     "pagerduty-incident-loop",
