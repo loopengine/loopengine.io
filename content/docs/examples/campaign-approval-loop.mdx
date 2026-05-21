@@ -1,0 +1,41 @@
+---
+title: Campaign approval loop (ABM / RevOps)
+description: AI-generated outbound copy passes brand and compliance guards, Slack review, then marketing platform execution.
+section: Examples
+complexity: Advanced
+runnable: false
+---
+
+<Callout variant="warning" title="Narrative pattern — ABM outbound">
+Governed **campaign launch** — not autonomous email generation. Marketing execution platform is **Integration**; humans approve in **Channel**.
+</Callout>
+
+## Runtime flow
+
+| Stage | In this pattern |
+| --- | --- |
+| **Provider** | LLM generates sequence copy, subject lines, and personalization tokens from account research |
+| **Loop + Guards** | `campaign.launch` — brand voice guard, compliance keyword blocklist, `evidence-required` |
+| **Channel** | **Slack** — marketing ops + legal review in `#campaign-approvals` |
+| **Integration** | MAP/SEP (e.g. Outreach, Marketo webhook) — schedule sends only after `APPROVED` |
+| **Evidence + learning** | Copy hash, guard outcomes, approval latency; learning on reply-rate vs predicted |
+
+## Operational scenario
+
+1. ABM operator opens loop for target account list segment.
+2. **Provider** produces draft sequences per persona — no sends yet.
+3. **Guards** block transitions containing forbidden claims or missing disclaimers.
+4. **Channel** collects approve / revise / reject from brand and legal roles.
+5. **Integration** activates campaign in marketing platform with approved artifact id.
+6. **Evidence** supports regulatory review (“who approved this copy, when, with what model”).
+
+## Deterministic boundaries
+
+- Prompt instructions cannot bypass compliance **guards**.
+- Slack reactions are not sends — MAP activation is post-governance **Integration**.
+
+## Related
+
+- [SDR qualification loop](/docs/examples/sdr-qualification-loop)
+- [Runtime Taxonomy — Providers](/docs/concepts/runtime-taxonomy#providers)
+- [Human approval gates](/docs/ai-and-automation/human-approval-gates)

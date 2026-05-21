@@ -21,16 +21,24 @@ Every operational change that Loop Engine owns passes through the same boundary:
 AI does not “run the business” inside Loop Engine — it operates **inside** deterministic governance boundaries. Orchestration frameworks may run elsewhere; **loops govern the transitions**.
 
 ```text
-Providers (intelligence)
+Providers          ← intelligence enters (LLMs, retrieval tools)
         ↓
-Decision loops + Guards   ← governance runtime (Loop Engine)
+Decision loops + Guards   ← GOVERNANCE: Loop Engine (policy before commit)
         ↓
-Channels (human surfaces)
+Channels           ← humans participate (Slack, Teams, approvals)
         ↓
-Integrations (operational systems)
+Integrations       ← systems of record execute (CRM, tickets, APIs)
         ↓
-Evidence + learning
+Evidence + learning ← audit + operational improvement
 ```
+
+| Stage | What enters | What exits | Who participates |
+| --- | --- | --- | --- |
+| Providers | Context, signals | Structured AI/human submissions | Models as governed actors |
+| Loops + Guards | Transition requests | Allow / block / escalate | Runtime policy (deterministic) |
+| Channels | `PENDING_HUMAN_*` events | Human actor transitions | Operators in Slack, email, etc. |
+| Integrations | Approved transitions | CRM rows, webhooks, staged applies | Enterprise systems |
+| Evidence | Each commit | Audit + learning signals | Compliance, RevOps, SRE |
 
 ### Evidence flow
 

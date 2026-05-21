@@ -1,0 +1,227 @@
+---
+title: "AI-Assisted Decision Loops: Why Operational AI Needs a Runtime Platform"
+description: Loop Engine is a governed operational runtime — not a workflow tool. How Providers, Channels, and Integrations compose with loops, guards, evidence, and learning.
+author: Better Data
+date: 2026-05-21
+tags:
+  - loop-engine
+  - operational-ai
+  - governance
+  - revops
+  - abm
+draft: true
+canonical: https://loopengine.io/blog/ai-assisted-decision-loops-runtime-platform
+---
+
+Enterprise AI stopped being “chat in a sidebar” the moment models could call APIs, read spreadsheets, and propose changes in systems of record. That shift creates a new requirement: **runtime governance** for operational decisions — not another workflow diagram.
+
+Loop Engine is an **open governed operational runtime platform** for AI-assisted enterprise systems. It connects **Providers** (intelligence), **Channels** (human coordination), and **Integrations** (systems of record) through **decision loops** — with deterministic **guards**, **evidence**, and **learning** on every transition.
+
+This post reframes how to think about AI-assisted operations: runtime first, workflows second, chatbots never.
+
+---
+
+## Loop Engine is a runtime platform — not a workflow engine
+
+**Workflows define the path.** Temporal, Salesforce Flow, and n8n coordinate durable steps, retries, and timers.
+
+**Loops govern the transitions.** Loop Engine decides whether a state change may commit — who may act, under which policy, with what evidence — before side effects land in CRM, ERP, or marketing systems.
+
+That distinction matters for RevOps, ABM, and platform teams shipping AI into production:
+
+| Concern | Workflow engine | Loop Engine runtime |
+| --- | --- | --- |
+| Primary question | What runs next? | May this transition commit? |
+| Policy | Often external or implicit | **Guards** in the runtime |
+| Audit | Reconstructed from logs | **Evidence** at commit time |
+| AI role | Step inside a flow | **Provider** inside governance boundaries |
+
+Loop Engine is **not** a replacement for Temporal or Salesforce. It is the **governance substrate** AI-assisted operations were missing.
+
+---
+
+## Three layers — not one “integrations” bucket
+
+A common mistake is treating Slack, OpenAI, and Salesforce as the same kind of connection. They are not.
+
+### Providers — intelligence systems
+
+**Providers** generate intelligence: analyze, recommend, classify, predict, draft.
+
+Examples: OpenAI, Anthropic, Gemini, Perplexity Sonar.
+
+- Providers **do not** approve deals in Slack.
+- Providers **do not** write to CRM.
+- Providers **do not** bypass guards.
+
+### Channels — human coordination surfaces
+
+**Channels** coordinate humans: request approvals, surface decisions, escalate operators.
+
+Examples: Slack, Microsoft Teams, email, comments in Google Docs, messenger routing via OpenClaw.
+
+- Channels **are not** systems of record.
+- Channels **are not** governance (that is loops + guards).
+
+### Integrations — systems of record
+
+**Integrations** execute operational actions after policy passes: persist state, trigger workflows, apply writes.
+
+Examples: Salesforce, PagerDuty, Jira, Google Workspace apply paths, Postgres, HTTP APIs.
+
+- Integrations **are not** LLM APIs.
+- Integrations **are not** human chat UIs.
+
+```text
+Providers          → intelligence in
+        ↓
+Decision loops + Guards   → governance (Loop Engine)
+        ↓
+Channels           → human coordination
+        ↓
+Integrations       → operational execution
+        ↓
+Evidence + learning
+```
+
+**Channels are not integrations. Providers are not workflow systems. Integrations are not governance.**
+
+---
+
+## Operational AI needs runtime governance
+
+AI can now operate across enterprise systems. APIs and MCP expose operational surfaces faster than governance models matured.
+
+Three forces make a **runtime layer** mandatory:
+
+1. **Models propose; they should not commit.** A Provider may recommend a discount or qualify a lead — guards and human Channels decide.
+2. **Humans still own authority.** Regulated and revenue-critical decisions need attributed actors, not anonymous chat threads.
+3. **Evidence must be structural.** “Show me the prompt” is not enough — you need transition-level evidence tied to business objects.
+
+Loop Engine governs **transitions between operational states** — not generic “tasks” or “jobs.”
+
+MCP and tool gateways are connectivity. They are not a substitute for deciding whether an operational state change is allowed. Loop Engine sits at that decision boundary; Commerce Gateway and registry patterns handle controlled tool access **under** the same governance model ([docs](https://loopengine.io/docs/integrations/commerce-gateway)).
+
+---
+
+## Why dual-surface operations matter
+
+The strongest GTM patterns split **where work happens** from **where decisions happen**:
+
+| Surface | Role | Example |
+| --- | --- | --- |
+| **Work** | Context and artifacts | Google Docs proposal, Sheets pricing grid |
+| **Decision** | Approve / reject / escalate | Slack interactive message |
+| **Governance** | Policy and audit | Loop Engine loop instance |
+| **Execution** | System of record | Salesforce stage, staged sheet apply |
+
+**Work happens inside operational tools. Decisions happen inside channels. Governance happens inside loops. Evidence connects everything.**
+
+### Google Docs + Slack
+
+An LLM drafts proposal language in a Doc (Provider + work surface). Brand and legal approve in Slack (Channel). Only after a governed transition does the customer-visible version publish and Salesforce advance (Integration). Doc hashes and approver IDs live in **evidence**.
+
+### Google Sheets + pricing exceptions
+
+A rep stages a discount row (work surface). Finance approves in Slack (Channel). **Apply** to the sheet and CRM sync run as Integration steps — never directly from the model.
+
+These patterns are documented as narrative examples on [loopengine.io](https://loopengine.io/docs/examples/dual-surface-docs-slack); managed connectors ship via [Loop Engine Cloud](https://loopengine.io/docs/integrations/loop-engine-cloud-api) where documented — we do not claim full OSS parity with every hosted connector today.
+
+---
+
+## ABM and RevOps: operational-runtime examples
+
+Workflow-centric stories (“automate the sequence”) miss the governance story revenue teams need.
+
+### SDR qualification loop
+
+- **Provider:** scores inbound lead against ICP.
+- **Guards:** confidence threshold, required fields.
+- **Channel:** Slack — SDR approve / reject.
+- **Integration:** CRM stage update.
+- **Learning:** compare predicted fit vs closed-won.
+
+### Proposal approval loop
+
+- **Provider:** drafts sections from opportunity context.
+- **Guards:** margin floor, compliance keywords.
+- **Channel:** Slack deal-desk + Doc comments for context.
+- **Integration:** Doc publish + opportunity stage.
+
+### Campaign approval loop
+
+- **Provider:** generates outbound copy.
+- **Guards:** brand voice + compliance blocklist.
+- **Channel:** marketing + legal in Slack.
+- **Integration:** MAP/SEP activates sends post-approval.
+
+### Pricing exception loop
+
+- **Provider:** optional band recommendation.
+- **Guards:** margin floor, `human-only` apply.
+- **Channel:** finance controller in Slack.
+- **Integration:** staged Sheets apply + ERP/CRM sync.
+
+Each example is a **decision loop** with operational evidence — not a chatbot that “does RevOps.”
+
+→ [Full example index](https://loopengine.io/docs/examples#abm-revops-operational-ai)
+
+---
+
+## Temporal, Salesforce, and the execution layer
+
+Keep durable execution where it belongs.
+
+**Temporal** (or similar) should run long-running processes: retries, timers, sagas.
+
+**Loop Engine** should govern checkpoints: may this shipment release, may this discount apply, may this campaign send?
+
+```text
+AI / Provider proposes
+        ↓
+Loop Engine transition (guards + evidence)
+        ↓
+Temporal activity executes approved side effects
+```
+
+Salesforce Flow can update records **after** a loop instance reaches an approved state — Flow executes; loops authorize.
+
+We document this composition pattern on [Workflow + Loop](https://loopengine.io/docs/examples/workflow-plus-loop) without claiming a single shipped “Temporal adapter” product.
+
+---
+
+## Runtime learning — not just logs
+
+**Evidence** is captured when the transition is evaluated: inputs, guard outcomes, actor attribution, Provider metadata (model id, prompt hash where applicable).
+
+When loops complete, **learning signals** compare predicted vs actual outcomes — fuel for improving guards, thresholds, and playbooks. That is operational learning on governed decisions, not dashboard vanity metrics on token counts.
+
+---
+
+## Self-host runtime vs hosted cloud
+
+**Today:** run `@loop-engine/sdk` in your infrastructure — local-first, embeddable, governance-native.
+
+**Direction:** optional self-host services (registry, audit store, replay, observability collector) documented as roadmap-only on [Runtime Platform Direction](https://loopengine.io/docs/concepts/runtime-platform-direction).
+
+**Loop Engine Cloud** extends the runtime with managed connectors and tenancy — it does not redefine what a loop is. We document shipped Cloud capabilities explicitly; we do not imply Studio, docker compose kits, or full OSS parity until released.
+
+---
+
+## What we are not claiming
+
+- Loop Engine is **not** “the Supabase for AI workflows.”
+- Loop Engine is **not** a Slack bot that approves by itself.
+- Loop Engine is **not** a replacement for your workflow engine or CRM.
+- Unreleased surfaces remain **roadmap** language only.
+
+---
+
+## Where to go next
+
+- [Runtime Taxonomy](https://loopengine.io/docs/concepts/runtime-taxonomy) — canonical definitions
+- [Architecture](https://loopengine.io/docs/getting-started/architecture) — annotated flow with enters/exits
+- [Runtime connections](https://loopengine.io/docs/integrations) — Providers, Channels, Integrations catalogs
+- [Quick start](https://loopengine.io/docs/getting-started/quick-start) — first governed loop in minutes
+
+**Workflows define the path. Loops govern the transitions. Operational AI needs a runtime platform in between.**

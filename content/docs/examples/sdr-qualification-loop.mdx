@@ -1,0 +1,53 @@
+---
+title: SDR qualification loop (ABM / RevOps)
+description: AI scores inbound leads, Slack escalates low confidence, human SDR decides, CRM updates — governed operational runtime pattern.
+section: Examples
+complexity: Advanced
+runnable: false
+---
+
+<Callout variant="warning" title="Narrative pattern — RevOps / ABM">
+Operational-runtime walkthrough for **governed lead qualification**. Composite of Provider + Channel + Integration patterns; **Loop Engine Cloud** connectors for Slack and CRM are documented on the [Cloud API](/docs/integrations/loop-engine-cloud-api). Not a single `loop-examples` clone-and-run repo today.
+</Callout>
+
+## Runtime flow
+
+| Stage | In this pattern |
+| --- | --- |
+| **Provider** | OpenAI or Anthropic scores fit, intent, and ICP match from form + enrichment context |
+| **Loop + Guards** | `lead.qualification` — `confidence-threshold`, `evidence-required`, route to human when below bar |
+| **Channel** | **Slack** — SDR receives interactive qualify/disqualify; unmapped users rejected |
+| **Integration** | **Salesforce** (or HubSpot) — lead status, owner, and stage update only after approved transition |
+| **Evidence + learning** | Score breakdown, model version, SDR decision; learning signal compares predicted vs closed-won |
+
+```text
+Inbound lead → Provider scores → Guards → (low confidence?) Channel: Slack → SDR → Integration: CRM → Evidence
+```
+
+## Operational scenario
+
+1. Marketing automation opens `lead.qualification` with firmographic evidence.
+2. **Provider** returns score + rationale — does not change CRM stage.
+3. **Guards** block auto-accept when confidence &lt; threshold or missing required fields.
+4. **Channel** posts to `#sdr-qualification` with approve / reject / needs-research actions.
+5. On **human-only** approve, **Integration** writes `Qualified` stage and assigns owner.
+6. **Evidence** on each transition supports pipeline reviews and model tuning.
+
+## Governance boundaries
+
+| Boundary | Enforcement |
+| --- | --- |
+| AI cannot self-qualify into pipeline | `human-only` on accept transitions |
+| Slack is not the system of record | CRM write is Integration step only |
+| No chatbot “magic” | Every outcome is a named loop transition |
+
+## What this is not
+
+- A lead-scoring Zapier recipe without audit trail.
+- An LLM that updates Salesforce directly from a prompt.
+
+## Related
+
+- [Campaign approval loop](/docs/examples/campaign-approval-loop)
+- [Dual-surface Docs + Slack](/docs/examples/dual-surface-docs-slack)
+- [Runtime Taxonomy](/docs/concepts/runtime-taxonomy)

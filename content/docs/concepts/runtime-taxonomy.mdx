@@ -10,19 +10,22 @@ Loop Engine is a **governed operational runtime platform**. This page is the can
 ## Runtime flow (read this first)
 
 ```text
-Providers (intelligence)
+Providers          → intelligence in (analyze, recommend, classify)
         ↓
-Decision loops + Guards
+Decision loops + Guards   → governance (who may transition, under what policy)
         ↓
-Channels (human surfaces)
+Channels           → human coordination (approve, reject, escalate)
         ↓
-Integrations (operational systems)
+Integrations       → operational execution (CRM, tickets, apply writes)
         ↓
-Evidence + learning
+Evidence + learning → audit trail and improvement
 ```
 
 **Rules this model enforces:**
 
+- **Channels are not integrations.** Slack approves; Salesforce updates.
+- **Providers are not workflow systems.** Temporal executes paths; loops govern commits.
+- **Integrations are not governance.** Guards run in the runtime, not in your CRM.
 - Providers do **not** bypass guards or write directly to integrations.
 - Integrations do **not** call models without a governed loop transition.
 - Durable workflow engines may **execute** approved work; **loops govern** whether transitions commit.
@@ -31,9 +34,9 @@ Evidence + learning
 
 | Public term | Meaning |
 | --- | --- |
-| **Provider** | Intelligence source — LLMs and AI systems that participate as governed actors (or tool steps for retrieval). |
-| **Channel** | Human interaction surface — where people approve, reject, or escalate (Slack, Teams, email, messenger routing). |
-| **Integration** | Operational system — enterprise apps and infrastructure that receive side effects or supply context **after** policy passes. |
+| **Provider** | **Intelligence system** — generates analysis and recommendations; does not commit operational state. |
+| **Channel** | **Human coordination surface** — where people approve, reject, or escalate; not a system of record. |
+| **Integration** | **System of record / operational system** — executes actions and persists state after policy passes. |
 | **Loop** | Governed decision cycle — explicit states, transitions, signals, and outcomes (not a generic BPM template). |
 | **Guard** | Deterministic runtime policy — evaluated before a transition commits; not prompt instructions. |
 | **Evidence** | Auditability layer — structured context explaining why a transition was allowed. |

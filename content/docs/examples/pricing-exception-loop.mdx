@@ -1,0 +1,47 @@
+---
+title: Pricing exception loop (Sheets + Slack)
+description: Margin exception detected in Google Sheets, AI recommends band, finance approves in Slack, ERP/CRM updated — dual-surface RevOps.
+section: Examples
+complexity: Advanced
+runnable: false
+---
+
+<Callout variant="warning" title="Narrative pattern — Sheets staging + Slack">
+Extends [Google Sheets + Slack](/docs/examples/dual-surface-sheets-slack). **Sheets = work surface + staging**; **Slack = Channel**; **ERP/CRM = Integration**. Apply to rows only after approved transition.
+</Callout>
+
+## Runtime flow
+
+| Stage | In this pattern |
+| --- | --- |
+| **Provider** | Optional — AI recommends discount band from deal context and policy tables |
+| **Loop + Guards** | `pricing.exception` — margin floor, tier entitlements, `human-only` on apply |
+| **Channel** | **Slack** — finance controller approve/reject with audit note |
+| **Integration** | **Google Sheets** staged cells → approved apply; **Salesforce** / ERP price sync |
+| **Evidence + learning** | Staging snapshot, exception rationale, approver; learning on exception win rate |
+
+```text
+Sheets detects exception → Provider (optional) → Guards → Channel: Slack → Integration: apply + CRM → Evidence
+```
+
+## Operational scenario
+
+1. Rep edits discount column — change **staged**, not committed to ERP.
+2. Loop opens `pricing.exception` with row keys and prior margin in evidence.
+3. **Provider** may suggest allowed band — **Guards** enforce hard floors.
+4. **Channel** notifies `#deal-desk-finance` in Slack.
+5. On approve, **Integration** applies row + syncs opportunity line items.
+6. **Evidence** proves who authorized margin erosion.
+
+## Governance vs spreadsheet macros
+
+| Spreadsheet macro | Governed loop |
+| --- | --- |
+| Auto-write on formula | No transition without human Channel action |
+| Email finance manually | Attributed actor + evidence on transition |
+
+## Related
+
+- [Dual-surface Sheets + Slack](/docs/examples/dual-surface-sheets-slack)
+- [Proposal approval loop](/docs/examples/proposal-approval-loop)
+- [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)
