@@ -1,6 +1,7 @@
 {
   "order": [
     "runtime-taxonomy",
+    "runtime-platform-direction",
     "what-is-a-loop",
     "integration-adapter",
     "actor-model",

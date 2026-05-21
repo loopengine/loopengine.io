@@ -52,6 +52,7 @@ export default function DocsHomePage() {
       accentColor: "#4338CA",
       links: [
         { label: "Runtime Taxonomy", href: "/docs/concepts/runtime-taxonomy" },
+        { label: "Platform direction", href: "/docs/concepts/runtime-platform-direction" },
         { label: "What is a Loop?", href: "/docs/concepts/what-is-a-loop" },
         { label: "Guards and Policy", href: "/docs/concepts/guards-and-policy" },
         { label: "Decision Governance", href: "/docs/concepts/decision-governance" },
@@ -99,6 +100,11 @@ export default function DocsHomePage() {
           label: "Architecture overview",
           href: "/docs/getting-started/architecture",
           description: "Governance runtime, evidence flow, OSS runtime vs Loop Engine Cloud."
+        },
+        {
+          label: "Runtime platform direction",
+          href: "/docs/concepts/runtime-platform-direction",
+          description: "Self-host direction, roadmap-only services, constrained claims (no false parity)."
         },
         {
           label: "Loop Engine vs Workflow Engines",

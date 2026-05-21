@@ -602,6 +602,20 @@ async function HomeContent() {
               Self-host with the SDK
             </Link>
             <Link
+              href="/docs/concepts/runtime-platform-direction"
+              className="inline-flex items-center"
+              style={{
+                border: "1px solid var(--color-border)",
+                color: "var(--color-ink-secondary)",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "var(--text-sm)"
+              }}
+            >
+              Self-host direction →
+            </Link>
+            <Link
               href="/docs/integrations/loop-engine-cloud-api"
               className="inline-flex items-center"
               style={{

@@ -53,23 +53,25 @@ Downstream analytics and learning signals consume events — they do not replace
 
 ## Runtime platform vs Loop Engine Cloud
 
-**Loop Engine can run inside your infrastructure, or connect to hosted governance services from Better Data.**
+**Loop Engine can run inside your infrastructure, or connect to hosted governance services from Better Data.** Full positioning constraints and roadmap language: **[Runtime Platform Direction](/docs/concepts/runtime-platform-direction)**.
 
-### OSS runtime platform
+### OSS runtime platform (today)
 
-- **Local execution** — your Node.js process runs `createLoopSystem` with chosen stores and adapters.
-- **Self-host direction** — install `@loop-engine/sdk`, add adapters, define loops in YAML or TypeScript.
-- **Governance primitives** — guards, actors, evidence, and events ship in OSS packages.
+- **Local-first** — your Node.js process runs `createLoopSystem` with chosen stores and adapters (not a required multi-service mesh today).
+- **Self-host substrate** — operational governance in your stack: loops, guards, evidence, events via `@loop-engine/sdk`.
+- **Adapters** — Providers, Channels, and Integrations you wire and operate.
 
-→ [Quick Start](/docs/getting-started/quick-start)
+→ [Quick Start](/docs/getting-started/quick-start) · [Runtime Platform Direction](/docs/concepts/runtime-platform-direction)
 
-### Loop Engine Cloud
+### Loop Engine Cloud (hosted)
 
-- **Hosted governance** — multi-tenant runtime, connector credentials, and `/api/v1` HTTP API.
-- **Controls** — organization isolation, API keys, metering-oriented operations, retention/compliance features as documented on the Cloud contract.
-- **Fleet-oriented operations** — manage connectors and loop operations without rebuilding every adapter in your estate (see hosted API for current scope).
+- **Governance control plane** — multi-tenant HTTP API, connector credentials, documented `/api/v1` contract.
+- **Adds** — managed connector paths (e.g. Slack, Google) and fleet-style operations **without** replacing the OSS runtime model.
+- **Not claimed** — full OSS parity with every Cloud feature; Studio; docker compose kit; multi-service runtime **today**.
 
 → [Loop Engine Cloud HTTP API](/docs/integrations/loop-engine-cloud-api)
+
+**Better Data company and application docs:** [docs.betterdata.co](https://docs.betterdata.co) — not loopengine.io.
 
 ## Connection types (taxonomy summary)
 
