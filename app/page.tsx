@@ -4,7 +4,12 @@ import { NpmInstallChip } from "@/components/home/NpmInstallChip";
 import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { BETTERDATA_CCO_URL, LOOP_ENGINE_CCO_LINE } from "@/lib/betterdata-ecosystem";
+import {
+  BETTERDATA_CCO_URL,
+  LOOP_ENGINE_CCO_LINE,
+  LOOP_ENGINE_META_DESCRIPTION,
+  LOOP_ENGINE_SUPPORTING
+} from "@/lib/betterdata-ecosystem";
 
 const packages = [
   { name: "@loop-engine/sdk", slug: "sdk", description: "High-level entry point for loop systems." },
@@ -239,8 +244,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         "@id": "https://loopengine.io/#website",
         url: "https://loopengine.io",
         name: "Loop Engine",
-        description:
-          "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
+        description: LOOP_ENGINE_META_DESCRIPTION,
         publisher: { "@id": "https://loopengine.io/#org" }
       },
       {
@@ -259,13 +263,12 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         "@id": "https://loopengine.io/#software",
         name: "Loop Engine",
         applicationCategory: "DeveloperApplication",
-        applicationSubCategory: "Operational Decision Control",
+        applicationSubCategory: "Governed Operational Runtime",
         operatingSystem: "Node.js 18+",
         url: "https://loopengine.io",
         downloadUrl: "https://npmjs.com/package/@loop-engine/sdk",
         softwareVersion: "0.1.0",
-        description:
-          "Operational decision control for governed AI systems. Finite states, deterministic guards, typed actors, and immutable evidence on every transition.",
+        description: LOOP_ENGINE_PRIMARY,
         license: "https://www.apache.org/licenses/LICENSE-2.0",
         author: { "@id": "https://loopengine.io/#org" },
         offers: {
@@ -276,7 +279,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
         codeRepository: "https://github.com/loopengine/loop-engine",
         programmingLanguage: "TypeScript",
         keywords:
-          "operational decision control, governed operational state, deterministic guards, operational evidence, governed transitions, AI operational governance, typed actors, state machine runtime, operational loops, TypeScript, open source"
+          "governed operational runtime, decision loops, deterministic guards, operational evidence, governed transitions, AI operational governance, typed actors, operational loops, TypeScript, open source"
       }
     ]
   };
@@ -340,7 +343,7 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 maxWidth: 720
               }}
             >
-              The control layer for AI-operated enterprises
+              Governed operational runtime for AI-assisted enterprise systems
             </h1>
             <p
               className="fade-in-up mt-5"
@@ -348,12 +351,11 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 animationDelay: "160ms",
                 fontSize: "var(--text-md)",
                 color: "var(--color-ink-tertiary)",
-                maxWidth: 540,
+                maxWidth: 640,
                 lineHeight: 1.65
               }}
             >
-              Loop Engine gives AI finite states, deterministic guards, and structured feedback.
-              Not improvisation - control.
+              {LOOP_ENGINE_SUPPORTING}
             </p>
             <p
               className="fade-in-up mt-4"
@@ -365,8 +367,9 @@ async function HomeContent({ architecture }: { architecture: string[] }) {
                 lineHeight: 1.65
               }}
             >
-              A Loop is a named finite state machine — with typed actors, guard policies, and an immutable evidence
-              trail on every transition.
+              AI operates inside deterministic governance boundaries — guards enforce policy, actors are attributed,
+              and evidence is captured on every transition. Decision loops are the unit of work; finite states are the
+              runtime mechanism.
             </p>
             <p
               className="fade-in-up mt-3"
