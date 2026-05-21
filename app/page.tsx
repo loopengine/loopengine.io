@@ -2,6 +2,7 @@ import { LoopEngineIcon } from "@/components/logo";
 import { CodeTabs } from "@/components/home/CodeTabs";
 import { NpmInstallChip } from "@/components/home/NpmInstallChip";
 import { RuntimeFlowDiagram } from "@/components/home/RuntimeFlowDiagram";
+import { RuntimeLayerStack } from "@/components/home/RuntimeLayerStack";
 import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
@@ -513,19 +514,19 @@ async function HomeContent() {
 
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             <PlatformPillar
-              title="Runtime connections"
+              title="Runtime layers"
               items={[
                 {
                   label: "Providers",
-                  body: "LLMs and AI systems participate as governed actors — not unconstrained agents."
+                  body: "Intelligence systems — analyze, recommend, classify. They do not write to CRM or approve in Slack."
                 },
                 {
                   label: "Channels",
-                  body: "Slack, Teams, email, and messenger surfaces where humans approve or escalate."
+                  body: "Human coordination — Slack, Teams, email, doc comments. Not systems of record."
                 },
                 {
                   label: "Integrations",
-                  body: "PagerDuty, Google Workspace, commerce systems, and data stores — side effects after guards pass."
+                  body: "Operational execution — Salesforce, Jira, Sheets apply, APIs. Not governance."
                 }
               ]}
             />
@@ -1023,11 +1024,30 @@ async function HomeContent() {
           >
             Runtime connections
           </p>
-          <h2 className="mt-3">Providers, channels, and integrations</h2>
+          <h2 className="mt-3">Three layers, one governance runtime</h2>
           <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
-            Adapters connect intelligence, human surfaces, and enterprise systems into the same governance model. Loop
-            Engine is not a generic integration platform or Slack bot — every connection routes through decision loops and
-            guards.
+            <strong>Providers</strong> generate intelligence. <strong>Channels</strong> coordinate humans.{" "}
+            <strong>Integrations</strong> execute against systems of record. They are not interchangeable — Loop Engine
+            governs transitions between them with guards and evidence.
+          </p>
+          <div className="mt-10">
+            <RuntimeLayerStack />
+          </div>
+          <p
+            style={{
+              marginTop: 32,
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)"
+            }}
+          >
+            Featured adapters & patterns
+          </p>
+          <p style={{ marginTop: 8, maxWidth: 760, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
+            npm adapters wire each layer into <code>createLoopSystem</code>. Loop Engine is not a generic integration
+            platform or Slack bot.
           </p>
           <p
             style={{
