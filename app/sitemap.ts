@@ -1,7 +1,9 @@
 import type { MetadataRoute } from "next";
 import { getAllDocs } from "@/lib/docs";
+import { SITE } from "@/lib/site-config";
+import { MADE_FOR_SEGMENTS } from "@/lib/made-for";
 
-const BASE = "https://loopengine.io";
+const BASE = SITE.baseUrl;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const docs = await getAllDocs();
@@ -12,6 +14,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
+
+  const madeForUrls = [
+    {
+      url: `${BASE}/made-for`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    },
+    ...MADE_FOR_SEGMENTS.map((segment) => ({
+      url: `${BASE}/made-for/${segment.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    })),
+  ];
 
   return [
     {
@@ -38,6 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    ...madeForUrls,
     ...docUrls,
   ];
 }

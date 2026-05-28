@@ -7,7 +7,7 @@ runnable: false
 ---
 
 <Callout variant="warning" title="Narrative pattern — dual-surface RevOps">
-Combines [Google Docs + Slack](/docs/examples/dual-surface-docs-slack) work/decision surfaces with CRM **Integration**. Requires **Loop Engine Cloud** for managed Google + Slack connectors; OSS SDK governs the loop definition.
+Combines [Google Docs + Slack](/docs/examples/dual-surface-docs-slack) work/decision surfaces with CRM **Integration**. Requires **Boss Cloud** for managed Google + Slack connectors; OSS SDK governs the loop definition.
 </Callout>
 
 ## Runtime flow
@@ -35,7 +35,7 @@ Provider drafts in Docs → Loop + Guards → Channel: Slack (+ doc comments) �
 
 ## Workflows vs loops
 
-| | Workflow (e.g. doc generation job) | Loop (Loop Engine) |
+| | Workflow (e.g. doc generation job) | Loop (Boss) |
 | --- | --- | --- |
 | Job | Render PDF, sync attachments | Govern whether proposal may be sent |
 | Retry | Orchestrator retries API failures | Guards block illegal transitions |

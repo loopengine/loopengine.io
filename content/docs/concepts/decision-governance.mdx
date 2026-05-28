@@ -1,6 +1,6 @@
 ---
 title: Decision Governance
-description: Why governed decision loops exist - the problem Loop Engine solves that workflow engines and agent frameworks leave open.
+description: Why governed decision loops exist - the problem Boss solves that workflow engines and agent frameworks leave open.
 section: Core Concepts
 order: 110
 ---
@@ -17,16 +17,16 @@ In production, three requirements emerge that most stacks do not address:
 
 Without an explicit governance layer, teams discover that decision trails are spread across prompt logs, API traces, application logs, and database records. Reconstructing the reasoning behind a decision after the fact is fragile.
 
-## What Loop Engine Adds
+## What Boss Adds
 
-Loop Engine sits between AI reasoning and operational execution. Its job is to govern the decision lifecycle.
+Boss sits between AI reasoning and operational execution. Its job is to govern the decision lifecycle.
 
 ```text
 Enterprise Knowledge Sources
           ↓
 RAG / Agent Reasoning Layer
           ↓
-Loop Engine - Decision Governance
+Boss - Decision Governance
           ↓
 Workflow / Execution Systems
 ```
@@ -42,15 +42,15 @@ This creates a decision record at runtime, not a best-effort reconstruction late
 
 ## What This Is Not
 
-Loop Engine is not a workflow engine. It does not schedule jobs, manage retries, or handle durable execution. Systems like Temporal or Prefect own those concerns.
+Boss is not a workflow engine. It does not schedule jobs, manage retries, or handle durable execution. Systems like Temporal or Prefect own those concerns.
 
-Loop Engine is not an agent framework. It does not orchestrate tool calls or manage model context. LangGraph, OpenAI Assistants, and your own agent runtime own that layer.
+Boss is not an agent framework. It does not orchestrate tool calls or manage model context. LangGraph, OpenAI Assistants, and your own agent runtime own that layer.
 
-Loop Engine governs the boundary between reasoning and action. It enforces who can do what, under what conditions, with what evidence.
+Boss governs the boundary between reasoning and action. It enforces who can do what, under what conditions, with what evidence.
 
 ## How the governance weighting works
 
-Loop Engine uses three types of weighting in sequence — all must pass for a transition to execute.
+Boss uses three types of weighting in sequence — all must pass for a transition to execute.
 
 1. **Confidence threshold (numeric gate)**  
    Every AI actor submission carries a `0–1` confidence score. The guard blocks the transition if the score falls below the configured threshold. In the fraud review example, `0.60` triggers escalation to human review and `0.80` allows auto-dismiss — two thresholds, two different outcomes from the same loop state.
@@ -74,7 +74,7 @@ The key design principle is compositional governance. You stack guards, each wit
 
 ## Related
 
-- [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+- [Boss vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
 - [Agents and RAG](/docs/concepts/agents-and-rag)
 - [Guards and Policy](/docs/concepts/guards-and-policy)
 - [Learning Signals](/docs/concepts/learning-signals)

@@ -6,7 +6,7 @@ import { TopNav } from "@/components/nav/TopNav";
 import { DocsSearchModalHost } from "@/components/docs/DocsSearchModalHost";
 import { EcosystemBanner } from "@/components/site/EcosystemBanner";
 import { Footer } from "@/components/site/Footer";
-import { LOOP_ENGINE_META_DESCRIPTION } from "@/lib/betterdata-ecosystem";
+import { SITE } from "@/lib/site-config";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/globals.css";
@@ -33,25 +33,27 @@ const monoFont = JetBrains_Mono({
   display: "swap",
 });
 
-const BASE_URL = "https://loopengine.io";
+const BASE_URL = SITE.baseUrl;
+const TITLE = `${SITE.productName} — ${SITE.tagline.replace(/\.$/, "")}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Loop Engine — Governed operational runtime",
-    template: "%s · Loop Engine"
+    default: TITLE,
+    template: `%s · ${SITE.brandName}`
   },
-  description: LOOP_ENGINE_META_DESCRIPTION,
+  description: SITE.metaDescription,
   keywords: [
-    "governed operational runtime",
-    "operational decision runtime",
+    "AI operations control",
+    "operational decision control infrastructure",
+    "governed AI execution",
+    "AI governance",
+    "operational accountability",
+    "traceability",
+    "human-in-the-loop control",
     "decision loops",
     "deterministic guards",
-    "operational evidence",
-    "governed transitions",
-    "AI operational governance",
-    "typed actors",
-    "loop engine",
+    "AI agent governance",
     "open source",
     "TypeScript"
   ],
@@ -62,25 +64,25 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: BASE_URL,
-    siteName: "Loop Engine",
-    title: "Loop Engine — Governed operational runtime",
-    description: LOOP_ENGINE_META_DESCRIPTION,
+    siteName: SITE.brandName,
+    title: TITLE,
+    description: SITE.metaDescription,
     images: [
       {
         url: "/og",
         width: 1200,
         height: 630,
-        alt: "Loop Engine — Governed operational runtime"
+        alt: TITLE
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Loop Engine — Governed operational runtime",
-    description: LOOP_ENGINE_META_DESCRIPTION,
+    title: TITLE,
+    description: SITE.metaDescription,
     images: ["/og"],
-    creator: "@loopengineio",
-    site: "@loopengineio"
+    creator: SITE.legacy.twitter,
+    site: SITE.legacy.twitter
   },
   robots: {
     index: true,

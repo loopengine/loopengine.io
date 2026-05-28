@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: DocsSlugPageProps): Promise<M
     title,
     description,
     openGraph: {
-      title: `${title} · Loop Engine`,
+      title: `${title} · Boss Loop`,
       description,
       url: `${SITE}/docs/${joinedSlug}`,
       images: [
@@ -45,13 +45,13 @@ export async function generateMetadata({ params }: DocsSlugPageProps): Promise<M
           url: ogUrl.toString(),
           width: 1200,
           height: 630,
-          alt: `${title} · Loop Engine`,
+          alt: `${title} · Boss Loop`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} · Loop Engine`,
+      title: `${title} · Boss Loop`,
       description,
       images: [ogUrl.toString()],
     },

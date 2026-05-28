@@ -1,6 +1,6 @@
 ---
 title: "AI-Assisted Decision Loops: Why Operational AI Needs a Runtime Platform"
-description: Loop Engine is a governed operational runtime — not a workflow tool. How Providers, Channels, and Integrations compose with loops, guards, evidence, and learning.
+description: Boss is a governed operational runtime — not a workflow tool. How Providers, Channels, and Integrations compose with loops, guards, evidence, and learning.
 author: Better Data
 date: 2026-05-21
 tags:
@@ -15,28 +15,28 @@ canonical: https://loopengine.io/blog/ai-assisted-decision-loops-runtime-platfor
 
 Enterprise AI stopped being “chat in a sidebar” the moment models could call APIs, read spreadsheets, and propose changes in systems of record. That shift creates a new requirement: **runtime governance** for operational decisions — not another workflow diagram.
 
-Loop Engine is an **open governed operational runtime platform** for AI-assisted enterprise systems. It connects **Providers** (intelligence), **Channels** (human coordination), and **Integrations** (systems of record) through **decision loops** — with deterministic **guards**, **evidence**, and **learning** on every transition.
+Boss is an **open governed operational runtime platform** for AI-assisted enterprise systems. It connects **Providers** (intelligence), **Channels** (human coordination), and **Integrations** (systems of record) through **decision loops** — with deterministic **guards**, **evidence**, and **learning** on every transition.
 
 This post reframes how to think about AI-assisted operations: runtime first, workflows second, chatbots never.
 
 ---
 
-## Loop Engine is a runtime platform — not a workflow engine
+## Boss is a runtime platform — not a workflow engine
 
 **Workflows define the path.** Temporal, Salesforce Flow, and n8n coordinate durable steps, retries, and timers.
 
-**Loops govern the transitions.** Loop Engine decides whether a state change may commit — who may act, under which policy, with what evidence — before side effects land in CRM, ERP, or marketing systems.
+**Loops govern the transitions.** Boss decides whether a state change may commit — who may act, under which policy, with what evidence — before side effects land in CRM, ERP, or marketing systems.
 
 That distinction matters for RevOps, ABM, and platform teams shipping AI into production:
 
-| Concern | Workflow engine | Loop Engine runtime |
+| Concern | Workflow engine | Boss runtime |
 | --- | --- | --- |
 | Primary question | What runs next? | May this transition commit? |
 | Policy | Often external or implicit | **Guards** in the runtime |
 | Audit | Reconstructed from logs | **Evidence** at commit time |
 | AI role | Step inside a flow | **Provider** inside governance boundaries |
 
-Loop Engine is **not** a replacement for Temporal or Salesforce. It is the **governance substrate** AI-assisted operations were missing.
+Boss is **not** a replacement for Temporal or Salesforce. It is the **governance substrate** AI-assisted operations were missing.
 
 ---
 
@@ -75,7 +75,7 @@ Examples: Salesforce, PagerDuty, Jira, Google Workspace apply paths, Postgres, H
 ```text
 Providers          → intelligence in
         ↓
-Decision loops + Guards   → governance (Loop Engine)
+Decision loops + Guards   → governance (Boss)
         ↓
 Channels           → human coordination
         ↓
@@ -98,9 +98,9 @@ Three forces make a **runtime layer** mandatory:
 2. **Humans still own authority.** Regulated and revenue-critical decisions need attributed actors, not anonymous chat threads.
 3. **Evidence must be structural.** “Show me the prompt” is not enough — you need transition-level evidence tied to business objects.
 
-Loop Engine governs **transitions between operational states** — not generic “tasks” or “jobs.”
+Boss governs **transitions between operational states** — not generic “tasks” or “jobs.”
 
-MCP and tool gateways are connectivity. They are not a substitute for deciding whether an operational state change is allowed. Loop Engine sits at that decision boundary; Commerce Gateway and registry patterns handle controlled tool access **under** the same governance model ([docs](https://loopengine.io/docs/integrations/commerce-gateway)).
+MCP and tool gateways are connectivity. They are not a substitute for deciding whether an operational state change is allowed. Boss sits at that decision boundary; Commerce Gateway and registry patterns handle controlled tool access **under** the same governance model ([docs](https://loopengine.io/docs/integrations/commerce-gateway)).
 
 ---
 
@@ -112,7 +112,7 @@ The strongest GTM patterns split **where work happens** from **where decisions h
 | --- | --- | --- |
 | **Work** | Context and artifacts | Google Docs proposal, Sheets pricing grid |
 | **Decision** | Approve / reject / escalate | Slack interactive message |
-| **Governance** | Policy and audit | Loop Engine loop instance |
+| **Governance** | Policy and audit | Boss loop instance |
 | **Execution** | System of record | Salesforce stage, staged sheet apply |
 
 **Work happens inside operational tools. Decisions happen inside channels. Governance happens inside loops. Evidence connects everything.**
@@ -125,7 +125,7 @@ An LLM drafts proposal language in a Doc (Provider + work surface). Brand and le
 
 A rep stages a discount row (work surface). Finance approves in Slack (Channel). **Apply** to the sheet and CRM sync run as Integration steps — never directly from the model.
 
-These patterns are documented as narrative examples on [loopengine.io](https://loopengine.io/docs/examples/dual-surface-docs-slack); managed connectors ship via [Loop Engine Cloud](https://loopengine.io/docs/integrations/loop-engine-cloud-api) where documented — we do not claim full OSS parity with every hosted connector today.
+These patterns are documented as narrative examples on [loopengine.io](https://loopengine.io/docs/examples/dual-surface-docs-slack); managed connectors ship via [Boss Cloud](https://loopengine.io/docs/integrations/loop-engine-cloud-api) where documented — we do not claim full OSS parity with every hosted connector today.
 
 ---
 
@@ -174,12 +174,12 @@ Keep durable execution where it belongs.
 
 **Temporal** (or similar) should run long-running processes: retries, timers, sagas.
 
-**Loop Engine** should govern checkpoints: may this shipment release, may this discount apply, may this campaign send?
+**Boss** should govern checkpoints: may this shipment release, may this discount apply, may this campaign send?
 
 ```text
 AI / Provider proposes
         ↓
-Loop Engine transition (guards + evidence)
+Boss transition (guards + evidence)
         ↓
 Temporal activity executes approved side effects
 ```
@@ -204,15 +204,15 @@ When loops complete, **learning signals** compare predicted vs actual outcomes �
 
 **Direction:** optional self-host services (registry, audit store, replay, observability collector) documented as roadmap-only on [Runtime Platform Direction](https://loopengine.io/docs/concepts/runtime-platform-direction).
 
-**Loop Engine Cloud** extends the runtime with managed connectors and tenancy — it does not redefine what a loop is. We document shipped Cloud capabilities explicitly; we do not imply Studio, docker compose kits, or full OSS parity until released.
+**Boss Cloud** extends the runtime with managed connectors and tenancy — it does not redefine what a loop is. We document shipped Cloud capabilities explicitly; we do not imply Studio, docker compose kits, or full OSS parity until released.
 
 ---
 
 ## What we are not claiming
 
-- Loop Engine is **not** “the Supabase for AI workflows.”
-- Loop Engine is **not** a Slack bot that approves by itself.
-- Loop Engine is **not** a replacement for your workflow engine or CRM.
+- Boss is **not** “the Supabase for AI workflows.”
+- Boss is **not** a Slack bot that approves by itself.
+- Boss is **not** a replacement for your workflow engine or CRM.
 - Unreleased surfaces remain **roadmap** language only.
 
 ---

@@ -1,14 +1,14 @@
 ---
 title: LLM Commerce Gateway Integration
-description: Connect Loop Engine to LLM Commerce Gateway so AI reads live commerce data while Loop Engine enforces approval before writes.
+description: Connect Boss to LLM Commerce Gateway so AI reads live commerce data while Boss enforces approval before writes.
 section: Examples
 ---
 
 ## Overview
 
-LLM Commerce Gateway exposes inventory, pricing, suppliers, and order operations as structured tool interfaces for LLM-driven workflows. Loop Engine governs the workflow state around those tools so recommendations and actions happen through explicit transitions.
+LLM Commerce Gateway exposes inventory, pricing, suppliers, and order operations as structured tool interfaces for LLM-driven workflows. Boss governs the workflow state around those tools so recommendations and actions happen through explicit transitions.
 
-The boundary is strict: Commerce Gateway handles commerce data access and operation execution, while Loop Engine handles state, actor attribution, guard enforcement, approval gates, and audit records.
+The boundary is strict: Commerce Gateway handles commerce data access and operation execution, while Boss handles state, actor attribution, guard enforcement, approval gates, and audit records.
 
 ## Architecture
 
@@ -16,7 +16,7 @@ The boundary is strict: Commerce Gateway handles commerce data access and operat
 Demand Spike Signal
        |
        v
-Loop Engine -------------------- engine.start('procurement.loop')
+Boss -------------------- engine.start('procurement.loop')
        |                        state: GATEWAY_QUERY
        |
        v
@@ -26,7 +26,7 @@ AI Actor ----------------------- GET /inventory/:sku
        |                        (read only)
        |
        v
-Loop Engine -------------------- guard: confidence_threshold >= 0.80
+Boss -------------------- guard: confidence_threshold >= 0.80
        |                        state: PENDING_APPROVAL
        |
        v
@@ -37,7 +37,7 @@ Automation Actor --------------- POST /purchase-orders          Commerce
        |                        (write post-approval only) ---> Gateway API
        |
        v
-Loop Engine -------------------- transition('place_order') -> engine.close(outcome: 'po_created')
+Boss -------------------- transition('place_order') -> engine.close(outcome: 'po_created')
 ```
 
 ## Three governed workflows
@@ -73,12 +73,12 @@ const evidence = await procurementActor({ instance: { data: { sku: 'LMB-BRS-001'
 
 ## The governance boundary
 
-Commerce Gateway handles data access and commerce operations. Loop Engine governs the workflow around those operations.
+Commerce Gateway handles data access and commerce operations. Boss governs the workflow around those operations.
 
 | System | Owns |
 |------|------|
 | Commerce Gateway | Commerce data (inventory, pricing, orders, catalog), LLM tool definitions for commerce operations, and commerce API execution |
-| Loop Engine | Workflow state, actor attribution, guard enforcement, human approval gates, transition audit trail, and learning signals |
+| Boss | Workflow state, actor attribution, guard enforcement, human approval gates, transition audit trail, and learning signals |
 
 Neither system needs to know the internal workings of the other. The adapter is the only coupling point.
 

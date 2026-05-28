@@ -6,7 +6,7 @@ section: Examples
 
 Examples teach **how governed operational decisions move through the runtime**, not how to wire a single adapter. Each pattern names **who** may transition state, **what evidence** is required, and **where humans** intervene — before any side effect reaches an operational system.
 
-→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [Loop Engine vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [Boss vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
 
 ## Canonical runtime flow
 
@@ -33,7 +33,7 @@ Evidence (audit + learning)
 | Integration | Salesforce, Sheets apply, PagerDuty, MAP |
 
 <Callout variant="warning" title="What these examples are not">
-They are **not** simple automation recipes, chatbot demos, or “agent magic” that skips policy. Loop Engine governs **whether** a transition commits; workflow engines and apps **execute** work after approval.
+They are **not** simple automation recipes, chatbot demos, or “agent magic” that skips policy. Boss governs **whether** a transition commits; workflow engines and apps **execute** work after approval.
 </Callout>
 
 ## What examples demonstrate
@@ -80,14 +80,14 @@ GTM and revenue operations are where **operational AI** needs runtime governance
     <h3><a href="/docs/examples/dual-surface-docs-slack">Google Docs + Slack</a></h3>
     <p>AI-generated proposal in Docs → Slack approval → governed transition → apply path.</p>
     <p><strong>Flow:</strong> Provider → Loop + Guards → Channel (Slack) → Integration (Docs/Sheets)</p>
-    <p><strong>Surface:</strong> Loop Engine Cloud · Narrative pattern</p>
+    <p><strong>Surface:</strong> Boss Cloud · Narrative pattern</p>
   </article>
 
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
     <h3><a href="/docs/examples/dual-surface-sheets-slack">Google Sheets + Slack</a></h3>
     <p>Spreadsheet staging → human approval in Slack → gated apply to Sheets.</p>
     <p><strong>Flow:</strong> Provider (optional) → Loop + Guards → Channel → Integration</p>
-    <p><strong>Surface:</strong> Loop Engine Cloud · Narrative pattern</p>
+    <p><strong>Surface:</strong> Boss Cloud · Narrative pattern</p>
   </article>
 
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
@@ -99,7 +99,7 @@ GTM and revenue operations are where **operational AI** needs runtime governance
 
   <article style={{ border: "1px solid var(--color-border)", borderRadius: 12, padding: 16 }}>
     <h3><a href="/docs/examples/workflow-plus-loop">Workflow + Loop</a></h3>
-    <p>Temporal or Salesforce durable steps with Loop Engine governing transitions.</p>
+    <p>Temporal or Salesforce durable steps with Boss governing transitions.</p>
     <p><strong>Flow:</strong> Provider → Loop + Guards → Channel → Integration (workflow activity)</p>
     <p><strong>Surface:</strong> Narrative · complements workflow engines</p>
   </article>

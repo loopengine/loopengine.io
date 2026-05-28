@@ -1,4 +1,4 @@
-import { LoopEngineIcon } from "@/components/logo";
+import { BossLoopMark } from "@/components/logo";
 import { CodeTabs } from "@/components/home/CodeTabs";
 import { NpmInstallChip } from "@/components/home/NpmInstallChip";
 import { RuntimeFlowDiagram } from "@/components/home/RuntimeFlowDiagram";
@@ -14,6 +14,7 @@ import {
   LOOP_ENGINE_PRIMARY,
   LOOP_ENGINE_SUPPORTING
 } from "@/lib/betterdata-ecosystem";
+import { SITE } from "@/lib/site-config";
 
 const packages = [
   { name: "@loop-engine/sdk", slug: "sdk", description: "High-level entry point for loop systems." },
@@ -51,7 +52,7 @@ const integrations: IntegrationCard[] = [
     name: "Perplexity + PagerDuty",
     badge: "Featured pattern",
     description:
-      "Sonar grounds research with citations; Loop Engine runs the governed incident FSM; PagerDuty delivers human review and escalation. End-to-end audit trail on every step.",
+      "Sonar grounds research with citations; Boss runs the governed incident FSM; PagerDuty delivers human review and escalation. End-to-end audit trail on every step.",
     capabilities: [
       "Research steps use Sonar with domain filters and required citations",
       "Risk classification and human gates before any PagerDuty trigger",
@@ -64,7 +65,7 @@ const integrations: IntegrationCard[] = [
     name: "OpenClaw",
     badge: "Featured Integration",
     description:
-      "OpenClaw is the agent that acts. Loop Engine is the runtime that governs what it's allowed to do.",
+      "OpenClaw is the agent that acts. Boss is the runtime that governs what it's allowed to do.",
     capabilities: [
       "Wrap OpenClaw skills with hard approval gates - structural, not prompt-based",
       "Route PENDING_HUMAN_APPROVAL events to WhatsApp, Telegram, Slack, or Discord"
@@ -149,7 +150,7 @@ const integrations: IntegrationCard[] = [
     badge: "Live Integration",
     logoPath: "/logos/gemini.svg",
     description:
-      "Google Gemini as a governed Loop Engine actor — native Google AI SDK, Gemini 1.5 Pro and 2.0 Flash supported.",
+      "Google Gemini as a governed Boss actor — native Google AI SDK, Gemini 1.5 Pro and 2.0 Flash supported.",
     capabilities: [
       "Native @google/generative-ai SDK (not OpenAI-compatible)",
       "Automatic JSON code fence stripping - handles Gemini quirks",
@@ -164,7 +165,7 @@ const integrations: IntegrationCard[] = [
     badge: "New adapter",
     logoPath: "/logos/perplexity.svg",
     description:
-      "Grounded web retrieval with cited sources for Loop steps that need verifiable, real-time information — regulatory lookups, supplier news, compliance research.",
+      "Grounded web retrieval with cited sources for Boss Loop steps that need verifiable, real-time information — regulatory lookups, supplier news, compliance research.",
     capabilities: [
       "Citations are first-class output for audit and evidence attachments",
       "Domain filters and recency filters map directly to Sonar API parameters",
@@ -243,7 +244,7 @@ async function HomeContent() {
         "@type": "WebSite",
         "@id": "https://loopengine.io/#website",
         url: "https://loopengine.io",
-        name: "Loop Engine",
+        name: SITE.brandName,
         description: LOOP_ENGINE_META_DESCRIPTION,
         publisher: { "@id": "https://loopengine.io/#org" }
       },
@@ -261,9 +262,9 @@ async function HomeContent() {
       {
         "@type": "SoftwareApplication",
         "@id": "https://loopengine.io/#software",
-        name: "Loop Engine",
+        name: SITE.productName,
         applicationCategory: "DeveloperApplication",
-        applicationSubCategory: "Governed Operational Runtime",
+        applicationSubCategory: "AI Operations Control System",
         operatingSystem: "Node.js 18+",
         url: "https://loopengine.io",
         downloadUrl: "https://npmjs.com/package/@loop-engine/sdk",
@@ -279,7 +280,7 @@ async function HomeContent() {
         codeRepository: "https://github.com/loopengine/loop-engine",
         programmingLanguage: "TypeScript",
         keywords:
-          "governed operational runtime, decision loops, deterministic guards, operational evidence, governed transitions, AI operational governance, typed actors, operational loops, TypeScript, open source"
+          "AI operations control, operational decision control infrastructure, governed AI execution, AI governance, operational accountability, traceability, decision loops, deterministic guards, AI agent governance, TypeScript, open source"
       }
     ]
   };
@@ -368,7 +369,7 @@ async function HomeContent() {
               }}
             >
               AI operates inside deterministic governance boundaries — guards enforce policy, actors are attributed,
-              and evidence is captured on every transition. Decision loops are the unit of work; finite states are the
+              and evidence is captured on every transition. Boss Loops are the unit of work; finite states are the
               runtime mechanism.
             </p>
             <p
@@ -480,7 +481,7 @@ async function HomeContent() {
           </p>
           <h2 className="mt-3">Governed decision runtime</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Loop Engine is the operational substrate where AI-assisted work becomes accountable. Intelligence proposes;
+            Boss is the operational substrate where AI-assisted work becomes accountable. Intelligence proposes;
             loops and guards decide whether a transition may commit; channels carry human oversight; integrations execute
             only after policy passes. Evidence is recorded at the moment of the decision — not rebuilt from logs later.
           </p>
@@ -567,15 +568,15 @@ async function HomeContent() {
                 color: "var(--color-ink-muted)"
               }}
             >
-              Workflows vs loops
+              Workflows vs Boss Loops
             </p>
             <p style={{ marginTop: 10, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
               <strong style={{ color: "var(--color-ink-primary)" }}>Workflows define the path.</strong>{" "}
               Temporal, n8n, and application orchestration coordinate durable steps.
             </p>
             <p style={{ marginTop: 8, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
-              <strong style={{ color: "var(--color-ink-primary)" }}>Loops govern the transitions.</strong>{" "}
-              Loop Engine decides who may move state, under which guards, with what evidence — before side effects land in
+              <strong style={{ color: "var(--color-ink-primary)" }}>Boss governs the transitions.</strong>{" "}
+              Boss decides who may move state, under which guards, with what evidence — before side effects land in
               your systems.
             </p>
             <Link
@@ -583,7 +584,7 @@ async function HomeContent() {
               className="mt-4 inline-block"
               style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)" }}
             >
-              Loop Engine vs workflow engines →
+              Boss vs workflow engines →
             </Link>
           </article>
 
@@ -628,7 +629,7 @@ async function HomeContent() {
                 fontSize: "var(--text-sm)"
               }}
             >
-              Loop Engine Cloud (hosted) →
+              Boss Cloud (hosted) →
             </Link>
           </div>
         </div>
@@ -654,19 +655,19 @@ async function HomeContent() {
           >
             System context
           </p>
-          <h2 className="mt-3">How Loop Engine fits into real systems</h2>
+          <h2 className="mt-3">How Boss fits into real systems</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
             Most enterprise AI projects hit the same wall: a capable model, a data source it&apos;s not allowed to touch
-            directly, and no structure for what happens between a signal and a recorded outcome. Loop Engine is the layer
-            that sits in that gap.
+            directly, and no structure for what happens between a signal and a recorded outcome. Boss is the layer
+            that sits in that gap — the coordination layer between AI and real-world operations.
           </p>
           <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Loop Engine is the execution and control layer inside a larger operational stack. It does
+            Boss is the execution and control layer inside a larger operational stack. It does
             not replace your data warehouse, ERP, or application UI. It sits where decisions become
             actions, enforces bounded transitions, and records evidence on every state change.
           </p>
           <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            In practice: signals detect change, decision logic selects next action, Loop Engine
+            In practice: signals detect change, decision logic selects next action, Boss
             executes inside explicit guardrails, evidence is captured for each transition, and the
             resulting feedback improves future decisions. This pattern is used in production systems,
             including the Better Data platform.
@@ -740,7 +741,7 @@ async function HomeContent() {
                 ))}
               </div>
               <p style={{ marginTop: 10, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
-                Loop Engine anchors the execution boundary while preserving full transition evidence.
+                Boss anchors the execution boundary while preserving full transition evidence.
               </p>
             </article>
           </div>
@@ -802,7 +803,7 @@ async function HomeContent() {
           </p>
           <h2 className="mt-3">Governance sits on execution — not beside it</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Loop Engine governs actions that are executed through Commerce Gateway. It is a control layer for policy, guards,
+            Boss governs actions that are executed through Commerce Gateway. It is a control layer for policy, guards,
             and audit — not a standalone automation tool that replaces your gateway or operators.
           </p>
           <div
@@ -820,7 +821,7 @@ async function HomeContent() {
               Commerce Agent pattern (illustrative — a composition, not a separate product):
             </p>
             <p>
-              Agent → Registry (discover) → Gateway (execute) → Loop Engine (govern) → Recorded outcome
+              Agent → Registry (discover) → Gateway (execute) → Boss (govern) → Recorded outcome
             </p>
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -882,7 +883,7 @@ async function HomeContent() {
           </p>
           <h2 className="mt-3">Architecture notes and rollout updates</h2>
           <p style={{ marginTop: 12, maxWidth: 820, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Loop Engine is Apache-2.0 open operational infrastructure with a first-class path on Better Data. Cross-module
+            Boss is Apache-2.0 open operational infrastructure with a first-class path on Better Data. Cross-module
             architecture updates, hosted path guidance, and launch context are published on the Better Data blog.
           </p>
 
@@ -952,7 +953,7 @@ async function HomeContent() {
               rel="noopener noreferrer"
               style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
             >
-              View Loop Engine tag →
+              View related posts →
             </a>
             <a
               href="https://betterdata.co/blog/tags/architecture"
@@ -977,7 +978,7 @@ async function HomeContent() {
         <div className="mx-auto grid w-full max-w-[1200px] gap-5 px-6 md:grid-cols-3 md:px-10">
           <FeatureCard
             title="Guards enforce policy"
-            icon={<LoopEngineIcon size={32} color="var(--color-primary)" />}
+            icon={<BossLoopMark size={32} color="var(--color-primary)" />}
             body="Hard and soft guards run in the runtime — not in prompts. Transitions that fail policy do not advance; denials are recorded for audit."
           />
           <FeatureCard
@@ -1027,7 +1028,7 @@ async function HomeContent() {
           <h2 className="mt-3">Three layers, one governance runtime</h2>
           <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
             <strong>Providers</strong> generate intelligence. <strong>Channels</strong> coordinate humans.{" "}
-            <strong>Integrations</strong> execute against systems of record. They are not interchangeable — Loop Engine
+            <strong>Integrations</strong> execute against systems of record. They are not interchangeable — Boss
             governs transitions between them with guards and evidence.
           </p>
           <div className="mt-10">
@@ -1046,7 +1047,7 @@ async function HomeContent() {
             Featured adapters & patterns
           </p>
           <p style={{ marginTop: 8, maxWidth: 760, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
-            npm adapters wire each layer into <code>createLoopSystem</code>. Loop Engine is not a generic integration
+            npm adapters wire each layer into <code>createLoopSystem</code>. Boss is not a generic integration
             platform or Slack bot.
           </p>
           <p
@@ -1222,7 +1223,7 @@ async function HomeContent() {
             color: "var(--color-ink-muted)"
           }}
         >
-          <span>Loop Engine is an open infrastructure project created by</span>
+          <span>Boss is an open infrastructure project created by</span>
           <a href="https://betterdata.co" rel="noreferrer" target="_blank" style={{ color: "var(--color-primary)" }}>
             Better Data
           </a>

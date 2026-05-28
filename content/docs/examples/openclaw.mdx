@@ -1,6 +1,6 @@
 ---
 title: OpenClaw Integration
-description: Use OpenClaw as the human approval channel for Loop Engine and route approval gates through WhatsApp, Telegram, Slack, or Discord.
+description: Use OpenClaw as the human approval channel for Boss and route approval gates through WhatsApp, Telegram, Slack, or Discord.
 section: Examples
 ---
 
@@ -8,7 +8,7 @@ section: Examples
 
 | Stage | In this example |
 | --- | --- |
-| **Provider** | Optional — agent reasoning may live in OpenClaw; governed transitions still pass through Loop Engine |
+| **Provider** | Optional — agent reasoning may live in OpenClaw; governed transitions still pass through Boss |
 | **Loop + Guards** | Approval loop — `allowedActors: ['human']`, `approval_obtained` |
 | **Channel** | **OpenClaw** — WhatsApp/Telegram/Slack/Discord delivery of approval prompts |
 | **Integration** | Downstream PO / ERP trigger after approved transition |
@@ -20,7 +20,7 @@ Provider (optional) → Loop + Guards → Channel (OpenClaw) → Integration →
 
 ## Overview
 
-OpenClaw handles delivery and replies across messaging channels, while Loop Engine owns state transitions, actor constraints, and guard decisions.
+OpenClaw handles delivery and replies across messaging channels, while Boss owns state transitions, actor constraints, and guard decisions.
 
 Approval gates are runtime policy checks, not prompt conventions. Even if an agent asks to self-approve, a transition with `allowedActors: ['human']` rejects non-human actors.
 
@@ -35,7 +35,7 @@ OpenClaw Gateway ------------------------------------.
      |                                                |
      | engine.transition('approve', humanActor)      |
      v                                                |
-Loop Engine                                           |
+Boss                                           |
      |                                                |
      |- guard: approval_obtained ✅                  |
      |- allowedActors: ['human'] ✅                  |

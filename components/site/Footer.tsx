@@ -9,7 +9,7 @@ import {
   BETTER_DATA_SUPPORT_FOOTER,
 } from "@betterdata/site-links";
 import { BetterDataFooterSocialIcons } from "@betterdata/site-links/social-icons";
-import { LoopEngineLogo } from "@/components/logo";
+import { BossLoopLogo } from "@/components/logo";
 import {
   BETTERDATA_CCO_URL,
   BETTERDATA_OPEN_INFRA_URL,
@@ -75,7 +75,7 @@ export function Footer() {
     >
       <div className="mx-auto w-full max-w-[var(--max-width-full)]">
         <div className="mb-6">
-          <LoopEngineLogo size="sm" theme="dark" />
+          <BossLoopLogo size="sm" theme="dark" />
         </div>
       </div>
       <div className="mx-auto grid w-full max-w-[var(--max-width-full)] gap-6 md:grid-cols-3">
@@ -167,7 +167,7 @@ export function Footer() {
           {ECOSYSTEM_STRIP}
         </p>
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-center sm:text-left">Apache-2.0 Licensed · © Loop Engine Contributors</p>
+          <p className="text-center sm:text-left">Apache-2.0 Licensed · © Boss Loop Contributors</p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
             <Link
               className="hover:text-[var(--color-primary)]"

@@ -4,7 +4,7 @@ description: Three distinct runtime layers — Providers (intelligence), Channel
 section: Runtime Connections
 ---
 
-Loop Engine connects **three different kinds** of external capability. They are not interchangeable buckets of “integrations.”
+Boss connects **three different kinds** of external capability. They are not interchangeable buckets of “integrations.”
 
 | Layer | Responsibility | Not this |
 | --- | --- | --- |
@@ -12,13 +12,13 @@ Loop Engine connects **three different kinds** of external capability. They are 
 | **[Channels](/docs/concepts/runtime-taxonomy#channels)** | Human coordination — approve, reject, escalate | System of record, model API |
 | **[Integrations](/docs/concepts/runtime-taxonomy#integrations)** | Operational execution — persist, trigger, apply writes | Governance, chat UI |
 
-<Callout variant="info" title="Loop Engine sits in the middle">
+<Callout variant="info" title="Boss sits in the middle">
 **Providers** submit decisions. **Channels** coordinate humans. **Integrations** execute after policy passes. **Loops + guards** govern every transition; **evidence** records why it was allowed.
 </Callout>
 
-→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [ABM examples](/docs/examples#abm-revops-operational-ai)
+→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [ABM examples](/docs/examples#abm-and-revops-operational-ai)
 
-**Hosted governance:** [Loop Engine Cloud (HTTP API)](/docs/integrations/loop-engine-cloud-api) at `loops.betterdata.co` — multi-tenant connectors and API keys. **OSS runtime:** self-host with `@loop-engine/sdk` in your infrastructure.
+**Hosted governance:** [Boss Cloud (HTTP API)](/docs/integrations/loop-engine-cloud-api) at `loops.betterdata.co` — multi-tenant connectors and API keys. **OSS runtime:** self-host with `@loop-engine/sdk` in your infrastructure.
 
 **Developer note:** npm packages implement [IntegrationAdapter archetypes](/docs/concepts/integration-adapter) (`Store`, `Registry`, `AI`, `EventBus`). Public grouping below follows the product taxonomy, not package folder names.
 
@@ -106,7 +106,7 @@ Examples: Slack, Microsoft Teams, email, Google Docs comments, OpenClaw messenge
 </div>
 
 <Callout variant="info" title="Slack, Teams, and hosted connectors">
-Slack and Microsoft Teams connectors are available on **Loop Engine Cloud** for dual-surface approval patterns. OSS `adapter-slack` / `adapter-teams` are planned — see [changelog](/docs/changelog).
+Slack and Microsoft Teams connectors are available on **Boss Cloud** for dual-surface approval patterns. OSS `adapter-slack` / `adapter-teams` are planned — see [changelog](/docs/changelog).
 </Callout>
 
 ## ⟩ Integrations — systems of record
@@ -180,7 +180,7 @@ Examples: Salesforce (via your connectors), PagerDuty, Jira, Google Workspace ap
     href="/docs/integrations/commerce-gateway"
   />
   <IntegrationCard
-    name="Loop Engine Cloud API"
+    name="Boss Cloud API"
     subtext="Hosted multi-tenant runtime, connectors, and governance API"
     tier="official"
     status="stable"
@@ -195,7 +195,7 @@ Examples: Salesforce (via your connectors), PagerDuty, Jira, Google Workspace ap
 | --- | --- | --- |
 | Anthropic, OpenAI, Gemini, Grok, Perplexity, Vercel AI SDK | Provider | `ActorAdapter` / `ToolAdapter` |
 | OpenClaw | Channel | Human-surface `EventBus` routing |
-| Memory, Postgres, Kafka, HTTP, PagerDuty, Commerce Gateway, Loop Engine Cloud API | Integration | `LoopStore` / `EventBus` / operational adapters |
+| Memory, Postgres, Kafka, HTTP, PagerDuty, Commerce Gateway, Boss Cloud API | Integration | `LoopStore` / `EventBus` / operational adapters |
 | Perplexity + PagerDuty (composite) | Integration | Provider step + ops trigger in one pattern |
 | Vercel AI (`/docs/integrations/vercel-ai`) | Provider | Alias → [vercel-ai-sdk](/docs/integrations/vercel-ai-sdk) |
 

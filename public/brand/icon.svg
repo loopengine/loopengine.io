@@ -1,15 +1,19 @@
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Loop Engine icon">
-  <defs>
-    <marker id="arrow-icon" markerWidth="5" markerHeight="5" refX="3.6" refY="2.5" orient="auto">
-      <path d="M0,0 L0,5 L4.5,2.5 Z" fill="#2563EB"/>
-    </marker>
-  </defs>
-  <line x1="19" y1="13" x2="45" y2="13" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow-icon)"/>
-  <line x1="51" y1="19" x2="51" y2="45" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow-icon)"/>
-  <line x1="45" y1="51" x2="19" y2="51" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow-icon)"/>
-  <line x1="13" y1="45" x2="13" y2="19" stroke="#2563EB" stroke-width="3" marker-end="url(#arrow-icon)"/>
-  <circle cx="13" cy="13" r="5.4" fill="#2563EB"/>
-  <circle cx="51" cy="13" r="5.4" fill="#2563EB"/>
-  <circle cx="51" cy="51" r="5.4" fill="#2563EB"/>
-  <circle cx="13" cy="51" r="5.4" fill="#2563EB"/>
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Boss Loop mark">
+  <!--
+    Boss Loop standalone mark, 64×64 (v10: Open Loop with Governance Gate).
+    Ink rounded perimeter (the bounded operational cycle), opened on the
+    right edge by a teal governance gate (the supervised transition).
+    No arrows. Motion is inferred from the containment shape.
+  -->
+  <!-- governance perimeter — open on the right edge -->
+  <path
+    d="M 56 24 L 56 18 A 10 10 0 0 0 46 8 L 18 8 A 10 10 0 0 0 8 18 L 8 46 A 10 10 0 0 0 18 56 L 46 56 A 10 10 0 0 0 56 46 L 56 40"
+    fill="none"
+    stroke="#0A0F1E"
+    stroke-width="3.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- governance gate — teal vertical bar in the right-edge gap -->
+  <rect x="53.5" y="25" width="5" height="14" rx="1.5" ry="1.5" fill="#0F766E"/>
 </svg>

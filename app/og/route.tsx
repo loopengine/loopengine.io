@@ -1,17 +1,20 @@
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
+import { SITE } from "@/lib/site-config";
 
 export const runtime = "edge";
 
-const PRIMARY = "#2563EB";
+// Brand governance teal (brighter variant for legibility on the dark canvas).
+const PRIMARY = "#14B8A6";
+// Governance perimeter on the dark canvas reads as light "authority" ink.
+const PERIMETER = "#F8FAFC";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
-  const title = searchParams.get("title") ?? "Loop Engine";
+  const title = searchParams.get("title") ?? SITE.brandName;
   const description =
-    searchParams.get("description") ??
-    "Open runtime for constrained, observable, and improvable enterprise loops.";
+    searchParams.get("description") ?? SITE.tagline;
   const section = searchParams.get("section") ?? null;
 
   return new ImageResponse(
@@ -41,25 +44,29 @@ export async function GET(req: NextRequest) {
         />
 
         <div style={{ display: "flex", alignItems: "center", gap: "16px", zIndex: 1 }}>
+          {/* Boss Loop mark: governed operational cycle (perimeter) opened on
+              the right by the teal governance gate. */}
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <circle cx="10" cy="10" r="4" fill={PRIMARY} />
-            <circle cx="30" cy="10" r="4" fill={PRIMARY} />
-            <circle cx="30" cy="30" r="4" fill={PRIMARY} />
-            <circle cx="10" cy="30" r="4" fill={PRIMARY} />
-            <line x1="14" y1="10" x2="26" y2="10" stroke={PRIMARY} strokeWidth="1.5" />
-            <line x1="30" y1="14" x2="30" y2="26" stroke={PRIMARY} strokeWidth="1.5" />
-            <line x1="26" y1="30" x2="14" y2="30" stroke={PRIMARY} strokeWidth="1.5" />
-            <line x1="10" y1="26" x2="10" y2="14" stroke={PRIMARY} strokeWidth="1.5" />
+            <path
+              d="M 35 15 L 35 11.25 A 6.25 6.25 0 0 0 28.75 5 L 11.25 5 A 6.25 6.25 0 0 0 5 11.25 L 5 28.75 A 6.25 6.25 0 0 0 11.25 35 L 28.75 35 A 6.25 6.25 0 0 0 35 28.75 L 35 25"
+              fill="none"
+              stroke={PERIMETER}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <rect x="33.4" y="15.6" width="3.2" height="8.8" rx="1.4" fill={PRIMARY} />
           </svg>
           <span
             style={{
               color: "#F8FAFC",
               fontSize: "22px",
               fontWeight: 700,
-              letterSpacing: "-0.02em"
+              letterSpacing: "0.04em",
+              textTransform: "uppercase"
             }}
           >
-            Loop Engine
+            {SITE.brandName}
           </span>
           {section ? (
             <span
@@ -123,7 +130,7 @@ export async function GET(req: NextRequest) {
               letterSpacing: "0.04em"
             }}
           >
-            loopengine.io
+            {SITE.legacy.domainHost}
           </span>
           <span
             style={{

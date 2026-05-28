@@ -1,10 +1,10 @@
 ---
-title: Loop Engine Cloud (hosted HTTP API)
-description: Managed Loop Engine HTTP API at loops.betterdata.co — auth, routes, and links to the canonical reference in bd-forge-main.
+title: Boss Cloud (hosted HTTP API)
+description: Managed Boss HTTP API at loops.betterdata.co — auth, routes, and links to the canonical reference in bd-forge-main.
 section: Runtime Connections
 taxonomy: integration
 order: 15
-sidebar_label: Loop Engine Cloud API
+sidebar_label: Boss Cloud API
 ---
 
 <div className="docs-quick-links">
@@ -15,15 +15,15 @@ sidebar_label: Loop Engine Cloud API
 
 ## What this is
 
-**loopengine.io** documents the **OSS governed runtime** (`@loop-engine/*`). **Loop Engine Cloud** is the **hosted Integration** path: same loop/guard/evidence model, operated by Better Data with tenancy, API keys, and managed connectors (Slack, Google, …).
+**loopengine.io** documents the **OSS governed runtime** (`@loop-engine/*`). **Boss Cloud** is the **hosted Integration** path: same loop/guard/evidence model, operated by Better Data with tenancy, API keys, and managed connectors (Slack, Google, …).
 
 | Surface | Where to read |
 | --- | --- |
-| Loop Engine runtime, taxonomy, adapters | **loopengine.io** (this site) |
-| Loop Engine Cloud HTTP contract | This page + monorepo `apps/hosted-loops/docs/api.md` |
+| Boss runtime, taxonomy, adapters | **loopengine.io** (this site) |
+| Boss Cloud HTTP contract | This page + monorepo `apps/hosted-loops/docs/api.md` |
 | Better Data company, SCM, CCO applications | **[docs.betterdata.co](https://docs.betterdata.co)** — not loopengine.io |
 
-**OSS runtime** defines states, signals, guards, transitions, and events in **your** infrastructure. **Loop Engine Cloud** exposes the execution contract over **HTTPS** when you want managed governance operations.
+**OSS runtime** defines states, signals, guards, transitions, and events in **your** infrastructure. **Boss Cloud** exposes the execution contract over **HTTPS** when you want managed governance operations.
 
 - **Developers & integrations** → **`https://loops.betterdata.co`** (Bearer JWT for first-party services, **`le_` API keys** for external automation).
 - **Operators** → **Automation** at **`app.betterdata.co/automation`** (product UX; same loops conceptually).
@@ -34,14 +34,14 @@ We document **shipped** Cloud capabilities here and in the monorepo API referenc
 
 The versioned, route-by-route contract (request/response shapes, errors, connectors, baseline routes, key management) is maintained **in the monorepo** alongside the `apps/hosted-loops` implementation:
 
-**[Loop Engine Cloud HTTP API reference (source)](https://github.com/betterdata-platform/bd-forge-main/blob/main/apps/hosted-loops/docs/api.md)**
+**[Boss Cloud HTTP API reference (source)](https://github.com/betterdata-platform/bd-forge-main/blob/main/apps/hosted-loops/docs/api.md)**
 
 That file is the **developer contract** for paths under `/api/v1/*`. Update pull requests that change route handlers should update `apps/hosted-loops/docs/api.md` in the same change-set when the public JSON contract moves.
 
 ## Related OSS docs
 
-- [HTTP adapter](/docs/integrations/http) — webhook-style **outbound** adapter from the OSS runtime; not the same as Loop Engine Cloud ingress.
-- [Architecture](/docs/getting-started/architecture) — core Loop Engine concepts reused by the hosted service.
+- [HTTP adapter](/docs/integrations/http) — webhook-style **outbound** adapter from the OSS runtime; not the same as Boss Cloud ingress.
+- [Architecture](/docs/getting-started/architecture) — core Boss concepts reused by the hosted service.
 
 ## Pricing
 

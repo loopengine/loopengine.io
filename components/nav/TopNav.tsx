@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LoopEngineLogo } from "@/components/logo";
+import { BossLoopLogo } from "@/components/logo";
 import { inferPageType } from "@/lib/analytics/posthog";
 import { trackOutboundClicked, trackCtaClicked } from "@/lib/analytics/events";
 import { DOCS_SEARCH_OPEN_EVENT } from "@/lib/docs-search-events";
@@ -15,6 +15,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { label: "Docs", href: "/docs", matchPrefix: "/docs" },
+  { label: "Made for", href: "/made-for", matchPrefix: "/made-for" },
   { label: "Examples", href: "/docs/examples", matchPrefix: "/docs/examples" },
   { label: "Packages", href: "/docs/packages", matchPrefix: "/docs/packages" },
   { label: "Use cases", href: "/use-cases", matchPrefix: "/use-cases" },
@@ -48,8 +49,8 @@ export function TopNav() {
   return (
     <header className="border-[var(--color-border)] border-b bg-[var(--color-surface)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-        <Link href="/" aria-label="Loop Engine home">
-          <LoopEngineLogo size="sm" />
+        <Link href="/" aria-label="Boss home">
+          <BossLoopLogo size="sm" />
         </Link>
 
         {pathname.startsWith("/docs") ? (

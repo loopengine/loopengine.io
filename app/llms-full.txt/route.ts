@@ -8,12 +8,12 @@ export async function GET() {
   const docs = await getAllDocs();
 
   const header = [
-    "# Loop Engine - Full Documentation",
+    "# Boss - Full Documentation",
     "> https://loopengine.io | Apache-2.0 Licensed | Created by Better Data (https://betterdata.co)",
     "> Generated: " + new Date().toISOString(),
     "> Source: https://github.com/loopengine/loopengine.io",
     "",
-    "This file contains the complete Loop Engine documentation in a single",
+    "This file contains the complete Boss documentation in a single",
     "plain-text file optimized for LLM context windows.",
     "Structured summary: https://loopengine.io/llms.txt",
     "",

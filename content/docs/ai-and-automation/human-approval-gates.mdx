@@ -54,5 +54,5 @@ await engine.transition({
 ```
 
 <Callout variant="important" title="Per-transition gating only">
-`AIActorConstraints` ships with a single field, `requiresHumanApprovalFor`. Loop Engine does not provide a built-in consecutive-AI-transition circuit breaker. Track that policy in your application and translate it into per-transition entries on this list (or into `allowedActors` exclusions).
+`AIActorConstraints` ships with a single field, `requiresHumanApprovalFor`. Boss does not provide a built-in consecutive-AI-transition circuit breaker. Track that policy in your application and translate it into per-transition entries on this list (or into `allowedActors` exclusions).
 </Callout>

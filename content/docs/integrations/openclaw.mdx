@@ -1,6 +1,6 @@
 ---
 title: OpenClaw
-description: Loop Engine as the decision governance layer for OpenClaw agentic workflows — policy enforcement at the runtime level.
+description: Boss as the decision governance layer for OpenClaw agentic workflows — policy enforcement at the runtime level.
 section: Runtime Connections
 taxonomy: channel
 ---
@@ -24,12 +24,12 @@ taxonomy: channel
 
 ## What it does
 
-Loop Engine provides the decision governance layer for OpenClaw workflows. OpenClaw handles agentic reasoning and tool orchestration; Loop Engine governs which actions are authorized, by whom, under what policy, and records full attribution for each transition.
+Boss provides the decision governance layer for OpenClaw workflows. OpenClaw handles agentic reasoning and tool orchestration; Boss governs which actions are authorized, by whom, under what policy, and records full attribution for each transition.
 
 This is the Sense → Decide → Govern pattern in practice:
 
 - OpenClaw retrieves context and reasons over it (`Decide`)
-- Loop Engine evaluates policy and transition guards (`Govern`)
+- Boss evaluates policy and transition guards (`Govern`)
 - Action executes only after the loop permits it (`Execute`)
 
 ## Quick setup
@@ -40,7 +40,7 @@ This is the Sense → Decide → Govern pattern in practice:
    npm install @loop-engine/adapter-openclaw @loop-engine/sdk
    ```
 
-2. **Wire Loop Engine into an OpenClaw workflow**
+2. **Wire Boss into an OpenClaw workflow**
 
    ```typescript
    // @no-typecheck
@@ -76,7 +76,7 @@ This is the Sense → Decide → Govern pattern in practice:
 ## How it works
 
 1. OpenClaw agent proposes an action
-2. Adapter maps proposal to a Loop Engine transition
+2. Adapter maps proposal to a Boss transition
 3. Runtime evaluates guards and policies
 4. Human approval gate pauses when required
 5. Approved transition executes and is fully audited

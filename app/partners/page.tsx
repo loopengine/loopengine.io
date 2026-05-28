@@ -16,9 +16,9 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
-  title: "Runtime ecosystem - Loop Engine",
+  title: "Runtime ecosystem",
   description:
-    "Loop Engine runtime ecosystem — Providers (intelligence), Channels (human coordination), Integrations (systems of record), governed by decision loops with guards and evidence.",
+    "Boss runtime ecosystem — Providers (intelligence), Channels (human coordination), Integrations (systems of record), governed by decision loops with guards and evidence.",
   robots: { index: false, follow: false },
 };
 
@@ -74,7 +74,7 @@ function layerBadge(layer: Partner["runtimeLayer"]) {
 }
 
 function availabilityLabel(partner: Partner) {
-  if (partner.availability === "cloud-connector") return "Loop Engine Cloud";
+  if (partner.availability === "cloud-connector") return "Boss Cloud";
   if (partner.availability === "pattern") return "Pattern doc";
   if (partner.availability === "ecosystem") return "Ecosystem";
   return null;
@@ -178,7 +178,7 @@ export default function PartnersPage() {
           </h1>
           <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--color-ink-secondary)]">{LOOP_ENGINE_SUPPORTING}</p>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--color-ink-tertiary)]">
-            {LOOP_ENGINE_PRIMARY} Loop Engine governs <strong>transitions</strong> between intelligence, human
+            {LOOP_ENGINE_PRIMARY} Boss governs <strong>transitions</strong> between intelligence, human
             coordination, and operational systems — with deterministic guards, structured evidence, and human oversight
             on every material state change.
           </p>
@@ -208,10 +208,10 @@ export default function PartnersPage() {
         <div className="mx-auto max-w-6xl">
           <SectionIntro
             eyebrow="How the runtime composes"
-            title="Loop Engine sits between every layer"
+            title="Boss sits between every layer"
             description={
               <>
-                <strong>Providers</strong> generate intelligence. <strong>Loop Engine</strong> governs operational
+                <strong>Providers</strong> generate intelligence. <strong>Boss</strong> governs operational
                 transitions. <strong>Channels</strong> coordinate human decisions. <strong>Integrations</strong> execute
                 against systems of record. <strong>Evidence + learning</strong> explain and improve operations — not
                 reconstructed chat logs.
@@ -357,7 +357,7 @@ export default function PartnersPage() {
             description={
               <>
                 AI can now act across enterprise systems — APIs and MCP expose operational surfaces where a wrong
-                transition has real business impact. Governance is mandatory: Loop Engine evaluates guards, captures
+                transition has real business impact. Governance is mandatory: Boss evaluates guards, captures
                 evidence, and routes human escalation before Integrations commit state.
               </>
             }
@@ -378,7 +378,7 @@ export default function PartnersPage() {
               </li>
             </ul>
             <aside className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-alt)] p-6">
-              <h3 className="font-[var(--font-display)] text-lg text-[var(--color-ink)]">Loop Engine certification</h3>
+              <h3 className="font-[var(--font-display)] text-lg text-[var(--color-ink)]">Boss certification</h3>
               <p className="mt-3 text-sm leading-7 text-[var(--color-ink-secondary)]">
                 Certified adapters are tested against <code>@loop-engine/guards</code> and{" "}
                 <code>@loop-engine/actors</code> — correct actor shapes, evidence attachment, and no guard bypass.
@@ -409,7 +409,7 @@ export default function PartnersPage() {
           <SectionIntro
             eyebrow="Ecosystem expansion"
             title="Partner roadmap"
-            description="Platforms and modules that extend the governed runtime — co-marketing, early roadmap access, and production deployments alongside Loop Engine."
+            description="Platforms and modules that extend the governed runtime — co-marketing, early roadmap access, and production deployments alongside Boss."
           />
           <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2">
             {ecosystemExpansionPartners.map((partner) => (
@@ -422,7 +422,7 @@ export default function PartnersPage() {
               Build on the governed runtime
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-ink-secondary)]">
-              For companies shipping Providers, Channels, or Integrations that participate in Loop Engine decision loops
+              For companies shipping Providers, Channels, or Integrations that participate in Boss Loops
               in production — not generic marketplace listings.
             </p>
             <div className="mt-6 flex flex-wrap gap-4">

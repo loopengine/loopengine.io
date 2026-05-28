@@ -54,9 +54,9 @@ const canonicalLoops: CanonicalLoop[] = [
 ];
 
 export const metadata: Metadata = {
-  title: "Loop catalog - Loop Engine",
+  title: "Loop catalog",
   description:
-    "The Loop Engine loop catalog — canonical and community loop definitions. Not the Commerce Gateway Registry.",
+    "The Boss catalog of canonical and community Boss Loop definitions. Not the Commerce Gateway Registry.",
   robots: { index: false, follow: false },
 };
 
@@ -73,7 +73,7 @@ export default function CatalogPage() {
           <strong className="text-[var(--color-ink-secondary)]">
             catalog-backed loop definitions with policy gates and evidence
           </strong>{" "}
-          for Loop Engine. It is unrelated to the{" "}
+          for Boss. It is unrelated to the{" "}
           <a
             className="text-[var(--color-primary)] underline underline-offset-4"
             href="https://commercegateway.io/registry"
