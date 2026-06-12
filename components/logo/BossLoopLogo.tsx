@@ -40,7 +40,7 @@ import type { CSSProperties } from "react";
  *   - The teal gate fades in last as the climax — the supervised
  *     transition takes its place in the gap.
  *
- * Wordmark: BOSS LOOP, geometric sans, uppercase, tracking 0.12em.
+ * Wordmark: BOSS LOOPS, geometric sans, uppercase, tracking 0.12em.
  *
  * Anti-pattern checklist (deliberately avoided):
  *   - Arrows, arrowheads, refresh / sync / orbit glyphs
@@ -263,7 +263,7 @@ export function BossLoopLogo({
         }}
       >
         <span style={wordmarkStyle}>
-          Boss<span style={{ marginLeft: "0.20em" }}>Loop</span>
+          Boss<span style={{ marginLeft: "0.20em" }}>Loops</span>
           <sup
             style={{
               fontSize: "48%",
