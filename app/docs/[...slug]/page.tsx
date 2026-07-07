@@ -5,12 +5,13 @@ import { DocsPrevNext } from "@/components/docs/DocsPrevNext";
 import { DocsShell } from "@/components/docs/DocsShell";
 import { mdxComponents } from "@/components/docs/MDXComponents";
 import { getAllDocSlugs, getDocBySlug, getPrevNext } from "@/lib/docs";
+import { SITE as SITE_CFG, LEGACY, npmPkg } from "@/lib/site-config";
 
 type DocsSlugPageProps = {
   params: Promise<{ slug: string[] }>;
 };
 
-const SITE = "https://loopengine.io";
+const SITE = SITE_CFG.baseUrl;
 
 export async function generateStaticParams() {
   const slugs = await getAllDocSlugs();
@@ -37,7 +38,7 @@ export async function generateMetadata({ params }: DocsSlugPageProps): Promise<M
     title,
     description,
     openGraph: {
-      title: `${title} · Boss Loop`,
+      title: `${title} · Boss Loops`,
       description,
       url: `${SITE}/docs/${joinedSlug}`,
       images: [
@@ -45,13 +46,13 @@ export async function generateMetadata({ params }: DocsSlugPageProps): Promise<M
           url: ogUrl.toString(),
           width: 1200,
           height: 630,
-          alt: `${title} · Boss Loop`,
+          alt: `${title} · Boss Loops`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: `${title} · Boss Loop`,
+      title: `${title} · Boss Loops`,
       description,
       images: [ogUrl.toString()],
     },
@@ -73,10 +74,10 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
       ? {
           "@context": "https://schema.org",
           "@type": "SoftwareSourceCode",
-          name: `@loop-engine/${packageName}`,
+          name: npmPkg(packageName),
           description: doc.frontmatter.description ?? "",
-          url: `https://loopengine.io/docs/packages/${packageName}`,
-          codeRepository: `https://github.com/loopengine/loop-engine/tree/main/packages/${packageName}`,
+          url: `${SITE}/docs/packages/${packageName}`,
+          codeRepository: LEGACY.ghTree(`packages/${packageName}`),
           programmingLanguage: {
             "@type": "ComputerLanguage",
             name: "TypeScript",
@@ -96,10 +97,10 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
       : {
           "@context": "https://schema.org",
           "@type": "TechArticle",
-          "@id": `https://loopengine.io/docs/${slugPath}#article`,
+          "@id": `${SITE}/docs/${slugPath}#article`,
           headline: doc.frontmatter.title ?? doc.title,
           description: doc.frontmatter.description ?? "",
-          url: `https://loopengine.io/docs/${slugPath}`,
+          url: `${SITE}/docs/${slugPath}`,
           inLanguage: "en-US",
           author: {
             "@type": "Organization",
@@ -112,12 +113,12 @@ export default async function DocsSlugPage({ params }: DocsSlugPageProps) {
             url: "https://betterdata.co",
             logo: {
               "@type": "ImageObject",
-              url: "https://loopengine.io/brand/logo.svg",
+              url: `${SITE}/brand/logo.svg`,
             },
           },
           isPartOf: {
             "@type": "WebSite",
-            "@id": "https://loopengine.io/#website",
+            "@id": `${SITE}/#website`,
           },
         };
 

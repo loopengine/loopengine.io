@@ -15,6 +15,7 @@ import {
   BETTERDATA_OPEN_INFRA_URL,
   ECOSYSTEM_STRIP,
 } from "@/lib/betterdata-ecosystem";
+import { LEGACY } from "@/lib/site-config";
 
 function ExternalFooterLink({
   href,
@@ -81,11 +82,11 @@ export function Footer() {
       <div className="mx-auto grid w-full max-w-[var(--max-width-full)] gap-6 md:grid-cols-3">
         <div>
           <p style={headingStyle}>Project</p>
-          <ExternalFooterLink href="https://github.com/loopengine/loop-engine" label="GitHub" style={linkStyle} />
-          <ExternalFooterLink href="https://npmjs.com/org/loop-engine" label="npm" style={linkStyle} />
-          <ExternalFooterLink href="https://github.com/loopengine/loop-examples" label="Examples" style={linkStyle} />
+          <ExternalFooterLink href={LEGACY.github} label="GitHub" style={linkStyle} />
+          <ExternalFooterLink href={LEGACY.npmOrg} label="npm" style={linkStyle} />
+          <ExternalFooterLink href={LEGACY.examplesRepo} label="Examples" style={linkStyle} />
           <ExternalFooterLink
-            href="https://github.com/loopengine/loop-engine/releases"
+            href={LEGACY.githubReleases}
             label="Changelog"
             style={linkStyle}
           />
@@ -98,7 +99,7 @@ export function Footer() {
           <Link className="block hover:text-[var(--color-ink)]" href="/docs/governance/rfc-process" style={linkStyle}>
             RFC Process
           </Link>
-          <ExternalFooterLink href="https://github.com/loopengine/loop-engine/issues" label="Issues" style={linkStyle} />
+          <ExternalFooterLink href={LEGACY.githubIssues} label="Issues" style={linkStyle} />
           <p style={{ ...plainTextStyle, marginTop: 14 }}>oss@betterdata.co</p>
         </div>
         <div>
@@ -167,7 +168,7 @@ export function Footer() {
           {ECOSYSTEM_STRIP}
         </p>
         <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-center sm:text-left">Apache-2.0 Licensed · © Boss Loop Contributors</p>
+          <p className="text-center sm:text-left">Apache-2.0 Licensed · © Boss Loops Contributors</p>
           <div className="flex flex-wrap items-center justify-center gap-4 sm:justify-end">
             <Link
               className="hover:text-[var(--color-primary)]"
@@ -178,10 +179,10 @@ export function Footer() {
             </Link>
             <a
               className="hover:text-[var(--color-primary)]"
-              href="mailto:conduct@loopengine.io"
+              href={`mailto:${LEGACY.conductEmail}`}
               style={{ color: "var(--color-ink-muted)", textDecoration: "none" }}
             >
-              conduct@loopengine.io
+              {LEGACY.conductEmail}
             </a>
           </div>
         </div>

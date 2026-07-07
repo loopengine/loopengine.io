@@ -1,7 +1,7 @@
 import type { CSSProperties, ComponentType } from "react";
 
 /**
- * Boss Loop — three candidate marks for the "Governed Operational Cycle"
+ * Boss Loops — three candidate marks for the "Governed Operational Cycle"
  * brand direction. None of these uses arrows, refresh icons, infinity
  * loops, or directional navigation cues. Motion is *inferred* from
  * geometry, not drawn explicitly.
@@ -52,7 +52,7 @@ export function Option1OpenLoopMark({
   inkColor = DEFAULT_INK,
   accentColor = DEFAULT_ACCENT,
   className,
-  ariaLabel = "Boss Loop — open loop with governance gate",
+  ariaLabel = "Boss Loops — open loop with governance gate",
 }: MarkProps) {
   const k = size / 64;
 
@@ -136,7 +136,7 @@ export function Option2StateTransitionMark({
   inkColor = DEFAULT_INK,
   accentColor = DEFAULT_ACCENT,
   className,
-  ariaLabel = "Boss Loop — operational state transition",
+  ariaLabel = "Boss Loops — operational state transition",
 }: MarkProps) {
   const k = size / 64;
   const fx = (n: number) => n * k;
@@ -238,7 +238,7 @@ export function Option3FeedbackSystemMark({
   inkColor = DEFAULT_INK,
   accentColor = DEFAULT_ACCENT,
   className,
-  ariaLabel = "Boss Loop — feedback system",
+  ariaLabel = "Boss Loops — feedback system",
 }: MarkProps) {
   const k = size / 64;
   const fx = (n: number) => n * k;

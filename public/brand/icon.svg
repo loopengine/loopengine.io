@@ -1,6 +1,6 @@
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Boss Loop mark">
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Boss Loops mark">
   <!--
-    Boss Loop standalone mark, 64×64 (v10: Open Loop with Governance Gate).
+    Boss Loops standalone mark, 64×64 (v10: Open Loop with Governance Gate).
     Ink rounded perimeter (the bounded operational cycle), opened on the
     right edge by a teal governance gate (the supervised transition).
     No arrows. Motion is inferred from the containment shape.

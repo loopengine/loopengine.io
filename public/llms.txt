@@ -1,10 +1,10 @@
-# Loop Engine
+# Boss Loops
 
 > Operational decision control for governed AI systems — bounded operational
 > loops with deterministic guards, typed actors, and immutable evidence.
 > Apache-2.0 Licensed. Created by Better Data. https://loopengine.io
 
-Loop Engine is a TypeScript monorepo of packages for defining, running,
+Boss Loops is a TypeScript monorepo of packages for defining, running,
 and observing bounded operational loops with a finite-state actor model.
 AI agents, humans, and automation systems are all first-class actors.
 Every transition emits structured events. Guards enforce deterministic policy.

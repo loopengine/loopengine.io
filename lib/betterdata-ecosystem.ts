@@ -1,5 +1,5 @@
 /**
- * Boss GTM copy. Rebranded from the previous "Loop Engine" Phase 0B strings.
+ * Boss Loops GTM copy. Rebranded from the previous "Loop Engine" Phase 0B strings.
  * NOTE: the bd-forge glossary lock still uses Loop Engine naming and needs its
  * own sync pass (tracked in the rebrand fast-follow). Track-A copy here is the
  * source of truth for this site. See `.cursor/rules/rebrand-glossary.md`.
@@ -8,13 +8,13 @@
 import { SITE } from "@/lib/site-config";
 
 export const LOOP_ENGINE_HERO_HEADLINE =
-  "The control system for AI-assisted operations.";
+  "The system of record for decisions.";
 
 export const LOOP_ENGINE_PRIMARY =
-  "Boss is operational decision control infrastructure — the coordination layer between AI and real-world operations.";
+  "Boss Loops is operational decision control infrastructure — the coordination layer between AI and real-world operations.";
 
 export const LOOP_ENGINE_SUPPORTING =
-  "Boss governs how AI executes against your systems, so you can scale operational execution while keeping accountability, governance, traceability, and control.";
+  "Boss Loops governs how AI executes against your systems, so you can scale operational execution while keeping accountability, governance, traceability, and control.";
 
 export const LOOP_ENGINE_META_DESCRIPTION = SITE.metaDescription;
 

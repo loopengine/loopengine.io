@@ -1,6 +1,6 @@
 ---
-title: Boss vs Workflow Engines
-description: How Boss and workflow engines like Temporal complement each other - execution vs decision governance.
+title: Boss Loops vs Workflow Engines
+description: How Boss Loops and workflow engines like Temporal complement each other - execution vs decision governance.
 section: Core Concepts
 order: 120
 ---
@@ -9,7 +9,7 @@ order: 120
 
 Workflow engines like Temporal solve durable execution: retries, timers, distributed coordination, and fault tolerance.
 
-Boss solves decision governance: actor authorization, policy enforcement, evidence capture, and decision audit trail.
+Boss Loops solves decision governance: actor authorization, policy enforcement, evidence capture, and decision audit trail.
 
 These are different problems. Both can exist in the same system.
 
@@ -21,7 +21,7 @@ These are different problems. Both can exist in the same system.
 - Saga pattern and distributed transactions
 - Timer and scheduling primitives
 
-## Boss's Responsibilities
+## Boss Loops' Responsibilities
 
 - Defining who can trigger each transition
 - Enforcing guard policies before allowing state changes
@@ -33,7 +33,7 @@ These are different problems. Both can exist in the same system.
 
 Use Temporal when: you need fault-tolerant execution of multi-step operations.
 
-Use Boss when: you need governed, attributable decision checkpoints.
+Use Boss Loops when: you need governed, attributable decision checkpoints.
 
 Use both when: AI agents make recommendations inside durable workflows that require human approval, policy enforcement, and audit trail.
 
@@ -42,14 +42,14 @@ Use both when: AI agents make recommendations inside durable workflows that requ
 ```text
 AI Agent
    ↓
-Boss    <- decision governance layer
+Boss Loops    <- decision governance layer
    ↓
 Temporal       <- durable execution layer
    ↓
 Infrastructure
 ```
 
-The agent proposes an action. Boss governs whether it is allowed and by whom. Temporal durably executes the approved action.
+The agent proposes an action. Boss Loops governs whether it is allowed and by whom. Temporal durably executes the approved action.
 
 ## Code Example
 

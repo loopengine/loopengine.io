@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BossLoopLogo } from "@/components/logo";
+import { LEGACY } from "@/lib/site-config";
 import { inferPageType } from "@/lib/analytics/posthog";
 import { trackOutboundClicked, trackCtaClicked } from "@/lib/analytics/events";
 import { DOCS_SEARCH_OPEN_EVENT } from "@/lib/docs-search-events";
@@ -49,7 +50,7 @@ export function TopNav() {
   return (
     <header className="border-[var(--color-border)] border-b bg-[var(--color-surface)]">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
-        <Link href="/" aria-label="Boss home">
+        <Link href="/" aria-label="Boss Loops home">
           <BossLoopLogo size="sm" />
         </Link>
 
@@ -97,14 +98,14 @@ export function TopNav() {
           ))}
           <a
             className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-            href="https://betterdata.co/blog/tags/loop-engine"
+            href={LEGACY.blogTag}
             target="_blank"
             rel="noopener noreferrer"
             data-ph-cta="read_blog"
             onClick={() =>
               trackOutboundClicked({
                 label: "blog",
-                destination: "https://betterdata.co/blog/tags/loop-engine",
+                destination: LEGACY.blogTag,
                 location: "top_nav_desktop",
                 pageType,
               })
@@ -114,14 +115,14 @@ export function TopNav() {
           </a>
           <a
             className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-            href="https://github.com/loopengine/loop-engine/releases"
+            href={LEGACY.githubReleases}
             target="_blank"
             rel="noopener noreferrer"
             data-ph-cta="releases"
             onClick={() =>
               trackOutboundClicked({
                 label: "releases",
-                destination: "https://github.com/loopengine/loop-engine/releases",
+                destination: LEGACY.githubReleases,
                 location: "top_nav_desktop",
                 pageType,
               })
@@ -131,14 +132,14 @@ export function TopNav() {
           </a>
           <a
             className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-            href="https://betterdata.co/changelog?module=loop-engine"
+            href={LEGACY.changelogModule}
             target="_blank"
             rel="noopener noreferrer"
             data-ph-cta="read_changelog"
             onClick={() =>
               trackOutboundClicked({
                 label: "changelog",
-                destination: "https://betterdata.co/changelog?module=loop-engine",
+                destination: LEGACY.changelogModule,
                 location: "top_nav_desktop",
                 pageType,
               })
@@ -148,14 +149,14 @@ export function TopNav() {
           </a>
           <a
             className="rounded border border-[var(--color-border)] px-3 py-1.5 font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-alt)]"
-            href="https://github.com/loopengine/loop-engine"
+            href={LEGACY.github}
             target="_blank"
             rel="noopener noreferrer"
             data-ph-cta="github"
             onClick={() =>
               trackOutboundClicked({
                 label: "github",
-                destination: "https://github.com/loopengine/loop-engine",
+                destination: LEGACY.github,
                 location: "top_nav_desktop",
                 pageType,
               })
@@ -194,14 +195,14 @@ export function TopNav() {
               ))}
               <a
                 className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-                href="https://betterdata.co/blog/tags/loop-engine"
+                href={LEGACY.blogTag}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-ph-cta="read_blog"
                 onClick={() =>
                   trackOutboundClicked({
                     label: "blog",
-                    destination: "https://betterdata.co/blog/tags/loop-engine",
+                    destination: LEGACY.blogTag,
                     location: "top_nav_mobile",
                     pageType,
                   })
@@ -211,14 +212,14 @@ export function TopNav() {
               </a>
               <a
                 className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-                href="https://github.com/loopengine/loop-engine/releases"
+                href={LEGACY.githubReleases}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-ph-cta="releases"
                 onClick={() =>
                   trackOutboundClicked({
                     label: "releases",
-                    destination: "https://github.com/loopengine/loop-engine/releases",
+                    destination: LEGACY.githubReleases,
                     location: "top_nav_mobile",
                     pageType,
                   })
@@ -228,14 +229,14 @@ export function TopNav() {
               </a>
               <a
                 className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-                href="https://betterdata.co/changelog?module=loop-engine"
+                href={LEGACY.changelogModule}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-ph-cta="read_changelog"
                 onClick={() =>
                   trackOutboundClicked({
                     label: "changelog",
-                    destination: "https://betterdata.co/changelog?module=loop-engine",
+                    destination: LEGACY.changelogModule,
                     location: "top_nav_mobile",
                     pageType,
                   })
@@ -245,14 +246,14 @@ export function TopNav() {
               </a>
               <a
                 className="rounded border border-[var(--color-border)] px-2 py-1.5 text-center font-medium text-[var(--color-ink)]"
-                href="https://github.com/loopengine/loop-engine"
+                href={LEGACY.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-ph-cta="github"
                 onClick={() =>
                   trackOutboundClicked({
                     label: "github",
-                    destination: "https://github.com/loopengine/loop-engine",
+                    destination: LEGACY.github,
                     location: "top_nav_mobile",
                     pageType,
                   })

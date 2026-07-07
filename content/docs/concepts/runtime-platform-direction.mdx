@@ -1,13 +1,13 @@
 ---
 title: Runtime Platform Direction
-description: Self-host operational runtime direction — what ships in OSS today, what Boss Cloud adds, and roadmap-only extensions (constrained language).
+description: Self-host operational runtime direction — what ships in OSS today, what Boss Loops Cloud adds, and roadmap-only extensions (constrained language).
 section: Core Concepts
 order: 8
 ---
 
-Boss is evolving toward a **self-host operational runtime platform**: a **local-first** stack and **operational governance substrate** you run in your infrastructure. This page states that direction honestly — what exists on npm **today**, what **Boss Cloud** adds, and which components are **roadmap-only**.
+Boss Loops is evolving toward a **self-host operational runtime platform**: a **local-first** stack and **operational governance substrate** you run in your infrastructure. This page states that direction honestly — what exists on npm **today**, what **Boss Loops Cloud** adds, and which components are **roadmap-only**.
 
-→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [Boss Cloud API](/docs/integrations/loop-engine-cloud-api)
+→ [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) · [Architecture](/docs/getting-started/architecture) · [Boss Loops Cloud API](/docs/integrations/loop-engine-cloud-api)
 
 ## Positioning (locked)
 
@@ -17,7 +17,7 @@ Boss is evolving toward a **self-host operational runtime platform**: a **local-
 | **Operational governance substrate** | Loops + guards + evidence sit **under** AI and workflow layers — they authorize transitions |
 | **Local-first runtime stack** | Default path is install SDK, wire adapters, run in your environment — not a required multi-tenant SaaS |
 
-We describe Boss as infrastructure for **governed operational decisions**, not as a generic cloud suite or workflow marketplace.
+We describe Boss Loops as infrastructure for **governed operational decisions**, not as a generic cloud suite or workflow marketplace.
 
 ## What you can run today (OSS)
 
@@ -38,9 +38,9 @@ npm install @loop-engine/sdk
 
 → [Quick Start](/docs/getting-started/quick-start)
 
-## Runtime platform vs Boss Cloud
+## Runtime platform vs Boss Loops Cloud
 
-| | **OSS runtime (self-host)** | **Boss Cloud (hosted)** |
+| | **OSS runtime (self-host)** | **Boss Loops Cloud (hosted)** |
 | --- | --- | --- |
 | **Runs where** | Your infrastructure | Better Data operated (`loops.betterdata.co`) |
 | **Primary job** | Govern transitions in **your** apps | Hosted governance API + managed connectors |
@@ -48,7 +48,7 @@ npm install @loop-engine/sdk
 | **Connectors** | You implement OAuth/secrets | Documented hosted connector paths (Slack, Google, …) |
 | **Docs surface** | **loopengine.io** (this site) | Cloud API page + **[docs.betterdata.co](https://docs.betterdata.co)** for company/apps |
 
-**Boss Cloud does not replace the OSS runtime model** — it hosts governance operations when you want managed connectors and fleet-style control. **Better Data application documentation** (SCM, CCO, company products) lives on **docs.betterdata.co**, not loopengine.io.
+**Boss Loops Cloud does not replace the OSS runtime model** — it hosts governance operations when you want managed connectors and fleet-style control. **Better Data application documentation** (SCM, CCO, company products) lives on **docs.betterdata.co**, not loopengine.io.
 
 We do **not** claim **full self-host parity** with every Cloud connector or operator feature on day one.
 
@@ -111,7 +111,7 @@ Need governed loops in your app now?
     → OSS SDK + adapters (self-host)
 
 Need managed Slack/Google connectors + tenancy API?
-    → Boss Cloud (hosted Integration path)
+    → Boss Loops Cloud (hosted Integration path)
 
 Need company / SCM / CCO product docs?
     → docs.betterdata.co (not loopengine.io)
@@ -121,5 +121,5 @@ Need company / SCM / CCO product docs?
 
 - [Architecture](/docs/getting-started/architecture) — evidence flow and boundaries
 - [Runtime Taxonomy](/docs/concepts/runtime-taxonomy) — Providers, Channels, Integrations
-- [Boss vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines) — execution vs governance
+- [Boss Loops vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines) — execution vs governance
 - [Package taxonomy](/docs/packages) — what to install today

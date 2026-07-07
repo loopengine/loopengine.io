@@ -1,5 +1,6 @@
 import { getAllDocs } from "@/lib/docs";
 import { NextResponse } from "next/server";
+import { SITE, LEGACY } from "@/lib/site-config";
 
 export const dynamic = "force-static";
 export const revalidate = 3600;
@@ -8,14 +9,14 @@ export async function GET() {
   const docs = await getAllDocs();
 
   const header = [
-    "# Boss - Full Documentation",
-    "> https://loopengine.io | Apache-2.0 Licensed | Created by Better Data (https://betterdata.co)",
+    "# Boss Loops - Full Documentation",
+    `> ${SITE.baseUrl} | Apache-2.0 Licensed | Created by Better Data (https://betterdata.co)`,
     "> Generated: " + new Date().toISOString(),
-    "> Source: https://github.com/loopengine/loopengine.io",
+    `> Source: ${LEGACY.siteRepo}`,
     "",
-    "This file contains the complete Boss documentation in a single",
+    "This file contains the complete Boss Loops documentation in a single",
     "plain-text file optimized for LLM context windows.",
-    "Structured summary: https://loopengine.io/llms.txt",
+    `Structured summary: ${SITE.baseUrl}/llms.txt`,
     "",
     "---",
     "",
@@ -23,7 +24,7 @@ export async function GET() {
 
   const body = docs
     .map((doc) => {
-      const lines = [`## ${doc.title}`, `URL: https://loopengine.io/docs/${doc.slugPath}`];
+      const lines = [`## ${doc.title}`, `URL: ${SITE.baseUrl}/docs/${doc.slugPath}`];
       if (doc.frontmatter.description) {
         lines.push(`Summary: ${doc.frontmatter.description}`);
       }

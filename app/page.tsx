@@ -14,7 +14,7 @@ import {
   LOOP_ENGINE_PRIMARY,
   LOOP_ENGINE_SUPPORTING
 } from "@/lib/betterdata-ecosystem";
-import { SITE } from "@/lib/site-config";
+import { SITE, LEGACY, npmPkgUrl } from "@/lib/site-config";
 
 const packages = [
   { name: "@loop-engine/sdk", slug: "sdk", description: "High-level entry point for loop systems." },
@@ -52,7 +52,7 @@ const integrations: IntegrationCard[] = [
     name: "Perplexity + PagerDuty",
     badge: "Featured pattern",
     description:
-      "Sonar grounds research with citations; Boss runs the governed incident FSM; PagerDuty delivers human review and escalation. End-to-end audit trail on every step.",
+      "Sonar grounds research with citations; Boss Loops runs the governed incident FSM; PagerDuty delivers human review and escalation. End-to-end audit trail on every step.",
     capabilities: [
       "Research steps use Sonar with domain filters and required citations",
       "Risk classification and human gates before any PagerDuty trigger",
@@ -65,7 +65,7 @@ const integrations: IntegrationCard[] = [
     name: "OpenClaw",
     badge: "Featured Integration",
     description:
-      "OpenClaw is the agent that acts. Boss is the runtime that governs what it's allowed to do.",
+      "OpenClaw is the agent that acts. Boss Loops is the runtime that governs what it's allowed to do.",
     capabilities: [
       "Wrap OpenClaw skills with hard approval gates - structural, not prompt-based",
       "Route PENDING_HUMAN_APPROVAL events to WhatsApp, Telegram, Slack, or Discord"
@@ -150,7 +150,7 @@ const integrations: IntegrationCard[] = [
     badge: "Live Integration",
     logoPath: "/logos/gemini.svg",
     description:
-      "Google Gemini as a governed Boss actor — native Google AI SDK, Gemini 1.5 Pro and 2.0 Flash supported.",
+      "Google Gemini as a governed Boss Loops actor — native Google AI SDK, Gemini 1.5 Pro and 2.0 Flash supported.",
     capabilities: [
       "Native @google/generative-ai SDK (not OpenAI-compatible)",
       "Automatic JSON code fence stripping - handles Gemini quirks",
@@ -165,7 +165,7 @@ const integrations: IntegrationCard[] = [
     badge: "New adapter",
     logoPath: "/logos/perplexity.svg",
     description:
-      "Grounded web retrieval with cited sources for Boss Loop steps that need verifiable, real-time information — regulatory lookups, supplier news, compliance research.",
+      "Grounded web retrieval with cited sources for decision loop steps that need verifiable, real-time information — regulatory lookups, supplier news, compliance research.",
     capabilities: [
       "Citations are first-class output for audit and evidence attachments",
       "Domain filters and recency filters map directly to Sonar API parameters",
@@ -188,7 +188,7 @@ const integrations: IntegrationCard[] = [
 
 async function getGitHubStars(): Promise<number> {
   try {
-    const response = await fetch("https://api.github.com/repos/loopengine/loop-engine", {
+    const response = await fetch(LEGACY.ghApiRepo, {
       next: { revalidate: 3600 }
     });
     if (!response.ok) {
@@ -203,7 +203,7 @@ async function getGitHubStars(): Promise<number> {
 
 async function getRelatedLoopEnginePosts(): Promise<RelatedPost[]> {
   try {
-    const response = await fetch("https://betterdata.co/blog/tags/loop-engine/feed", {
+    const response = await fetch(LEGACY.blogTagFeed, {
       next: { revalidate: 3600 },
     });
     if (!response.ok) {
@@ -242,42 +242,42 @@ async function HomeContent() {
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "https://loopengine.io/#website",
-        url: "https://loopengine.io",
+        "@id": `${SITE.baseUrl}/#website`,
+        url: SITE.baseUrl,
         name: SITE.brandName,
         description: LOOP_ENGINE_META_DESCRIPTION,
-        publisher: { "@id": "https://loopengine.io/#org" }
+        publisher: { "@id": `${SITE.baseUrl}/#org` }
       },
       {
         "@type": "Organization",
-        "@id": "https://loopengine.io/#org",
+        "@id": `${SITE.baseUrl}/#org`,
         name: "Better Data",
         url: "https://betterdata.co",
         sameAs: [
-          "https://github.com/loopengine",
-          "https://npmjs.com/org/loop-engine",
-          "https://x.com/loopengineio"
+          LEGACY.githubOrg,
+          LEGACY.npmOrg,
+          LEGACY.x
         ]
       },
       {
         "@type": "SoftwareApplication",
-        "@id": "https://loopengine.io/#software",
+        "@id": `${SITE.baseUrl}/#software`,
         name: SITE.productName,
         applicationCategory: "DeveloperApplication",
         applicationSubCategory: "AI Operations Control System",
         operatingSystem: "Node.js 18+",
-        url: "https://loopengine.io",
-        downloadUrl: "https://npmjs.com/package/@loop-engine/sdk",
+        url: SITE.baseUrl,
+        downloadUrl: npmPkgUrl("sdk"),
         softwareVersion: "0.1.0",
         description: LOOP_ENGINE_PRIMARY,
         license: "https://www.apache.org/licenses/LICENSE-2.0",
-        author: { "@id": "https://loopengine.io/#org" },
+        author: { "@id": `${SITE.baseUrl}/#org` },
         offers: {
           "@type": "Offer",
           price: "0",
           priceCurrency: "USD"
         },
-        codeRepository: "https://github.com/loopengine/loop-engine",
+        codeRepository: LEGACY.github,
         programmingLanguage: "TypeScript",
         keywords:
           "AI operations control, operational decision control infrastructure, governed AI execution, AI governance, operational accountability, traceability, decision loops, deterministic guards, AI agent governance, TypeScript, open source"
@@ -416,7 +416,7 @@ async function HomeContent() {
                 Get started
               </Link>
               <a
-                href="https://github.com/loopengine/loop-engine"
+                href={LEGACY.github}
                 rel="noreferrer"
                 target="_blank"
                 className="inline-flex items-center"
@@ -481,7 +481,7 @@ async function HomeContent() {
           </p>
           <h2 className="mt-3">Governed decision runtime</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss is the operational substrate where AI-assisted work becomes accountable. Intelligence proposes;
+            Boss Loops is the operational substrate where AI-assisted work becomes accountable. Intelligence proposes;
             loops and guards decide whether a transition may commit; channels carry human oversight; integrations execute
             only after policy passes. Evidence is recorded at the moment of the decision — not rebuilt from logs later.
           </p>
@@ -575,8 +575,8 @@ async function HomeContent() {
               Temporal, n8n, and application orchestration coordinate durable steps.
             </p>
             <p style={{ marginTop: 8, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
-              <strong style={{ color: "var(--color-ink-primary)" }}>Boss governs the transitions.</strong>{" "}
-              Boss decides who may move state, under which guards, with what evidence — before side effects land in
+              <strong style={{ color: "var(--color-ink-primary)" }}>Boss Loops governs the transitions.</strong>{" "}
+              Boss Loops decides who may move state, under which guards, with what evidence — before side effects land in
               your systems.
             </p>
             <Link
@@ -584,7 +584,7 @@ async function HomeContent() {
               className="mt-4 inline-block"
               style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)" }}
             >
-              Boss vs workflow engines →
+              Boss Loops vs workflow engines →
             </Link>
           </article>
 
@@ -629,7 +629,7 @@ async function HomeContent() {
                 fontSize: "var(--text-sm)"
               }}
             >
-              Boss Cloud (hosted) →
+              Boss Loops Cloud (hosted) →
             </Link>
           </div>
         </div>
@@ -655,19 +655,19 @@ async function HomeContent() {
           >
             System context
           </p>
-          <h2 className="mt-3">How Boss fits into real systems</h2>
+          <h2 className="mt-3">How Boss Loops fits into real systems</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
             Most enterprise AI projects hit the same wall: a capable model, a data source it&apos;s not allowed to touch
-            directly, and no structure for what happens between a signal and a recorded outcome. Boss is the layer
+            directly, and no structure for what happens between a signal and a recorded outcome. Boss Loops is the layer
             that sits in that gap — the coordination layer between AI and real-world operations.
           </p>
           <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss is the execution and control layer inside a larger operational stack. It does
+            Boss Loops is the execution and control layer inside a larger operational stack. It does
             not replace your data warehouse, ERP, or application UI. It sits where decisions become
             actions, enforces bounded transitions, and records evidence on every state change.
           </p>
           <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            In practice: signals detect change, decision logic selects next action, Boss
+            In practice: signals detect change, decision logic selects next action, Boss Loops
             executes inside explicit guardrails, evidence is captured for each transition, and the
             resulting feedback improves future decisions. This pattern is used in production systems,
             including the Better Data platform.
@@ -741,7 +741,7 @@ async function HomeContent() {
                 ))}
               </div>
               <p style={{ marginTop: 10, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
-                Boss anchors the execution boundary while preserving full transition evidence.
+                Boss Loops anchors the execution boundary while preserving full transition evidence.
               </p>
             </article>
           </div>
@@ -803,7 +803,7 @@ async function HomeContent() {
           </p>
           <h2 className="mt-3">Governance sits on execution — not beside it</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss governs actions that are executed through Commerce Gateway. It is a control layer for policy, guards,
+            Boss Loops governs actions that are executed through Commerce Gateway. It is a control layer for policy, guards,
             and audit — not a standalone automation tool that replaces your gateway or operators.
           </p>
           <div
@@ -821,7 +821,7 @@ async function HomeContent() {
               Commerce Agent pattern (illustrative — a composition, not a separate product):
             </p>
             <p>
-              Agent → Registry (discover) → Gateway (execute) → Boss (govern) → Recorded outcome
+              Agent → Registry (discover) → Gateway (execute) → Boss Loops (govern) → Recorded outcome
             </p>
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
@@ -842,7 +842,7 @@ async function HomeContent() {
               Commerce Gateway
             </a>
             <a
-              href="https://app.betterdata.co/sign-up?utm_source=loopengine.io&utm_medium=site&utm_campaign=oss_handoff"
+              href={`https://app.betterdata.co/sign-up?utm_source=${LEGACY.domainHost}&utm_medium=site&utm_campaign=oss_handoff`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center"
@@ -883,7 +883,7 @@ async function HomeContent() {
           </p>
           <h2 className="mt-3">Architecture notes and rollout updates</h2>
           <p style={{ marginTop: 12, maxWidth: 820, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss is Apache-2.0 open operational infrastructure with a first-class path on Better Data. Cross-module
+            Boss Loops is Apache-2.0 open operational infrastructure with a first-class path on Better Data. Cross-module
             architecture updates, hosted path guidance, and launch context are published on the Better Data blog.
           </p>
 
@@ -948,7 +948,7 @@ async function HomeContent() {
 
           <div className="mt-6 flex flex-wrap gap-4">
             <a
-              href="https://betterdata.co/blog/tags/loop-engine"
+              href={LEGACY.blogTag}
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
@@ -1028,7 +1028,7 @@ async function HomeContent() {
           <h2 className="mt-3">Three layers, one governance runtime</h2>
           <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
             <strong>Providers</strong> generate intelligence. <strong>Channels</strong> coordinate humans.{" "}
-            <strong>Integrations</strong> execute against systems of record. They are not interchangeable — Boss
+            <strong>Integrations</strong> execute against systems of record. They are not interchangeable — Boss Loops
             governs transitions between them with guards and evidence.
           </p>
           <div className="mt-10">
@@ -1047,7 +1047,7 @@ async function HomeContent() {
             Featured adapters & patterns
           </p>
           <p style={{ marginTop: 8, maxWidth: 760, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
-            npm adapters wire each layer into <code>createLoopSystem</code>. Boss is not a generic integration
+            npm adapters wire each layer into <code>createLoopSystem</code>. Boss Loops is not a generic integration
             platform or Slack bot.
           </p>
           <p
@@ -1223,12 +1223,12 @@ async function HomeContent() {
             color: "var(--color-ink-muted)"
           }}
         >
-          <span>Boss is an open infrastructure project created by</span>
+          <span>Boss Loops is an open infrastructure project created by</span>
           <a href="https://betterdata.co" rel="noreferrer" target="_blank" style={{ color: "var(--color-primary)" }}>
             Better Data
           </a>
           <span>· Apache-2.0 ·</span>
-          <a href="https://github.com/loopengine/loop-engine" rel="noreferrer" target="_blank">
+          <a href={LEGACY.github} rel="noreferrer" target="_blank">
             ★ {stars}
           </a>
         </div>

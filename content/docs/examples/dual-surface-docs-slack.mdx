@@ -1,13 +1,13 @@
 ---
 title: Google Docs + Slack (dual-surface)
-description: AI-generated proposal in Google Docs, human approval in Slack, governed transition before any write — Boss Cloud pattern.
+description: AI-generated proposal in Google Docs, human approval in Slack, governed transition before any write — Boss Loops Cloud pattern.
 section: Examples
 complexity: Advanced
 runnable: false
 ---
 
 <Callout variant="warning" title="Narrative pattern — not an OSS clone-and-run example">
-This walkthrough describes the **Boss Cloud** dual-surface model (Google work surface + Slack decision surface). It does **not** ship as a standalone repo in `loop-examples`. Connectors and templates are operated via **[Boss Cloud](/docs/integrations/loop-engine-cloud-api)** — see [changelog](/docs/changelog) for shipped capabilities.
+This walkthrough describes the **Boss Loops Cloud** dual-surface model (Google work surface + Slack decision surface). It does **not** ship as a standalone repo in `loop-examples`. Connectors and templates are operated via **[Boss Loops Cloud](/docs/integrations/loop-engine-cloud-api)** — see [changelog](/docs/changelog) for shipped capabilities.
 </Callout>
 
 ## Runtime flow
@@ -21,7 +21,7 @@ This walkthrough describes the **Boss Cloud** dual-surface model (Google work su
 | **Evidence** | Doc revision hash, prompt attribution, Slack actor mapping → platform `actorId`, transition audit |
 
 ```text
-Google Doc (work)          Slack (decisions)           Boss Cloud
+Google Doc (work)          Slack (decisions)        Boss Loops Cloud
       │                          │                            │
       │  context + draft         │  approve / reject          │  guards + state
       └──────────────────────────┴────────────────────────────┘
@@ -57,5 +57,5 @@ Company and connector operations docs: **[docs.betterdata.co](https://docs.bette
 
 - [Google Sheets + Slack](/docs/examples/dual-surface-sheets-slack) — staging/apply pattern for spreadsheets
 - [Runtime Taxonomy — Channels](/docs/concepts/runtime-taxonomy#channels)
-- [Boss Cloud API](/docs/integrations/loop-engine-cloud-api)
+- [Boss Loops Cloud API](/docs/integrations/loop-engine-cloud-api)
 - [Human approval gates](/docs/ai-and-automation/human-approval-gates)

@@ -1,22 +1,22 @@
 ---
 title: Governed Incident Response with Perplexity and PagerDuty
-description: Research with citations, governance in Boss, execution and escalation in PagerDuty — with a tamper-evident audit trail throughout.
+description: Research with citations, governance in Boss Loops, execution and escalation in PagerDuty — with a tamper-evident audit trail throughout.
 section: Runtime Connections
 taxonomy: integration
 ---
 
 ## Introduction
 
-Perplexity Sonar can research and propose answers. PagerDuty can alert and escalate. Neither product, by itself, produces a compliance-grade record of what the AI did, what sources it used, and who approved the next action. Boss closes that gap: you model the flow as explicit states and transitions, attach evidence at each step, and only then hand off to PagerDuty when policy allows.
+Perplexity Sonar can research and propose answers. PagerDuty can alert and escalate. Neither product, by itself, produces a compliance-grade record of what the AI did, what sources it used, and who approved the next action. Boss Loops closes that gap: you model the flow as explicit states and transitions, attach evidence at each step, and only then hand off to PagerDuty when policy allows.
 
-The architecture is linear: **Perplexity Sonar** supplies grounded text and citations; **Boss** runs a finite-state loop (for example a `governed-incident-response` definition) with guards and human gates; **PagerDuty** receives Events API v2 triggers when the loop reaches an alerting state. The audit trail is written from the loop side — one entry per material step, with hashes and references you can tie back to incidents.
+The architecture is linear: **Perplexity Sonar** supplies grounded text and citations; **Boss Loops** runs a finite-state loop (for example a `governed-incident-response` definition) with guards and human gates; **PagerDuty** receives Events API v2 triggers when the loop reaches an alerting state. The audit trail is written from the loop side — one entry per material step, with hashes and references you can tie back to incidents.
 
 ## Architecture
 
 ```text
                     ┌── audit trail (tamper-evident entries per step)
                     │
-Perplexity Sonar ──►│  Boss — governed-incident-response FSM
+Perplexity Sonar ──►│  Boss Loops — governed-incident-response FSM
                     │
                     └──► PagerDuty (Events API v2 — trigger / dedupe / custom_details)
 ```

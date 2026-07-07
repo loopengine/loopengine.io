@@ -42,9 +42,9 @@ const platformPatterns = [
     summary: "Sonar research → governed classification → on-call Channel → alert Integration.",
   },
   {
-    title: "Workflow + Boss Loop",
+    title: "Workflow + Boss Loops",
     href: "/docs/examples/workflow-plus-loop",
-    summary: "Temporal or Salesforce execution after Boss governs transitions.",
+    summary: "Temporal or Salesforce execution after Boss Loops governs transitions.",
   },
 ];
 
@@ -57,7 +57,7 @@ export default function UseCasesPage() {
           Operational runtime patterns
         </h1>
         <p className="mt-3 max-w-3xl text-[var(--color-ink-secondary)] text-base leading-7">
-          Boss wraps operational AI in explicit states, guards, and evidence. Patterns are organized by runtime
+          Boss Loops wraps operational AI in explicit states, guards, and evidence. Patterns are organized by runtime
           layer — <strong>Providers</strong> (intelligence), <strong>Channels</strong> (human coordination),{" "}
           <strong>Integrations</strong> (systems of record) — not by adapter catalog alone.
         </p>
@@ -118,7 +118,7 @@ export default function UseCasesPage() {
             </Link>
           </h2>
           <p className="mt-3 text-sm text-[var(--color-ink-secondary)] leading-7">
-            Perplexity proposes. Boss governs. PagerDuty executes. Tamper-evident audit for SOC 2, HIPAA, and EU AI
+            Perplexity proposes. Boss Loops governs. PagerDuty executes. Tamper-evident audit for SOC 2, HIPAA, and EU AI
             Act programs.
           </p>
           <p className="mt-4">

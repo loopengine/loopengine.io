@@ -4,9 +4,9 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Enterprise IT: From AI productivity to governed actor",
   description:
-    "Why enterprise AI hits a governance wall, how Boss adds governed execution between models and systems, and what to measure for security and compliance leaders.",
+    "Why enterprise AI hits a governance wall, how Boss Loops adds governed execution between models and systems, and what to measure for security and compliance leaders.",
   openGraph: {
-    title: "From productivity tool to governed enterprise actor · Boss Loop",
+    title: "From productivity tool to governed enterprise actor · Boss Loops",
     description:
       "Technical explainer for IT leaders: the governance wall, governed execution, PO exception review, actor attribution, and security architecture."
   }
@@ -29,7 +29,7 @@ export default function EnterpriseItExplainerPage() {
           Use cases · Enterprise IT
         </p>
         <h1 className="mt-3 font-[var(--font-display)] text-[var(--color-ink)] text-3xl tracking-tight md:text-[2rem]">
-          From productivity tool to enterprise actor: how Boss crosses the AI governance wall
+          From productivity tool to enterprise actor: how Boss Loops crosses the AI governance wall
         </h1>
         <p className="mt-2 text-sm text-[var(--color-ink-tertiary)]">
           Technical peer explainer for senior developers, enterprise architects, and security-adjacent leaders.
@@ -84,7 +84,7 @@ export default function EnterpriseItExplainerPage() {
             The result: AI stays in the productivity layer. It advises. It drafts. It summarizes. But it cannot{" "}
             <em>act</em> on enterprise systems — because no one has built the layer that makes that safe.
           </p>
-          <p className="text-[var(--color-ink)]">Boss is that layer.</p>
+          <p className="text-[var(--color-ink)]">Boss Loops is that layer.</p>
         </section>
 
         <section className={section}>
@@ -104,14 +104,14 @@ export default function EnterpriseItExplainerPage() {
             </li>
           </ol>
           <p>
-            Boss introduces a third option: <strong className="text-[var(--color-ink)]">governed execution</strong>.
+            Boss Loops introduces a third option: <strong className="text-[var(--color-ink)]">governed execution</strong>.
           </p>
           <pre className={codeBlock} tabIndex={0}>
 {`Signal (data change, schedule, trigger)
   ↓
 AI Actor (analyzes, decides, proposes a transition)
   ↓
-Boss (evaluates guards, requires evidence, enforces actor policy)
+Boss Loops (evaluates guards, requires evidence, enforces actor policy)
   ↓
 Human Gate [if required] (manager, compliance officer, CISO approves)
   ↓
@@ -120,7 +120,7 @@ Downstream System (Salesforce updated, ticket closed, PO flagged)
 Evidence Record (immutable — what happened, who authorized, when, why)`}
           </pre>
           <p>
-            The AI never writes directly to Salesforce. It proposes a transition. Boss evaluates whether that
+            The AI never writes directly to Salesforce. It proposes a transition. Boss Loops evaluates whether that
             transition is allowed under the current guard policy. If a human approval gate is configured, the loop pauses at{" "}
             <code className="rounded bg-[var(--color-surface-alt)] px-1 font-mono text-[13px]">PENDING_HUMAN_APPROVAL</code>{" "}
             until a named actor approves. Only then does the downstream action execute — and the full chain of custody is
@@ -139,9 +139,9 @@ Evidence Record (immutable — what happened, who authorized, when, why)`}
             spend, new vendors, over-budget line items. Today a human analyst reviews a queue and makes calls. Tomorrow you
             want an AI to do the initial triage.
           </p>
-          <p>Without Boss, that means giving the AI write access to your procurement system. No one will approve that.</p>
+          <p>Without Boss Loops, that means giving the AI write access to your procurement system. No one will approve that.</p>
           <p>
-            <strong className="text-[var(--color-ink)]">With Boss:</strong>
+            <strong className="text-[var(--color-ink)]">With Boss Loops:</strong>
           </p>
           <pre className={codeBlock} tabIndex={0}>
 {`States:     RECEIVED → TRIAGED → PENDING_HUMAN_REVIEW → APPROVED / REJECTED / ESCALATED
@@ -177,7 +177,7 @@ Guards:
         <section className={section}>
           <h2 className={h2}>Every actor is accounted for</h2>
           <p>
-            One of the most important properties of the Boss actor model is that{" "}
+            One of the most important properties of the Boss Loops actor model is that{" "}
             <strong className="text-[var(--color-ink)]">humans, AI agents, and automations are treated identically</strong>.
           </p>
           <p>Every transition must be attributed to a typed actor:</p>
@@ -202,7 +202,7 @@ Guards:
         <section className={section}>
           <h2 className={h2}>Watching and reporting on loops</h2>
           <p>
-            Boss emits structured events on every state change. These are first-class observability outputs, not logs.
+            Boss Loops emits structured events on every state change. These are first-class observability outputs, not logs.
           </p>
           <p>Typical transition-related events include loop identity, aggregate id, from/to states, actor, evidence, and timing.</p>
           <p>
@@ -264,7 +264,7 @@ Guards:
             correctly escalated.
           </p>
           <p>
-            Without a layer like Boss, much of this data never exists in a form that can drive improvement — you have
+            Without a layer like Boss Loops, much of this data never exists in a form that can drive improvement — you have
             logs, not a governed process record.
           </p>
         </section>
@@ -363,7 +363,7 @@ Guards:
         </section>
 
         <p className="mt-12 text-sm text-[var(--color-ink-tertiary)]">
-          Boss is Apache-2.0 licensed open infrastructure created by{" "}
+          Boss Loops is Apache-2.0 licensed open infrastructure created by{" "}
           <a href="https://betterdata.co" className="text-[var(--color-primary)] underline underline-offset-4" target="_blank" rel="noopener noreferrer">
             Better Data
           </a>

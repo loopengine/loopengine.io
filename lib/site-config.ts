@@ -1,5 +1,5 @@
 /**
- * Single source of truth for Boss (formerly Loop Engine) naming + URLs.
+ * Single source of truth for Boss Loops (formerly Loop Engine) naming + URLs.
  *
  * See `.cursor/rules/rebrand-glossary.md`.
  *
@@ -15,23 +15,23 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://loopengine.io";
 
 export const SITE = {
   /** Short product / platform name. */
-  productName: "Boss",
+  productName: "Boss Loops",
   /** Brand lockup / wordmark (matches the logo). */
-  brandName: "Boss Loop",
-  /** Unit of work. */
-  unitName: "Boss Loop",
-  unitNamePlural: "Boss Loops",
+  brandName: "Boss Loops",
+  /** Unit of work (the product's loops — lowercase in prose). */
+  unitName: "decision loop",
+  unitNamePlural: "decision loops",
   /** Hosted offering on Better Data (display name only; URL is Track B). */
-  cloudName: "Boss Cloud",
+  cloudName: "Boss Loops Cloud",
 
-  tagline: "The control system for AI-assisted operations.",
+  tagline: "The system of record for decisions.",
   /** Eyebrow / short tagline. */
-  shortTagline: "Governed AI Operations",
+  shortTagline: "Governed Decision Intelligence",
 
   metaDescription:
-    "Boss is the control system for AI-assisted operations — operational " +
-    "decision control infrastructure that lets organizations scale AI " +
-    "execution with accountability, governance, traceability, and control.",
+    "Boss Loops is the system of record for decisions — it turns every " +
+    "consequential operational decision into a governed, auditable record " +
+    "that fuses the evidence, the policy, the people, and the AI behind it.",
 
   /** Resolved at build time; flips to the new domain via env in the fast-follow. */
   baseUrl: BASE_URL,

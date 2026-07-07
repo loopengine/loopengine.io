@@ -188,7 +188,7 @@ export const ecosystemExpansionPartners: Partner[] = [
     slug: "commerce-chain",
     logoPath: "/logos/commerce-chain.svg",
     description:
-      "Supply chain and demand chain modules on Boss — SCM/DCM loops, participant manifests, and the CCO platform.",
+      "Supply chain and demand chain modules on Boss Loops — SCM/DCM loops, participant manifests, and the CCO platform.",
     runtimeLayer: "ecosystem",
     docsPath: "https://commercechain.io/docs",
     externalUrl: "https://commercechain.io",
@@ -200,7 +200,7 @@ export const ecosystemExpansionPartners: Partner[] = [
     slug: "vercel-ai-sdk",
     logoPath: "/logos/vercel.svg",
     description:
-      "Compose streaming AI responses with Boss governance — Providers stay inside loop boundaries.",
+      "Compose streaming AI responses with Boss Loops governance — Providers stay inside loop boundaries.",
     runtimeLayer: "ecosystem",
     docsPath: "/docs/integrations/vercel-ai-sdk",
     certificationStatus: "community",

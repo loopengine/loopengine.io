@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
         />
 
         <div style={{ display: "flex", alignItems: "center", gap: "16px", zIndex: 1 }}>
-          {/* Boss Loop mark: governed operational cycle (perimeter) opened on
+          {/* Boss Loops mark: governed operational cycle (perimeter) opened on
               the right by the teal governance gate. */}
           <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
             <path

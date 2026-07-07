@@ -1,13 +1,13 @@
 ---
-title: Workflow engine + Boss
-description: Temporal or Salesforce durable execution with Boss governing transitions — Provider → Guards → Channel → Integration (activity).
+title: Workflow engine + Boss Loops
+description: Temporal or Salesforce durable execution with Boss Loops governing transitions — Provider → Guards → Channel → Integration (activity).
 section: Examples
 complexity: Advanced
 runnable: false
 ---
 
 <Callout variant="warning" title="Narrative pattern">
-This is an **architecture composition** example. It does not ship as a single `loop-examples` folder. Combine OSS Boss with your workflow engine using explicit transition gates — see [Boss vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines) for contracts.
+This is an **architecture composition** example. It does not ship as a single `loop-examples` folder. Combine Boss Loops OSS with your workflow engine using explicit transition gates — see [Boss Loops vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines) for contracts.
 </Callout>
 
 ## Runtime flow
@@ -15,7 +15,7 @@ This is an **architecture composition** example. It does not ship as a single `l
 | Stage | Role in this pattern |
 | --- | --- |
 | **Provider** | AI agent inside a workflow activity proposes a transition (recommendation + evidence) |
-| **Loop + Guards** | Boss evaluates policy **before** the workflow schedules downstream side effects |
+| **Loop + Guards** | Boss Loops evaluates policy **before** the workflow schedules downstream side effects |
 | **Channel** | Human approval activity (Slack, ticketing UI, or in-app) resumes workflow only after governed transition |
 | **Integration** | **Temporal** activity / **Salesforce** flow step executes durable work **after** `executed` status |
 | **Evidence** | Loop transition evidence linked to workflow run id / Salesforce record id for audit |
@@ -27,7 +27,7 @@ Workflow (Temporal / Salesforce)
         │       ↓
         │   Provider
         │       ↓
-        │   Loop + Guards  ←── Boss (governance)
+        │   Loop + Guards  ←── Boss Loops (governance)
         │       ↓
         │   Channel (human)
         │       ↓
@@ -40,7 +40,7 @@ Workflow (Temporal / Salesforce)
 
 **Temporal** owns: retries, timers, sagas, long-running coordination.
 
-**Boss** owns: whether a named transition may commit, with which actor, and with what evidence.
+**Boss Loops** owns: whether a named transition may commit, with which actor, and with what evidence.
 
 Typical sequence:
 
@@ -51,7 +51,7 @@ Typical sequence:
 
 ```ts
 // @no-typecheck
-// After Boss returns executed — Temporal runs durable side effects.
+// After Boss Loops returns executed — Temporal runs durable side effects.
 const decision = await engine.transition({
   aggregateId: workflowRunId as never,
   transitionId: "approve_change" as never,
@@ -67,7 +67,7 @@ if (decision.status !== "executed") {
 
 ## Salesforce composition
 
-**Salesforce Flow / Apex** often owns record updates and UI. Boss governs **approval transitions** that Flow must not bypass:
+**Salesforce Flow / Apex** often owns record updates and UI. Boss Loops governs **approval transitions** that Flow must not bypass:
 
 - Provider step: classify opportunity risk or draft terms (AI agent actor).
 - Loop + Guards: credit-policy guards, evidence-required fields.
@@ -85,13 +85,13 @@ Same rule: **Flow executes; Loop governs commit.**
 
 ## What this is not
 
-- Boss as a workflow engine replacement.
+- Boss Loops as a workflow engine replacement.
 - Salesforce or Temporal “plugins” that hide guards behind prompts.
 - An implied single npm package that embeds both runtimes — you compose explicitly.
 
 ## Related
 
-- [Boss vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+- [Boss Loops vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
 - [What is a Loop?](/docs/concepts/what-is-a-loop)
 - [Architecture](/docs/getting-started/architecture)
 - [Infrastructure Change Approval](/docs/examples/infrastructure-change-approval) — SRE Channel + rollout Integration

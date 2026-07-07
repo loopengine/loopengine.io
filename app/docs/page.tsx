@@ -1,33 +1,34 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SITE, LEGACY } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Docs",
   description:
-    "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Cloud.",
+    "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Loops Cloud.",
   alternates: {
-    canonical: "https://loopengine.io/docs"
+    canonical: `${SITE.baseUrl}/docs`
   },
   openGraph: {
-    title: "Docs · Boss Loop",
+    title: "Docs · Boss Loops",
     description:
-      "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Cloud.",
-    url: "https://loopengine.io/docs",
+      "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Loops Cloud.",
+    url: `${SITE.baseUrl}/docs`,
     images: [
       {
-        url: "https://loopengine.io/og?title=Docs&section=Documentation",
+        url: `${SITE.baseUrl}/og?title=Docs&section=Documentation`,
         width: 1200,
         height: 630,
-        alt: "Docs · Boss Loop"
+        alt: "Docs · Boss Loops"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Docs · Boss Loop",
+    title: "Docs · Boss Loops",
     description:
-      "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Cloud.",
-    images: ["https://loopengine.io/og?title=Docs&section=Documentation"]
+      "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Loops Cloud.",
+    images: [`${SITE.baseUrl}/og?title=Docs&section=Documentation`]
   }
 };
 
@@ -36,7 +37,7 @@ export default function DocsHomePage() {
     {
       icon: "🚀",
       title: "Get Started",
-      description: "Install Boss and run your first governed loop in under 10 minutes.",
+      description: "Install Boss Loops and run your first governed loop in under 10 minutes.",
       accentColor: "var(--color-primary)",
       links: [
         { label: "Quick Start", href: "/docs/getting-started/quick-start" },
@@ -80,7 +81,7 @@ export default function DocsHomePage() {
       accentColor: "#D97706",
       links: [
         { label: "Runtime connections index", href: "/docs/integrations" },
-        { label: "Boss Cloud API", href: "/docs/integrations/loop-engine-cloud-api" },
+        { label: "Boss Loops Cloud API", href: "/docs/integrations/loop-engine-cloud-api" },
         { label: "Providers (Claude)", href: "/docs/integrations/anthropic" },
         { label: "@loop-engine/sdk", href: "/docs/packages/sdk" }
       ]
@@ -99,7 +100,7 @@ export default function DocsHomePage() {
         {
           label: "Architecture overview",
           href: "/docs/getting-started/architecture",
-          description: "Governance runtime, evidence flow, OSS runtime vs Boss Cloud."
+          description: "Governance runtime, evidence flow, OSS runtime vs Boss Loops Cloud."
         },
         {
           label: "Runtime platform direction",
@@ -107,7 +108,7 @@ export default function DocsHomePage() {
           description: "Self-host direction, roadmap-only services, constrained claims (no false parity)."
         },
         {
-          label: "Boss vs Workflow Engines",
+          label: "Boss Loops vs Workflow Engines",
           href: "/docs/concepts/loop-engine-vs-workflow-engines",
           description: "Where deterministic workflow ends and adaptive looping begins."
         },
@@ -194,7 +195,7 @@ export default function DocsHomePage() {
                 lineHeight: 1.1
               }}
             >
-              Boss Documentation
+              Boss Loops Documentation
             </h1>
             <p className="mb-6 max-w-[520px] text-[var(--text-base)] leading-7 text-[var(--color-ink-muted)]">
               Governed operational runtime documentation. Start with{" "}
@@ -209,7 +210,7 @@ export default function DocsHomePage() {
           </div>
 
           <div className="hidden rounded-[var(--radius-lg)] border border-[var(--color-border-dark)] bg-[rgba(255,255,255,0.03)] p-6 shadow-[var(--shadow-md)] lg:block">
-            <svg viewBox="0 0 480 260" role="img" aria-label="Boss runtime flow: Providers, Loops and Guards, Channels, Integrations, Evidence" className="h-auto w-full">
+            <svg viewBox="0 0 480 260" role="img" aria-label="Boss Loops runtime flow: Providers, Loops and Guards, Channels, Integrations, Evidence" className="h-auto w-full">
               <rect x="8" y="8" width="464" height="244" rx="12" fill="none" stroke="rgba(148,163,184,0.45)" />
               <text x="240" y="32" textAnchor="middle" fill="white" fontSize="14" fontFamily="var(--font-display)">
                 Governed runtime flow
@@ -311,7 +312,7 @@ export default function DocsHomePage() {
             Popular pages
           </h2>
           <p className="mb-8 text-[var(--text-sm)] text-[var(--color-ink-tertiary)]">
-            The most-visited pages in the Boss docs.
+            The most-visited pages in the Boss Loops docs.
           </p>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {popularColumns.map((column) => (
@@ -361,7 +362,7 @@ export default function DocsHomePage() {
               </p>
               <a
                 className="text-[var(--text-sm)] text-[var(--color-primary)] hover:underline"
-                href="https://github.com/loopengine/loop-engine/discussions"
+                href={LEGACY.githubDiscussions}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -377,7 +378,7 @@ export default function DocsHomePage() {
               </p>
               <a
                 className="text-[var(--text-sm)] text-[var(--color-primary)] hover:underline"
-                href="https://github.com/loopengine/loop-examples"
+                href={LEGACY.examplesRepo}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -389,7 +390,7 @@ export default function DocsHomePage() {
                 🏢
               </div>
               <p className="mb-3 text-[var(--text-sm)] text-[var(--color-ink-secondary)]">
-                Boss is built and maintained by Better Data.
+                Boss Loops is built and maintained by Better Data.
               </p>
               <a
                 className="text-[var(--text-sm)] text-[var(--color-primary)] hover:underline"

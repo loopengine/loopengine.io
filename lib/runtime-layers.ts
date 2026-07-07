@@ -76,5 +76,5 @@ export const LAYER_DISAMBIGUATION = [
   "Channels are not integrations.",
   "Providers are not workflow systems.",
   "Integrations are not governance.",
-  "Boss sits between all three and governs transitions."
+  "Boss Loops sits between all three and governs transitions."
 ] as const;

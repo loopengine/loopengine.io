@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { LEGACY } from "@/lib/site-config";
 
 type CanonicalLoop = {
   loopId: string;
@@ -56,7 +57,7 @@ const canonicalLoops: CanonicalLoop[] = [
 export const metadata: Metadata = {
   title: "Loop catalog",
   description:
-    "The Boss catalog of canonical and community Boss Loop definitions. Not the Commerce Gateway Registry.",
+    "The Boss Loops catalog of canonical and community decision loop definitions. Not the Commerce Gateway Registry.",
   robots: { index: false, follow: false },
 };
 
@@ -73,7 +74,7 @@ export default function CatalogPage() {
           <strong className="text-[var(--color-ink-secondary)]">
             catalog-backed loop definitions with policy gates and evidence
           </strong>{" "}
-          for Boss. It is unrelated to the{" "}
+          for Boss Loops. It is unrelated to the{" "}
           <a
             className="text-[var(--color-primary)] underline underline-offset-4"
             href="https://commercegateway.io/registry"
@@ -111,7 +112,7 @@ export default function CatalogPage() {
                   <td className="px-4 py-3">
                     <a
                       className="text-[var(--color-primary)] underline underline-offset-4"
-                      href={`https://github.com/loopengine/loop-engine/tree/main/loops/${loop.githubPath}/`}
+                      href={LEGACY.ghTree(`loops/${loop.githubPath}/`)}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -128,13 +129,13 @@ export default function CatalogPage() {
       <section className="mx-auto mt-10 max-w-6xl rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
         <h2 className="font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-2xl)]">Coming soon</h2>
         <p className="mt-3 text-[var(--color-ink-secondary)] text-sm leading-7">
-          <code>catalog.loopengine.io</code> will be a searchable index of canonical and community-contributed loop definitions.
+          <code>{`catalog.${LEGACY.domainHost}`}</code> will be a searchable index of canonical and community-contributed loop definitions.
         </p>
         <p className="mt-4 text-[var(--color-ink-secondary)] text-sm">
           Want to list your loop definition in the catalog?{" "}
           <a
             className="text-[var(--color-primary)] underline underline-offset-4"
-            href="https://github.com/loopengine/loop-engine/issues/new"
+            href={LEGACY.githubNewIssue}
             target="_blank"
             rel="noopener noreferrer"
           >

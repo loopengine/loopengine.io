@@ -13,7 +13,7 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
         Something went wrong
       </h1>
       <p className="max-w-2xl text-base text-[var(--color-ink-tertiary)]">
-        The page failed to render. Try again, and if the issue persists, open an issue in the Boss
+        The page failed to render. Try again, and if the issue persists, open an issue in the Boss Loops
         repository.
       </p>
       <button

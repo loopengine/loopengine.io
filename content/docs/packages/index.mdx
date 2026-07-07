@@ -1,11 +1,11 @@
 ---
 title: Package taxonomy
-description: Select Boss npm packages by runtime role — runtime core, Providers, Channels, and Integrations.
+description: Select Boss Loops npm packages by runtime role — runtime core, Providers, Channels, and Integrations.
 section: Packages
 taxonomy: platform
 ---
 
-Boss installs in layers. The minimum floor is always `@loop-engine/sdk`. Additional packages are opt-in by capability.
+Boss Loops installs in layers. The minimum floor is always `@loop-engine/sdk`. Additional packages are opt-in by capability.
 
 Public docs group connections as **[Providers](/docs/concepts/runtime-taxonomy#providers)**, **[Channels](/docs/concepts/runtime-taxonomy#channels)**, and **[Integrations](/docs/concepts/runtime-taxonomy#integrations)**. npm package names and developer types (`ActorAdapter`, `ToolAdapter`, `IntegrationAdapter` archetypes) sit underneath — see [IntegrationAdapter archetype](/docs/concepts/integration-adapter).
 
@@ -71,10 +71,10 @@ npm install @loop-engine/sdk @loop-engine/observability @loop-engine/ui-devtools
 
 ## Dependency direction
 
-**Runtime core** has no Boss upstream dependencies. **Providers**, **Channels**, and **Integrations** depend on core. Add one package per capability — not every row in the table.
+**Runtime core** has no Boss Loops upstream dependencies. **Providers**, **Channels**, and **Integrations** depend on core. Add one package per capability — not every row in the table.
 
 <Callout variant="warning" title="Self-host vs hosted">
-**Today:** install OSS packages in your processes (local-first). **Direction:** optional self-host services (registry, audit store, replay, …) documented as roadmap-only on [Runtime Platform Direction](/docs/concepts/runtime-platform-direction). **Boss Cloud** adds managed connectors — not full OSS parity. Better Data apps: **[docs.betterdata.co](https://docs.betterdata.co)**.
+**Today:** install OSS packages in your processes (local-first). **Direction:** optional self-host services (registry, audit store, replay, …) documented as roadmap-only on [Runtime Platform Direction](/docs/concepts/runtime-platform-direction). **Boss Loops Cloud** adds managed connectors — not full OSS parity. Better Data apps: **[docs.betterdata.co](https://docs.betterdata.co)**.
 </Callout>
 
 <Callout variant="warning" title="Vertical loops">

@@ -1,5 +1,5 @@
 /**
- * "Made For" segments — Boss is sold to an operational pain, so we segment by
+ * "Made For" segments — Boss Loops is sold to an operational pain, so we segment by
  * who feels that pain, not by company size. See `.cursor/rules/rebrand-glossary.md`.
  *
  * `live` segments render the full template; `soon` segments render a lightweight
@@ -28,9 +28,9 @@ export type MadeForSegment = {
   pain: string;
   /** Short meta/card description. */
   summary: string;
-  /** Three concrete jobs Boss does for this segment (live only). */
+  /** Three concrete jobs Boss Loops does for this segment (live only). */
   jobs?: MadeForJob[];
-  /** Before / after Boss (live only). */
+  /** Before / after Boss Loops (live only). */
   before?: string;
   after?: string;
   /** Proof slot — quote, logo, or early-access line (live only). */
@@ -75,7 +75,7 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
     primaryCtaLabel: "See how it works",
     primaryCtaHref: "/docs/getting-started",
     talkLabel: "Talk to the team",
-    talkHref: talkHref("operations", "Boss for operations leaders"),
+    talkHref: talkHref("operations", "Boss Loops for operations leaders"),
   },
   {
     slug: "compliance",
@@ -109,7 +109,7 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
     primaryCtaLabel: "Read the governance model",
     primaryCtaHref: "/docs/concepts/decision-governance",
     talkLabel: "Talk to the team",
-    talkHref: talkHref("compliance", "Boss for compliance & risk"),
+    talkHref: talkHref("compliance", "Boss Loops for compliance & risk"),
   },
   {
     slug: "customer-ops",
@@ -120,7 +120,7 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
     pain: "Support, claims, and fulfillment are your highest-volume AI use case — and the one most exposed when AI gets it wrong.",
     summary: "Governed AI execution for high-volume customer operations. Coming soon.",
     talkLabel: "Talk to us about customer ops",
-    talkHref: talkHref("customer-ops", "Boss for customer operations"),
+    talkHref: talkHref("customer-ops", "Boss Loops for customer operations"),
   },
   {
     slug: "finance",
@@ -131,7 +131,7 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
     pain: "AP, AR, and reconciliation are controls-heavy and mistakes cost real money. AI can help — if it can be governed.",
     summary: "Governed AI execution for controls-heavy finance operations. Coming soon.",
     talkLabel: "Talk to us about finance ops",
-    talkHref: talkHref("finance", "Boss for finance operations"),
+    talkHref: talkHref("finance", "Boss Loops for finance operations"),
   },
   {
     slug: "platform-teams",
@@ -142,7 +142,7 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
     pain: "You're deploying agents internally and rebuilding approval gates, attribution, and audit trails for every one.",
     summary: "A governance layer for the agents your teams deploy. Coming soon.",
     talkLabel: "Talk to us about platform needs",
-    talkHref: talkHref("platform-teams", "Boss for platform & AI teams"),
+    talkHref: talkHref("platform-teams", "Boss Loops for platform & AI teams"),
   },
 ];
 

@@ -1,6 +1,6 @@
 ---
 title: Agents and RAG
-description: How Boss governs the decision boundary in AI agent systems and RAG pipelines.
+description: How Boss Loops governs the decision boundary in AI agent systems and RAG pipelines.
 section: Core Concepts
 order: 130
 ---
@@ -29,7 +29,7 @@ This works for low-risk autonomous tasks.
 
 In enterprise production - supply chain, financial approvals, healthcare, infrastructure - the gap between "agent recommends" and "system executes" needs an explicit governance layer.
 
-## Where Boss Fits
+## Where Boss Loops Fits
 
 ```text
 Knowledge Base
@@ -38,18 +38,18 @@ RAG Retrieval
      ↓
 LLM / Agent Reasoning
      ↓
-Boss             <- decision governance
+Boss Loops       <- decision governance
      ↓
 Workflow Execution
 ```
 
-The agent's recommendation becomes a proposed transition in a Boss loop. Guards evaluate it. A human approves when policy requires. The action executes only after the loop allows it.
+The agent's recommendation becomes a proposed transition in a decision loop. Guards evaluate it. A human approves when policy requires. The action executes only after the loop allows it.
 
 ## RAG Outputs as Evidence
 
 RAG systems already produce high-value evidence: retrieved documents, confidence scores, and graph relationships.
 
-Boss attaches this context directly to transitions as structured evidence, creating a permanent record of what the model used, what it recommended, and why the system allowed the action.
+Boss Loops attaches this context directly to transitions as structured evidence, creating a permanent record of what the model used, what it recommended, and why the system allowed the action.
 
 ## Code Example
 
@@ -86,9 +86,9 @@ await engine.transition({
 });
 ```
 
-## Commerce Chain and Boss
+## Commerce Chain and Boss Loops
 
-Boss is the runtime that powers the [Commerce Chain](https://commercechain.io) platform. Each `@betterdata/scm-*` and `@betterdata/dcm-*` module declares how it participates in loops using a **`LoopParticipantManifest`** from `@betterdata/loop-definitions`—a typed map of which domain events the module handles and which loop IDs it joins.
+Boss Loops is the runtime that powers the [Commerce Chain](https://commercechain.io) platform. Each `@betterdata/scm-*` and `@betterdata/dcm-*` module declares how it participates in loops using a **`LoopParticipantManifest`** from `@betterdata/loop-definitions`—a typed map of which domain events the module handles and which loop IDs it joins.
 
 Canonical loop IDs and domain event names live in **`@betterdata/loop-definitions`** (`LoopIds`, `EventNames`) so modules and the host runtime stay aligned.
 
@@ -101,4 +101,4 @@ Canonical loop IDs and domain event names live in **`@betterdata/loop-definition
 - [AI as Actor](/docs/ai-and-automation/ai-as-actor)
 - [Confidence + Evidence](/docs/ai-and-automation/confidence-evidence)
 - [Decision Governance](/docs/concepts/decision-governance)
-- [Boss vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)
+- [Boss Loops vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines)

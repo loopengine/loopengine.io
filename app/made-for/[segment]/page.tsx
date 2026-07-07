@@ -83,7 +83,7 @@ function LiveSegment({ segment }: { segment: MadeForSegment }) {
     <main>
       <SegmentHero segment={segment} />
 
-      {/* Three jobs Boss does */}
+      {/* Three jobs Boss Loops does */}
       <section className="px-4 py-14">
         <div className="mx-auto max-w-6xl">
           <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-primary)]">

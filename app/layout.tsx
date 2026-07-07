@@ -6,7 +6,7 @@ import { TopNav } from "@/components/nav/TopNav";
 import { DocsSearchModalHost } from "@/components/docs/DocsSearchModalHost";
 import { EcosystemBanner } from "@/components/site/EcosystemBanner";
 import { Footer } from "@/components/site/Footer";
-import { SITE } from "@/lib/site-config";
+import { SITE, LEGACY } from "@/lib/site-config";
 import "./globals.css";
 import "../styles/tokens.css";
 import "../styles/globals.css";
@@ -81,8 +81,8 @@ export const metadata: Metadata = {
     title: TITLE,
     description: SITE.metaDescription,
     images: ["/og"],
-    creator: SITE.legacy.twitter,
-    site: SITE.legacy.twitter
+    creator: LEGACY.twitter,
+    site: LEGACY.twitter
   },
   robots: {
     index: true,

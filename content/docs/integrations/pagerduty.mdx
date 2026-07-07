@@ -1,6 +1,6 @@
 ---
 title: PagerDuty
-description: Incident-triggered loops — PagerDuty alerts start governed Boss response workflows with full attribution.
+description: Incident-triggered loops — PagerDuty alerts start governed Boss Loops response workflows with full attribution.
 section: Runtime Connections
 taxonomy: integration
 ---
@@ -13,13 +13,13 @@ taxonomy: integration
 
 ## What it does
 
-PagerDuty incidents can trigger Boss workflows, turning urgent alerts into governed and attributable response loops. The adapter maps incident events to loop signals, starts a loop per incident, and keeps human decisions in-policy.
+PagerDuty incidents can trigger Boss Loops workflows, turning urgent alerts into governed and attributable response loops. The adapter maps incident events to loop signals, starts a loop per incident, and keeps human decisions in-policy.
 
 ## Use case
 
 PagerDuty fires a `SEV-2` database incident:
 
-1. Boss starts `incident-response` loop
+1. Boss Loops starts `incident-response` loop
 2. On-call engineer acknowledges (human-only guard)
 3. Runbook automation executes
 4. Loop closes and emits learning signal

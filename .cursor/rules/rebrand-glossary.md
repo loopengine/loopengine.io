@@ -1,15 +1,23 @@
 ---
-description: Boss rebrand naming policy + Track A (copy, rename now) vs Track B (technical identifiers, deferred fast-follow). Apply to every edit in this repo.
+description: Boss Loops rebrand naming policy + Track A (copy, rename now) vs Track B (technical identifiers, deferred fast-follow). Apply to every edit in this repo.
 alwaysApply: true
 ---
 
-# Boss Rebrand Glossary
+# Boss Loops Rebrand Glossary (v2 — supersedes the "Boss" v1 glossary)
 
-The product formerly named **Loop Engine** (`loopengine.io`) is being renamed to
-**Boss**. This is a go-to-market repositioning, not just a string swap: we are
-**no longer selling workflow automation**. We sell **the control system for
-AI-assisted operations** — operational decision control infrastructure / governed
-AI execution / the coordination layer between AI and real-world operations.
+The product formerly named **Loop Engine** (`loopengine.io`) is named
+**Boss Loops** (`bossloops.io`). An earlier iteration of this glossary targeted
+the short name "Boss" with lockup "Boss Loop" — that naming is **superseded**.
+The product name, brand, and lockup are all **Boss Loops** (plural, two words).
+
+This is a go-to-market repositioning, not just a string swap. Positioning is
+locked by the GTM v1 doc ("Boss Loops — Positioning & Go-to-Market"):
+
+- **Category position:** Governed Decision Intelligence
+- **The object we sell:** the system of record for decisions
+- **Product:** Boss Loops
+- **Operating surface (inside the product):** Decision Operations — never a
+  competing category claim
 
 Follow this glossary on **every** edit.
 
@@ -17,22 +25,41 @@ Follow this glossary on **every** edit.
 
 | Concept | Use | Was |
 |---|---|---|
-| Product / platform (short name) | **Boss** | "Loop Engine" |
-| Brand lockup / wordmark / logo | **Boss Loop** | "Loop Engine" |
-| The unit of work (the product's loops) | **a Boss Loop** / **Boss Loops** | "a loop" / "loops" |
-| Hosted offering on Better Data | **Boss Cloud** | "Loop Engine Cloud" |
-| Tagline | **The control system for AI-assisted operations.** | "Governed operational runtime" |
-| Short tagline / eyebrow | **Governed AI Operations** | — |
+| Product / platform / brand / lockup | **Boss Loops** | "Loop Engine", then "Boss" / "Boss Loop" (v1) |
+| Open-core tier | **Boss Loops OSS** | "Loop Engine (OSS)" |
+| Hosted/enterprise tier | **Boss Loops Cloud** (confirmed 2026-07; "the hosted tier" remains fine in running prose, but nav/titles use Boss Loops Cloud) | "Loop Engine Cloud", then "Boss Cloud" (v1) |
+| The core durable object | **Decision Record** | — |
+| Unit of work (the product's loops) | **a decision loop** / **decision loops** (lowercase) | "a loop", then "a Boss Loop" (v1) |
+| Operating surface | **Decision Operations** | — |
+| Tagline | **The system of record for decisions.** | "The control system for AI-assisted operations." (v1) |
+| Eyebrow / short tagline | **Governed Decision Intelligence** | "Governed AI Operations" (v1) |
+| Corporate entity (invoices, legal, trust) | **Better Data, Inc.** (`betterdata.co`) | — |
 
 - Generic, **mechanical** uses of the word "loop" stay lowercase and unchanged:
   "the loop transitions", "loop definition", "control loop", "event loop".
-  Only rename "loop(s)" when it denotes *the product's* unit of work.
-- **Never** produce: `Boss Loop Engine`, `Boss Engine`, `Boss Looping`, `Boss Loops Engine`.
-- Positioning vocabulary to prefer: "operational decision control infrastructure",
-  "governed AI execution", "accountability", "governance", "traceability", "control",
-  "the coordination layer between AI and real-world operations".
-- Drop / avoid: "workflow automation", "workflow engine" as our *self*-description
-  (it's fine when contrasting against competitors, e.g. "Boss vs workflow engines").
+- **Never** produce: `Boss` (alone, as the product name), `Boss Loop` (singular,
+  as product/brand/unit), `Boss Loop Engine`, `Boss Engine`, `Boss Loops Engine`,
+  `BossLoops` (one word, outside identifiers/domains).
+- Positioning vocabulary to prefer (from GTM v1): "governed decision
+  intelligence", "the system of record for decisions", "Decision Record",
+  "governed, auditable", "defensible decisions", "evidence, policy, people, and
+  AI", "accountability", "traceability", "consume existing semantics".
+- Drop / avoid as *self*-description: "workflow automation", "workflow engine",
+  "control system for AI-assisted operations" (v1 positioning). Fine when
+  contrasting against competitors ("Boss Loops vs workflow engines").
+
+## Provider naming (semantic-overload rule)
+
+"Provider" is reserved. Exactly three terms, never interchanged:
+
+| Term | Means | Never call it |
+|---|---|---|
+| **Evidence Provider** | attaches governed evidence to a Decision Record (Snowflake semantic view, Looker model, Samsara reading) | "data provider", "source provider" |
+| **Model Provider** | supplies AI models/LLMs (Anthropic, OpenAI, …) | "AI provider", "intelligence provider", bare "provider" |
+| **Connector** | ERP/CRM/warehouse/system integration plumbing | "adapter-provider", bare "provider" |
+
+Auth remains "SSO / identity provider" only in technical auth contexts (industry
+term of art); never shorten to "provider" in product copy.
 
 ## TWO TRACKS — read before any find/replace
 
@@ -42,17 +69,26 @@ OG text, `keywords`, alt text, copyright lines. These are what GTM needs.
 
 ### Track B — technical identifiers → **DO NOT touch until told**
 These reference real external systems. Changing them on the site before the
-underlying resource is renamed/published **breaks installs and links**. They are
-being handled in a separate **fast-follow** (git/npm/docker/domain).
+underlying resource is renamed/published **breaks installs and links**.
 
-Frozen Track-B tokens (leave exactly as-is unless a maintainer says the resource is live):
-- npm scope `@loop-engine/*` and any `npm`/`pnpm`/`docker` install or `import` snippets
-- GitHub `github.com/loopengine/...` (org `loopengine`, repos `loop-engine`, `loop-examples`)
-- Domain `loopengine.io` (and emails at it, e.g. `conduct@loopengine.io`)
+Frozen Track-B tokens (leave exactly as-is unless a maintainer says otherwise):
+- npm scope `@loop-engine/*` and any `npm`/`pnpm`/`docker` install or `import`
+  snippets. **NOTE: this scope is RETAINED BY DECISION, not pending rename** —
+  the confirmed naming map is *Boss Loops OSS (`@loop-engine/*`, Apache-2.0)*.
+  Do not "helpfully" rename it to `@boss-loops/*`; there is no such flip planned.
+- GitHub `github.com/loopengine/...` (org `loopengine`, repos `loop-engine`,
+  `loop-examples`) — no rename decided; stays until a maintainer says otherwise.
+- Domain `loopengine.io` legacy tokens and emails at it (e.g.
+  `conduct@loopengine.io`). **`bossloops.io` is live and serves this site** —
+  the domain flip is real but runs through the Track-B go-live steps below
+  (config + env + codemod), never an ad-hoc sweep. Do not change legacy-domain
+  emails until the replacement mailbox exists.
 - Social handle `@loopengineio`
-- Better Data hosted URLs (`loops.betterdata.co`) and `betterdata.co` blog-tag /
-  changelog-module slugs (`tags/loop-engine`, `module=loop-engine`)
+- Better Data hosted URLs and `betterdata.co` blog-tag / changelog-module slugs
+  (`tags/loop-engine`, `module=loop-engine`)
 - Fenced code blocks in MDX (output, config, code) unless explicitly a Track-A label
+- **API identifiers** (`LoopEngine`, `createLoopEngine`, `LoopEngineOptions`):
+  real exported names — rename only in lockstep with the npm package itself.
 
 When in doubt, treat a string as **Track B** and leave it.
 
@@ -60,12 +96,31 @@ When in doubt, treat a string as **Track B** and leave it.
 
 All Track-A brand strings and the frozen Track-B identifiers live in
 **`lib/site-config.ts`** (`SITE` and `SITE.legacy`). Prefer reading from `SITE`
-over hardcoding. The fast-follow flips Track B by editing `SITE.legacy` + env,
-not by sweeping call sites.
+over hardcoding. Track-B flips happen by editing `SITE.legacy` + env, not by
+sweeping call sites.
 
 ## Cross-repo note
 
-`lib/betterdata-ecosystem.ts` copy was previously "kept in sync with the bd-forge
-glossary lock". It has been rebranded to Boss for this site's GTM. The bd-forge
-monorepo (`docs-site`, platform copy) still uses Loop Engine naming and needs its
-own sync pass — that is **out of scope for this repo** and tracked in the fast-follow.
+The bd-forge monorepo (`docs-site`, platform copy) and
+`betterdata-sites/docs.betterdata.co` still contain Loop Engine naming and need
+their own Track-A sync pass against **this v2 glossary** (not v1 — v1's "Boss"
+target would introduce a second wrong name). Same for
+`commercegateway.io` (footer + `llms.txt`).
+
+## Track-B go-live (the fast-follow)
+
+Scope has narrowed since v1: npm scope and (for now) GitHub org **stay**. The
+only live Track-B item is the **domain** (`loopengine.io` → `bossloops.io`,
+already serving traffic).
+
+1. **Edit `lib/site-config.ts` → `SITE.legacy.domainHost`** to `bossloops.io`
+   once the legacy-domain email situation is resolved (conduct@ etc.).
+2. **Set `NEXT_PUBLIC_BASE_URL`** to `https://www.bossloops.io` in the deploy
+   env (drives `SITE.baseUrl`, canonicals, sitemap, OG URLs).
+3. **Dry-run the codemod** `scripts/flip-track-b.mjs` for literal domain tokens
+   in MDX/static; review, then `--apply`. Do NOT pass npm/GitHub replacement
+   env — those tokens are retained.
+4. **Verify:** `pnpm verify:anchors && pnpm lint && pnpm build`.
+5. Add `next.config.ts` redirects for any renamed internal doc slugs
+   (`loop-engine-vs-workflow-engines`, `loop-engine-cloud-api`) in the same
+   change, or keep the slugs stable.

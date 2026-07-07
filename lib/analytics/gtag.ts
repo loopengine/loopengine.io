@@ -1,11 +1,13 @@
+import { LEGACY } from "@/lib/site-config";
+
 /** Better Data ecosystem hostnames for GA4 cross-domain session linking. */
 export const GA_LINKER_DOMAINS = [
   "betterdata.co",
   "www.betterdata.co",
   "docs.betterdata.co",
   "app.betterdata.co",
-  "loopengine.io",
-  "www.loopengine.io",
+  LEGACY.domainHost,
+  `www.${LEGACY.domainHost}`,
   "commercegateway.io",
   "www.commercegateway.io",
   "commercechain.io",

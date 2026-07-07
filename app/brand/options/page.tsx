@@ -81,7 +81,7 @@ const OPTIONS: OptionDef[] = [
       "Hub-and-spoke (supervisor doesn't connect to states)",
     ],
     fivePillarsAlignment:
-      "Maps to actors / guards / transitions language — the state machine that already underlies Boss architecture. Most differentiated visually; closest to a finite-state-machine icon.",
+      "Maps to actors / guards / transitions language — the state machine that already underlies Boss Loops architecture. Most differentiated visually; closest to a finite-state-machine icon.",
     Mark: Option2StateTransitionMark,
   },
   {
@@ -163,7 +163,7 @@ function WordmarkLockup({
           lineHeight: 1,
         }}
       >
-        Boss<span style={{ marginLeft: "0.20em" }}>Loop</span>
+        Boss<span style={{ marginLeft: "0.20em" }}>Loops</span>
         <sup
           style={{
             fontSize: "48%",
@@ -556,7 +556,7 @@ export default function BrandOptionsPage() {
           Logo mark options
         </h1>
         <p className="mt-3 max-w-3xl text-[var(--text-base)] leading-7 text-[var(--color-ink-secondary)]">
-          Three candidate directions for the Boss Loop mark, all built around{" "}
+          Three candidate directions for the Boss Loops mark, all built around{" "}
           <em>governed operational cycles</em>. None uses arrows, refresh icons, infinity loops,
           or directional navigation cues — motion is inferred from geometry, not drawn explicitly.
         </p>

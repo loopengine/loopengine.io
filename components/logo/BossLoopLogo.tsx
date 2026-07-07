@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 
 /**
- * Boss Loop — visual identity (v10: "Open Loop with Governance Gate")
+ * Boss Loops — visual identity (v10: "Open Loop with Governance Gate")
  *
  * The mark depicts a governed operational cycle: a single rounded
  * perimeter — the operational cycle — opened on the right by a teal
@@ -159,7 +159,7 @@ export function BossLoopMark({
 
   return (
     <svg
-      aria-label="Boss Loop mark"
+      aria-label="Boss Loops mark"
       className={className}
       height={size}
       role="img"
@@ -287,7 +287,7 @@ export function BossLoopLogo({
               color: "var(--color-ink-tertiary)",
             }}
           >
-            Governed AI Operations
+            Governed Decision Intelligence
           </span>
         ) : null}
       </div>

@@ -1,29 +1,29 @@
 ---
 title: Architecture
-description: Boss runtime architecture — governance boundaries, evidence flow, Providers, Channels, Integrations, and runtime vs Cloud.
+description: Boss Loops runtime architecture — governance boundaries, evidence flow, Providers, Channels, Integrations, and runtime vs Cloud.
 section: Getting Started
 order: 40
 ---
 
-Boss is a **governance runtime**, not a generic workflow orchestrator or AI automation builder. This page describes how the runtime composes **decision loops**, **deterministic guards**, and **evidence** with external **Providers**, **Channels**, and **Integrations**.
+Boss Loops is a **governance runtime**, not a generic workflow orchestrator or AI automation builder. This page describes how the runtime composes **decision loops**, **deterministic guards**, and **evidence** with external **Providers**, **Channels**, and **Integrations**.
 
 → Full glossary: [Runtime Taxonomy](/docs/concepts/runtime-taxonomy)
 
 ## Governance runtime (center of the model)
 
-Every operational change that Boss owns passes through the same boundary:
+Every operational change that Boss Loops owns passes through the same boundary:
 
 1. A named **actor** requests a transition.
 2. **Guards** evaluate policy in the runtime (hard failures block; soft failures may warn).
 3. **Evidence** is attached to the allowed transition.
 4. An immutable **event** is emitted for audit and learning.
 
-AI does not “run the business” inside Boss — it operates **inside** deterministic governance boundaries. Orchestration frameworks may run elsewhere; **loops govern the transitions**.
+AI does not “run the business” inside Boss Loops — it operates **inside** deterministic governance boundaries. Orchestration frameworks may run elsewhere; **loops govern the transitions**.
 
 ```text
 Providers          ← intelligence enters (LLMs, retrieval tools)
         ↓
-Decision loops + Guards   ← GOVERNANCE: Boss (policy before commit)
+Decision loops + Guards   ← GOVERNANCE: Boss Loops (policy before commit)
         ↓
 Channels           ← humans participate (Slack, Teams, approvals)
         ↓
@@ -52,16 +52,16 @@ Downstream analytics and learning signals consume events — they do not replace
 
 ### Runtime boundaries
 
-| Boundary | Inside Boss | Outside (but connected) |
+| Boundary | Inside Boss Loops | Outside (but connected) |
 | --- | --- | --- |
 | Policy | Guards, allowed actors, transition graph | Prompt content alone is not policy |
 | State | Loop instance state, transition history | ERP/CRM records update via Integrations after approval |
 | Humans | Attribution + channel routing | Slack/Teams UIs are Channels |
 | Intelligence | Provider adapters submit decisions | Models do not call integrations directly |
 
-## Runtime platform vs Boss Cloud
+## Runtime platform vs Boss Loops Cloud
 
-**Boss can run inside your infrastructure, or connect to hosted governance services from Better Data.** Full positioning constraints and roadmap language: **[Runtime Platform Direction](/docs/concepts/runtime-platform-direction)**.
+**Boss Loops can run inside your infrastructure, or connect to hosted governance services from Better Data.** Full positioning constraints and roadmap language: **[Runtime Platform Direction](/docs/concepts/runtime-platform-direction)**.
 
 ### OSS runtime platform (today)
 
@@ -71,13 +71,13 @@ Downstream analytics and learning signals consume events — they do not replace
 
 → [Quick Start](/docs/getting-started/quick-start) · [Runtime Platform Direction](/docs/concepts/runtime-platform-direction)
 
-### Boss Cloud (hosted)
+### Boss Loops Cloud (hosted)
 
 - **Governance control plane** — multi-tenant HTTP API, connector credentials, documented `/api/v1` contract.
 - **Adds** — managed connector paths (e.g. Slack, Google) and fleet-style operations **without** replacing the OSS runtime model.
 - **Not claimed** — full OSS parity with every Cloud feature; Studio; docker compose kit; multi-service runtime **today**.
 
-→ [Boss Cloud HTTP API](/docs/integrations/loop-engine-cloud-api)
+→ [Boss Loops Cloud HTTP API](/docs/integrations/loop-engine-cloud-api)
 
 **Better Data company and application docs:** [docs.betterdata.co](https://docs.betterdata.co) — not loopengine.io.
 
@@ -198,9 +198,9 @@ await engine.transition({
 // Terminal state emits loop.completed + learning signal.
 ```
 
-## What Boss is not
+## What Boss Loops is not
 
-- **Not** a replacement for Temporal, n8n, or BPM suites — use [Boss vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines).
+- **Not** a replacement for Temporal, n8n, or BPM suites — use [Boss Loops vs Workflow Engines](/docs/concepts/loop-engine-vs-workflow-engines).
 - **Not** an AI automation builder that skips policy.
 - **Not** a Slack bot product — Slack is a **Channel** when used for human approval.
 
