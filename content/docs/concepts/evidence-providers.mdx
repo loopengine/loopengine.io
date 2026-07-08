@@ -1,0 +1,98 @@
+---
+title: Evidence Providers
+description: How Looker, Snowflake, and Samsara attach governed evidence to the Decision Record — frozen at capture, with qualification inherited from the source.
+section: Core Concepts
+order: 115
+---
+
+## What an Evidence Provider is
+
+An **Evidence Provider** attaches governed evidence to a Decision Record. It is
+not a Model Provider (it supplies no intelligence) and not an Integration (it
+executes no side effects). It supplies one thing: **what was true, from a
+governed source, at the moment it informed the decision** — frozen into an
+immutable snapshot the record carries forever.
+
+Two archetypes:
+
+```
+Semantic evidence     →  governed definitions from your warehouse and BI stack
+                          (e.g. Snowflake semantic views, Looker explores)
+Operational evidence  →  live readings from fleet and field systems
+                          (e.g. Samsara telemetry at decision time)
+```
+
+Three properties make this different from linking to a dashboard:
+
+- **Frozen at capture.** The Decision Record holds the value, definition,
+  source, and timestamp as they were when the decision was made — not a link
+  that may have changed since. The vendor UI remains an optional live surface;
+  the record is the frozen one.
+- **Qualification is inherited, never asserted.** How governed a definition is,
+  how attestable its provenance, how fresh the reading — these come from the
+  source's own mapping, not from whoever built the loop.
+- **Conformance is verifiable.** The provider contract and conformance suite
+  live in Boss Loops OSS, so "every evidence source in this decision conformed
+  to the contract" is a statement an auditor can check — not a marketing claim.
+
+## Status legend
+
+| Badge | Meaning |
+|---|---|
+| **Preview** | A fixture/seed illustrates the architecture on the demo golden record; not a live vendor connection |
+| **Contract-validated** | The evidence shape passes the OSS contract exemplars and conformance checks |
+| **Conformant Provider** | Future — a production adapter that passes the public OSS conformance suite |
+| **Boss Loops Cloud** | Future hosted connector path, managed auth included |
+
+## Looker — semantic evidence (Preview) [#looker]
+
+Approvers see a number in Slack; nobody remembers which Explore, which band,
+as of when. With Looker as an Evidence Provider, the **certified metric
+definition** travels with the decision: the demo Alpine invoice record carries
+vendor spend vs. a 12-month band as a preview snapshot — definition, value, and
+qualification frozen on the record.
+
+**Today:** preview snapshot on the Alpine golden Decision Record. It
+illustrates qualification inherited from the provider — not asserted by the
+loop. There is no live Looker API connection yet.
+
+**Next:** a live connector with LookML mapping, an optional rendered tile, and
+two-clock freshness (when the value was bound vs. when it was observed).
+
+## Snowflake — semantic evidence (Planned) [#snowflake]
+
+Warehouse truth exists; decisions happen in email with screenshots and stale
+exports. With Snowflake as an Evidence Provider, **governed semantic views**
+become Evidence Snapshots with lineage and qualification.
+
+**Today:** the evidence shape is contract-validated in Boss Loops OSS
+(governed semantic metric exemplar); a reference JSON provider exercises it.
+There is no live warehouse connection on the demo.
+
+**Next:** a production semantic provider for semantic views and governed
+metrics. Ad-hoc SQL stays unreviewed — it must not map to governed. We document
+the governed path first.
+
+## Samsara — operational evidence (Planned) [#samsara]
+
+Operational decisions need what was true on the ground — not a dashboard
+someone refreshed later. With Samsara as an Evidence Provider, **telemetry is
+captured at decision time**, with provenance up to origin-attested where
+hardware and process support it.
+
+**Today:** the evidence shapes are contract-validated in Boss Loops OSS
+(telemetry and origin-attested exemplars). There is no live fleet connection on
+the demo. Operational evidence is captured, not streamed as a live widget on
+the record.
+
+**Next:** a production operational provider with real-time freshness and
+origin attestation where warranted.
+
+## Where the line sits (OSS vs. hosted)
+
+The **contract, reference providers, and conformance suite are open** in
+Boss Loops OSS — you can validate an evidence shape and verify the invariants
+yourself. **Production adapters** (managed auth, live vendor connections, full
+qualification presentation) ship in the hosted tier. Consuming your existing
+semantics — not re-modeling them — is the point: Boss Loops opens what Looker,
+Snowflake, and Samsara already govern; it does not replace them.

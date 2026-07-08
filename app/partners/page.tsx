@@ -4,6 +4,7 @@ import { operationalPatterns } from "@/lib/partner-patterns";
 import {
   channelPartners,
   ecosystemExpansionPartners,
+  evidencePartners,
   featuredChannelPartner,
   integrationPartners,
   providerPartners,
@@ -18,7 +19,7 @@ import type { ReactNode } from "react";
 export const metadata: Metadata = {
   title: "Runtime ecosystem",
   description:
-    "Boss Loops runtime ecosystem — Providers (intelligence), Channels (human coordination), Integrations (systems of record), governed by decision loops with guards and evidence.",
+    "Boss Loops runtime ecosystem — Model Providers (intelligence), Evidence Providers (governed evidence), Channels (human coordination), Integrations (systems of record), governed by decision loops with guards and evidence.",
   robots: { index: false, follow: false },
 };
 
@@ -51,13 +52,14 @@ function Badge({
   tone = "neutral",
 }: {
   children: string;
-  tone?: "neutral" | "blue" | "green" | "amber";
+  tone?: "neutral" | "blue" | "green" | "amber" | "violet";
 }) {
   const styles = {
     neutral: "bg-[var(--color-surface-alt)] text-[var(--color-ink-tertiary)]",
     blue: "bg-[var(--color-primary-light)] text-[var(--color-primary-dark)]",
     green: "bg-emerald-50 text-emerald-800",
     amber: "bg-amber-50 text-amber-900",
+    violet: "bg-violet-50 text-violet-900",
   };
   return (
     <span className={`rounded-full px-2 py-1 font-mono text-[10px] uppercase tracking-wide ${styles[tone]}`}>
@@ -67,7 +69,8 @@ function Badge({
 }
 
 function layerBadge(layer: Partner["runtimeLayer"]) {
-  if (layer === "provider") return <Badge tone="blue">Provider</Badge>;
+  if (layer === "provider") return <Badge tone="blue">Model Provider</Badge>;
+  if (layer === "evidence") return <Badge tone="violet">Evidence Provider</Badge>;
   if (layer === "channel") return <Badge tone="green">Channel</Badge>;
   if (layer === "integration") return <Badge tone="amber">Integration</Badge>;
   return <Badge>Ecosystem</Badge>;
@@ -76,6 +79,7 @@ function layerBadge(layer: Partner["runtimeLayer"]) {
 function availabilityLabel(partner: Partner) {
   if (partner.availability === "cloud-connector") return "Boss Loops Cloud";
   if (partner.availability === "pattern") return "Pattern doc";
+  if (partner.availability === "preview") return "Preview on demo";
   if (partner.availability === "ecosystem") return "Ecosystem";
   return null;
 }
@@ -211,9 +215,10 @@ export default function PartnersPage() {
             title="Boss Loops sits between every layer"
             description={
               <>
-                <strong>Providers</strong> generate intelligence. <strong>Boss Loops</strong> governs operational
-                transitions. <strong>Channels</strong> coordinate human decisions. <strong>Integrations</strong> execute
-                against systems of record. <strong>Evidence + learning</strong> explain and improve operations — not
+                <strong>Model Providers</strong> generate intelligence. <strong>Evidence Providers</strong> attach
+                governed evidence. <strong>Boss Loops</strong> governs operational transitions.{" "}
+                <strong>Channels</strong> coordinate human decisions. <strong>Integrations</strong> execute against
+                systems of record. <strong>Evidence + learning</strong> explain and improve operations — not
                 reconstructed chat logs.
               </>
             }
@@ -227,11 +232,11 @@ export default function PartnersPage() {
         </div>
       </section>
 
-      {/* Providers */}
+      {/* Model Providers */}
       <section className="px-4 py-14">
         <div className="mx-auto max-w-6xl">
           <SectionIntro
-            eyebrow="Providers"
+            eyebrow="Model Providers"
             title="Intelligence systems"
             description={
               <>
@@ -249,6 +254,39 @@ export default function PartnersPage() {
               <PartnerCard key={partner.slug} partner={partner} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Evidence Providers */}
+      <section className="border-t border-[var(--color-border)] px-4 py-14">
+        <div className="mx-auto max-w-6xl">
+          <SectionIntro
+            eyebrow="Evidence Providers"
+            title="Governed evidence, frozen at capture"
+            description={
+              <>
+                Looker, Snowflake, and Samsara don&apos;t become another dashboard inside Boss Loops. They attach
+                governed evidence to the Decision Record — <strong>frozen at capture</strong>, with qualification the
+                loop <strong>inherits, never asserts</strong>. Semantic evidence carries your warehouse and BI
+                definitions; operational evidence carries what was true on the ground at decision time.
+              </>
+            }
+          />
+          <p className="mt-4 font-mono text-xs text-[var(--color-ink-muted)]">
+            Typical actions: attach · freeze · qualify · trace
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {evidencePartners.map((partner) => (
+              <PartnerCard key={partner.slug} partner={partner} />
+            ))}
+          </div>
+          <p className="mt-6 text-sm text-[var(--color-ink-muted)]">
+            Preview means a fixture illustrates the architecture on the demo golden record — not a live vendor
+            connection. The provider contract and conformance suite are open in Boss Loops OSS.{" "}
+            <Link href="/docs/concepts/evidence-providers" className="text-[var(--color-primary)] underline underline-offset-4">
+              How Evidence Providers work →
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -328,9 +366,9 @@ export default function PartnersPage() {
             title="How layers compose in production"
             description={
               <>
-                ABM, RevOps, and incident workflows share one spine: Provider → Loop + Guards → Channel → Integration →
-                Evidence. Each pattern reinforces dual-surface operations, deterministic guard boundaries, and evidence at
-                commit time.
+                ABM, RevOps, and incident workflows share one spine: Model Provider → Loop + Guards → Channel →
+                Integration → Evidence. Each pattern reinforces dual-surface operations, deterministic guard boundaries,
+                and evidence at commit time.
               </>
             }
           />
@@ -422,8 +460,8 @@ export default function PartnersPage() {
               Build on the governed runtime
             </h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-ink-secondary)]">
-              For companies shipping Providers, Channels, or Integrations that participate in Boss Loops
-              in production — not generic marketplace listings.
+              For companies shipping Model Providers, Evidence Providers, Channels, or Integrations that participate
+              in Boss Loops in production — not generic marketplace listings.
             </p>
             <div className="mt-6 flex flex-wrap gap-4">
               <a

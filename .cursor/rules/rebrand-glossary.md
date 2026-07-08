@@ -61,6 +61,21 @@ Follow this glossary on **every** edit.
 Auth remains "SSO / identity provider" only in technical auth contexts (industry
 term of art); never shorten to "provider" in product copy.
 
+### Evidence Provider status badges (marketing ↔ product alignment)
+
+| Badge | Claimable when |
+|---|---|
+| **Preview** | Fixture/seed illustrates the architecture on the demo golden record; NOT a live vendor connection |
+| **Contract-validated** | Shape passes the OSS contract exemplars + conformance checks |
+| **Conformant Provider** | Future — passes the public OSS conformance suite |
+| **Boss Loops Cloud** | Future hosted connector path, once documented on the Cloud API page |
+
+Copy discipline until production adapters ship: never "Connect your Looker
+account today", "integration available", or live-dashboard framing. The demo
+Looker metric is **certified** (its definition), not "governed" — do not
+upgrade the adjective. Vendor UIs are optional live surfaces; the Decision
+Record is the frozen one.
+
 ## TWO TRACKS — read before any find/replace
 
 ### Track A — display / narrative copy → **rename freely, now**

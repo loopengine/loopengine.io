@@ -1,4 +1,4 @@
-export type RuntimePartnerLayer = "provider" | "channel" | "integration" | "ecosystem";
+export type RuntimePartnerLayer = "provider" | "evidence" | "channel" | "integration" | "ecosystem";
 
 export type Partner = {
   name: string;
@@ -12,8 +12,8 @@ export type Partner = {
   certificationStatus?: "certified" | "in-review" | "community" | "pattern";
   marketingBadge?: string;
   installCommand?: string;
-  /** When no npm adapter ships yet — Cloud connector or narrative pattern only */
-  availability?: "oss-adapter" | "cloud-connector" | "pattern" | "ecosystem";
+  /** When no npm adapter ships yet — Cloud connector, narrative pattern, or preview evidence only */
+  availability?: "oss-adapter" | "cloud-connector" | "pattern" | "preview" | "ecosystem";
 };
 
 export const featuredChannelPartner: Partner = {
@@ -81,7 +81,7 @@ export const providerPartners: Partner[] = [
     slug: "perplexity",
     logoPath: "/logos/perplexity.svg",
     description:
-      "Grounded retrieval with citations — research-heavy Provider steps for compliance workflows that need verifiable outputs.",
+      "Grounded retrieval with citations — research-heavy Model Provider steps for compliance workflows that need verifiable outputs.",
     runtimeLayer: "provider",
     docsPath: "/docs/adapters/perplexity",
     adapterPackage: "@loop-engine/adapter-perplexity",
@@ -89,6 +89,47 @@ export const providerPartners: Partner[] = [
     marketingBadge: "NEW",
     installCommand: "pnpm add @loop-engine/adapter-perplexity",
     availability: "oss-adapter",
+  },
+];
+
+/**
+ * Evidence Providers attach governed evidence to Decision Records — frozen at
+ * capture, with qualification inherited from the source, never asserted by the
+ * loop. Not Model Providers, not Integrations. Copy discipline (ADR-0005):
+ * Looker is "Preview" (on the Alpine golden record today); Snowflake and
+ * Samsara are contract-validated archetypes only — never imply shipped OAuth
+ * connectors, and say "certified" (not "governed") for the demo Looker metric.
+ */
+export const evidencePartners: Partner[] = [
+  {
+    name: "Looker",
+    slug: "looker",
+    description:
+      "Semantic evidence — attaches a certified metric definition (vendor spend vs. 12-month band) to the decision, frozen on the Decision Record with qualification inherited from the source. Preview snapshot on the Alpine golden record today; live connector in development.",
+    runtimeLayer: "evidence",
+    docsPath: "/docs/concepts/evidence-providers#looker",
+    marketingBadge: "Preview",
+    availability: "preview",
+  },
+  {
+    name: "Snowflake",
+    slug: "snowflake",
+    description:
+      "Semantic evidence — governed semantic views become Evidence Snapshots with lineage and qualification. Warehouse truth attached to the decision, not exported to a screenshot. Contract-validated shape in Boss Loops OSS; live warehouse connector planned.",
+    runtimeLayer: "evidence",
+    docsPath: "/docs/concepts/evidence-providers#snowflake",
+    marketingBadge: "Planned",
+    availability: "pattern",
+  },
+  {
+    name: "Samsara",
+    slug: "samsara",
+    description:
+      "Operational evidence — telemetry captured at decision time, with provenance up to origin-attested where hardware and process support it. Contract-validated shape in Boss Loops OSS; live fleet connector planned.",
+    runtimeLayer: "evidence",
+    docsPath: "/docs/concepts/evidence-providers#samsara",
+    marketingBadge: "Planned",
+    availability: "pattern",
   },
 ];
 
@@ -200,7 +241,7 @@ export const ecosystemExpansionPartners: Partner[] = [
     slug: "vercel-ai-sdk",
     logoPath: "/logos/vercel.svg",
     description:
-      "Compose streaming AI responses with Boss Loops governance — Providers stay inside loop boundaries.",
+      "Compose streaming AI responses with Boss Loops governance — Model Providers stay inside loop boundaries.",
     runtimeLayer: "ecosystem",
     docsPath: "/docs/integrations/vercel-ai-sdk",
     certificationStatus: "community",
