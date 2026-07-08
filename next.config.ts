@@ -27,6 +27,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        // LD-2: Cloud API docs moved into the Cloud group
+        source: "/docs/integrations/loop-engine-cloud-api",
+        destination: "/docs/cloud/api-reference",
+        permanent: true,
+      },
+      {
         source: "/blog/:slug",
         destination: "https://betterdata.co/blog/:slug",
         permanent: true,

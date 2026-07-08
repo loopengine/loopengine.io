@@ -1,0 +1,52 @@
+---
+title: Getting started with Boss Loops Cloud
+description: >-
+  Choose your path — prove the loop mechanics locally with Boss Loops OSS in five
+  minutes, or start Boss Loops Cloud for live connectors, tenancy, and audit exports.
+section: Boss Loops Cloud
+sidebar_label: Getting started
+order: 2
+canonical: https://www.bossloops.io/docs/cloud/getting-started
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge tier-cloud">Cloud</span>
+</div>
+
+Two ways to experience Boss Loops:
+
+| | **Run locally in 5 minutes** | **Run live with integrations** |
+| - | --- | --- |
+| Product | **Boss Loops OSS** | **Boss Loops Cloud** |
+| What you get | dry-run of the Spreadsheet Approval loop over seeded evidence | live **Slack** approval + live **Google Sheets** apply |
+| Credentials | **none** | Slack app + Google OAuth |
+| Where | [OSS quick start](/docs/getting-started/quick-start) | [Start Boss Loops Cloud](/docs/cloud) |
+
+## The OSS 5-minute proof
+
+```bash
+# Boss Loops OSS — local, credential-free 5-minute proof
+pnpm boss-loops:demo --dry-run
+```
+
+<Callout variant="info">
+The `boss-loops:demo` script runs from the Better Data monorepo checkout. If you are
+starting from the published packages instead, follow the
+[quick start](/docs/getting-started/quick-start) — same loop model, SDK-first.
+</Callout>
+
+The dry-run walks the real loop state machine and prints the staged change, the approval,
+the applied result, and an audit trail — no Slack or Google credentials required.
+
+## The Cloud path
+
+Live connectors (Slack approvals, Google Sheets apply) are **Cloud-only** — the OSS
+self-host runtime intentionally excludes hosted connectors:
+
+```txt
+Slack approval request → Google Sheets staged update → Approve in Slack
+→ Sheet updated → confirmation → execution history
+```
+
+Start from the [Cloud overview](/docs/cloud) — organization and tenant are created in
+seconds, no payment required. Commercial tiers: [Pricing](/pricing).

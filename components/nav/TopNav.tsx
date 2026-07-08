@@ -15,13 +15,12 @@ type NavItem = {
 };
 
 const navItems: NavItem[] = [
-  { label: "Docs", href: "/docs", matchPrefix: "/docs" },
-  { label: "Made for", href: "/made-for", matchPrefix: "/made-for" },
-  { label: "Examples", href: "/docs/examples", matchPrefix: "/docs/examples" },
-  { label: "Packages", href: "/docs/packages", matchPrefix: "/docs/packages" },
-  { label: "Use cases", href: "/use-cases", matchPrefix: "/use-cases" },
+  { label: "Cloud", href: "/docs/cloud", matchPrefix: "/docs/cloud" },
+  { label: "Solutions", href: "/use-cases", matchPrefix: "/use-cases" },
+  { label: "Who it's for", href: "/made-for", matchPrefix: "/made-for" },
+  { label: "Pricing", href: "/pricing", matchPrefix: "/pricing" },
   { label: "Partners", href: "/partners", matchPrefix: "/partners" },
-  { label: "Catalog", href: "/catalog", matchPrefix: "/catalog" },
+  { label: "Docs", href: "/docs", matchPrefix: "/docs" },
 ];
 
 function isItemActive(pathname: string, item: NavItem): boolean {
@@ -114,40 +113,6 @@ export function TopNav() {
             Blog
           </a>
           <a
-            className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-            href={LEGACY.githubReleases}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-ph-cta="releases"
-            onClick={() =>
-              trackOutboundClicked({
-                label: "releases",
-                destination: LEGACY.githubReleases,
-                location: "top_nav_desktop",
-                pageType,
-              })
-            }
-          >
-            Releases
-          </a>
-          <a
-            className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-            href={LEGACY.changelogModule}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-ph-cta="read_changelog"
-            onClick={() =>
-              trackOutboundClicked({
-                label: "changelog",
-                destination: LEGACY.changelogModule,
-                location: "top_nav_desktop",
-                pageType,
-              })
-            }
-          >
-            Changelog
-          </a>
-          <a
             className="rounded border border-[var(--color-border)] px-3 py-1.5 font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-alt)]"
             href={LEGACY.github}
             target="_blank"
@@ -163,6 +128,23 @@ export function TopNav() {
             }
           >
             GitHub
+          </a>
+          <a
+            className="rounded bg-[var(--color-primary)] px-3 py-1.5 font-medium text-white transition-opacity hover:opacity-90"
+            href={LEGACY.cloudUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-ph-cta="sign_in"
+            onClick={() =>
+              trackOutboundClicked({
+                label: "sign_in",
+                destination: LEGACY.cloudUrl,
+                location: "top_nav_desktop",
+                pageType,
+              })
+            }
+          >
+            Sign in
           </a>
         </nav>
 
@@ -211,40 +193,6 @@ export function TopNav() {
                 Blog
               </a>
               <a
-                className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-                href={LEGACY.githubReleases}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-ph-cta="releases"
-                onClick={() =>
-                  trackOutboundClicked({
-                    label: "releases",
-                    destination: LEGACY.githubReleases,
-                    location: "top_nav_mobile",
-                    pageType,
-                  })
-                }
-              >
-                Releases
-              </a>
-              <a
-                className="text-[var(--color-ink-secondary)] underline-offset-4 transition-colors hover:text-[var(--color-ink)] hover:underline"
-                href={LEGACY.changelogModule}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-ph-cta="read_changelog"
-                onClick={() =>
-                  trackOutboundClicked({
-                    label: "changelog",
-                    destination: LEGACY.changelogModule,
-                    location: "top_nav_mobile",
-                    pageType,
-                  })
-                }
-              >
-                Changelog
-              </a>
-              <a
                 className="rounded border border-[var(--color-border)] px-2 py-1.5 text-center font-medium text-[var(--color-ink)]"
                 href={LEGACY.github}
                 target="_blank"
@@ -260,6 +208,23 @@ export function TopNav() {
                 }
               >
                 GitHub
+              </a>
+              <a
+                className="rounded bg-[var(--color-primary)] px-2 py-1.5 text-center font-medium text-white"
+                href={LEGACY.cloudUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-ph-cta="sign_in"
+                onClick={() =>
+                  trackOutboundClicked({
+                    label: "sign_in",
+                    destination: LEGACY.cloudUrl,
+                    location: "top_nav_mobile",
+                    pageType,
+                  })
+                }
+              >
+                Sign in
               </a>
             </div>
           </div>

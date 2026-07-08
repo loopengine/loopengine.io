@@ -92,3 +92,23 @@ export function trackOutboundClicked(args: {
     page_type: args.pageType,
   });
 }
+
+/**
+ * Boss Loops Cloud CTA funnel event (M2.2 / 5B). Event name and property
+ * schema are byte-identical to the docs.betterdata.co origin so the PostHog
+ * funnel (cta_clicked → signup_started → tenant_created) survives the
+ * docs-domain move unchanged.
+ */
+export function trackBossLoopsCloudCtaClicked(args: {
+  cta: string;
+  destination: string;
+  location?: string;
+}) {
+  capture("boss_loops_cloud_cta_clicked", {
+    page_type: "docs",
+    product: "boss-loops",
+    cta: args.cta,
+    destination: args.destination,
+    location: args.location ?? "boss-loops",
+  });
+}

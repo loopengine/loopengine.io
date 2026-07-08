@@ -8,13 +8,16 @@
 import { SITE } from "@/lib/site-config";
 
 export const LOOP_ENGINE_HERO_HEADLINE =
-  "The system of record for decisions.";
+  "Your ERP records what happened. Boss Loops governs what happens next.";
+
+export const LOOP_ENGINE_AUDITOR_LINE =
+  "When the auditor asks why it was approved, you don't reconstruct the story. You retrieve it.";
 
 export const LOOP_ENGINE_PRIMARY =
-  "Boss Loops is operational decision control infrastructure — the coordination layer between AI and real-world operations.";
+  "Boss Loops is the system of record for decisions — governed decision intelligence for operations where a decision must be defensible after the fact.";
 
 export const LOOP_ENGINE_SUPPORTING =
-  "Boss Loops governs how AI executes against your systems, so you can scale operational execution while keeping accountability, governance, traceability, and control.";
+  "Boss Loops turns every consequential operational decision into a governed, auditable record — fusing the evidence, the policy, the people, and the AI that produced it, and proving, years later, why the decision was made.";
 
 export const LOOP_ENGINE_META_DESCRIPTION = SITE.metaDescription;
 
@@ -24,7 +27,7 @@ export const BETTERDATA_OPEN_INFRA_URL = "https://betterdata.co/open-source";
 export const BETTERDATA_LOOP_ENGINE_CLOUD_URL = SITE.legacy.cloudUrl;
 
 export const ECOSYSTEM_STRIP =
-  `Apache-2.0 governed runtime — self-host with ${SITE.legacy.npmScope}/sdk or adopt ${SITE.cloudName} on Better Data.`;
+  `${SITE.productName} is open core — inspect and self-host the Apache-2.0 engine, or run governed decisions on ${SITE.cloudName}.`;
 
 export const LOOP_ENGINE_CCO_LINE =
   `Run standalone on any stack, or compose with ${SITE.cloudName} and Commerce Chain modules on Better Data.`;

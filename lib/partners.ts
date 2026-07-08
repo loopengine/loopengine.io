@@ -107,7 +107,7 @@ export const evidencePartners: Partner[] = [
     description:
       "Semantic evidence — attaches a certified metric definition (vendor spend vs. 12-month band) to the decision, frozen on the Decision Record with qualification inherited from the source. Preview snapshot on the Alpine golden record today; live connector in development.",
     runtimeLayer: "evidence",
-    docsPath: "/docs/concepts/evidence-providers#looker",
+    docsPath: "/docs/concepts/evidence-providers#looker-semantic-evidence-preview",
     marketingBadge: "Preview",
     availability: "preview",
   },
@@ -117,7 +117,7 @@ export const evidencePartners: Partner[] = [
     description:
       "Semantic evidence — governed semantic views become Evidence Snapshots with lineage and qualification. Warehouse truth attached to the decision, not exported to a screenshot. Contract-validated shape in Boss Loops OSS; live warehouse connector planned.",
     runtimeLayer: "evidence",
-    docsPath: "/docs/concepts/evidence-providers#snowflake",
+    docsPath: "/docs/concepts/evidence-providers#snowflake-semantic-evidence-planned",
     marketingBadge: "Planned",
     availability: "pattern",
   },
@@ -127,7 +127,7 @@ export const evidencePartners: Partner[] = [
     description:
       "Operational evidence — telemetry captured at decision time, with provenance up to origin-attested where hardware and process support it. Contract-validated shape in Boss Loops OSS; live fleet connector planned.",
     runtimeLayer: "evidence",
-    docsPath: "/docs/concepts/evidence-providers#samsara",
+    docsPath: "/docs/concepts/evidence-providers#samsara-operational-evidence-planned",
     marketingBadge: "Planned",
     availability: "pattern",
   },
@@ -151,7 +151,7 @@ export const channelPartners: Partner[] = [
     description:
       "Enterprise Channel for approval loops and operator escalation — not a system of record.",
     runtimeLayer: "channel",
-    docsPath: "/docs/integrations/loop-engine-cloud-api",
+    docsPath: "/docs/cloud",
     certificationStatus: "pattern",
     availability: "cloud-connector",
   },

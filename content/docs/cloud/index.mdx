@@ -1,0 +1,78 @@
+---
+title: Boss Loops Cloud
+description: >-
+  Boss Loops Cloud — the managed distribution of Boss Loops. Governed decision
+  loops, multi-tenant isolation, outcome-based metering, and audit exports,
+  operated by Better Data.
+section: Boss Loops Cloud
+order: 1
+canonical: https://www.bossloops.io/docs/cloud
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge tier-cloud">Cloud</span>
+  <span className="docs-status-badge attr-built-in">Production: loops.betterdata.co</span>
+</div>
+
+**Boss Loops Cloud** is the **managed** distribution of Boss Loops — run governed,
+observable decision loops without operating the runtime yourself. Same engine, same
+governance model as [Boss Loops OSS](/docs/getting-started/quick-start); Better Data
+operates scale, isolation, metering, and upgrades. Commercial tiers and early access:
+[Pricing](/pricing).
+
+## See the product: the governed Decision Record
+
+The canonical product demo is the **Alpine golden Decision Record** — a supplier invoice
+decision (`INV-2026-004521`) carrying frozen evidence, the policy that applied, the approval
+bound to the exact evidence the approver saw, and preview semantic evidence from
+[Looker](/docs/concepts/evidence-providers#looker-semantic-evidence-preview). It shows what Boss Loops sells: a
+decision you can defend a year later.
+
+## Start
+
+- **<CtaLink cta="start_cloud" location="boss-loops/cloud" href="https://registry.betterdata.co/boss-loops/cloud/start">Start Boss Loops Cloud</CtaLink>** — create your organization and tenant in seconds (no payment)
+
+Prefer to talk first?
+
+- <CtaLink cta="early_access" location="boss-loops/cloud" href="mailto:hello@betterdata.co?subject=Boss%20Loops%20Cloud%20early%20access">Request early access</CtaLink>
+- <CtaLink cta="waitlist" location="boss-loops/cloud" href="mailto:hello@betterdata.co?subject=Boss%20Loops%20Cloud%20waitlist">Join the waitlist</CtaLink>
+- <CtaLink cta="sales" location="boss-loops/cloud" href="mailto:hello@betterdata.co?subject=Boss%20Loops%20Cloud%20sales">Contact sales</CtaLink>
+
+> **OSS proves the loop. Cloud runs the workflow.**
+>
+> The [OSS quickstart](/docs/getting-started/quick-start) proves the loop state machine on
+> your machine. Boss Loops Cloud runs live workflows — managed connectors (Slack, Google, …),
+> tenancy, and audit exports. See [Cloud getting started](/docs/cloud/getting-started).
+
+## What is Boss Loops Cloud?
+
+Boss Loops Cloud, hosted at **[loops.betterdata.co](https://loops.betterdata.co)**, runs the
+Boss Loops model as a **multi-tenant service**. You integrate via APIs and module manifests;
+Better Data operates scale, isolation, and upgrades. The runtime technology underneath is the
+**Boss Loops runtime** (`@loop-engine/*`) — see [Architecture](/docs/getting-started/architecture).
+
+**Self-hosted alternative:** Boss Loops OSS — start with the
+[quick start](/docs/getting-started/quick-start) and the engine docs on this site.
+
+## What you get
+
+See [Cloud operations](/docs/cloud/operations) for the full capability list — org isolation,
+outcome-based metering, capability enforcement, tamper-evident audit trail, drift detection,
+and Industry Pack policy overlays.
+
+## API
+
+The hosted runtime exposes a versioned HTTP API — see the
+[Cloud API reference](/docs/cloud/api-reference), which also links the generated OpenAPI
+reference and the monorepo contract.
+
+## Boss Loops OSS vs Boss Loops Cloud
+
+| | Boss Loops OSS (`@loop-engine/sdk`) | Boss Loops Cloud ([loops.betterdata.co](https://loops.betterdata.co)) |
+| - | ------------------------- | ----------------------------------------------------------- |
+| Cost | Free (Apache-2.0) | See [Pricing](/pricing) |
+| Setup | You operate | No infrastructure setup |
+| Multi-tenant | No | Yes |
+| Industry Packs | No | Yes |
+| Audit / compliance exports | Your pipelines | Platform aggregation + reports |
+| SLA | Self-managed | Better Data SLA |

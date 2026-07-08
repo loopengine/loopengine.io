@@ -1,6 +1,7 @@
 import type { ComponentProps, ReactElement, ReactNode } from "react";
 import { Callout } from "./Callout";
 import { CodeBlock } from "./CodeBlock";
+import { CtaLink } from "./CtaLink";
 import { IntegrationCard } from "./IntegrationCard";
 import { LoopDiagram } from "./LoopDiagram";
 import { PackageCard } from "./PackageCard";
@@ -27,6 +28,7 @@ export const mdxComponents = {
   ),
   Callout,
   CodeBlock,
+  CtaLink,
   IntegrationCard,
   PackageCard,
   LoopDiagram

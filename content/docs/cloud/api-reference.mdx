@@ -1,0 +1,78 @@
+---
+title: Boss Loops Cloud API reference
+description: >-
+  The Boss Loops Cloud HTTP API — auth, versioned routes, the generated OpenAPI
+  reference, and the canonical contract in the monorepo.
+section: Boss Loops Cloud
+taxonomy: integration
+sidebar_label: API reference
+order: 4
+canonical: https://www.bossloops.io/docs/cloud/api-reference
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge tier-cloud">Cloud</span>
+  <span className="docs-status-badge attr-built-in">Production: loops.betterdata.co</span>
+  <span className="docs-status-badge attr-built-in">Taxonomy: Integration (hosted control plane)</span>
+</div>
+
+## What this is
+
+This site documents the **OSS governed engine** (`@loop-engine/*`). **Boss Loops Cloud** is
+the **hosted Integration** path: same loop/guard/evidence model, operated by Better Data
+with tenancy, API keys, and managed connectors (Slack, Google, …).
+
+| Surface | Where to read |
+| --- | --- |
+| Boss Loops engine, taxonomy, adapters | This site (bossloops.io/docs) |
+| Boss Loops Cloud HTTP contract | This page + the references below |
+| Better Data platform, SCM, CCO applications | **[docs.betterdata.co](https://docs.betterdata.co)** |
+
+**The OSS engine** defines states, signals, guards, transitions, and events in **your**
+infrastructure. **Boss Loops Cloud** exposes the execution contract over **HTTPS** when you
+want managed governance operations.
+
+- **Developers & integrations** → **`https://loops.betterdata.co`** (Bearer JWT for first-party services, **`le_` API keys** for external automation).
+- **Operators** → **Automation** at **`app.betterdata.co/automation`** (product UX; same loops conceptually).
+
+We document **shipped** Cloud capabilities here and in the references below. We do not imply
+undelivered OSS parity, Studio, docker compose runtime, or a multi-service mesh **today** —
+see [Runtime Platform Direction](/docs/concepts/runtime-platform-direction) and
+[changelog](/docs/changelog).
+
+## Routes at a glance
+
+The **hosted-loops** service exposes versioned HTTP routes under **`/api/v1/...`**.
+**Production base URL** mapping (for example **`loops.betterdata.co`**) is
+environment-specific — confirm with your deployment or support.
+
+| Prefix | Purpose (high level) |
+| --- | --- |
+| **`/api/v1/loops`** | List/create loop concerns; catalog, start, transition, cancel, events, history, and integration helpers |
+| **`/api/v1/loops/runs`** | Run detail and comparison |
+| **`/api/v1/loops/definitions`** | Definition-scoped run listings |
+| **`/api/v1/baselines`** | Baselines CRUD, transitions, true-ups, delivery routes |
+| **`/api/v1/connectors/*`** | Connector health and OAuth/event surfaces (e.g. Slack, Google) |
+
+External callers should use the service's **authenticated API** only; **exact auth header
+and tenancy claims** are defined by the hosted-loops implementation — treat field names and
+JWT contracts as **implementation details** to verify in the references below.
+
+## Canonical references
+
+- **[Generated OpenAPI reference](https://docs.betterdata.co/docs/developer-resources/api-reference/boss-loops)** —
+  the route-by-route generated reference (from `apps/hosted-loops/openapi.yaml`, DP-07). It
+  lives on the Better Data platform docs and stays there.
+- **[Boss Loops Cloud HTTP API contract (source)](https://github.com/betterdata-platform/bd-forge-main/blob/main/apps/hosted-loops/docs/api.md)** —
+  the developer contract maintained alongside the implementation. Pull requests that change
+  route handlers should update it in the same change-set when the public JSON contract moves.
+
+## Related OSS docs
+
+- [HTTP adapter](/docs/integrations/http) — webhook-style **outbound** adapter from the OSS runtime; not the same as Boss Loops Cloud ingress.
+- [Architecture](/docs/getting-started/architecture) — core Boss Loops concepts reused by the hosted service.
+
+## Pricing
+
+See [Pricing](/pricing) — open core plus Starter, Team, and Enterprise tiers. Launch pricing is being
+finalized; all commercial tiers are in early access. (Do not hardcode prices in integration guides.)

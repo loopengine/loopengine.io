@@ -360,6 +360,19 @@
   color: #a16207;
 }
 
+/* Distribution badges (glossary v2): OSS = open engine, Cloud = hosted tier */
+.tier-oss {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #047857;
+}
+
+.tier-cloud {
+  background: rgba(139, 92, 246, 0.12);
+  border-color: rgba(139, 92, 246, 0.3);
+  color: #6d28d9;
+}
+
 .attr-featured {
   background: rgba(59, 130, 246, 0.14);
   border-color: rgba(59, 130, 246, 0.25);

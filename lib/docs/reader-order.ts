@@ -5,6 +5,7 @@ import type { LoadedDoc } from "./types";
  */
 export const SECTION_LABEL_ORDER: string[] = [
   "Getting Started",
+  "Boss Loops Cloud",
   "Core Concepts",
   "Defining Loops",
   "Running Loops",
@@ -75,7 +76,6 @@ const INTEGRATIONS_SLUG_RANK: Record<string, number> = (() => {
     "integrations/pagerduty",
     "integrations/perplexity-pagerduty",
     "integrations/commerce-gateway",
-    "integrations/loop-engine-cloud-api",
   ];
   const m: Record<string, number> = {};
   segments.forEach((s, i) => {

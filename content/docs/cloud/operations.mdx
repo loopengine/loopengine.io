@@ -1,0 +1,52 @@
+---
+title: Cloud operations
+description: >-
+  What Boss Loops Cloud operates for you — tenancy and isolation, outcome-based
+  metering, capability enforcement, audit exports, drift detection, and the
+  canonical loop types.
+section: Boss Loops Cloud
+sidebar_label: Operations
+order: 3
+canonical: https://www.bossloops.io/docs/cloud/operations
+---
+
+<div className="docs-quick-links">
+  <span className="docs-status-badge tier-cloud">Cloud</span>
+</div>
+
+## What you get with Boss Loops Cloud
+
+- Multi-tenant **org isolation**
+- **Outcome-based metering** (billing tied to loop completions — see [Pricing](/pricing))
+- **TenantCapabilitySnapshot**-style capability enforcement for RBAC
+- Tamper-evident **loop audit trail** and export paths for compliance workflows
+- **Drift detection** (scheduled validation of expected vs observed state)
+- **Outbox relay** for cross-module event delivery
+- **Industry Pack** policy overlays (hosted-only; not published as OSS)
+
+## Loop types (canonical)
+
+| Loop | Module | What it governs |
+| ---- | ------ | ---------------- |
+| `scm.procurement` | SCM | AI-assisted PO recommendation + human approval gates |
+| `scm.fulfillment` | SCM | Multi-step order fulfillment |
+| `scm.quality` | SCM | Inspection, deviation, CAPA-style disposition |
+| `scm.replenishment` | SCM | Demand signal → reorder / replenishment |
+| `dcm.demand` | DCM | Demand signal detection and replenishment triggers |
+| `dcm.order` | DCM | Channel order routing and lifecycle |
+| `dcm.returns` | DCM | Return authorization and reverse logistics |
+
+For the platform conceptual model behind these loop types, see
+[Loops on the Better Data platform](https://docs.betterdata.co/docs/platform/loops).
+
+## Hosted services
+
+The running hosted stack includes **hosted-loops** (runtime + loops database API) and the
+published loop definitions catalog. For how these relate to the wider Better Data platform
+apps, see
+[Hosted platform apps](https://docs.betterdata.co/docs/developer-resources/reference/hosted-platform-apps).
+
+## API
+
+Versioned HTTP routes for loop lifecycle, runs, baselines, and connector health are
+documented in the [Cloud API reference](/docs/cloud/api-reference).

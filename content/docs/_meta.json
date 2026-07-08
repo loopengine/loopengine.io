@@ -1,6 +1,7 @@
 {
   "order": [
     "getting-started",
+    "cloud",
     "concepts",
     "ai-and-automation",
     "defining-loops",

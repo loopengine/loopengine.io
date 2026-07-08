@@ -81,7 +81,7 @@ export default function DocsHomePage() {
       accentColor: "#D97706",
       links: [
         { label: "Runtime connections index", href: "/docs/integrations" },
-        { label: "Boss Loops Cloud API", href: "/docs/integrations/loop-engine-cloud-api" },
+        { label: "Boss Loops Cloud API", href: "/docs/cloud/api-reference" },
         { label: "Providers (Claude)", href: "/docs/integrations/anthropic" },
         { label: "@loop-engine/sdk", href: "/docs/packages/sdk" }
       ]

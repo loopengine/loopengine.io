@@ -7,8 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import {
-  BETTERDATA_CCO_URL,
-  LOOP_ENGINE_CCO_LINE,
+  LOOP_ENGINE_AUDITOR_LINE,
   LOOP_ENGINE_HERO_HEADLINE,
   LOOP_ENGINE_META_DESCRIPTION,
   LOOP_ENGINE_PRIMARY,
@@ -263,8 +262,8 @@ async function HomeContent() {
         "@type": "SoftwareApplication",
         "@id": `${SITE.baseUrl}/#software`,
         name: SITE.productName,
-        applicationCategory: "DeveloperApplication",
-        applicationSubCategory: "AI Operations Control System",
+        applicationCategory: "BusinessApplication",
+        applicationSubCategory: "Governed Decision Intelligence",
         operatingSystem: "Node.js 18+",
         url: SITE.baseUrl,
         downloadUrl: npmPkgUrl("sdk"),
@@ -280,7 +279,7 @@ async function HomeContent() {
         codeRepository: LEGACY.github,
         programmingLanguage: "TypeScript",
         keywords:
-          "AI operations control, operational decision control infrastructure, governed AI execution, AI governance, operational accountability, traceability, decision loops, deterministic guards, AI agent governance, TypeScript, open source"
+          "governed decision intelligence, system of record for decisions, Decision Record, decision governance, auditable AI decisions, evidence providers, decision loops, deterministic guards, AI agent governance, operational accountability, TypeScript, open source"
       }
     ]
   };
@@ -294,44 +293,35 @@ async function HomeContent() {
       <section
         className="relative overflow-hidden"
         style={{
-          background: "var(--color-surface-alt)",
-          minHeight: "max(80vh, calc(100vh - 56px))",
+          background: "linear-gradient(180deg, var(--color-surface-alt) 0%, var(--color-surface) 100%)",
           borderBottom: "1px solid var(--color-border)"
         }}
       >
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg, color-mix(in srgb, var(--color-border) 100%, transparent) 0px, color-mix(in srgb, var(--color-border) 100%, transparent) 1px, transparent 1px, transparent 32px), repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-border) 100%, transparent) 0px, color-mix(in srgb, var(--color-border) 100%, transparent) 1px, transparent 1px, transparent 32px)"
-          }}
-        />
-        <div className="relative mx-auto w-full max-w-[1200px] px-6 py-16 md:px-10 md:py-24">
+        <div className="relative mx-auto w-full max-w-[1200px] px-6 py-20 md:px-10 md:py-28">
           <div className="mx-auto max-w-[800px]">
             <p className="fade-in-up" style={{ animationDelay: "0ms" }}>
               <span
                 style={{
-                  fontFamily: "var(--font-mono)",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: 600,
                   fontSize: "var(--text-xs)",
-                  letterSpacing: "0.12em",
+                  letterSpacing: "0.14em",
                   textTransform: "uppercase",
                   color: "var(--color-primary)"
                 }}
               >
-                Open Infrastructure · Apache-2.0
+                Governed Decision Intelligence
               </span>
             </p>
             <p className="fade-in-up mt-2" style={{ animationDelay: "40ms" }}>
               <span
                 style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "var(--text-xs)",
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
+                  fontFamily: "var(--font-sans)",
+                  fontSize: "var(--text-sm)",
                   color: "var(--color-ink-tertiary)"
                 }}
               >
-                Without governance, AI agents improvise — no approval gates, no audit trail, no accountability.
+                AI now participates in operational decisions. &ldquo;The model said it was fine&rdquo; is not an answer an auditor will accept.
               </span>
             </p>
             <h1
@@ -368,9 +358,9 @@ async function HomeContent() {
                 lineHeight: 1.65
               }}
             >
-              AI operates inside deterministic governance boundaries — guards enforce policy, actors are attributed,
-              and evidence is captured on every transition. Boss Loops are the unit of work; finite states are the
-              runtime mechanism.
+              Supplier invoice approvals. Purchase approvals. Inventory exceptions. Returns triage. Credit reviews.
+              The decisions your operation makes every day — with the approvals, the exceptions, and the
+              &ldquo;prove why we approved it&rdquo; that comes months later.
             </p>
             <p
               className="fade-in-up mt-3"
@@ -380,21 +370,11 @@ async function HomeContent() {
                 color: "var(--color-ink-secondary)",
                 fontFamily: "var(--font-mono)",
                 letterSpacing: "0.02em",
-              }}
-            >
-              Install only what you govern.
-            </p>
-            <p
-              className="fade-in-up mt-4"
-              style={{
-                animationDelay: "260ms",
-                fontSize: "var(--text-sm)",
-                color: "var(--color-ink-tertiary)",
                 maxWidth: 620,
-                lineHeight: 1.65,
+                lineHeight: 1.7,
               }}
             >
-              {LOOP_ENGINE_CCO_LINE}
+              {LOOP_ENGINE_AUDITOR_LINE}
             </p>
 
             <div
@@ -402,14 +382,30 @@ async function HomeContent() {
               style={{ animationDelay: "280ms" }}
             >
               <Link
-                href="/docs/getting-started"
+                href="/docs/cloud"
                 className="le-cta-button inline-flex items-center"
                 style={{
                   background: "var(--color-primary)",
                   color: "#fff",
                   borderRadius: "var(--radius-sm)",
                   padding: "12px 28px",
-                  fontFamily: "var(--font-mono)",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: 500,
+                  fontSize: "var(--text-sm)"
+                }}
+              >
+                Explore {SITE.cloudName}
+              </Link>
+              <Link
+                href="/docs/getting-started"
+                className="inline-flex items-center"
+                style={{
+                  border: "1px solid var(--color-border)",
+                  color: "var(--color-ink)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "12px 28px",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: 500,
                   fontSize: "var(--text-sm)"
                 }}
               >
@@ -425,37 +421,139 @@ async function HomeContent() {
                   color: "var(--color-ink-secondary)",
                   borderRadius: "var(--radius-sm)",
                   padding: "12px 28px",
-                  fontFamily: "var(--font-mono)",
+                  fontFamily: "var(--font-sans)",
+                  fontWeight: 500,
                   fontSize: "var(--text-sm)"
                 }}
               >
                 View on GitHub
               </a>
-              <a
-                href={BETTERDATA_CCO_URL}
-                rel="noopener noreferrer"
-                target="_blank"
-                className="inline-flex items-center"
-                style={{
-                  border: "1px solid var(--color-border)",
-                  color: "var(--color-ink)",
-                  borderRadius: "var(--radius-sm)",
-                  padding: "12px 28px",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "var(--text-sm)"
-                }}
-              >
-                See Commerce Chain Optimization
-              </a>
-              <div className="max-w-full overflow-x-auto">
-                <NpmInstallChip />
-              </div>
-            </div>
-
-            <div className="fade-in-up mt-14" style={{ animationDelay: "440ms" }}>
-              <RuntimeFlowDiagram variant="hero" />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* The Decision Record — the object we sell */}
+      <section
+        style={{
+          background: "var(--color-surface)",
+          borderTop: "1px solid var(--color-border)",
+          padding: "72px 0"
+        }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontWeight: 600,
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)"
+            }}
+          >
+            The Decision Record
+          </p>
+          <h2 className="mt-3">Decisions deserve a system of record</h2>
+          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            One record holds the situation, the evidence — frozen at the moment it was used, from governed sources,
+            not a link that may have changed since — the policies that applied, the people and AI that participated,
+            the outcome that followed, and the learning it produced. GRC holds policy. BI holds metrics. Workflow
+            holds steps. Chat holds the AI&apos;s reasoning until the window closes. None of them holds all of it,
+            linked, as one auditable artifact.
+          </p>
+          <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
+            In Boss Loops this isn&apos;t a convention a well-behaved workflow follows — it&apos;s{" "}
+            <strong>enforced by the engine</strong>. A consequential decision cannot commit without frozen evidence,
+            recorded provenance, and an approval bound to the exact evidence the approver saw. Immutable, hashable,
+            replayable — by construction, not by discipline.
+          </p>
+
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
+            <FeatureCard
+              title="Evidence frozen at capture"
+              icon={
+                <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
+                  <rect x="6" y="8" width="20" height="16" rx="2" stroke="var(--color-primary)" strokeWidth="2" fill="none" />
+                  <path d="M10 14h12M10 18h8" stroke="var(--color-primary-mid)" strokeWidth="2" />
+                </svg>
+              }
+              body="What they knew at the time — value, source definition, freshness, and provenance snapshotted the moment evidence informs a decision. Not a screenshot, not a stale export."
+            />
+            <FeatureCard
+              title="Approvals bound to evidence"
+              icon={
+                <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
+                  <circle cx="8" cy="16" r="4" fill="var(--color-primary-mid)" />
+                  <circle cx="16" cy="10" r="4" fill="var(--color-primary)" />
+                  <circle cx="24" cy="16" r="4" fill="var(--color-primary-dark)" />
+                </svg>
+              }
+              body="The authorized approver signs under their own name, against the exact evidence they saw. Human, automation, and AI actors share one attribution model."
+            />
+            <FeatureCard
+              title="Answerable years later"
+              icon={<BossLoopMark size={32} color="var(--color-primary)" />}
+              body="Who decided, on what evidence, under which policy, and whether it worked — retrieved as a record, not reconstructed across four systems."
+            />
+          </div>
+
+          <article
+            className="mt-10 rounded-xl border p-6 md:p-8"
+            style={{ borderColor: "var(--color-border)", background: "var(--color-surface-alt)" }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontWeight: 600,
+                fontSize: "var(--text-xs)",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--color-ink-muted)"
+              }}
+            >
+              What it looks like in practice
+            </p>
+            <p style={{ marginTop: 12, maxWidth: 900, color: "var(--color-ink-secondary)", lineHeight: 1.75 }}>
+              A refrigerated shipment records a temperature excursion in transit. Instead of an alert someone has to
+              chase, it opens a decision: <em>lot release review</em>. Boss Loops attaches governed evidence
+              automatically — the peak excursion from the validated monitoring system, the batch&apos;s stability data,
+              the release criteria from the current SOP — each frozen with its source and timestamp. Policy checks the
+              reading against the criteria. Quality reviews; the authorized approver signs off against the exact
+              evidence they saw. A year later, when someone asks why the lot was released, the answer isn&apos;t a
+              scramble across four systems. It&apos;s a record.
+            </p>
+            <p style={{ marginTop: 12, maxWidth: 900, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+              <strong style={{ color: "var(--color-ink-primary)" }}>This is a pattern, not a vertical.</strong> The
+              same record that defends a lot release defends a capital authorization, a credit approval, a sole-source
+              supplier commitment, or a claims adjudication.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {[
+                "Supplier invoice approval",
+                "Purchase approval",
+                "Inventory exceptions",
+                "Returns triage",
+                "Customer credit review"
+              ].map((useCase) => (
+                <span
+                  key={useCase}
+                  style={{
+                    border: "1px solid var(--color-border)",
+                    borderRadius: 999,
+                    padding: "5px 12px",
+                    fontFamily: "var(--font-sans)",
+                    fontSize: "var(--text-xs)",
+                    fontWeight: 500,
+                    color: "var(--color-ink-secondary)",
+                    background: "var(--color-surface)"
+                  }}
+                >
+                  {useCase}
+                </span>
+              ))}
+            </div>
+          </article>
         </div>
       </section>
 
@@ -470,14 +568,15 @@ async function HomeContent() {
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
           <p
             style={{
-              fontFamily: "var(--font-mono)",
+              fontFamily: "var(--font-sans)",
+              fontWeight: 600,
               fontSize: "var(--text-xs)",
-              letterSpacing: "0.1em",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
               color: "var(--color-primary)"
             }}
           >
-            Runtime platform
+            Architecture
           </p>
           <h2 className="mt-3">Governed decision runtime</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
@@ -518,8 +617,12 @@ async function HomeContent() {
               title="Runtime layers"
               items={[
                 {
-                  label: "Providers",
+                  label: "Model Providers",
                   body: "Intelligence systems — analyze, recommend, classify. They do not write to CRM or approve in Slack."
+                },
+                {
+                  label: "Evidence Providers",
+                  body: "Governed evidence — Snowflake semantic views, Looker metrics, Samsara readings — frozen onto the Decision Record with qualification inherited from the source."
                 },
                 {
                   label: "Channels",
@@ -588,6 +691,65 @@ async function HomeContent() {
             </Link>
           </article>
 
+          <article
+            className="mt-8 rounded-xl border p-6 md:p-8"
+            style={{ borderColor: "var(--color-border)", background: "var(--color-surface-alt)" }}
+          >
+            <p
+              style={{
+                fontFamily: "var(--font-sans)",
+                fontWeight: 600,
+                fontSize: "var(--text-xs)",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--color-ink-muted)"
+              }}
+            >
+              Evidence Providers
+            </p>
+            <h3 style={{ marginTop: 10, fontSize: "var(--text-xl)" }}>Consume the semantics you already govern</h3>
+            <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+              Your warehouse and BI investments already define what the numbers mean. Boss Loops attaches that
+              definition to the Decision Record — frozen at capture, with qualification inherited from the source,
+              never asserted by the loop. No re-modeling your business to get there.
+            </p>
+            <ul className="mt-4 space-y-2">
+              {[
+                { badge: "Preview", text: "Looker semantic evidence on the Alpine golden record" },
+                { badge: "Planned", text: "Snowflake governed semantic views" },
+                { badge: "Planned", text: "Samsara operational readings at decision time" }
+              ].map((row) => (
+                <li key={row.text} className="flex items-center gap-3">
+                  <span
+                    style={{
+                      fontFamily: "var(--font-sans)",
+                      fontWeight: 600,
+                      fontSize: "var(--text-xs)",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.06em",
+                      border: "1px solid var(--color-border)",
+                      borderRadius: 999,
+                      padding: "3px 10px",
+                      color: row.badge === "Preview" ? "var(--color-primary)" : "var(--color-ink-muted)",
+                      background: "var(--color-surface)",
+                      whiteSpace: "nowrap"
+                    }}
+                  >
+                    {row.badge}
+                  </span>
+                  <span style={{ color: "var(--color-ink-secondary)", fontSize: "var(--text-sm)" }}>{row.text}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/docs/concepts/evidence-providers"
+              className="mt-5 inline-block"
+              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)" }}
+            >
+              How Evidence Providers work →
+            </Link>
+          </article>
+
           <div className="mt-8 flex flex-col items-start gap-3 min-[520px]:flex-row min-[520px]:items-center">
             <Link
               href="/docs/getting-started/quick-start"
@@ -597,7 +759,8 @@ async function HomeContent() {
                 color: "#fff",
                 borderRadius: "var(--radius-sm)",
                 padding: "11px 22px",
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
                 fontSize: "var(--text-sm)"
               }}
             >
@@ -611,21 +774,23 @@ async function HomeContent() {
                 color: "var(--color-ink-secondary)",
                 borderRadius: "var(--radius-sm)",
                 padding: "11px 22px",
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
                 fontSize: "var(--text-sm)"
               }}
             >
               Self-host direction →
             </Link>
             <Link
-              href="/docs/integrations/loop-engine-cloud-api"
+              href="/docs/cloud"
               className="inline-flex items-center"
               style={{
                 border: "1px solid var(--color-border)",
                 color: "var(--color-ink-secondary)",
                 borderRadius: "var(--radius-sm)",
                 padding: "11px 22px",
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
                 fontSize: "var(--text-sm)"
               }}
             >
@@ -635,148 +800,103 @@ async function HomeContent() {
         </div>
       </section>
 
+      {/* Open core — the trust layer */}
       <section
         style={{
-          background: "var(--color-surface-alt)",
+          background: "var(--color-surface)",
           borderTop: "1px solid var(--color-border)",
-          borderBottom: "1px solid var(--color-border)",
           padding: "72px 0"
         }}
       >
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
           <p
             style={{
-              fontFamily: "var(--font-mono)",
+              fontFamily: "var(--font-sans)",
+              fontWeight: 600,
               fontSize: "var(--text-xs)",
-              letterSpacing: "0.1em",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
               color: "var(--color-primary)"
             }}
           >
-            System context
+            Open core · Apache-2.0
           </p>
-          <h2 className="mt-3">How Boss Loops fits into real systems</h2>
+          <h2 className="mt-3">Governance you can verify, not take on faith</h2>
           <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Most enterprise AI projects hit the same wall: a capable model, a data source it&apos;s not allowed to touch
-            directly, and no structure for what happens between a signal and a recorded outcome. Boss Loops is the layer
-            that sits in that gap — the coordination layer between AI and real-world operations.
+            Anyone can say &ldquo;governed.&rdquo; The Boss Loops engine, the evidence contracts, and the conformance
+            suite are open — inspect them, self-host them, and prove the invariants yourself. The invariants hold in
+            the open engine, not behind a paywall: a consequential decision cannot commit without frozen evidence,
+            recorded provenance, and an approval bound to what the approver saw.
           </p>
           <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss Loops is the execution and control layer inside a larger operational stack. It does
-            not replace your data warehouse, ERP, or application UI. It sits where decisions become
-            actions, enforces bounded transitions, and records evidence on every state change.
+            Because the conformance suite is an executable artifact, &ldquo;every evidence source in this decision
+            conformed to the contract&rdquo; is a statement an auditor can verify — not a marketing claim. What the
+            hosted tier adds isn&apos;t the governance. It&apos;s production Evidence Providers, curated policy packs,
+            and the Decision Operations workspace.
           </p>
-          <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            In practice: signals detect change, decision logic selects next action, Boss Loops
-            executes inside explicit guardrails, evidence is captured for each transition, and the
-            resulting feedback improves future decisions. This pattern is used in production systems,
-            including the Better Data platform.
+          <p
+            style={{
+              marginTop: 14,
+              maxWidth: 760,
+              fontFamily: "var(--font-mono)",
+              fontSize: "var(--text-xs)",
+              lineHeight: 1.65,
+              color: "var(--color-ink-muted)"
+            }}
+          >
+            Apache-2.0 with explicit patent grant — fully permissive, OSI-approved, patent-safe.
           </p>
-
-          <div className="mt-8 grid gap-4 lg:grid-cols-2">
-            <article
-              style={{
-                border: "1px solid var(--color-border)",
-                borderRadius: "var(--radius-lg)",
-                background: "var(--color-surface-alt)",
-                padding: "20px 18px"
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "var(--text-xs)",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "var(--color-ink-muted)"
-                }}
-              >
-                Governed runtime path
-              </p>
-              <div className="mt-3">
-                <RuntimeFlowDiagram variant="hero" />
-              </div>
-            </article>
-
-            <article
-              style={{
-                border: "1px solid var(--color-border)",
-                borderRadius: "var(--radius-lg)",
-                background: "var(--color-surface-alt)",
-                padding: "20px 18px"
-              }}
-            >
-              <p
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "var(--text-xs)",
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "var(--color-ink-muted)"
-                }}
-              >
-                Better Data system model
-              </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                {["Sense", "Decide", "Execute", "Govern", "Improve"].map((item, idx, arr) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <span
-                      style={{
-                        border: "1px solid var(--color-border)",
-                        borderRadius: 999,
-                        padding: "6px 10px",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "var(--text-xs)",
-                        background: item === "Execute" ? "var(--color-primary-light)" : "var(--color-surface)"
-                      }}
-                    >
-                      {item}
-                    </span>
-                    {idx < arr.length - 1 ? (
-                      <span style={{ color: "var(--color-primary-mid)" }} aria-hidden>
-                        →
-                      </span>
-                    ) : null}
-                  </div>
-                ))}
-              </div>
-              <p style={{ marginTop: 10, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
-                Boss Loops anchors the execution boundary while preserving full transition evidence.
-              </p>
-            </article>
-          </div>
-
           <div className="mt-8 flex flex-col items-start gap-3 min-[520px]:flex-row min-[520px]:items-center">
-            <Link
-              href="/docs/getting-started/architecture"
+            <a
+              href={LEGACY.github}
+              rel="noreferrer"
+              target="_blank"
               className="inline-flex items-center"
               style={{
                 background: "var(--color-primary)",
                 color: "#fff",
                 borderRadius: "var(--radius-sm)",
                 padding: "11px 22px",
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
                 fontSize: "var(--text-sm)"
               }}
             >
-              See architecture guide
-            </Link>
-            <a
-              href="https://betterdata.co/product"
-              target="_blank"
-              rel="noopener noreferrer"
+              Inspect the engine on GitHub
+            </a>
+            <Link
+              href="/docs/getting-started/quick-start"
               className="inline-flex items-center"
               style={{
                 border: "1px solid var(--color-border)",
                 color: "var(--color-ink-secondary)",
                 borderRadius: "var(--radius-sm)",
                 padding: "11px 22px",
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
                 fontSize: "var(--text-sm)"
               }}
             >
-              See system context in Better Data
-            </a>
+              Self-host quick start →
+            </Link>
+            <Link
+              href="/docs/concepts/decision-governance"
+              className="inline-flex items-center"
+              style={{
+                border: "1px solid var(--color-border)",
+                color: "var(--color-ink-secondary)",
+                borderRadius: "var(--radius-sm)",
+                padding: "11px 22px",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
+                fontSize: "var(--text-sm)"
+              }}
+            >
+              Why decision governance →
+            </Link>
+            <div className="max-w-full overflow-x-auto">
+              <NpmInstallChip />
+            </div>
           </div>
         </div>
       </section>
@@ -835,7 +955,8 @@ async function HomeContent() {
                 color: "#fff",
                 borderRadius: "var(--radius-sm)",
                 padding: "11px 22px",
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
                 fontSize: "var(--text-sm)",
               }}
             >
@@ -851,7 +972,8 @@ async function HomeContent() {
                 color: "var(--color-ink-secondary)",
                 borderRadius: "var(--radius-sm)",
                 padding: "11px 22px",
-                fontFamily: "var(--font-mono)",
+                fontFamily: "var(--font-sans)",
+                fontWeight: 500,
                 fontSize: "var(--text-sm)",
               }}
             >
@@ -969,44 +1091,6 @@ async function HomeContent() {
 
       <section
         style={{
-          background: "var(--color-surface)",
-          borderTop: "1px solid var(--color-border)",
-          borderBottom: "1px solid var(--color-border)",
-          padding: "80px 0"
-        }}
-      >
-        <div className="mx-auto grid w-full max-w-[1200px] gap-5 px-6 md:grid-cols-3 md:px-10">
-          <FeatureCard
-            title="Guards enforce policy"
-            icon={<BossLoopMark size={32} color="var(--color-primary)" />}
-            body="Hard and soft guards run in the runtime — not in prompts. Transitions that fail policy do not advance; denials are recorded for audit."
-          />
-          <FeatureCard
-            title="Evidence on every transition"
-            icon={
-              <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
-                <rect x="6" y="8" width="20" height="16" rx="2" stroke="var(--color-primary)" strokeWidth="2" fill="none" />
-                <path d="M10 14h12M10 18h8" stroke="var(--color-primary-mid)" strokeWidth="2" />
-              </svg>
-            }
-            body="Structured evidence explains why a decision was allowed — inputs, confidence, approvals, and citations where applicable."
-          />
-          <FeatureCard
-            title="Human oversight built in"
-            icon={
-              <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
-                <circle cx="8" cy="16" r="4" fill="var(--color-primary-mid)" />
-                <circle cx="16" cy="10" r="4" fill="var(--color-primary)" />
-                <circle cx="24" cy="16" r="4" fill="var(--color-primary-dark)" />
-              </svg>
-            }
-            body="Human, automation, and AI agent actors share one model. Channels deliver approval gates; integrations execute only after governance passes."
-          />
-        </div>
-      </section>
-
-      <section
-        style={{
           background: "var(--color-surface-subtle)",
           borderTop: "1px solid var(--color-border)",
           borderBottom: "1px solid var(--color-border)",
@@ -1027,9 +1111,10 @@ async function HomeContent() {
           </p>
           <h2 className="mt-3">Three layers, one governance runtime</h2>
           <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
-            <strong>Providers</strong> generate intelligence. <strong>Channels</strong> coordinate humans.{" "}
-            <strong>Integrations</strong> execute against systems of record. They are not interchangeable — Boss Loops
-            governs transitions between them with guards and evidence.
+            <strong>Model Providers</strong> generate intelligence. <strong>Evidence Providers</strong> attach governed
+            evidence. <strong>Channels</strong> coordinate humans. <strong>Integrations</strong> execute against systems
+            of record. They are not interchangeable — Boss Loops governs transitions between them with guards and
+            evidence.
           </p>
           <div className="mt-10">
             <RuntimeLayerStack />

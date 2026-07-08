@@ -16,7 +16,6 @@
     "memory",
     "pagerduty",
     "perplexity-pagerduty",
-    "commerce-gateway",
-    "loop-engine-cloud-api"
+    "commerce-gateway"
   ]
 }
