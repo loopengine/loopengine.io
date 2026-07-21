@@ -83,38 +83,17 @@ export default function MadeForOperationsPage() {
             Every fact that shaped the escalation.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
-            An alert fires. What happens next is not a runbook step — it&apos;s a record
-            being assembled. Signal evidence from your observability layer. History from
-            past incidents. The blast radius. The escalation policy. The AI recommendation.
-            The responder who signed.
+            An alert fires. What happens next is a record being assembled.
           </p>
 
           <ol className="mt-10 space-y-4">
             {[
-              {
-                title: "The alert arrives",
-                body: "A production signal enters the queue. Nothing recorded yet — the decision hasn't been made.",
-              },
-              {
-                title: "Signal evidence is frozen",
-                body: "Latency, error rate, saturation, and traces at the moment of alert are captured onto the record. That snapshot is what the responder reviewed — not a live query that could drift by the time anyone asks.",
-              },
-              {
-                title: "Similar-incident context is attached",
-                body: "Prior occurrences, mean time to resolve, and matching runbooks are attached with confidence scores. The record shows what the responder saw.",
-              },
-              {
-                title: "Blast radius is estimated",
-                body: "Customer impact, revenue path, and dependent services are computed and stamped. The severity call is defensible in the record.",
-              },
-              {
-                title: "Escalation is explicit",
-                body: "The on-call rotation and escalation policy determine the responder — not a manual page. The policy version is captured with the decision.",
-              },
-              {
-                title: "AI recommends. Human confirms. Record remains.",
-                body: "The AI's severity recommendation carries its confidence and the exact prompt. The responder acknowledges the record, not a chat. It's queryable the day of the incident and every day after.",
-              },
+              { title: "The alert arrives", body: "A production signal enters the queue. No decision yet." },
+              { title: "Signal evidence is frozen", body: "Latency, error rate, saturation, and traces at the moment of alert are captured onto the record." },
+              { title: "Similar-incident context is attached", body: "Prior occurrences, mean time to resolve, and matching runbooks are linked with confidence scores." },
+              { title: "Blast radius is estimated", body: "Customer impact, revenue path, and dependent services are stamped on the record — the severity call is defensible." },
+              { title: "Escalation is explicit", body: "The on-call rotation and escalation policy determine the responder. The policy version is captured with the decision." },
+              { title: "AI recommends. Human confirms.", body: "The recommendation carries its confidence and the exact prompt. The responder acknowledges the record, not a chat." },
             ].map((step, idx) => (
               <li
                 key={step.title}
@@ -267,9 +246,7 @@ export default function MadeForOperationsPage() {
               className="mt-3 text-[var(--color-ink-secondary)]"
               style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
             >
-              Pick the decision that woke someone up last quarter. We&apos;ll wire it to
-              your observability, your runbooks, and your escalation policy — and show
-              you the record it produces.
+              Pick the decision that woke someone up last quarter. We wire it to your systems and show you the record it produces.
             </p>
             <a
               href={`${SALES_CONTACT_URL}&cta=${CTA}-pilot`}
@@ -294,8 +271,7 @@ export default function MadeForOperationsPage() {
               className="mt-3 text-[var(--color-ink-secondary)]"
               style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
             >
-              The runtime, the SDK, the guards, the actors — all open source. Bring your
-              own systems; run the record inside your infrastructure.
+              Runtime, SDK, guards, actors — Apache-2.0. Run the record inside your infrastructure.
             </p>
             <Link
               href={`/docs/getting-started?cta=${CTA}-oss`}

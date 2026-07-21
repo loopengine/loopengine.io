@@ -316,17 +316,6 @@ async function HomeContent() {
                 Governed Decision Intelligence
               </span>
             </p>
-            <p className="fade-in-up mt-2" style={{ animationDelay: "40ms" }}>
-              <span
-                style={{
-                  fontFamily: "var(--font-sans)",
-                  fontSize: "var(--text-sm)",
-                  color: "var(--color-ink-tertiary)"
-                }}
-              >
-                AI and agents now participate in operational decisions. &ldquo;The model said it was fine&rdquo; is not an answer operations or risk teams can defend.
-              </span>
-            </p>
             <h1
               className="fade-in-up mt-3"
               style={{
@@ -350,34 +339,6 @@ async function HomeContent() {
               }}
             >
               {LOOP_ENGINE_SUPPORTING}
-            </p>
-            <p
-              className="fade-in-up mt-4"
-              style={{
-                animationDelay: "200ms",
-                fontSize: "var(--text-sm)",
-                color: "var(--color-ink-muted)",
-                maxWidth: 620,
-                lineHeight: 1.65
-              }}
-            >
-              Supplier invoice approvals. Purchase approvals. Inventory exceptions. Returns triage. Credit reviews.
-              The decisions your operation makes every day — with the approvals, the exceptions, and the
-              &ldquo;prove why we approved it&rdquo; that comes months later.
-            </p>
-            <p
-              className="fade-in-up mt-3"
-              style={{
-                animationDelay: "240ms",
-                fontSize: "var(--text-sm)",
-                color: "var(--color-ink-secondary)",
-                fontFamily: "var(--font-mono)",
-                letterSpacing: "0.02em",
-                maxWidth: 620,
-                lineHeight: 1.7,
-              }}
-            >
-              {LOOP_ENGINE_AUDITOR_LINE}
             </p>
 
             <div
@@ -525,66 +486,11 @@ async function HomeContent() {
             />
           </div>
 
-          <article
-            className="mt-10 rounded-xl border p-6 md:p-8"
-            style={{ borderColor: "var(--color-border)", background: "var(--color-surface-alt)" }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontWeight: 600,
-                fontSize: "var(--text-xs)",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--color-ink-muted)"
-              }}
-            >
-              What it looks like in practice
-            </p>
-            <p style={{ marginTop: 12, maxWidth: 900, color: "var(--color-ink-secondary)", lineHeight: 1.75 }}>
-              A refrigerated shipment records a temperature excursion in transit. Instead of an alert someone has to
-              chase, it opens a decision: <em>lot release review</em>. Boss Loops attaches governed evidence
-              automatically — the peak excursion from the validated monitoring system, the batch&apos;s stability data,
-              the release criteria from the current SOP — each frozen with its source and timestamp. Policy checks the
-              reading against the criteria. Quality reviews; the approver signs off under their own name, and the
-              record captures the sign-off with the evidence presented. A year later, when someone asks why the lot
-              was released, the answer isn&apos;t a
-              scramble across four systems. It&apos;s a record.
-            </p>
-            <p style={{ marginTop: 12, maxWidth: 900, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-              <strong style={{ color: "var(--color-ink-primary)" }}>This is a pattern, not a vertical.</strong> The
-              same record that defends a lot release defends a capital authorization, a credit approval, a sole-source
-              supplier commitment, or a claims adjudication.
-            </p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {[
-                "Supplier invoice approval",
-                "Purchase approval",
-                "Inventory exceptions",
-                "Returns triage",
-                "Customer credit review"
-              ].map((useCase) => (
-                <Link
-                  key={useCase}
-                  href="/use-cases"
-                  className="transition-colors hover:border-[var(--color-primary-mid)] hover:text-[var(--color-primary-dark)]"
-                  style={{
-                    border: "1px solid var(--color-border)",
-                    borderRadius: 999,
-                    padding: "5px 12px",
-                    fontFamily: "var(--font-sans)",
-                    fontSize: "var(--text-xs)",
-                    fontWeight: 500,
-                    color: "var(--color-ink-secondary)",
-                    background: "var(--color-surface)",
-                    textDecoration: "none"
-                  }}
-                >
-                  {useCase} →
-                </Link>
-              ))}
-            </div>
-          </article>
+          <p style={{ marginTop: 32, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
+            <Link href="/product/how-it-works" style={{ color: "var(--color-primary)" }}>
+              See a governed decision, walked through →
+            </Link>
+          </p>
         </div>
       </section>
 
@@ -622,6 +528,34 @@ async function HomeContent() {
           >
             <EnterpriseStackDiagram />
           </div>
+          <ul className="mt-6 space-y-2">
+            {[
+              { badge: "Preview", text: "Looker semantic evidence on the Alpine golden record" },
+              { badge: "Planned", text: "Snowflake governed semantic views" },
+              { badge: "Planned", text: "Samsara operational readings at decision time" }
+            ].map((row) => (
+              <li key={row.text} className="flex items-center gap-3">
+                <span
+                  style={{
+                    fontFamily: "var(--font-sans)",
+                    fontWeight: 600,
+                    fontSize: "var(--text-xs)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
+                    border: "1px solid var(--color-border)",
+                    borderRadius: 999,
+                    padding: "3px 10px",
+                    color: row.badge === "Preview" ? "var(--color-primary)" : "var(--color-ink-muted)",
+                    background: "var(--color-surface)",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  {row.badge}
+                </span>
+                <span style={{ color: "var(--color-ink-secondary)", fontSize: "var(--text-sm)" }}>{row.text}</span>
+              </li>
+            ))}
+          </ul>
           <p style={{ marginTop: 16, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
             <Link href="/product/reuse-dont-rebuild" style={{ color: "var(--color-primary)" }}>
               Reuse, don&apos;t rebuild →
@@ -653,14 +587,9 @@ async function HomeContent() {
             Architecture
           </p>
           <h2 className="mt-3">Governed decision runtime</h2>
-          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss Loops is the operational substrate where AI-assisted work becomes accountable. Intelligence proposes;
-            loops and guards decide whether a transition may commit; channels carry human oversight; integrations execute
-            only after policy passes. Evidence is recorded at the moment of the decision — not rebuilt from logs later.
-          </p>
 
           <div
-            className="mt-8 rounded-xl border p-6 md:p-8"
+            className="mt-6 rounded-xl border p-6 md:p-8"
             style={{
               borderColor: "var(--color-border)",
               background: "var(--color-surface-alt)"
@@ -727,651 +656,14 @@ async function HomeContent() {
             />
           </div>
 
-          <article
-            className="mt-8"
-            style={{
-              border: "1px solid var(--color-border)",
-              borderRadius: "var(--radius-lg)",
-              background: "var(--color-surface-alt)",
-              padding: "20px 18px"
-            }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "var(--text-xs)",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--color-ink-muted)"
-              }}
-            >
-              Workflows vs Boss Loops
-            </p>
-            <p style={{ marginTop: 10, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
-              <strong style={{ color: "var(--color-ink-primary)" }}>Workflows define the path.</strong>{" "}
-              Temporal, n8n, and application orchestration coordinate durable steps.
-            </p>
-            <p style={{ marginTop: 8, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
-              <strong style={{ color: "var(--color-ink-primary)" }}>Boss Loops governs the transitions.</strong>{" "}
-              Boss Loops decides who may move state, under which guards, with what evidence — before side effects land in
-              your systems.
-            </p>
-            <Link
-              href="/docs/concepts/loop-engine-vs-workflow-engines"
-              className="mt-4 inline-block"
-              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)" }}
-            >
-              Boss Loops vs workflow engines →
+          <p style={{ marginTop: 24, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
+            <Link href="/product/how-it-works" style={{ color: "var(--color-primary)" }}>
+              How it works →
             </Link>
-          </article>
-
-          <article
-            className="mt-8 rounded-xl border p-6 md:p-8"
-            style={{ borderColor: "var(--color-border)", background: "var(--color-surface-alt)" }}
-          >
-            <p
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontWeight: 600,
-                fontSize: "var(--text-xs)",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "var(--color-ink-muted)"
-              }}
-            >
-              Evidence Providers
-            </p>
-            <h3 style={{ marginTop: 10, fontSize: "var(--text-xl)" }}>Consume the semantics you already govern</h3>
-            <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-              Your warehouse and BI investments already define what the numbers mean. Boss Loops attaches that
-              definition to the Decision Record — frozen at capture, with qualification inherited from the source,
-              never asserted by the loop. No re-modeling your business to get there.
-            </p>
-            <ul className="mt-4 space-y-2">
-              {[
-                { badge: "Preview", text: "Looker semantic evidence on the Alpine golden record" },
-                { badge: "Planned", text: "Snowflake governed semantic views" },
-                { badge: "Planned", text: "Samsara operational readings at decision time" }
-              ].map((row) => (
-                <li key={row.text} className="flex items-center gap-3">
-                  <span
-                    style={{
-                      fontFamily: "var(--font-sans)",
-                      fontWeight: 600,
-                      fontSize: "var(--text-xs)",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.06em",
-                      border: "1px solid var(--color-border)",
-                      borderRadius: 999,
-                      padding: "3px 10px",
-                      color: row.badge === "Preview" ? "var(--color-primary)" : "var(--color-ink-muted)",
-                      background: "var(--color-surface)",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
-                    {row.badge}
-                  </span>
-                  <span style={{ color: "var(--color-ink-secondary)", fontSize: "var(--text-sm)" }}>{row.text}</span>
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/docs/concepts/evidence-providers"
-              className="mt-5 inline-block"
-              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)", fontSize: "var(--text-sm)" }}
-            >
-              How Evidence Providers work →
-            </Link>
-          </article>
-
-          <div className="mt-8 flex flex-col items-start gap-3 min-[520px]:flex-row min-[520px]:items-center">
-            <Link
-              href="/docs/getting-started/quick-start"
-              className="inline-flex items-center"
-              style={{
-                background: "var(--color-primary)",
-                color: "#fff",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)"
-              }}
-            >
-              Self-host with the SDK
-            </Link>
-            <Link
-              href="/docs/concepts/runtime-platform-direction"
-              className="inline-flex items-center"
-              style={{
-                border: "1px solid var(--color-border)",
-                color: "var(--color-ink-secondary)",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)"
-              }}
-            >
-              Self-host direction →
-            </Link>
-            <Link
-              href="/docs/cloud"
-              className="inline-flex items-center"
-              style={{
-                border: "1px solid var(--color-border)",
-                color: "var(--color-ink-secondary)",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)"
-              }}
-            >
-              Boss Loops Cloud (hosted) →
-            </Link>
-          </div>
+          </p>
         </div>
       </section>
 
-      {/* Open core — the trust layer */}
-      <section
-        style={{
-          background: "var(--color-surface)",
-          borderTop: "1px solid var(--color-border)",
-          padding: "72px 0"
-        }}
-      >
-        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
-          <p
-            style={{
-              fontFamily: "var(--font-sans)",
-              fontWeight: 600,
-              fontSize: "var(--text-xs)",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--color-primary)"
-            }}
-          >
-            Open core · Apache-2.0
-          </p>
-          <h2 className="mt-3">Governance you can verify, not take on faith</h2>
-          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Anyone can say &ldquo;governed.&rdquo; The Boss Loops engine, the evidence contracts, and the conformance
-            suite are open — inspect them, self-host them, and prove the invariants yourself. The invariants hold in
-            the open engine, not behind a paywall: a consequential decision cannot commit without frozen evidence,
-            recorded provenance, and a record reconstructable from its primary objects.
-          </p>
-          <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Because the conformance suite is an executable artifact, &ldquo;every evidence source in this decision
-            conformed to the contract&rdquo; is a statement your team can verify — not a marketing claim. What the
-            hosted tier adds isn&apos;t the governance. It&apos;s production Evidence Providers, curated policy packs,
-            and the Decision Operations workspace.
-          </p>
-          <p
-            style={{
-              marginTop: 14,
-              maxWidth: 760,
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-xs)",
-              lineHeight: 1.65,
-              color: "var(--color-ink-muted)"
-            }}
-          >
-            Apache-2.0 with explicit patent grant — fully permissive, OSI-approved, patent-safe.
-          </p>
-          <div className="mt-8 flex flex-col items-start gap-3 min-[520px]:flex-row min-[520px]:items-center">
-            <a
-              href={LEGACY.github}
-              rel="noreferrer"
-              target="_blank"
-              className="inline-flex items-center"
-              style={{
-                background: "var(--color-primary)",
-                color: "#fff",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)"
-              }}
-            >
-              Inspect the engine on GitHub
-            </a>
-            <Link
-              href="/docs/getting-started/quick-start"
-              className="inline-flex items-center"
-              style={{
-                border: "1px solid var(--color-border)",
-                color: "var(--color-ink-secondary)",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)"
-              }}
-            >
-              Self-host quick start →
-            </Link>
-            <Link
-              href="/docs/concepts/decision-governance"
-              className="inline-flex items-center"
-              style={{
-                border: "1px solid var(--color-border)",
-                color: "var(--color-ink-secondary)",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)"
-              }}
-            >
-              Why decision governance →
-            </Link>
-            <div className="max-w-full overflow-x-auto">
-              <NpmInstallChip />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section
-        style={{
-          background: "var(--color-surface-alt)",
-          borderTop: "1px solid var(--color-border)",
-          borderBottom: "1px solid var(--color-border)",
-          padding: "72px 0",
-        }}
-      >
-        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-xs)",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--color-primary)",
-            }}
-          >
-            Used with Commerce Gateway
-          </p>
-          <h2 className="mt-3">Governance sits on execution — not beside it</h2>
-          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss Loops governs actions that are executed through Commerce Gateway. It is a control layer for policy, guards,
-            and audit — not a standalone automation tool that replaces your gateway or operators.
-          </p>
-          <div
-            className="mt-8 rounded-xl border p-6"
-            style={{
-              borderColor: "var(--color-border)",
-              background: "var(--color-surface)",
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-sm)",
-              color: "var(--color-ink-secondary)",
-              lineHeight: 1.8,
-            }}
-          >
-            <p className="mb-3" style={{ fontFamily: "var(--font-sans)", fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
-              Commerce Agent pattern (illustrative — a composition, not a separate product):
-            </p>
-            <p>
-              Agent → Registry (discover) → Gateway (execute) → Boss Loops (govern) → Recorded outcome
-            </p>
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href="https://commercegateway.io"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center"
-              style={{
-                background: "var(--color-primary)",
-                color: "#fff",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)",
-              }}
-            >
-              Commerce Gateway
-            </a>
-            <a
-              href={`https://app.betterdata.co/sign-up?utm_source=${LEGACY.domainHost}&utm_medium=site&utm_campaign=oss_handoff`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center"
-              style={{
-                border: "1px solid var(--color-border)",
-                color: "var(--color-ink-secondary)",
-                borderRadius: "var(--radius-sm)",
-                padding: "11px 22px",
-                fontFamily: "var(--font-sans)",
-                fontWeight: 500,
-                fontSize: "var(--text-sm)",
-              }}
-            >
-              Open in Better Data
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section
-        style={{
-          background: "var(--color-surface)",
-          borderTop: "1px solid var(--color-border)",
-          borderBottom: "1px solid var(--color-border)",
-          padding: "72px 0",
-        }}
-      >
-        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-xs)",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--color-primary)",
-            }}
-          >
-            Related from Better Data
-          </p>
-          <h2 className="mt-3">Architecture notes and rollout updates</h2>
-          <p style={{ marginTop: 12, maxWidth: 820, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Boss Loops is Apache-2.0 open operational infrastructure with a first-class path on Better Data. Cross-module
-            architecture updates, hosted path guidance, and launch context are published on the Better Data blog.
-          </p>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-2">
-            {(relatedPosts.length > 0
-              ? relatedPosts
-              : [
-                  {
-                    id: "fallback-1",
-                    title: "From Firefighting to Flow",
-                    slug: "from-firefighting-to-flow",
-                    publishedAt: "2026-01-12T22:28:00.000Z",
-                    tags: ["loop-engine", "architecture"],
-                  },
-                ]
-            ).map((post) => (
-              <a
-                key={post.id}
-                href={`https://betterdata.co/blog/${post.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "var(--radius-lg)",
-                  background: "var(--color-surface-alt)",
-                  padding: "18px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 10,
-                }}
-              >
-                <p style={{ fontSize: "var(--text-lg)", color: "var(--color-ink-primary)" }}>{post.title}</p>
-                <p style={{ color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
-                  {post.publishedAt
-                    ? new Intl.DateTimeFormat("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      }).format(new Date(post.publishedAt))
-                    : "Recent post"}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {(post.tags ?? []).slice(0, 2).map((tag) => (
-                    <span
-                      key={tag}
-                      style={{
-                        border: "1px solid var(--color-border)",
-                        borderRadius: 999,
-                        padding: "3px 8px",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: "var(--text-xs)",
-                        color: "var(--color-ink-secondary)",
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </a>
-            ))}
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-4">
-            <a
-              href={LEGACY.blogTag}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
-            >
-              View related posts →
-            </a>
-            <a
-              href="https://betterdata.co/blog/tags/architecture"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
-            >
-              View architecture posts →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section
-        style={{
-          background: "var(--color-surface-subtle)",
-          borderTop: "1px solid var(--color-border)",
-          borderBottom: "1px solid var(--color-border)",
-          padding: "80px 0"
-        }}
-      >
-        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-xs)",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--color-primary)"
-            }}
-          >
-            Runtime connections
-          </p>
-          <h2 className="mt-3">Three layers, one governance runtime</h2>
-          <p style={{ marginTop: 12, maxWidth: 760, color: "var(--color-ink-tertiary)" }}>
-            <strong>Model Providers</strong> generate intelligence. <strong>Evidence Providers</strong> attach governed
-            evidence. <strong>Channels</strong> coordinate humans. <strong>Integrations</strong> execute against systems
-            of record. They are not interchangeable — Boss Loops governs transitions between them with guards and
-            evidence.
-          </p>
-          <div className="mt-10">
-            <RuntimeLayerStack />
-          </div>
-          <p
-            style={{
-              marginTop: 32,
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-xs)",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: "var(--color-primary)"
-            }}
-          >
-            Featured adapters & patterns
-          </p>
-          <p style={{ marginTop: 8, maxWidth: 760, color: "var(--color-ink-muted)", fontSize: "var(--text-sm)" }}>
-            npm adapters wire each layer into <code>createLoopSystem</code>. Boss Loops is not a generic integration
-            platform or Slack bot.
-          </p>
-          <p
-            style={{
-              marginTop: 14,
-              maxWidth: 760,
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-xs)",
-              lineHeight: 1.65,
-              color: "var(--color-ink-muted)"
-            }}
-          >
-            Apache-2.0 with explicit patent grant — the only governed execution layer in this space with a fully
-            permissive, OSI-approved, patent-safe license. Temporal and Inngest ship under SSPL.
-          </p>
-
-          <div className="mt-8 grid gap-4 lg:grid-cols-3">
-            {integrations.map((integration) => (
-              <article
-                key={integration.name}
-                style={{
-                  background: integration.featured ? "var(--color-surface)" : "var(--color-surface-alt)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "var(--radius-lg)",
-                  padding: integration.featured ? "28px 28px 24px" : "22px 20px",
-                  minHeight: integration.featured ? 260 : 190,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 10
-                }}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <IntegrationLogo name={integration.name} logoPath={integration.logoPath} />
-                    <h3 style={{ fontSize: integration.featured ? "var(--text-xl)" : "var(--text-lg)" }}>
-                      {integration.name}
-                    </h3>
-                  </div>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: "var(--text-xs)",
-                      color: integration.featured ? "var(--color-primary)" : "var(--color-ink-muted)",
-                      border: "1px solid var(--color-border)",
-                      borderRadius: 999,
-                      padding: "4px 10px",
-                      whiteSpace: "nowrap"
-                    }}
-                  >
-                    {integration.badge}
-                  </span>
-                </div>
-                <p style={{ color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>{integration.description}</p>
-                {integration.capabilities?.length ? (
-                  <ul className="mt-1 space-y-2">
-                    {integration.capabilities.map((capability) => (
-                      <li key={capability} className="flex gap-2">
-                        <span style={{ color: "var(--color-primary)" }}>·</span>
-                        <span style={{ color: "var(--color-ink-secondary)", lineHeight: 1.6 }}>{capability}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : null}
-                {integration.docsHref || integration.npmHref ? (
-                  <div className="mt-auto flex flex-col gap-2 pt-2">
-                    {integration.docsHref ? (
-                      <Link
-                        href={integration.docsHref}
-                        style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
-                      >
-                        View integration docs →
-                      </Link>
-                    ) : null}
-                    {integration.npmHref ? (
-                      <a
-                        href={integration.npmHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}
-                      >
-                        {(integration.npmLabel ?? "@loop-engine/adapter-openclaw") + " on npm →"}
-                      </a>
-                    ) : null}
-                  </div>
-                ) : null}
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section style={{ background: "var(--color-surface-dark)", padding: "80px 0" }}>
-        <div className="mx-auto grid w-full max-w-[1200px] gap-8 px-6 md:grid-cols-2 md:px-10">
-          <div>
-            <p
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "var(--text-xs)",
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "var(--color-primary-mid)"
-              }}
-            >
-              Quick start
-            </p>
-            <h2 className="mt-3" style={{ color: "var(--color-code-text)" }}>
-              Running in 60 seconds
-            </h2>
-            <ol className="mt-4 space-y-2" style={{ color: "var(--color-code-text)" }}>
-              <li>
-                <span className="mono">1.</span> Install the SDK
-              </li>
-              <li>
-                <span className="mono">2.</span> Define your loop
-              </li>
-              <li>
-                <span className="mono">3.</span> Start and transition
-              </li>
-              <li>
-                <span className="mono">4.</span> Subscribe to events
-              </li>
-            </ol>
-          </div>
-          <CodeTabs />
-        </div>
-      </section>
-
-      <section style={{ background: "var(--color-surface-alt)", padding: "80px 0" }}>
-        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
-          <h2>Everything you need to build on</h2>
-          <div className="mt-6 grid gap-4 min-[480px]:grid-cols-2 md:grid-cols-4">
-            {packages.map((pkg) => (
-              <Link
-                key={pkg.name}
-                href={`/docs/packages/${pkg.slug}`}
-                style={{
-                  background: "var(--color-surface)",
-                  border: "1px solid var(--color-border)",
-                  borderRadius: "var(--radius-md)",
-                  padding: "20px 24px",
-                  transition: "all var(--dur-fast) var(--ease-out)"
-                }}
-              >
-                <p
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "var(--text-xs)",
-                    color: "var(--color-primary)"
-                  }}
-                >
-                  {pkg.name}
-                </p>
-                <p style={{ fontSize: "var(--text-sm)", color: "var(--color-ink-tertiary)", marginTop: 8 }}>
-                  {pkg.description}
-                </p>
-              </Link>
-            ))}
-          </div>
-          <div className="mt-6">
-            <Link href="/docs/packages" style={{ color: "var(--color-primary)", fontFamily: "var(--font-mono)" }}>
-              View all packages →
-            </Link>
-          </div>
-        </div>
-      </section>
 
       <section style={{ padding: "24px 0", borderTop: "1px solid var(--color-border)" }}>
         <div

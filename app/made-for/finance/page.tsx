@@ -84,41 +84,17 @@ export default function MadeForFinancePage() {
             Every fact that made it defensible.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
-            An invoice enters the queue. What happens next is not a workflow — it&apos;s a
-            record being assembled. Semantic evidence from your analytics layer. Change
-            history from the ERP. Budget context from the plan. The authority that
-            signs. The AI that recommended. The outcome that lands.
+            An invoice enters the queue. What happens next is a record being assembled.
           </p>
 
-          <ol
-            className="mt-10 space-y-4"
-            style={{ counterReset: "step 0" }}
-          >
+          <ol className="mt-10 space-y-4">
             {[
-              {
-                title: "The invoice enters",
-                body: "Vendor, amount, PO reference. Nothing recorded yet — the decision hasn't been made.",
-              },
-              {
-                title: "Semantic evidence is frozen",
-                body: "Looker returns the budget variance, category spend, and vendor tenure at the moment the record opens. That snapshot is the record's — not a live query that could drift.",
-              },
-              {
-                title: "Provenance is attached",
-                body: "NetSuite change history, PO match, and the buying team's Slack thread are attached as source-of-truth references.",
-              },
-              {
-                title: "Authority is explicit",
-                body: "The Approval Matrix determines who signs, based on amount, category, and vendor tier. No manual routing.",
-              },
-              {
-                title: "AI recommends. Human decides.",
-                body: "The recommendation carries its confidence and the exact prompt that produced it. The approver reads the record, not a chat.",
-              },
-              {
-                title: "The Decision Record remains",
-                body: "Committed to the AP system. The record is queryable by policy, by amount, by approver, by any source in its evidence chain — for as long as the record needs to live.",
-              },
+              { title: "The invoice enters", body: "Vendor, amount, PO reference. No decision yet." },
+              { title: "Semantic evidence is frozen", body: "Looker returns budget variance, category spend, and vendor tenure at the moment the record opens." },
+              { title: "Provenance is attached", body: "NetSuite change history, PO match, and the buying-team Slack thread are linked as source-of-truth references." },
+              { title: "Authority is explicit", body: "The Approval Matrix determines who signs — by amount, category, and vendor tier." },
+              { title: "AI recommends. Human decides.", body: "The recommendation carries its confidence and the exact prompt. The approver reads the record, not a chat." },
+              { title: "The Decision Record remains", body: "Committed and queryable by policy, amount, approver, or any source in its evidence chain." },
             ].map((step, idx) => (
               <li
                 key={step.title}
@@ -271,9 +247,7 @@ export default function MadeForFinancePage() {
               className="mt-3 text-[var(--color-ink-secondary)]"
               style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
             >
-              Pick the decision you least want to have to defend later. We&apos;ll wire it
-              to your semantic layer, your ERP, and your approval matrix — and show you
-              the record it produces.
+              Pick the decision you least want to defend later. We wire it to your systems and show you the record it produces.
             </p>
             <a
               href={`${SALES_CONTACT_URL}&cta=${CTA}-pilot`}
@@ -298,8 +272,7 @@ export default function MadeForFinancePage() {
               className="mt-3 text-[var(--color-ink-secondary)]"
               style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
             >
-              The runtime, the SDK, the guards, the actors — all open source. Bring your
-              own systems; run the record inside your infrastructure.
+              Runtime, SDK, guards, actors — Apache-2.0. Run the record inside your infrastructure.
             </p>
             <Link
               href={`/docs/getting-started?cta=${CTA}-oss`}
