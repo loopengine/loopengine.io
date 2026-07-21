@@ -1,5 +1,5 @@
 import { LEGACY, SITE } from "@/lib/site-config";
-import { DEMO_URL, salesContactForTier } from "@/lib/contact-routes";
+import { CONTACT_PAGE, salesContactForTier } from "@/lib/contact-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
@@ -233,7 +233,7 @@ export default function PricingPage() {
               </p>
             </div>
             <a
-              href={DEMO_URL}
+              href={CONTACT_PAGE}
               rel="noopener noreferrer"
               target="_blank"
               style={{
@@ -249,7 +249,7 @@ export default function PricingPage() {
                 textDecoration: "none",
               }}
             >
-              Try the demo
+              Request a demo
             </a>
           </article>
         </div>

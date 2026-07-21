@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { VisualSlot } from "@/components/site/VisualSlot";
-import { CLOUD_START_URL, DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CLOUD_START_URL, CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { SITE } from "@/lib/site-config";
 
 /**
@@ -47,13 +47,13 @@ export default function CloudPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href={`${DEMO_URL}?cta=${CTA}-demo`}
+              href={`${CONTACT_PAGE}?cta=${CTA}-demo`}
               target="_blank"
               rel="noopener noreferrer"
               data-ph-cta={`${CTA}-demo`}
               className="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-6 py-3 font-mono text-sm text-white"
             >
-              Try the demo
+              Request a demo
             </a>
             <a
               href={`${CLOUD_START_URL}?cta=${CTA}-start`}
@@ -177,7 +177,7 @@ export default function CloudPage() {
               className="mt-3 font-[var(--font-display)] text-[var(--color-ink)]"
               style={{ fontSize: "var(--text-xl)" }}
             >
-              Try the demo. Or talk pricing.
+              Request a demo. Or talk pricing.
             </h3>
             <p
               className="mt-3 text-[var(--color-ink-secondary)]"
@@ -188,13 +188,13 @@ export default function CloudPage() {
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <a
-                href={`${DEMO_URL}?cta=${CTA}-buy-demo`}
+                href={`${CONTACT_PAGE}?cta=${CTA}-buy-demo`}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-ph-cta={`${CTA}-buy-demo`}
                 className="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-6 py-3 font-mono text-sm text-white"
               >
-                Try the demo
+                Request a demo
               </a>
               <a
                 href={`${SALES_CONTACT_URL}&cta=${CTA}-buy-sales`}

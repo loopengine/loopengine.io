@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { BossLoopLogo } from "@/components/logo";
-import { CONTACT_PAGE, DEMO_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE } from "@/lib/contact-routes";
 import { LEGACY } from "@/lib/site-config";
 import { inferPageType } from "@/lib/analytics/posthog";
 import { trackOutboundClicked, trackCtaClicked } from "@/lib/analytics/events";
@@ -411,20 +411,20 @@ export function TopNav() {
           </a>
           <a
             className="rounded bg-[var(--color-primary)] px-3 py-1.5 font-medium text-white transition-opacity hover:opacity-90"
-            href={DEMO_URL}
+            href={CONTACT_PAGE}
             target="_blank"
             rel="noopener noreferrer"
             data-ph-cta="try_demo"
             onClick={() =>
               trackOutboundClicked({
                 label: "try_demo",
-                destination: DEMO_URL,
+                destination: CONTACT_PAGE,
                 location: "top_nav_desktop",
                 pageType,
               })
             }
           >
-            Try demo
+            Request a demo
           </a>
         </nav>
 
@@ -517,20 +517,20 @@ export function TopNav() {
               </a>
               <a
                 className="rounded bg-[var(--color-primary)] px-2 py-1.5 text-center font-medium text-white"
-                href={DEMO_URL}
+                href={CONTACT_PAGE}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-ph-cta="try_demo"
                 onClick={() =>
                   trackOutboundClicked({
                     label: "try_demo",
-                    destination: DEMO_URL,
+                    destination: CONTACT_PAGE,
                     location: "top_nav_mobile",
                     pageType,
                   })
                 }
               >
-                Try demo
+                Request a demo
               </a>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -234,7 +234,7 @@ export default function HowItWorksPage() {
               Product overview
             </Link>
             <a
-              href={DEMO_URL}
+              href={CONTACT_PAGE}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center"
@@ -248,7 +248,7 @@ export default function HowItWorksPage() {
                 fontSize: "var(--text-sm)"
               }}
             >
-              Try the demo
+              Request a demo
             </a>
             <a
               href={SALES_CONTACT_URL}

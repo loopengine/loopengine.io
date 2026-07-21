@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { CLOUD_START_URL, DEMO_URL } from "@/lib/contact-routes";
+import { CLOUD_START_URL, CONTACT_PAGE } from "@/lib/contact-routes";
 import { LEGACY } from "@/lib/site-config";
 
 const ROWS = [
-  { label: "Try it", detail: "Alpine walkthrough — no signup", href: DEMO_URL, external: true },
+  { label: "Request a demo", detail: "Alpine walkthrough — no signup", href: CONTACT_PAGE, external: true },
   { label: "Build OSS", detail: "Quick start + GitHub", href: "/docs/getting-started/quick-start", external: false },
   { label: "Run Cloud", detail: "Create your tenant", href: CLOUD_START_URL, external: true },
   { label: "Sign in", detail: "Production workspace", href: LEGACY.cloudUrl, external: true },

@@ -14,7 +14,7 @@ import {
   LOOP_ENGINE_SUPPORTING
 } from "@/lib/betterdata-ecosystem";
 import { SITE, LEGACY, npmPkgUrl } from "@/lib/site-config";
-import { DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { EnterpriseStackDiagram } from "@/components/site/EnterpriseStackDiagram";
 import { WhereToGoStrip } from "@/components/site/WhereToGoStrip";
 
@@ -346,7 +346,7 @@ async function HomeContent() {
               style={{ animationDelay: "280ms" }}
             >
               <a
-                href={DEMO_URL}
+                href={CONTACT_PAGE}
                 rel="noreferrer"
                 target="_blank"
                 className="le-cta-button inline-flex items-center"
@@ -360,7 +360,7 @@ async function HomeContent() {
                   fontSize: "var(--text-sm)"
                 }}
               >
-                Try the demo
+                Request a demo
               </a>
               <a
                 href={SALES_CONTACT_URL}

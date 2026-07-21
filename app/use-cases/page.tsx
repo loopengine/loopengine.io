@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DEMO_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE } from "@/lib/contact-routes";
 
 export const metadata: Metadata = {
   title: "Use cases",
@@ -89,7 +89,7 @@ const catalogLoops: CatalogLoop[] = [
 const highStakesLoops = [
   {
     title: "Settle / Pay exception",
-    href: DEMO_URL,
+    href: CONTACT_PAGE,
     external: true,
     summary:
       "Invoice settlement governance — Alpine supplier invoice (INV-2026-009082). Govern state transitions, exceptions, and overrides with a Decision Record, not a linear routing rule.",
@@ -226,7 +226,7 @@ export default function UseCasesPage() {
                 </div>
               ) : null}
               <a
-                href={DEMO_URL}
+                href={CONTACT_PAGE}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-4 text-sm font-medium text-[var(--color-primary)] hover:underline"

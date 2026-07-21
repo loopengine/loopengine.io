@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { VisualSlot } from "@/components/site/VisualSlot";
 import { EnterpriseStackDiagram } from "@/components/site/EnterpriseStackDiagram";
-import { DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 
 export const metadata: Metadata = {
   title: "Governed Decision Intelligence",
@@ -336,7 +336,7 @@ export default function ProductPage() {
             both — focused on the Decision Governance pillar of the Decision Intelligence market.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <PrimaryCta label="Try the demo" href={DEMO_URL} />
+            <PrimaryCta label="Request a demo" href={CONTACT_PAGE} />
             <SecondaryCta label="See how it works ↓" href="#category" />
           </div>
         </div>
@@ -558,7 +558,7 @@ export default function ProductPage() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href={DEMO_URL}
+              href={CONTACT_PAGE}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center"
@@ -572,7 +572,7 @@ export default function ProductPage() {
                 fontSize: "var(--text-sm)",
               }}
             >
-              Try the demo
+              Request a demo
             </a>
             <a
               href={SALES_CONTACT_URL}
@@ -740,7 +740,7 @@ export default function ProductPage() {
             enterprise software, and it&apos;s the category Boss Loops is built to own.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <PrimaryCta label="Try the demo" href={DEMO_URL} />
+            <PrimaryCta label="Request a demo" href={CONTACT_PAGE} />
             <SecondaryCta label="Talk to us" href={SALES_CONTACT_URL} />
           </div>
         </div>

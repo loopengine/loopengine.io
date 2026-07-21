@@ -9,7 +9,7 @@ import {
 } from "@betterdata/site-links";
 import { BetterDataFooterSocialIcons } from "@betterdata/site-links/social-icons";
 import { BossLoopLogo } from "@/components/logo";
-import { CONTACT_PAGE, DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { LEGACY } from "@/lib/site-config";
 
 type FooterLink = { label: string; href: string; external?: boolean };
@@ -18,7 +18,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
   {
     title: "Product",
     links: [
-      { label: "Try demo", href: DEMO_URL, external: true },
+      { label: "Request a demo", href: CONTACT_PAGE, external: true },
       { label: "Pricing", href: "/pricing" },
       { label: "Boss Loops Cloud", href: "/docs/cloud" },
       { label: "Evidence Providers", href: "/docs/concepts/evidence-providers" },

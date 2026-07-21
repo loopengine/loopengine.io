@@ -1,4 +1,4 @@
-import { DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import type { Metadata } from "next";
 import { VisualSlot } from "@/components/site/VisualSlot";
 import { OverlayArchitectureDiagram } from "@/components/site/OverlayArchitectureDiagram";
@@ -304,7 +304,7 @@ export default function ReuseDontRebuildPage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Cta primary label="Get started" href="https://registry.betterdata.co/boss-loops/cloud/start" />
-            <Cta label="Try the demo" href={DEMO_URL} primary />
+            <Cta label="Request a demo" href={CONTACT_PAGE} primary />
             <Cta label="Talk to us" href={SALES_CONTACT_URL} />
           </div>
         </div>
