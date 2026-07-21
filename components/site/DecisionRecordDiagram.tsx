@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import { FidelityBadge } from "./FidelityBadge";
+import { ALPINE_ACTORS } from "@/lib/alpine";
 
 /**
  * Illustrative rendering of a Boss Loops Decision Record.
@@ -56,7 +57,7 @@ const SCENARIOS: Record<"invoice" | "incident", ScenarioContent> = {
       { source: "NetSuite", claim: "PO reference", value: "PO-8814 matched, 3-way" },
       { source: "Slack", claim: "Buying team approval thread", value: "#procurement, 4 acks" },
     ],
-    authorityName: "alpine-finance",
+    authorityName: ALPINE_ACTORS.finance,
     authorityRole: "",
     authorityPolicy: "Approval Matrix v3.2 · Tier B",
     aiRecommendation: "Approve · confidence 0.94",
@@ -80,7 +81,7 @@ const SCENARIOS: Record<"invoice" | "incident", ScenarioContent> = {
       { source: "Runbook", claim: "api-checkout-timeout match", value: "confidence 0.91" },
       { source: "Datadog", claim: "DB connection pool", value: "saturated · 87%" },
     ],
-    authorityName: "Priya Nair · On-call Tier 1",
+    authorityName: ALPINE_ACTORS.ops,
     authorityRole: "",
     authorityPolicy: "Runbook-Escalation-v2 · api-checkout",
     aiRecommendation: "Recommend Sev-2 · confidence 0.89",
