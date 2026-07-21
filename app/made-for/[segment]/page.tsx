@@ -15,7 +15,12 @@ type RouteParams = { segment: string };
 export const dynamicParams = false;
 
 export function generateStaticParams(): RouteParams[] {
-  return MADE_FOR_SEGMENTS.map((s) => ({ segment: s.slug }));
+  // `finance` is served by the dedicated `app/made-for/finance/page.tsx`
+  // (decision-led bespoke page). Exclude it here so the static route wins
+  // cleanly without build-time duplication.
+  return MADE_FOR_SEGMENTS
+    .filter((s) => s.slug !== "finance")
+    .map((s) => ({ segment: s.slug }));
 }
 
 export async function generateMetadata({

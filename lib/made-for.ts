@@ -6,11 +6,11 @@
  * "talk to us" stub so the section never ships thin pages.
  */
 
-const CONTACT_EMAIL = "oss@betterdata.co";
+import { SALES_CONTACT_URL } from "@/lib/contact-routes";
 
-/** Build a tracked "talk to us" mailto for a segment. */
-function talkHref(slug: string, subject: string): string {
-  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+/** Build sales contact link for a segment stub. */
+function talkHref(_slug: string, _subject: string): string {
+  return SALES_CONTACT_URL;
 }
 
 export type MadeForJob = { title: string; body: string };
@@ -80,30 +80,30 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
   {
     slug: "compliance",
     status: "live",
-    label: "Compliance & risk",
-    audience: "For compliance & risk",
+    label: "Risk & stewardship",
+    audience: "For risk & stewardship",
     headline: "Every AI action, traceable. Every decision, accountable.",
-    pain: "Your teams are piloting AI against regulated processes. Your job is to make sure it can be governed, evidenced, and defended.",
+    pain: "Your teams are deploying AI on consequential operations. Your job is stewardship — making sure every transition can be governed, evidenced, and defended when scrutiny arrives.",
     summary:
-      "Structural governance, tamper-evident evidence, and a queryable chain of custody on every AI-assisted decision.",
+      "Structural governance, durable evidence, and a queryable chain of custody on every AI-assisted decision — composable with the compliance programs you already run.",
     jobs: [
       {
         title: "Governance that's structural, not promised",
         body: "Approval gates and policy guards run at the moment of transition. They can't be prompt-injected away or disabled by a clever instruction.",
       },
       {
-        title: "Tamper-evident evidence on every transition",
-        body: "Inputs, confidence, approvals, and citations are captured at decision time — an append-only record built for SOC 2, HIPAA, and EU AI Act review, not reconstructed from chat logs.",
+        title: "Durable evidence on every transition",
+        body: "Inputs, confidence, approvals, and citations are frozen at decision time — an append-only record your GRC stack can consume, not reconstructed from chat logs.",
       },
       {
-        title: "Answer the auditor's question in one query",
-        body: "Who acted, under what policy, with what evidence, and when. The full chain of custody is queryable.",
+        title: "Answer the hard question in one query",
+        body: "Who acted, under what policy, with what evidence, and when. The full chain of custody is queryable — whether the ask comes from audit, legal, or the board.",
       },
     ],
     before:
       "AI decisions live in opaque chat transcripts with no attribution and no enforceable controls.",
     after:
-      "Every material decision is governed by policy, attributed to an actor, and backed by durable evidence you can hand to an auditor.",
+      "Every material decision is governed by policy, attributed to an actor, and backed by durable evidence your stewardship programs can rely on.",
     proof:
       "Apache-2.0 with an explicit patent grant — a permissive, OSI-approved license your legal team can clear.",
     primaryCtaLabel: "Read the governance model",
@@ -124,14 +124,41 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
   },
   {
     slug: "finance",
-    status: "soon",
-    label: "Finance operations",
-    audience: "For finance operations",
-    headline: "Controls strong enough to put AI on the ledger.",
-    pain: "AP, AR, and reconciliation are controls-heavy and mistakes cost real money. AI can help — if it can be governed.",
-    summary: "Governed AI execution for controls-heavy finance operations. Coming soon.",
-    talkLabel: "Talk to us about finance ops",
-    talkHref: talkHref("finance", "Boss Loops for finance operations"),
+    status: "live",
+    label: "Finance",
+    audience: "For finance",
+    headline:
+      "For finance teams responsible for decisions that must move quickly and remain defensible.",
+    pain:
+      "Every approval, override, and forecast is one auditor question away from being your problem. Move fast. Keep the record.",
+    summary:
+      "One invoice, every fact that made it defensible. The governed record every finance team will eventually be asked for — plus pricing, spend, vendor risk, and forecast.",
+    // The dedicated app/made-for/finance/page.tsx renders the actual page.
+    // These live-mode fields exist so the hub card renders as live (no "Coming
+    // soon" badge) and the shared segment metadata stays consistent.
+    jobs: [
+      {
+        title: "Assemble the record, don't reconstruct it",
+        body: "Semantic evidence, provenance, budget context, and approval are captured at the moment of decision — not stitched together later from logs.",
+      },
+      {
+        title: "Move fast where the record is clean",
+        body: "High-confidence, in-policy work flows; only exceptions ask for a human. The record explains both.",
+      },
+      {
+        title: "Answer for it in one query",
+        body: "Every decision is queryable by policy, amount, approver, or any source in its evidence chain — for as long as the record needs to live.",
+      },
+    ],
+    before:
+      "Invoice approvals live across email, Slack, and spreadsheets. When someone asks how a decision was made, you go find it.",
+    after:
+      "Every finance decision — invoice, pricing, spend, vendor, forecast — is a governed record with the evidence, authority, and outcome attached.",
+    proof: "Anchored on the Alpine invoice-approval scenario shown in the live Boss Loops product.",
+    primaryCtaLabel: "See a governed decision",
+    primaryCtaHref: "/#governed-decision",
+    talkLabel: "Design a pilot",
+    talkHref: talkHref("finance", "Boss Loops for finance"),
   },
   {
     slug: "platform-teams",
