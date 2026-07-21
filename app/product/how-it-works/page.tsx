@@ -1,7 +1,19 @@
 import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { VisualSlot } from "@/components/site/VisualSlot";
+import { LoopStateMachineDiagram } from "@/components/site/LoopStateMachineDiagram";
+import { DecisionRecordDiagram } from "@/components/site/DecisionRecordDiagram";
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
+
+/**
+ * Inline visuals available today for specific concepts. Slots without an
+ * entry here render the labeled dashed placeholder from VisualSlot.
+ */
+const CONCEPT_VISUALS: Record<string, ReactNode> = {
+  "decision-loops": <LoopStateMachineDiagram />,
+  evidence: <DecisionRecordDiagram scenario="invoice" />,
+};
 
 export const metadata: Metadata = {
   title: "How it works — the Boss Loops engine, in plain English",
@@ -40,8 +52,8 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/concepts/what-is-a-loop",
     docsLabel: "What is a loop",
     image: {
-      label: "Diagram or screenshot — a decision loop's state machine (Alpine supplier invoice)",
-      caption: "Recommended: the Alpine invoice loop shown as states + transitions (OPENED → PENDING_APPROVAL → APPROVED / REJECTED / ESCALATED), with the active guards annotated on the PENDING_APPROVAL → APPROVED transition."
+      label: "Diagram — a decision loop's state machine (Alpine supplier invoice)",
+      caption: "The Alpine supplier invoice loop. Active guards on the governed happy-path transition are annotated below the diagram — a transition that doesn't satisfy them doesn't commit."
     }
   },
   {
@@ -150,8 +162,8 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/concepts/evidence-providers",
     docsLabel: "Evidence Providers",
     image: {
-      label: "Screenshot — evidence row on the Alpine Decision Record (Looker semantic evidence)",
-      caption: "Recommended: the evidence row expanded on the Alpine invoice record — value, source definition, freshness, provenance, and qualification, all frozen at the moment the decision was made."
+      label: "The Alpine Decision Record",
+      caption: "The Alpine supplier invoice Decision Record — evidence rows are frozen at the moment they inform the decision, with definitions inherited from the source. Same record shown across the site."
     }
   },
   {
@@ -246,7 +258,9 @@ export default function HowItWorksPage() {
               </p>
             ))}
             {concept.image ? (
-              <VisualSlot label={concept.image.label} caption={concept.image.caption} />
+              <VisualSlot label={concept.image.label} caption={concept.image.caption}>
+                {CONCEPT_VISUALS[concept.slug] ?? undefined}
+              </VisualSlot>
             ) : null}
             <p style={{ marginTop: 20, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
               Go deeper:{" "}
