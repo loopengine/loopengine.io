@@ -11,6 +11,7 @@ import {
   type Partner,
 } from "@/lib/partners";
 import { LOOP_ENGINE_PRIMARY, LOOP_ENGINE_SUPPORTING } from "@/lib/betterdata-ecosystem";
+import { SALES_CONTACT_URL } from "@/lib/contact-routes";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -173,38 +174,64 @@ export default function PartnersPage() {
 
   return (
     <main>
-      {/* Hero */}
+      {/* Hero — design-partner first */}
       <section className="border-b border-[var(--color-border)] px-4 py-14 md:py-20">
-        <div className="mx-auto max-w-6xl">
-          <Eyebrow>Runtime ecosystem</Eyebrow>
-          <h1 className="mt-3 max-w-4xl font-[var(--font-display)] text-[var(--text-4xl)] text-[var(--color-ink)]">
-            Partners in a governed operational runtime
+        <div className="mx-auto max-w-4xl">
+          <Eyebrow>Design partners</Eyebrow>
+          <h1
+            className="mt-3 max-w-3xl font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-4xl)]"
+            style={{ letterSpacing: "-0.02em", lineHeight: 1.05 }}
+          >
+            One decision. One pilot. One record you can defend.
           </h1>
-          <p className="mt-4 max-w-3xl text-base leading-7 text-[var(--color-ink-secondary)]">{LOOP_ENGINE_SUPPORTING}</p>
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-[var(--color-ink-tertiary)]">
-            {LOOP_ENGINE_PRIMARY} Boss Loops governs <strong>transitions</strong> between intelligence, human
-            coordination, and operational systems — with deterministic guards, structured evidence, and human oversight
-            on every material state change.
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
+            We work with a small number of teams designing pilots around a single, consequential
+            decision. We wire it to your semantic layer, your systems of record, and your approval
+            matrix — then hand you back the governed record it produces.
           </p>
-          <p className="mt-4 max-w-3xl font-mono text-xs leading-6 text-[var(--color-ink-muted)]">
-            This is a runtime ecosystem — not an integration marketplace. Workflows define paths; loops govern whether
-            transitions commit.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4 text-sm">
-            <Link href="/docs/concepts/runtime-taxonomy" className="text-[var(--color-primary)] underline underline-offset-4">
-              Runtime taxonomy →
-            </Link>
-            <Link href="/docs/getting-started/architecture" className="text-[var(--color-primary)] underline underline-offset-4">
-              Architecture →
-            </Link>
-            <Link href="/use-cases" className="text-[var(--color-primary)] underline underline-offset-4">
-              Operational patterns →
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <a
+              href={`${SALES_CONTACT_URL}&cta=partners-hero-pilot`}
+              data-ph-cta="partners-hero-pilot"
+              className="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-6 py-3 font-mono text-sm text-white"
+            >
+              Design a pilot →
+            </a>
+            <Link
+              href="#ecosystem"
+              className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
+            >
+              See the ecosystem below ↓
             </Link>
           </div>
+          <p className="mt-6 max-w-2xl font-mono text-xs leading-6 text-[var(--color-ink-muted)]">
+            Building an adapter, not deploying? The runtime taxonomy and partner program are further
+            down.
+          </p>
         </div>
       </section>
 
       {/* Runtime ecosystem explanation */}
+      <section
+        id="ecosystem"
+        className="border-b border-[var(--color-border)] px-4 py-14"
+        style={{ background: "var(--color-surface-subtle)" }}
+      >
+        <div className="mx-auto mb-8 max-w-6xl">
+          <p className="max-w-3xl text-sm leading-7 text-[var(--color-ink-tertiary)]">
+            {LOOP_ENGINE_SUPPORTING} {LOOP_ENGINE_PRIMARY} Boss Loops governs{" "}
+            <strong>transitions</strong> between intelligence, human coordination, and operational
+            systems — with deterministic guards, structured evidence, and human oversight on every
+            material state change.
+          </p>
+          <p className="mt-4 max-w-3xl font-mono text-xs leading-6 text-[var(--color-ink-muted)]">
+            This is a runtime ecosystem — not an integration marketplace. Workflows define paths;
+            loops govern whether transitions commit.
+          </p>
+        </div>
+      </section>
+
+      {/* Runtime ecosystem visual */}
       <section
         className="border-b border-[var(--color-border)] px-4 py-14"
         style={{ background: "var(--color-surface-subtle)" }}
@@ -454,29 +481,62 @@ export default function PartnersPage() {
               <PartnerCard key={partner.slug} partner={partner} />
             ))}
           </div>
-          <div className="mt-12 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-8">
-            <Eyebrow>Partner program</Eyebrow>
-            <h2 className="mt-2 font-[var(--font-display)] text-2xl text-[var(--color-ink)]">
-              Build on the governed runtime
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--color-ink-secondary)]">
-              For companies shipping Model Providers, Evidence Providers, Channels, or Integrations that participate
-              in Boss Loops in production — not generic marketplace listings.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-4">
+          {/* Split by audience: design partners (buyer) vs technical partners (builder) */}
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            <article className="rounded-xl border border-[var(--color-primary)] bg-[var(--color-primary-light)] p-6">
+              <Eyebrow>For design partners</Eyebrow>
+              <h3
+                className="mt-2 font-[var(--font-display)] text-[var(--color-ink)]"
+                style={{ fontSize: "var(--text-xl)" }}
+              >
+                Design a pilot around a named decision.
+              </h3>
+              <p
+                className="mt-3 text-[var(--color-ink-secondary)]"
+                style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
+              >
+                We work with a small number of teams designing pilots around a single, consequential
+                decision — invoice approval, incident routing, exception overrides, and beyond.
+              </p>
               <a
-                className="inline-block rounded-lg bg-[var(--color-primary)] px-5 py-2.5 text-sm font-medium text-white"
-                href="mailto:partners@betterdata.co"
+                className="mt-6 inline-flex items-center rounded-lg bg-[var(--color-primary)] px-6 py-3 font-mono text-sm text-white"
+                href={`${SALES_CONTACT_URL}&cta=partners-footer-pilot`}
+                data-ph-cta="partners-footer-pilot"
               >
-                Become a partner
+                Design a pilot →
               </a>
-              <Link
-                href="/docs/governance/rfc-process"
-                className="inline-block rounded-lg border border-[var(--color-border)] px-5 py-2.5 text-sm text-[var(--color-ink-secondary)]"
+            </article>
+
+            <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
+              <Eyebrow>For technical partners</Eyebrow>
+              <h3
+                className="mt-2 font-[var(--font-display)] text-[var(--color-ink)]"
+                style={{ fontSize: "var(--text-xl)" }}
               >
-                RFC process →
-              </Link>
-            </div>
+                Ship a Model Provider, Evidence Provider, Channel, or Integration.
+              </h3>
+              <p
+                className="mt-3 text-[var(--color-ink-secondary)]"
+                style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
+              >
+                For companies whose products participate in Boss Loops decisions in production —
+                not generic marketplace listings.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
+                  href="mailto:partners@betterdata.co"
+                >
+                  Become a partner
+                </a>
+                <Link
+                  href="/docs/governance/rfc-process"
+                  className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
+                >
+                  RFC process →
+                </Link>
+              </div>
+            </article>
           </div>
         </div>
       </section>
