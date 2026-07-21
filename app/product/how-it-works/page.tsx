@@ -1,4 +1,5 @@
 import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { VisualSlot } from "@/components/site/VisualSlot";
 import type { Metadata } from "next";
 import Link from "next/link";
 
@@ -15,6 +16,15 @@ type Concept = {
   paragraphs: string[];
   docsHref: string;
   docsLabel: string;
+  /**
+   * Illustrative image for this concept. Ships as a labeled placeholder
+   * (VisualSlot without `src`); swap in a real screenshot by adding a file
+   * under public/screenshots/ and passing `src` here.
+   */
+  image?: {
+    label: string;
+    caption: string;
+  };
 };
 
 const CONCEPTS: Concept[] = [
@@ -28,7 +38,11 @@ const CONCEPTS: Concept[] = [
       "Under the hood a loop is a finite-state machine, which is what makes it enforceable — a transition either satisfies the rules or it does not commit. But the state machine is the mechanism, not the point. The point is that the decision, not the task, is the object your organization manages."
     ],
     docsHref: "/docs/concepts/what-is-a-loop",
-    docsLabel: "What is a loop"
+    docsLabel: "What is a loop",
+    image: {
+      label: "Diagram or screenshot — a decision loop's state machine (Alpine supplier invoice)",
+      caption: "Recommended: the Alpine invoice loop shown as states + transitions (OPENED → PENDING_APPROVAL → APPROVED / REJECTED / ESCALATED), with the active guards annotated on the PENDING_APPROVAL → APPROVED transition."
+    }
   },
   {
     slug: "loops-vs-workflows",
@@ -41,7 +55,11 @@ const CONCEPTS: Concept[] = [
       "Signal → Boss Loops governs the commit → transition approved → your workflow engine executes the downstream pipeline. Temporal, n8n, Salesforce — unchanged. Boss Loops is the brains before the muscle."
     ],
     docsHref: "/docs/concepts/what-is-a-loop",
-    docsLabel: "What is a loop"
+    docsLabel: "What is a loop",
+    image: {
+      label: "Diagram — Signal → Boss Loops governs the commit → workflow engine executes",
+      caption: "Recommended: a horizontal flow showing the signal on the left, Boss Loops (with guards + evidence + actors) in the middle, and downstream execution engines (Temporal / n8n / Salesforce) on the right, labeled 'unchanged'."
+    }
   },
   {
     slug: "actors",
@@ -53,7 +71,11 @@ const CONCEPTS: Concept[] = [
       "It also means governance doesn't care how the work gets done. Shift a decision from human review to AI recommendation to partial automation over time — the attribution, guards, and audit trail stay identical. Autonomy becomes a dial you turn, not a rewrite."
     ],
     docsHref: "/docs/concepts/actor-model",
-    docsLabel: "The actor model"
+    docsLabel: "The actor model",
+    image: {
+      label: "Screenshot — actor attribution on the Alpine Decision Record (human · automation · AI)",
+      caption: "Recommended: the Actor row on the Alpine invoice record — Sam Patel (Controller) approving, the AI actor (gpt-4o with prompt hash + confidence 0.94), and any automation actor that advanced state — all rendered with the same attribution shape."
+    }
   },
   {
     slug: "guards",
@@ -65,7 +87,11 @@ const CONCEPTS: Concept[] = [
       "This is what \"governance is the substrate\" means in practice: the rules aren't a review meeting or a wiki page. They execute."
     ],
     docsHref: "/docs/concepts/guards-and-policy",
-    docsLabel: "Guards & policy"
+    docsLabel: "Guards & policy",
+    image: {
+      label: "Screenshot — a blocked transition with the failing guard visible",
+      caption: "Recommended: an Alpine record showing a transition that failed policy (e.g. AI confidence 0.72 below the 0.90 floor). The record captures the guard name, why it fired, and who reviewed the denial — same fidelity as an approval."
+    }
   },
   {
     slug: "signals",
@@ -76,7 +102,11 @@ const CONCEPTS: Concept[] = [
       "In Boss Loops, that change is a signal, and a signal opens the right decision loop directly: a lot-release review, an invoice approval, a replenishment decision — with the relevant evidence already attaching. The difference sounds small and isn't. An alert asks \"did anyone see this?\" A signal asks \"what did we decide about this?\" — and guarantees there will be an answer on the record."
     ],
     docsHref: "/docs/concepts/signals",
-    docsLabel: "Signals"
+    docsLabel: "Signals",
+    image: {
+      label: "Screenshot — a signal opening the right loop with evidence pre-attached",
+      caption: "Recommended: a signal card (e.g. temperature excursion, invoice over threshold) with the resulting decision loop opening beneath it and the relevant evidence already visible on the record — not an alert queue."
+    }
   },
   {
     slug: "events",
@@ -87,7 +117,11 @@ const CONCEPTS: Concept[] = [
       "Because events are structured contracts rather than log lines, they're dependable enough to build on: your systems can react to decisions the way they react to transactions, and anyone reviewing a decision later can replay its history without reconstructing it from chat scrollback."
     ],
     docsHref: "/docs/packages/events",
-    docsLabel: "Event contracts"
+    docsLabel: "Event contracts",
+    image: {
+      label: "Screenshot or diagram — a loop's event stream, replay-ready",
+      caption: "Recommended: the timeline of a single Alpine decision — signal received, evidence attached, transition proposed, guards evaluated, transition committed — each row a structured event with actor + timestamp."
+    }
   },
   {
     slug: "adapters",
@@ -98,7 +132,11 @@ const CONCEPTS: Concept[] = [
       "The layers are deliberately not interchangeable. Intelligence can't write to your CRM directly; a chat channel is never the system of record; execution never precedes policy. That separation is what lets you adopt AI aggressively at the recommendation layer while the blast radius of a wrong answer stays bounded."
     ],
     docsHref: "/docs/integrations",
-    docsLabel: "Adapters & integrations"
+    docsLabel: "Adapters & integrations",
+    image: {
+      label: "Diagram — the adapter taxonomy (Model Providers · Channels · Integrations)",
+      caption: "Recommended: three horizontal bands — top row Model Providers (Claude, GPT, Gemini, Grok), middle row Channels (Slack, Teams, OpenClaw), bottom row Integrations (PagerDuty, Postgres, HTTP APIs) — with the governance layer running across all three."
+    }
   },
   {
     slug: "evidence",
@@ -110,7 +148,11 @@ const CONCEPTS: Concept[] = [
       "Qualification travels with the evidence — how governed the definition is, how attestable the provenance — inherited from the source, never asserted by whoever built the loop. A decision can require \"a governed metric and an origin-attested reading,\" and the engine enforces it."
     ],
     docsHref: "/docs/concepts/evidence-providers",
-    docsLabel: "Evidence Providers"
+    docsLabel: "Evidence Providers",
+    image: {
+      label: "Screenshot — evidence row on the Alpine Decision Record (Looker semantic evidence)",
+      caption: "Recommended: the evidence row expanded on the Alpine invoice record — value, source definition, freshness, provenance, and qualification, all frozen at the moment the decision was made."
+    }
   },
   {
     slug: "loop-catalog",
@@ -121,7 +163,11 @@ const CONCEPTS: Concept[] = [
       "As your own decision systems mature, they join the catalog too: institutional judgment, versioned and reusable, that survives the person who designed it."
     ],
     docsHref: "/catalog",
-    docsLabel: "Browse the catalog"
+    docsLabel: "Browse the catalog",
+    image: {
+      label: "Screenshot — the loop catalog grid (supplier invoice, purchase approval, returns triage, credit review)",
+      caption: "Recommended: the catalog surface as a grid of loop templates — each card showing the loop name, participant taxonomy, evidence requirements, and a 'Use as template' action."
+    }
   }
 ];
 
@@ -199,7 +245,10 @@ export default function HowItWorksPage() {
                 {para}
               </p>
             ))}
-            <p style={{ marginTop: 16, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
+            {concept.image ? (
+              <VisualSlot label={concept.image.label} caption={concept.image.caption} />
+            ) : null}
+            <p style={{ marginTop: 20, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
               Go deeper:{" "}
               <Link href={concept.docsHref} style={{ color: "var(--color-primary)" }}>
                 {concept.docsLabel} →
