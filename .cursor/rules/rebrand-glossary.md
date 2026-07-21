@@ -88,11 +88,18 @@ underlying resource is renamed/published **breaks installs and links**.
 
 Frozen Track-B tokens (leave exactly as-is unless a maintainer says otherwise):
 - npm scope `@loop-engine/*` and any `npm`/`pnpm`/`docker` install or `import`
-  snippets. **NOTE: this scope is RETAINED BY DECISION, not pending rename** —
-  the confirmed naming map is *Boss Loops OSS (`@loop-engine/*`, Apache-2.0)*.
-  Do not "helpfully" rename it to `@boss-loops/*`; there is no such flip planned.
+  snippets. **STATUS CHANGE (2026-07-09): the loop-engine mark is in phased,
+  trademark-driven wind-down.** The `@bossloops` npm scope and `bossloops`
+  GitHub org are claimed; a full flip `@loop-engine/*` → `@bossloops/*` is
+  PLANNED (timeline set by counsel) and ships as one coordinated migration
+  with the GitHub org rename — never piecemeal, never ad-hoc. Until then:
+  existing `@loop-engine/*` references stay frozen exactly as-is, and **no NEW
+  loop-engine-branded surfaces may be created** (packages, repos, domains,
+  handles, slugs).
 - GitHub `github.com/loopengine/...` (org `loopengine`, repos `loop-engine`,
-  `loop-examples`) — no rename decided; stays until a maintainer says otherwise.
+  `loop-examples`) — same wind-down: org renames to `bossloops` in the Phase-1
+  migration (with the vacated `loopengine` name re-registered as a placeholder);
+  frozen until that migration executes.
 - Domain `loopengine.io` legacy tokens and emails at it (e.g.
   `conduct@loopengine.io`). **`bossloops.io` is live and serves this site** —
   the domain flip is real but runs through the Track-B go-live steps below
