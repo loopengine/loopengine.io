@@ -58,13 +58,13 @@ const MENUS: NavMenu[] = [
       },
       {
         label: "Evidence Providers",
-        href: "/docs/concepts/evidence-providers",
+        href: "/product/evidence-providers",
         description: "Looker, Snowflake, and Samsara evidence — frozen at capture.",
         badge: "New",
       },
       {
         label: "Boss Loops Cloud",
-        href: "/docs/cloud",
+        href: "/product/cloud",
         description: "The hosted tier — managed runtime, tenancy, audit exports.",
       },
     ],
