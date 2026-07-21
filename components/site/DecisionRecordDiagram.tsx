@@ -56,7 +56,7 @@ const SCENARIOS: Record<"invoice" | "incident", ScenarioContent> = {
       { source: "NetSuite", claim: "PO reference", value: "PO-8814 matched, 3-way" },
       { source: "Slack", claim: "Buying team approval thread", value: "#procurement, 4 acks" },
     ],
-    authorityName: "Sam Patel · Controller",
+    authorityName: "alpine-finance",
     authorityRole: "",
     authorityPolicy: "Approval Matrix v3.2 · Tier B",
     aiRecommendation: "Approve · confidence 0.94",
