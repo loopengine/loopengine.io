@@ -14,12 +14,15 @@ type RouteParams = { segment: string };
 // Closed set of segments — anything else is a 404, no on-demand rendering.
 export const dynamicParams = false;
 
+/** Segments that have a dedicated decision-led page overriding this template. */
+const BESPOKE_SLUGS = new Set(["finance", "operations"]);
+
 export function generateStaticParams(): RouteParams[] {
-  // `finance` is served by the dedicated `app/made-for/finance/page.tsx`
-  // (decision-led bespoke page). Exclude it here so the static route wins
+  // Bespoke slugs are served by their own static pages under
+  // app/made-for/<slug>/page.tsx. Exclude them here so the static route wins
   // cleanly without build-time duplication.
   return MADE_FOR_SEGMENTS
-    .filter((s) => s.slug !== "finance")
+    .filter((s) => !BESPOKE_SLUGS.has(s.slug))
     .map((s) => ({ segment: s.slug }));
 }
 

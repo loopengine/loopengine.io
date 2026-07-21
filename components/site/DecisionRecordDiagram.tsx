@@ -8,9 +8,14 @@ import { FidelityBadge } from "./FidelityBadge";
  * record contains: the decision, the evidence chain, the authority, the AI
  * actor, and the outcome — arranged as they appear in the real product.
  *
- * Ships with the Alpine invoice-approval scenario by default. When a real
- * screenshot from the Alpine environment is available, prefer passing it to
- * `<VisualSlot src=... />` instead of rendering this component.
+ * Ships two Alpine canonical seeded scenarios:
+ *   - `scenario="invoice"` (default): Finance / invoice-approval — Aegis
+ *     Semantics vendor. Used on /made-for/finance.
+ *   - `scenario="incident"`: Operations / incident-routing — API latency
+ *     Sev-2 escalation. Used on /made-for/operations.
+ *
+ * When a real Alpine screenshot is available for either scenario, prefer
+ * passing it to `<VisualSlot src=... />` instead of rendering this component.
  *
  * Any use of this component must be accompanied by a fidelity badge (rendered
  * inline in the top-right of the card) and the seeded-scenario disclosure line
@@ -19,13 +24,93 @@ import { FidelityBadge } from "./FidelityBadge";
 
 type EvidenceRow = { source: string; claim: string; value: string };
 
-export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
-  const evidence: EvidenceRow[] = [
-    { source: "Looker", claim: "Budget variance vs. plan", value: "−3.1% MTD" },
-    { source: "NetSuite", claim: "Vendor tenure", value: "4.2 years, no disputes" },
-    { source: "NetSuite", claim: "PO reference", value: "PO-8814 matched, 3-way" },
-    { source: "Slack", claim: "Buying team approval thread", value: "#procurement, 4 acks" },
-  ];
+type ScenarioContent = {
+  recordId: string;
+  status: string;
+  timestamp: string;
+  decisionLine: React.ReactNode;
+  evidence: EvidenceRow[];
+  authorityName: string;
+  authorityRole: string;
+  authorityPolicy: string;
+  aiRecommendation: string;
+  aiConfidence: string;
+  aiModel: string;
+  outcome: string;
+};
+
+const SCENARIOS: Record<"invoice" | "incident", ScenarioContent> = {
+  invoice: {
+    recordId: "DR-2831",
+    status: "Approved",
+    timestamp: "12 Nov 2026 · 14:03 UTC",
+    decisionLine: (
+      <>
+        Approve invoice <span style={{ fontFamily: "var(--font-mono)" }}>INV-4291</span> for{" "}
+        <span style={{ fontFamily: "var(--font-mono)" }}>$12,847.00</span> from Aegis Semantics.
+      </>
+    ),
+    evidence: [
+      { source: "Looker", claim: "Budget variance vs. plan", value: "−3.1% MTD" },
+      { source: "NetSuite", claim: "Vendor tenure", value: "4.2 years, no disputes" },
+      { source: "NetSuite", claim: "PO reference", value: "PO-8814 matched, 3-way" },
+      { source: "Slack", claim: "Buying team approval thread", value: "#procurement, 4 acks" },
+    ],
+    authorityName: "Sam Patel · Controller",
+    authorityRole: "",
+    authorityPolicy: "Approval Matrix v3.2 · Tier B",
+    aiRecommendation: "Approve · confidence 0.94",
+    aiConfidence: "",
+    aiModel: "gpt-4o · prompt hash 8f22…",
+    outcome: "Committed to NetSuite AP · notification sent to vendor and buying team.",
+  },
+  incident: {
+    recordId: "DR-3047",
+    status: "Escalated",
+    timestamp: "14 Nov 2026 · 09:18 UTC",
+    decisionLine: (
+      <>
+        Page on-call · <span style={{ fontFamily: "var(--font-mono)" }}>api-checkout</span> P95
+        latency spike · classify Sev-2.
+      </>
+    ),
+    evidence: [
+      { source: "Grafana", claim: "P95 latency vs. baseline", value: "12s → 42s · 6 min" },
+      { source: "PagerDuty", claim: "Similar incidents · 90 d", value: "3 seen · avg TTR 22 min" },
+      { source: "Runbook", claim: "api-checkout-timeout match", value: "confidence 0.91" },
+      { source: "Datadog", claim: "DB connection pool", value: "saturated · 87%" },
+    ],
+    authorityName: "Priya Nair · On-call Tier 1",
+    authorityRole: "",
+    authorityPolicy: "Runbook-Escalation-v2 · api-checkout",
+    aiRecommendation: "Recommend Sev-2 · confidence 0.89",
+    aiConfidence: "",
+    aiModel: "gpt-4o · prompt hash 4c19…",
+    outcome:
+      "PagerDuty incident opened · Slack war-room #inc-3047 · runbook attached to record.",
+  },
+};
+
+const STATUS_TONE: Record<string, { bg: string; fg: string }> = {
+  Approved: {
+    bg: "var(--color-primary-light, #ecfdf5)",
+    fg: "var(--color-primary-dark, #065f46)",
+  },
+  Escalated: {
+    bg: "var(--color-surface-alt, #fef3c7)",
+    fg: "var(--color-ink, #78350f)",
+  },
+};
+
+export function DecisionRecordDiagram({
+  scenario = "invoice",
+  style,
+}: {
+  scenario?: "invoice" | "incident";
+  style?: CSSProperties;
+}) {
+  const s = SCENARIOS[scenario];
+  const tone = STATUS_TONE[s.status] ?? STATUS_TONE.Approved;
 
   return (
     <div
@@ -59,7 +144,7 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
               letterSpacing: "0.06em",
             }}
           >
-            DR-2831
+            {s.recordId}
           </span>
           <span
             style={{
@@ -67,15 +152,15 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
               alignItems: "center",
               padding: "2px 8px",
               borderRadius: 999,
-              background: "var(--color-primary-light, #ecfdf5)",
-              color: "var(--color-primary-dark, #065f46)",
+              background: tone.bg,
+              color: tone.fg,
               fontFamily: "var(--font-mono)",
               fontSize: 10,
               textTransform: "uppercase",
               letterSpacing: "0.08em",
             }}
           >
-            Approved
+            {s.status}
           </span>
           <span
             style={{
@@ -84,7 +169,7 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
               color: "var(--color-ink-muted)",
             }}
           >
-            12 Nov 2026 · 14:03 UTC
+            {s.timestamp}
           </span>
         </div>
         <FidelityBadge kind="seeded" />
@@ -112,8 +197,7 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
             lineHeight: 1.35,
           }}
         >
-          Approve invoice <span style={{ fontFamily: "var(--font-mono)" }}>INV-4291</span>{" "}
-          for <span style={{ fontFamily: "var(--font-mono)" }}>$12,847.00</span> from Aegis Semantics.
+          {s.decisionLine}
         </p>
       </div>
 
@@ -128,10 +212,10 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
             color: "var(--color-ink-muted)",
           }}
         >
-          Evidence · 4 sources
+          Evidence · {s.evidence.length} sources
         </p>
         <ul style={{ margin: "10px 0 0", padding: 0, listStyle: "none" }}>
-          {evidence.map((row) => (
+          {s.evidence.map((row) => (
             <li
               key={`${row.source}-${row.claim}`}
               style={{
@@ -194,9 +278,9 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
               lineHeight: 1.5,
             }}
           >
-            Sam Patel · Controller
+            {s.authorityName}
             <br />
-            <span style={{ color: "var(--color-ink-muted)" }}>Approval Matrix v3.2 · Tier B</span>
+            <span style={{ color: "var(--color-ink-muted)" }}>{s.authorityPolicy}</span>
           </p>
         </div>
         <div>
@@ -219,9 +303,9 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
               lineHeight: 1.5,
             }}
           >
-            Approve · confidence 0.94
+            {s.aiRecommendation}
             <br />
-            <span style={{ color: "var(--color-ink-muted)" }}>gpt-4o · prompt hash 8f22…</span>
+            <span style={{ color: "var(--color-ink-muted)" }}>{s.aiModel}</span>
           </p>
         </div>
       </div>
@@ -247,7 +331,7 @@ export function DecisionRecordDiagram({ style }: { style?: CSSProperties }) {
             lineHeight: 1.5,
           }}
         >
-          Committed to NetSuite AP · notification sent to vendor and buying team.
+          {s.outcome}
         </p>
       </div>
     </div>

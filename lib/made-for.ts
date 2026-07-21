@@ -47,35 +47,41 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
   {
     slug: "operations",
     status: "live",
-    label: "Operations leaders",
-    audience: "For operations leaders",
-    headline: "Scale operational execution without losing control of it.",
-    pain: "You're told to do more with AI. You can't afford a hallucinated invoice, a rogue refund, or an action nobody can explain.",
+    label: "Operations",
+    audience: "For operations",
+    headline:
+      "For operations teams responsible for the decisions that keep the day moving.",
+    pain:
+      "Every incident, every exception, every override is a decision. Move fast. Keep the record.",
     summary:
-      "Put AI to work on real operational execution behind hard guardrails, human gates, and a full audit trail.",
+      "One incident, every fact that shaped the escalation. The governed record every operations team will eventually be asked for — plus change approvals, exceptions, dispatch, and capacity.",
+    // The dedicated app/made-for/operations/page.tsx renders the actual page.
+    // These live-mode fields exist so the hub card renders as live (no "Coming
+    // soon" badge) and the shared segment metadata stays consistent.
     jobs: [
       {
-        title: "Put AI to work behind hard guardrails",
-        body: "AI proposes operational actions; deterministic guards decide whether they commit. Policy runs in the runtime — not in a prompt that can be talked past.",
+        title: "Assemble the record, don't reconstruct it",
+        body: "Signal evidence, similar-incident context, blast radius, and escalation are captured at the moment of decision — not stitched together from logs later.",
       },
       {
-        title: "Keep a human in the loop where it matters",
-        body: "Route high-risk transitions to the right approver in Slack, Teams, or email, and let low-risk, high-confidence work flow automatically.",
+        title: "Move fast where the record is clean",
+        body: "High-confidence, in-policy work flows; only exceptions ask for a human. The record explains both.",
       },
       {
-        title: "Prove what happened, every time",
-        body: "Every action is attributed to a named actor and stamped with evidence. When leadership or an auditor asks 'who approved this?', you have the answer.",
+        title: "Answer for it in one query",
+        body: "Every decision is queryable by policy, service, responder, or any source in its evidence chain — for as long as the record needs to live.",
       },
     ],
     before:
-      "AI is stuck in the productivity layer — it drafts and advises, but can't safely touch your systems of record.",
+      "Incidents live in Slack, PagerDuty history, and dashboards. When someone asks how the call was made, you go find it.",
     after:
-      "AI executes real operational work inside explicit boundaries, with a human gate on anything risky and an audit trail on everything.",
-    proof: "Runs in production operational systems on the Better Data platform.",
-    primaryCtaLabel: "See how it works",
-    primaryCtaHref: "/docs/getting-started",
-    talkLabel: "Talk to the team",
-    talkHref: talkHref("operations", "Boss Loops for operations leaders"),
+      "Every operations decision — incident, change, exception, dispatch, capacity — is a governed record with the evidence, authority, and outcome attached.",
+    proof:
+      "Anchored on the Alpine incident-routing scenario shown in the live Boss Loops product.",
+    primaryCtaLabel: "See a governed decision",
+    primaryCtaHref: "/#governed-decision",
+    talkLabel: "Design a pilot",
+    talkHref: talkHref("operations", "Boss Loops for operations"),
   },
   {
     slug: "compliance",
