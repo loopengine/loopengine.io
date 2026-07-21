@@ -3,68 +3,88 @@ import { FidelityBadge } from "./FidelityBadge";
 import { ALPINE_ACTORS } from "@/lib/alpine";
 
 /**
- * Illustrative rendering of a Boss Loops Decision Record.
+ * Rendering of a Boss Loops Decision Record.
  *
- * NOT a screenshot. A stylized structural view of what a governed decision
- * record contains: the decision, the evidence chain, the authority, the AI
- * actor, and the outcome — arranged as they appear in the real product.
+ * Two scenarios:
  *
- * Ships two Alpine canonical seeded scenarios:
- *   - `scenario="invoice"` (default): Finance / invoice-approval — Aegis
- *     Semantics vendor. Used on /made-for/finance.
- *   - `scenario="incident"`: Operations / incident-routing — API latency
- *     Sev-2 escalation. Used on /made-for/operations.
+ *   - `scenario="invoice"` (default): the real Alpine record INV-2026-004521
+ *     (Acme Industrial Supply · Supplier Invoice Approval · Completed). Fields
+ *     and participants match what the actual Story tab shows in the Alpine
+ *     reference environment. Prefer swapping in a real screenshot via
+ *     <VisualSlot src=... />; this component is the fallback rendering.
  *
- * When a real Alpine screenshot is available for either scenario, prefer
- * passing it to `<VisualSlot src=... />` instead of rendering this component.
+ *   - `scenario="incident"`: STILL ILLUSTRATIVE. No real ops-side record has
+ *     been captured yet, so this scenario ships with placeholder specifics
+ *     (api-checkout, DR-3047, "confidence 0.89"). When a real Alpine ops
+ *     record is available, rewrite this block against it — same rule as the
+ *     invoice: no invented product content on Alpine surfaces.
  *
  * Any use of this component must be accompanied by a fidelity badge (rendered
  * inline in the top-right of the card) and the seeded-scenario disclosure line
  * near the surface.
  */
 
-type EvidenceRow = { source: string; claim: string; value: string };
+type BusinessObjectRow = { source: string; claim: string; value: string };
+
+type Participant = { name: string; role: string; action: string };
 
 type ScenarioContent = {
   recordId: string;
   status: string;
   timestamp: string;
   decisionLine: React.ReactNode;
-  evidence: EvidenceRow[];
-  authorityName: string;
-  authorityRole: string;
-  authorityPolicy: string;
-  aiRecommendation: string;
-  aiConfidence: string;
-  aiModel: string;
+  /** Section label above the row grid — "Business Object" or "Evidence". */
+  detailLabel: string;
+  detail: BusinessObjectRow[];
+  /** Named actors on the record. When present, replaces the authority + AI grid. */
+  participants?: Participant[];
+  /** Fallback fields for scenarios not yet rewritten to the participants shape. */
+  authorityName?: string;
+  authorityPolicy?: string;
+  aiRecommendation?: string;
+  aiModel?: string;
   outcome: string;
 };
 
 const SCENARIOS: Record<"invoice" | "incident", ScenarioContent> = {
   invoice: {
-    recordId: "DR-2831",
-    status: "Approved",
-    timestamp: "12 Nov 2026 · 14:03 UTC",
+    recordId: "INV-2026-004521",
+    status: "Completed",
+    timestamp: "Received Monday 8:42 AM",
     decisionLine: (
       <>
-        Approve invoice <span style={{ fontFamily: "var(--font-mono)" }}>INV-4291</span> for{" "}
-        <span style={{ fontFamily: "var(--font-mono)" }}>$12,847.00</span> from Aegis Semantics.
+        Sarah Chen — Case file complete. Release for payment.
       </>
     ),
-    evidence: [
-      { source: "Looker", claim: "Budget variance vs. plan", value: "−3.1% MTD" },
-      { source: "NetSuite", claim: "Vendor tenure", value: "4.2 years, no disputes" },
-      { source: "NetSuite", claim: "PO reference", value: "PO-8814 matched, 3-way" },
-      { source: "Slack", claim: "Buying team approval thread", value: "#procurement, 4 acks" },
+    detailLabel: "Business object",
+    detail: [
+      { source: "Supplier", claim: "Acme Industrial Supply", value: "Hydraulic Components" },
+      { source: "Invoice", claim: "INV-2026-004521", value: "$12,481.70 · Net 30" },
+      { source: "Purchase order", claim: "PO-11983", value: "Fort Collins Plant" },
+      { source: "Received", claim: "Monday 8:42 AM", value: "Supplier Invoice Approval" },
     ],
-    authorityName: ALPINE_ACTORS.finance,
-    authorityRole: "",
-    authorityPolicy: "Approval Matrix v3.2 · Tier B",
-    aiRecommendation: "Approve · confidence 0.94",
-    aiConfidence: "",
-    aiModel: "gpt-4o · prompt hash 8f22…",
-    outcome: "Committed to NetSuite AP · notification sent to vendor and buying team.",
+    participants: [
+      {
+        name: "Sarah Chen",
+        role: "VP Operations",
+        action: "Case file complete. Release for payment.",
+      },
+      {
+        name: "Claude",
+        role: "Decision assistant",
+        action: "Claude reviewed. Confidence High.",
+      },
+      {
+        name: "David Okonkwo",
+        role: "Controller",
+        action: "Hold for Finance; freight not on PO-11983.",
+      },
+    ],
+    outcome: "Released for payment.",
   },
+  // ILLUSTRATIVE — no real Alpine ops record has been captured yet. Rewrite
+  // against the real record when it's available (same rule as the invoice
+  // scenario: no invented product content on Alpine surfaces).
   incident: {
     recordId: "DR-3047",
     status: "Escalated",
@@ -75,17 +95,16 @@ const SCENARIOS: Record<"invoice" | "incident", ScenarioContent> = {
         latency spike · classify Sev-2.
       </>
     ),
-    evidence: [
+    detailLabel: "Evidence",
+    detail: [
       { source: "Grafana", claim: "P95 latency vs. baseline", value: "12s → 42s · 6 min" },
       { source: "PagerDuty", claim: "Similar incidents · 90 d", value: "3 seen · avg TTR 22 min" },
       { source: "Runbook", claim: "api-checkout-timeout match", value: "confidence 0.91" },
       { source: "Datadog", claim: "DB connection pool", value: "saturated · 87%" },
     ],
     authorityName: ALPINE_ACTORS.ops,
-    authorityRole: "",
     authorityPolicy: "Runbook-Escalation-v2 · api-checkout",
     aiRecommendation: "Recommend Sev-2 · confidence 0.89",
-    aiConfidence: "",
     aiModel: "gpt-4o · prompt hash 4c19…",
     outcome:
       "PagerDuty incident opened · Slack war-room #inc-3047 · runbook attached to record.",
@@ -94,6 +113,10 @@ const SCENARIOS: Record<"invoice" | "incident", ScenarioContent> = {
 
 const STATUS_TONE: Record<string, { bg: string; fg: string }> = {
   Approved: {
+    bg: "var(--color-primary-light, #ecfdf5)",
+    fg: "var(--color-primary-dark, #065f46)",
+  },
+  Completed: {
     bg: "var(--color-primary-light, #ecfdf5)",
     fg: "var(--color-primary-dark, #065f46)",
   },
@@ -202,7 +225,7 @@ export function DecisionRecordDiagram({
         </p>
       </div>
 
-      {/* Evidence */}
+      {/* Business object / Evidence (structured captured content) */}
       <div style={{ padding: "16px 0 14px", borderBottom: "1px solid var(--color-border)" }}>
         <p
           style={{
@@ -213,15 +236,15 @@ export function DecisionRecordDiagram({
             color: "var(--color-ink-muted)",
           }}
         >
-          Evidence · {s.evidence.length} sources
+          {s.detailLabel}
         </p>
         <ul style={{ margin: "10px 0 0", padding: 0, listStyle: "none" }}>
-          {s.evidence.map((row) => (
+          {s.detail.map((row) => (
             <li
               key={`${row.source}-${row.claim}`}
               style={{
                 display: "grid",
-                gridTemplateColumns: "minmax(84px, auto) minmax(120px, 1fr) auto",
+                gridTemplateColumns: "minmax(112px, auto) minmax(120px, 1fr) auto",
                 gap: 12,
                 alignItems: "baseline",
                 padding: "6px 0",
@@ -249,17 +272,9 @@ export function DecisionRecordDiagram({
         </ul>
       </div>
 
-      {/* Authority + AI actor */}
-      <div
-        style={{
-          padding: "16px 0 14px",
-          borderBottom: "1px solid var(--color-border)",
-          display: "grid",
-          gap: 14,
-          gridTemplateColumns: "1fr 1fr",
-        }}
-      >
-        <div>
+      {/* Participants — named actor rows (real Alpine records) */}
+      {s.participants ? (
+        <div style={{ padding: "16px 0 14px", borderBottom: "1px solid var(--color-border)" }}>
           <p
             style={{
               fontFamily: "var(--font-mono)",
@@ -269,47 +284,81 @@ export function DecisionRecordDiagram({
               color: "var(--color-ink-muted)",
             }}
           >
-            Authority
+            Participants · {s.participants.length}
           </p>
-          <p
-            style={{
-              marginTop: 4,
-              fontSize: "var(--text-sm)",
-              color: "var(--color-ink)",
-              lineHeight: 1.5,
-            }}
-          >
-            {s.authorityName}
-            <br />
-            <span style={{ color: "var(--color-ink-muted)" }}>{s.authorityPolicy}</span>
-          </p>
+          <ul style={{ margin: "10px 0 0", padding: 0, listStyle: "none" }}>
+            {s.participants.map((p) => (
+              <li
+                key={p.name}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "minmax(140px, auto) 1fr",
+                  gap: 12,
+                  alignItems: "baseline",
+                  padding: "8px 0",
+                  borderTop: "1px dashed var(--color-border)",
+                }}
+              >
+                <span style={{ fontSize: "var(--text-sm)", color: "var(--color-ink)" }}>
+                  <strong style={{ fontWeight: 600 }}>{p.name}</strong>
+                  <span style={{ color: "var(--color-ink-muted)" }}> · {p.role}</span>
+                </span>
+                <span style={{ fontSize: "var(--text-sm)", color: "var(--color-ink-secondary)" }}>
+                  {p.action}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
-        <div>
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              color: "var(--color-ink-muted)",
-            }}
-          >
-            AI recommendation
-          </p>
-          <p
-            style={{
-              marginTop: 4,
-              fontSize: "var(--text-sm)",
-              color: "var(--color-ink)",
-              lineHeight: 1.5,
-            }}
-          >
-            {s.aiRecommendation}
-            <br />
-            <span style={{ color: "var(--color-ink-muted)" }}>{s.aiModel}</span>
-          </p>
+      ) : (
+        // Legacy scenarios not yet rewritten with a real record.
+        <div
+          style={{
+            padding: "16px 0 14px",
+            borderBottom: "1px solid var(--color-border)",
+            display: "grid",
+            gap: 14,
+            gridTemplateColumns: "1fr 1fr",
+          }}
+        >
+          <div>
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                color: "var(--color-ink-muted)",
+              }}
+            >
+              Authority
+            </p>
+            <p style={{ marginTop: 4, fontSize: "var(--text-sm)", color: "var(--color-ink)", lineHeight: 1.5 }}>
+              {s.authorityName}
+              <br />
+              <span style={{ color: "var(--color-ink-muted)" }}>{s.authorityPolicy}</span>
+            </p>
+          </div>
+          <div>
+            <p
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                color: "var(--color-ink-muted)",
+              }}
+            >
+              AI recommendation
+            </p>
+            <p style={{ marginTop: 4, fontSize: "var(--text-sm)", color: "var(--color-ink)", lineHeight: 1.5 }}>
+              {s.aiRecommendation}
+              <br />
+              <span style={{ color: "var(--color-ink-muted)" }}>{s.aiModel}</span>
+            </p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Outcome */}
       <div style={{ padding: "16px 0 6px" }}>

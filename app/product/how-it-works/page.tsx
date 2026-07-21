@@ -97,7 +97,7 @@ const CONCEPTS: Concept[] = [
     docsLabel: "The actor model",
     image: {
       label: "Screenshot — actor attribution on the Alpine Decision Record (human · automation · AI)",
-      caption: "Recommended: the Actor row on the Alpine invoice record — the alpine-finance authority approving, the AI actor (gpt-4o with prompt hash + confidence 0.94), and any automation actor that advanced state — all rendered with the same attribution shape."
+      caption: "Recommended: the Participants row on Alpine record INV-2026-004521 — Sarah Chen (VP Operations, 'Case file complete. Release for payment.'), Claude (Decision assistant, 'Claude reviewed. Confidence High.'), and David Okonkwo (Controller, 'Hold for Finance; freight not on PO-11983.') — three attributed actors on one row."
     }
   },
   {
