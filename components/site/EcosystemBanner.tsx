@@ -7,7 +7,7 @@ export function EcosystemBanner() {
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-center gap-2 px-4 py-2 text-center sm:flex-row sm:gap-4 sm:text-left">
         <p className="max-w-3xl text-[11px] leading-snug text-[var(--color-ink-secondary)] sm:text-xs">{ECOSYSTEM_STRIP}</p>
         <Link
-          href="/docs/cloud"
+          href="/product/cloud"
           className="shrink-0 text-[11px] font-semibold text-[var(--color-primary)] underline-offset-2 hover:underline sm:text-xs"
         >
           Explore Boss Loops Cloud →

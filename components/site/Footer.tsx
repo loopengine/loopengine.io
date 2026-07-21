@@ -20,7 +20,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: "Request a demo", href: CONTACT_PAGE, external: true },
       { label: "Pricing", href: "/pricing" },
-      { label: "Boss Loops Cloud", href: "/docs/cloud" },
+      { label: "Boss Loops Cloud", href: "/product/cloud" },
       { label: "Evidence Providers", href: "/docs/concepts/evidence-providers" },
       { label: "Partners", href: "/partners" },
     ],
