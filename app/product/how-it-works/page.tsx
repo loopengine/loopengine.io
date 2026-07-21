@@ -29,13 +29,19 @@ type Concept = {
   docsHref: string;
   docsLabel: string;
   /**
-   * Illustrative image for this concept. Ships as a labeled placeholder
-   * (VisualSlot without `src`); swap in a real screenshot by adding a file
-   * under public/screenshots/ and passing `src` here.
+   * Illustrative image for this concept.
+   * - Without `src` (and without an entry in `CONCEPT_VISUALS`): renders as a
+   *   labeled dashed placeholder from VisualSlot with the shot recommendation.
+   * - With `src`: renders the real screenshot / diagram from
+   *   public/screenshots/.
+   * - Concepts with an inline React visual (see `CONCEPT_VISUALS`) render
+   *   that instead — no `src` needed.
    */
   image?: {
     label: string;
     caption: string;
+    src?: string;
+    alt?: string;
   };
 };
 
@@ -69,8 +75,10 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/concepts/what-is-a-loop",
     docsLabel: "What is a loop",
     image: {
-      label: "Diagram — Signal → Boss Loops governs the commit → workflow engine executes",
-      caption: "Recommended: a horizontal flow showing the signal on the left, Boss Loops (with guards + evidence + actors) in the middle, and downstream execution engines (Temporal / n8n / Salesforce) on the right, labeled 'unchanged'."
+      label: "Workflow vs. State Machine vs. Decision Loop",
+      caption: "Signal enters. Boss Loops governs the commit — guards, state machine, evidence, actors. Downstream execution (Temporal, n8n, Salesforce) runs unchanged.",
+      src: "/screenshots/workflow-vs-loop.png",
+      alt: "Workflow vs. State Machine vs. Decision Loop — a signal enters Boss Loops for a governed decision; state-machine enforcement, guards, evidence, and actors govern the commit; downstream workflow engines execute unchanged."
     }
   },
   {
@@ -258,7 +266,12 @@ export default function HowItWorksPage() {
               </p>
             ))}
             {concept.image ? (
-              <VisualSlot label={concept.image.label} caption={concept.image.caption}>
+              <VisualSlot
+                label={concept.image.label}
+                caption={concept.image.caption}
+                src={concept.image.src}
+                alt={concept.image.alt}
+              >
                 {CONCEPT_VISUALS[concept.slug] ?? undefined}
               </VisualSlot>
             ) : null}
