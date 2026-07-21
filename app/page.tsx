@@ -460,7 +460,7 @@ async function HomeContent() {
 
       {/* The Decision Record — the object we sell */}
       <section
-        id="decisions-deserve-a-system-of-record"
+        id="governed-decision"
         style={{
           background: "var(--color-surface)",
           borderTop: "1px solid var(--color-border)",
