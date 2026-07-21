@@ -3,15 +3,22 @@ import type { ReactNode } from "react";
 
 /**
  * Screenshot / visual slot for marketing pages.
- * - With `src`: renders the framed screenshot (drop PNGs in public/screenshots/).
- * - Without `src`: renders a labeled placeholder so pages can ship copy-complete
- *   while assets are captured. Swap = add the file + src prop, nothing else.
+ * - With `src` (default variant="screenshot"): renders the framed screenshot with
+ *   mac-style browser chrome — appropriate for real product screenshots.
+ * - With `src` and `variant="diagram"`: renders the image with a simple bordered
+ *   card, no chrome — appropriate for diagrams and illustrations that shouldn't
+ *   read as UI captures.
+ * - Without `src` (and without children): renders a labeled placeholder so pages
+ *   can ship copy-complete while assets are captured.
+ * - With `children`: renders inline JSX (diagram components) with the same
+ *   plain card treatment as variant="diagram".
  */
 export function VisualSlot({
   src,
   alt,
   label,
   caption,
+  variant = "screenshot",
   children,
 }: {
   src?: string;
@@ -20,6 +27,8 @@ export function VisualSlot({
   label: string;
   /** One-line caption rendered under the visual (real or placeholder). */
   caption?: string;
+  /** "screenshot" wraps the image in browser chrome; "diagram" is chrome-free. */
+  variant?: "screenshot" | "diagram";
   /** Optional inline-built visual (diagram JSX) instead of an image. */
   children?: ReactNode;
 }) {
@@ -36,6 +45,24 @@ export function VisualSlot({
           }}
         >
           {children}
+        </div>
+      ) : src && variant === "diagram" ? (
+        <div
+          style={{
+            border: "1px solid var(--color-border)",
+            borderRadius: "var(--radius-lg)",
+            overflow: "hidden",
+            background: "var(--color-surface)",
+            boxShadow: "0 1px 3px rgba(15, 23, 42, 0.06)",
+          }}
+        >
+          <Image
+            src={src}
+            alt={alt ?? label}
+            width={1600}
+            height={900}
+            style={{ width: "100%", height: "auto", display: "block" }}
+          />
         </div>
       ) : src ? (
         <div

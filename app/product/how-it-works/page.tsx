@@ -42,6 +42,8 @@ type Concept = {
     caption: string;
     src?: string;
     alt?: string;
+    /** Chrome-free frame for diagrams; browser-style chrome for real screenshots. */
+    variant?: "screenshot" | "diagram";
   };
 };
 
@@ -78,7 +80,8 @@ const CONCEPTS: Concept[] = [
       label: "Workflow vs. State Machine vs. Decision Loop",
       caption: "Signal enters. Boss Loops governs the commit — guards, state machine, evidence, actors. Downstream execution (Temporal, n8n, Salesforce) runs unchanged.",
       src: "/screenshots/workflow-vs-loop.png",
-      alt: "Workflow vs. State Machine vs. Decision Loop — a signal enters Boss Loops for a governed decision; state-machine enforcement, guards, evidence, and actors govern the commit; downstream workflow engines execute unchanged."
+      alt: "Workflow vs. State Machine vs. Decision Loop — a signal enters Boss Loops for a governed decision; state-machine enforcement, guards, evidence, and actors govern the commit; downstream workflow engines execute unchanged.",
+      variant: "diagram"
     }
   },
   {
@@ -271,6 +274,7 @@ export default function HowItWorksPage() {
                 caption={concept.image.caption}
                 src={concept.image.src}
                 alt={concept.image.alt}
+                variant={concept.image.variant}
               >
                 {CONCEPT_VISUALS[concept.slug] ?? undefined}
               </VisualSlot>
