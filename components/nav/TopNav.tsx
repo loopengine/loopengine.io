@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, ExternalLink } from "lucide-react";
 import { BossLoopLogo } from "@/components/logo";
-import { CONTACT_PAGE, DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE, DEMO_URL } from "@/lib/contact-routes";
 import { LEGACY } from "@/lib/site-config";
 import { inferPageType } from "@/lib/analytics/posthog";
 import { trackOutboundClicked, trackCtaClicked } from "@/lib/analytics/events";
@@ -32,7 +32,7 @@ type NavMenu = {
 const MENUS: NavMenu[] = [
   {
     label: "Product",
-    matchPrefixes: ["/product", "/partners"],
+    matchPrefixes: ["/product"],
     columns: 2,
     links: [
       {
@@ -52,13 +52,8 @@ const MENUS: NavMenu[] = [
         description: "Loops, actors, guards, signals — in plain English.",
       },
       {
-        label: "Four pillars",
-        href: "/product#pillars",
-        description: "Capture, Govern, Intelligence, Operate.",
-      },
-      {
         label: "The Decision Record",
-        href: "/product#decision-record",
+        href: "/#governed-decision",
         description: "One auditable artifact behind every consequential decision.",
       },
       {
@@ -66,11 +61,6 @@ const MENUS: NavMenu[] = [
         href: "/docs/concepts/evidence-providers",
         description: "Looker, Snowflake, and Samsara evidence — frozen at capture.",
         badge: "New",
-      },
-      {
-        label: "Integrations",
-        href: "/partners",
-        description: "Model Providers, Evidence Providers, channels, and systems of record.",
       },
       {
         label: "Boss Loops Cloud",
@@ -89,9 +79,14 @@ const MENUS: NavMenu[] = [
         description: "Where decision loops pay off first.",
       },
       {
-        label: "Operations leaders",
+        label: "For finance",
+        href: "/made-for/finance",
+        description: "Invoice approval, pricing, spend, vendor risk, forecast.",
+      },
+      {
+        label: "For operations",
         href: "/made-for/operations",
-        description: "Scale execution without losing control of it.",
+        description: "Incidents, change, exceptions, dispatch, capacity.",
       },
       {
         label: "Risk & stewardship",
@@ -106,8 +101,8 @@ const MENUS: NavMenu[] = [
     ],
   },
   {
-    label: "Developers",
-    matchPrefixes: ["/catalog"],
+    label: "Resources",
+    matchPrefixes: ["/docs", "/catalog", "/partners", "/contact"],
     columns: 2,
     links: [
       {
@@ -121,14 +116,14 @@ const MENUS: NavMenu[] = [
         description: "Runnable loops you can copy.",
       },
       {
-        label: "Packages",
-        href: "/docs/packages",
-        description: "SDK, runtime, and adapters.",
-      },
-      {
         label: "Loop catalog",
         href: "/catalog",
         description: "Browse ready-made decision loops.",
+      },
+      {
+        label: "Partners",
+        href: "/partners",
+        description: "Model Providers, Evidence Providers, channels, integrations.",
       },
       {
         label: "Changelog",
@@ -137,20 +132,9 @@ const MENUS: NavMenu[] = [
         external: true,
       },
       {
-        label: "GitHub",
-        href: LEGACY.github,
-        description: "Source, issues, and discussions.",
-        external: true,
-      },
-      {
-        label: "Contributing",
-        href: "/docs/governance/contributing",
-        description: "How to contribute to the project.",
-      },
-      {
-        label: "RFC process",
-        href: "/docs/governance/rfc-process",
-        description: "How changes get proposed and decided.",
+        label: "Contact",
+        href: CONTACT_PAGE,
+        description: "Talk to the team.",
       },
     ],
   },
@@ -159,10 +143,7 @@ const MENUS: NavMenu[] = [
 type FlatItem = { label: string; href: string; matchPrefix: string; external?: boolean };
 
 const FLAT_ITEMS: FlatItem[] = [
-  { label: "Demo", href: DEMO_URL, matchPrefix: "/demo", external: true },
   { label: "Pricing", href: "/pricing", matchPrefix: "/pricing" },
-  { label: "Contact", href: CONTACT_PAGE, matchPrefix: "/contact" },
-  { label: "Docs", href: "/docs", matchPrefix: "/docs" },
 ];
 
 function navLinkClass(active: boolean): string {
@@ -412,24 +393,7 @@ export function TopNav() {
             ),
           )}
           <a
-            className="rounded border border-[var(--color-border)] px-3 py-1.5 font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-alt)]"
-            href={LEGACY.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-ph-cta="github"
-            onClick={() =>
-              trackOutboundClicked({
-                label: "github",
-                destination: LEGACY.github,
-                location: "top_nav_desktop",
-                pageType,
-              })
-            }
-          >
-            GitHub
-          </a>
-          <a
-            className="rounded border border-[var(--color-border)] px-3 py-1.5 font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-alt)]"
+            className="text-[var(--color-ink-secondary)] transition-colors hover:text-[var(--color-ink)]"
             href={LEGACY.cloudUrl}
             target="_blank"
             rel="noopener noreferrer"
@@ -444,23 +408,6 @@ export function TopNav() {
             }
           >
             Sign in
-          </a>
-          <a
-            className="rounded border border-[var(--color-border)] px-3 py-1.5 font-medium text-[var(--color-ink)] transition-colors hover:bg-[var(--color-surface-alt)]"
-            href={SALES_CONTACT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-ph-cta="talk_to_us"
-            onClick={() =>
-              trackOutboundClicked({
-                label: "talk_to_us",
-                destination: SALES_CONTACT_URL,
-                location: "top_nav_desktop",
-                pageType,
-              })
-            }
-          >
-            Talk to us
           </a>
           <a
             className="rounded bg-[var(--color-primary)] px-3 py-1.5 font-medium text-white transition-opacity hover:opacity-90"
@@ -553,23 +500,6 @@ export function TopNav() {
               </div>
               <a
                 className="rounded border border-[var(--color-border)] px-2 py-1.5 text-center font-medium text-[var(--color-ink)]"
-                href={LEGACY.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-ph-cta="github"
-                onClick={() =>
-                  trackOutboundClicked({
-                    label: "github",
-                    destination: LEGACY.github,
-                    location: "top_nav_mobile",
-                    pageType,
-                  })
-                }
-              >
-                GitHub
-              </a>
-              <a
-                className="rounded border border-[var(--color-border)] px-2 py-1.5 text-center font-medium text-[var(--color-ink)]"
                 href={LEGACY.cloudUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -584,15 +514,6 @@ export function TopNav() {
                 }
               >
                 Sign in
-              </a>
-              <a
-                className="rounded border border-[var(--color-border)] px-2 py-1.5 text-center font-medium text-[var(--color-ink)]"
-                href={SALES_CONTACT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-ph-cta="talk_to_us"
-              >
-                Talk to us
               </a>
               <a
                 className="rounded bg-[var(--color-primary)] px-2 py-1.5 text-center font-medium text-white"
