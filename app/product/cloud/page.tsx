@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: `${SITE.cloudName} · ${SITE.brandName}`,
     description:
-      "Same engine as Boss Loops OSS. Better Data runs scale, isolation, upgrades, and metering.",
+      "Same engine underneath. Better Data runs scale, isolation, upgrades, and metering.",
   },
 };
 
@@ -78,12 +78,12 @@ export default function CloudPage() {
             className="mt-3 font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-3xl)]"
             style={{ letterSpacing: "-0.02em", lineHeight: 1.1 }}
           >
-            The managed distribution of Boss Loops OSS.
+            The managed distribution of the Boss Loops engine.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
-            Same engine underneath. Same governance model. Same Decision Record. Better Data
-            runs the multi-tenant service, the managed connectors, the audit exports, and the
-            metering — so your team stays on the decision, not the runtime.
+            Same governance model. Same Decision Record. Better Data runs the multi-tenant
+            service, the managed connectors, the audit exports, and the metering — so your
+            team stays on the decision, not the runtime.
           </p>
 
           <VisualSlot
@@ -163,79 +163,12 @@ export default function CloudPage() {
         </div>
       </section>
 
-      {/* ── OSS vs Cloud ─────────────────────────────────────────────── */}
-      <section className="px-4 py-16 md:py-20">
-        <div className="mx-auto max-w-4xl">
-          <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-primary)]">
-            OSS or Cloud
-          </p>
-          <h2
-            className="mt-3 font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-3xl)]"
-            style={{ letterSpacing: "-0.02em", lineHeight: 1.1 }}
-          >
-            Same engine. Two ways to run it.
-          </h2>
-
-          <div className="mt-8 grid gap-5 md:grid-cols-2">
-            <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-ink-muted)]">
-                Self-host
-              </p>
-              <h3
-                className="mt-2 font-[var(--font-display)] text-[var(--color-ink)]"
-                style={{ fontSize: "var(--text-xl)" }}
-              >
-                Boss Loops OSS
-              </h3>
-              <p
-                className="mt-3 text-[var(--color-ink-secondary)]"
-                style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
-              >
-                The runtime, the guards, the actors, the evidence contract. Apache-2.0. Run it
-                on your infrastructure.
-              </p>
-              <Link
-                href="/docs/getting-started/quick-start"
-                className="mt-6 inline-flex items-center font-mono text-sm text-[var(--color-primary)]"
-              >
-                Quick start →
-              </Link>
-            </article>
-
-            <article className="rounded-xl border border-[var(--color-primary)] bg-[var(--color-primary-light)] p-6">
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-primary-dark)]">
-                Managed
-              </p>
-              <h3
-                className="mt-2 font-[var(--font-display)] text-[var(--color-ink)]"
-                style={{ fontSize: "var(--text-xl)" }}
-              >
-                {SITE.cloudName}
-              </h3>
-              <p
-                className="mt-3 text-[var(--color-ink-secondary)]"
-                style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
-              >
-                Everything above, plus managed connectors, tenancy, audit exports, and
-                outcome metering. We run it. You use it.
-              </p>
-              <Link
-                href="/pricing"
-                className="mt-6 inline-flex items-center font-mono text-sm text-[var(--color-primary)]"
-              >
-                Pricing →
-              </Link>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Buyer / builder CTA split ────────────────────────────────── */}
+      {/* ── Buyer CTA ────────────────────────────────────────────────── */}
       <section
         className="border-t border-[var(--color-border)] px-4 py-16"
         style={{ background: "var(--color-surface-alt)" }}
       >
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+        <div className="mx-auto max-w-2xl">
           <article className="rounded-xl border border-[var(--color-primary)] bg-[var(--color-primary-light)] p-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-primary-dark)]">
               For buyers
@@ -271,32 +204,6 @@ export default function CloudPage() {
                 Talk to us →
               </a>
             </div>
-          </article>
-
-          <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-ink-muted)]">
-              For builders
-            </p>
-            <h3
-              className="mt-3 font-[var(--font-display)] text-[var(--color-ink)]"
-              style={{ fontSize: "var(--text-xl)" }}
-            >
-              Explore Boss Loops OSS.
-            </h3>
-            <p
-              className="mt-3 text-[var(--color-ink-secondary)]"
-              style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
-            >
-              Same engine underneath. Prove the loop on your machine before you graduate to
-              Cloud, or run OSS in production forever.
-            </p>
-            <Link
-              href={`/docs/getting-started/quick-start?cta=${CTA}-oss`}
-              data-ph-cta={`${CTA}-oss`}
-              className="mt-6 inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
-            >
-              OSS quick start →
-            </Link>
           </article>
         </div>
       </section>

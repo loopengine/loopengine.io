@@ -226,12 +226,12 @@ export default function MadeForOperationsPage() {
         </div>
       </section>
 
-      {/* ── Buyer / builder CTA split ────────────────────────────────── */}
+      {/* ── Buyer CTA ────────────────────────────────────────────────── */}
       <section
         className="border-t border-[var(--color-border)] px-4 py-16"
         style={{ background: "var(--color-surface-alt)" }}
       >
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+        <div className="mx-auto max-w-2xl">
           <article className="rounded-xl border border-[var(--color-primary)] bg-[var(--color-primary-light)] p-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-primary-dark)]">
               For operations and platform leaders
@@ -255,31 +255,6 @@ export default function MadeForOperationsPage() {
             >
               Design a pilot →
             </a>
-          </article>
-
-          <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-ink-muted)]">
-              For builders
-            </p>
-            <h3
-              className="mt-3 font-[var(--font-display)] text-[var(--color-ink)]"
-              style={{ fontSize: "var(--text-xl)" }}
-            >
-              Explore Boss Loops OSS.
-            </h3>
-            <p
-              className="mt-3 text-[var(--color-ink-secondary)]"
-              style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
-            >
-              Runtime, SDK, guards, actors — Apache-2.0. Run the record inside your infrastructure.
-            </p>
-            <Link
-              href={`/docs/getting-started?cta=${CTA}-oss`}
-              data-ph-cta={`${CTA}-oss`}
-              className="mt-6 inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
-            >
-              Explore Boss Loops OSS →
-            </Link>
           </article>
         </div>
       </section>

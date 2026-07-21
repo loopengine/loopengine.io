@@ -55,12 +55,6 @@ export default function EvidenceProvidersPage() {
             >
               See a governed decision
             </Link>
-            <Link
-              href="/docs/concepts/evidence-providers"
-              className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
-            >
-              Technical docs →
-            </Link>
           </div>
         </div>
       </section>
@@ -119,7 +113,7 @@ export default function EvidenceProvidersPage() {
               },
               {
                 title: "Conformance verifiable",
-                body: "The provider contract and conformance suite live in Boss Loops OSS. An auditor can check that every evidence source in a decision conformed to the contract.",
+                body: "The provider contract and conformance suite are open. An auditor can check that every evidence source in a decision conformed to the contract.",
               },
             ].map((card) => (
               <article
@@ -220,12 +214,12 @@ export default function EvidenceProvidersPage() {
         </div>
       </section>
 
-      {/* ── Buyer / builder CTA split ────────────────────────────────── */}
+      {/* ── Buyer CTA ────────────────────────────────────────────────── */}
       <section
         className="border-t border-[var(--color-border)] px-4 py-16"
         style={{ background: "var(--color-surface-alt)" }}
       >
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
+        <div className="mx-auto max-w-2xl">
           <article className="rounded-xl border border-[var(--color-primary)] bg-[var(--color-primary-light)] p-6">
             <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-primary-dark)]">
               For finance and ops leaders
@@ -250,32 +244,6 @@ export default function EvidenceProvidersPage() {
             >
               Design a pilot →
             </a>
-          </article>
-
-          <article className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-            <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-ink-muted)]">
-              For builders
-            </p>
-            <h3
-              className="mt-3 font-[var(--font-display)] text-[var(--color-ink)]"
-              style={{ fontSize: "var(--text-xl)" }}
-            >
-              Read the provider contract.
-            </h3>
-            <p
-              className="mt-3 text-[var(--color-ink-secondary)]"
-              style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
-            >
-              The contract and OSS conformance suite are open. Build a provider for your
-              semantic layer without waiting on us.
-            </p>
-            <Link
-              href={`/docs/concepts/evidence-providers?cta=${CTA}-docs`}
-              data-ph-cta={`${CTA}-docs`}
-              className="mt-6 inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
-            >
-              Read the technical docs →
-            </Link>
           </article>
         </div>
       </section>

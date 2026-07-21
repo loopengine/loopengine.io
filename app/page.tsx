@@ -362,21 +362,6 @@ async function HomeContent() {
               >
                 Try the demo
               </a>
-              <Link
-                href="/docs/getting-started/quick-start"
-                className="inline-flex items-center"
-                style={{
-                  border: "1px solid var(--color-border)",
-                  color: "var(--color-ink)",
-                  borderRadius: "var(--radius-sm)",
-                  padding: "12px 28px",
-                  fontFamily: "var(--font-sans)",
-                  fontWeight: 500,
-                  fontSize: "var(--text-sm)"
-                }}
-              >
-                Self-host with OSS
-              </Link>
               <a
                 href={SALES_CONTACT_URL}
                 rel="noreferrer"
