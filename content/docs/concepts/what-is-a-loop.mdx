@@ -12,15 +12,43 @@ A **loop** is a **governed decision cycle** in the [runtime taxonomy](/docs/conc
 Enterprise AI systems fail when actions are not bounded by explicit state, policy, and traceability.  
 Boss Loops provides finite states, deterministic transition checks, and event traces that make decisions auditable.
 
-## A loop is not a workflow
+## Workflow vs. State Machine vs. Decision Loop
 
-| | Workflow | Loop |
-|---|---|---|
-| Unit of work | Task | Outcome |
-| State | Implicit | Explicit and named |
-| Actors | Generic user/system | `human` / `automation` / `ai-agent` / `webhook` / `system` |
-| Failure model | Usually generic step errors | Guard failures and attributed rejections |
-| Learning | External or absent | Structured signals and measurable outcomes |
+When designing operational processes, mixing up execution pipelines with governance models leads to brittle systems and decisions that cannot be defended later.
+
+| Dimension | Workflow Engine (e.g. Temporal, n8n) | Finite State Machine (pattern) | Boss Loops (Decision Loop) |
+|---|---|---|---|
+| Primary focus | Tasks & execution — orchestrating sequences, API calls, data pipelines | Status & transitions — ensuring an entity moves legally between named states | Governance & evidence — proving why a transition was authorized |
+| Progression | Linear / forward-moving pipelines | Cyclical, event-driven, multi-directional | Cyclical execution with strict policy and authority guardrails |
+| Core unit | The task (what runs next?) | The state (where are we right now?) | The Decision Record (what is the immutable proof?) |
+| Triggers | Completion of the previous programmatic step | External raw events or inputs | Signals paired with runtime evidence evaluation |
+| Handling rejection | Complex error branching or manual exception code | State reset (e.g. back to draft) | Attributed rejections, guard failures, and historical loop resets |
+
+**One-liner:** Workflow engines excel at sequential execution; state machines excel at status, events, and legal transitions; Boss Loops uses state-machine enforcement to govern decisions with durable evidence — and composes with workflow engines for everything that runs after approval.
+
+### Reclaim approval chains from workflows
+
+Traditional guides classify document approvals as workflows. Boss Loops treats them as state-driven decisions. A sequential pipeline treats approval as another API step; an auditor asking why a $10M invoice was paid needs more than step completion logs.
+
+In Boss Loops, the invoice sits in `PENDING_APPROVAL` protected by active guards. It cannot transition to `APPROVED` without the required C10 authority and a frozen snapshot of the evidence as it was seen at that moment.
+
+### Active governance, not passive status
+
+Generic explainers describe state machines as passive — waiting for external events. Boss Loops is an active gatekeeper: while it waits for signals (temperature excursion, invoice over threshold), invariant enforcement and authority configuration deny illegal transitions — for example `COMMIT_AUTHORITY_NOT_CONFIGURED`.
+
+### Composition, not replacement
+
+Boss Loops does not replace your workflow engine. It governs the commit; the workflow engine executes the approved work.
+
+```text
+Signal → Boss Loops (govern decision) → transition approved → Workflow engine (execute sequential APIs)
+```
+
+Example: AI drafts a proposal → Boss Loops governs draft → approved → Salesforce or Temporal runs the downstream pipeline. See [Workflow + Boss Loops](/docs/examples/workflow-plus-loop).
+
+:::note Alpine supplier invoice
+While naive tooling models invoice approvals as sequential workflows, the [Alpine demo](https://demo.bossloops.io) treats invoices as an FSM pattern — reset, exception handling, and strict state-based guardrails that a linear pipeline cannot enforce without brittle branching.
+:::
 
 ## Anatomy of a loop (`LoopDefinition`)
 
@@ -87,3 +115,4 @@ outcome:
 
 - [Decision Governance](/docs/concepts/decision-governance)
 - [When to Use Boss Loops](/docs/concepts/when-to-use)
+- [Boss Loops vs workflow engines](/docs/concepts/loop-engine-vs-workflow-engines)

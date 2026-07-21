@@ -14,6 +14,9 @@ import {
   LOOP_ENGINE_SUPPORTING
 } from "@/lib/betterdata-ecosystem";
 import { SITE, LEGACY, npmPkgUrl } from "@/lib/site-config";
+import { DEMO_URL, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { EnterpriseStackDiagram } from "@/components/site/EnterpriseStackDiagram";
+import { WhereToGoStrip } from "@/components/site/WhereToGoStrip";
 
 const packages = [
   { name: "@loop-engine/sdk", slug: "sdk", description: "High-level entry point for loop systems." },
@@ -55,7 +58,7 @@ const integrations: IntegrationCard[] = [
     capabilities: [
       "Research steps use Sonar with domain filters and required citations",
       "Risk classification and human gates before any PagerDuty trigger",
-      "Custom details on incidents include audit references for compliance review"
+      "Custom details on incidents include audit references for post-mortem review"
     ],
     docsHref: "/docs/integrations/perplexity-pagerduty",
     featured: true
@@ -321,7 +324,7 @@ async function HomeContent() {
                   color: "var(--color-ink-tertiary)"
                 }}
               >
-                AI now participates in operational decisions. &ldquo;The model said it was fine&rdquo; is not an answer an auditor will accept.
+                AI and agents now participate in operational decisions. &ldquo;The model said it was fine&rdquo; is not an answer operations or risk teams can defend.
               </span>
             </p>
             <h1
@@ -381,8 +384,10 @@ async function HomeContent() {
               className="fade-in-up mt-9 flex flex-col items-stretch gap-3 min-[480px]:items-center min-[480px]:flex-row min-[480px]:flex-wrap"
               style={{ animationDelay: "280ms" }}
             >
-              <Link
-                href="/docs/cloud"
+              <a
+                href={DEMO_URL}
+                rel="noreferrer"
+                target="_blank"
                 className="le-cta-button inline-flex items-center"
                 style={{
                   background: "var(--color-primary)",
@@ -394,10 +399,10 @@ async function HomeContent() {
                   fontSize: "var(--text-sm)"
                 }}
               >
-                Explore {SITE.cloudName}
-              </Link>
+                Try the demo
+              </a>
               <Link
-                href="/docs/getting-started"
+                href="/docs/getting-started/quick-start"
                 className="inline-flex items-center"
                 style={{
                   border: "1px solid var(--color-border)",
@@ -409,10 +414,10 @@ async function HomeContent() {
                   fontSize: "var(--text-sm)"
                 }}
               >
-                Get started
+                Self-host with OSS
               </Link>
               <a
-                href={LEGACY.github}
+                href={SALES_CONTACT_URL}
                 rel="noreferrer"
                 target="_blank"
                 className="inline-flex items-center"
@@ -426,15 +431,36 @@ async function HomeContent() {
                   fontSize: "var(--text-sm)"
                 }}
               >
-                View on GitHub
+                Talk to us
               </a>
             </div>
+
+            <p
+              className="fade-in-up mt-8"
+              style={{
+                animationDelay: "320ms",
+                fontSize: "var(--text-xs)",
+                color: "var(--color-ink-muted)",
+                fontFamily: "var(--font-sans)"
+              }}
+            >
+              Apache-2.0 open core · Governance verifiable in the open engine ·{" "}
+              <a
+                href="https://betterdata.co/trust"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "var(--color-ink-tertiary)", textDecoration: "underline", textUnderlineOffset: 3 }}
+              >
+                Trust Center →
+              </a>
+            </p>
           </div>
         </div>
       </section>
 
       {/* The Decision Record — the object we sell */}
       <section
+        id="decisions-deserve-a-system-of-record"
         style={{
           background: "var(--color-surface)",
           borderTop: "1px solid var(--color-border)",
@@ -465,8 +491,9 @@ async function HomeContent() {
           <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-secondary)", lineHeight: 1.7 }}>
             In Boss Loops this isn&apos;t a convention a well-behaved workflow follows — it&apos;s{" "}
             <strong>enforced by the engine</strong>. A consequential decision cannot commit without frozen evidence,
-            recorded provenance, and an approval bound to the exact evidence the approver saw. Immutable, hashable,
-            replayable — by construction, not by discipline.
+            recorded provenance, and a record reconstructable from its primary objects — immutable, hashable,
+            replayable by construction, not by discipline. Approvals are captured on that record with the evidence
+            presented, under the approver&apos;s own name.
           </p>
 
           <div className="mt-10 grid gap-5 md:grid-cols-3">
@@ -481,7 +508,7 @@ async function HomeContent() {
               body="What they knew at the time — value, source definition, freshness, and provenance snapshotted the moment evidence informs a decision. Not a screenshot, not a stale export."
             />
             <FeatureCard
-              title="Approvals bound to evidence"
+              title="Approvals on the record"
               icon={
                 <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden>
                   <circle cx="8" cy="16" r="4" fill="var(--color-primary-mid)" />
@@ -489,7 +516,7 @@ async function HomeContent() {
                   <circle cx="24" cy="16" r="4" fill="var(--color-primary-dark)" />
                 </svg>
               }
-              body="The authorized approver signs under their own name, against the exact evidence they saw. Human, automation, and AI actors share one attribution model."
+              body="Approvers sign under their own name, and the sign-off is captured with the evidence presented. Human, automation, and AI actors share one attribution model."
             />
             <FeatureCard
               title="Answerable years later"
@@ -519,8 +546,9 @@ async function HomeContent() {
               chase, it opens a decision: <em>lot release review</em>. Boss Loops attaches governed evidence
               automatically — the peak excursion from the validated monitoring system, the batch&apos;s stability data,
               the release criteria from the current SOP — each frozen with its source and timestamp. Policy checks the
-              reading against the criteria. Quality reviews; the authorized approver signs off against the exact
-              evidence they saw. A year later, when someone asks why the lot was released, the answer isn&apos;t a
+              reading against the criteria. Quality reviews; the approver signs off under their own name, and the
+              record captures the sign-off with the evidence presented. A year later, when someone asks why the lot
+              was released, the answer isn&apos;t a
               scramble across four systems. It&apos;s a record.
             </p>
             <p style={{ marginTop: 12, maxWidth: 900, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
@@ -536,8 +564,10 @@ async function HomeContent() {
                 "Returns triage",
                 "Customer credit review"
               ].map((useCase) => (
-                <span
+                <Link
                   key={useCase}
+                  href="/use-cases"
+                  className="transition-colors hover:border-[var(--color-primary-mid)] hover:text-[var(--color-primary-dark)]"
                   style={{
                     border: "1px solid var(--color-border)",
                     borderRadius: 999,
@@ -546,14 +576,58 @@ async function HomeContent() {
                     fontSize: "var(--text-xs)",
                     fontWeight: 500,
                     color: "var(--color-ink-secondary)",
-                    background: "var(--color-surface)"
+                    background: "var(--color-surface)",
+                    textDecoration: "none"
                   }}
                 >
-                  {useCase}
-                </span>
+                  {useCase} →
+                </Link>
               ))}
             </div>
           </article>
+        </div>
+      </section>
+
+      {/* Existing semantics — no ontology project */}
+      <section
+        id="existing-semantics"
+        style={{
+          background: "var(--color-surface-subtle)",
+          borderTop: "1px solid var(--color-border)",
+          padding: "72px 0"
+        }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontWeight: 600,
+              fontSize: "var(--text-xs)",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "var(--color-primary)"
+            }}
+          >
+            Your data context, unchanged
+          </p>
+          <h2 className="mt-3">Consume the semantics you already govern</h2>
+          <p style={{ marginTop: 12, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+            Your ERP holds the invoice. Snowflake and Looker hold the metric definitions your business already runs on.
+            Boss Loops links to them — frozen at decision time — and records why you acted. No ontology project. No
+            second definition of your business to populate and maintain.
+          </p>
+          <div
+            className="mt-10 rounded-xl border p-6 md:p-8"
+            style={{ borderColor: "var(--color-border)", background: "var(--color-surface)" }}
+          >
+            <EnterpriseStackDiagram />
+          </div>
+          <p style={{ marginTop: 16, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
+            <Link href="/product/reuse-dont-rebuild" style={{ color: "var(--color-primary)" }}>
+              Reuse, don&apos;t rebuild →
+            </Link>
+          </p>
+          <WhereToGoStrip />
         </div>
       </section>
 
@@ -826,11 +900,11 @@ async function HomeContent() {
             Anyone can say &ldquo;governed.&rdquo; The Boss Loops engine, the evidence contracts, and the conformance
             suite are open — inspect them, self-host them, and prove the invariants yourself. The invariants hold in
             the open engine, not behind a paywall: a consequential decision cannot commit without frozen evidence,
-            recorded provenance, and an approval bound to what the approver saw.
+            recorded provenance, and a record reconstructable from its primary objects.
           </p>
           <p style={{ marginTop: 10, maxWidth: 860, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
             Because the conformance suite is an executable artifact, &ldquo;every evidence source in this decision
-            conformed to the contract&rdquo; is a statement an auditor can verify — not a marketing claim. What the
+            conformed to the contract&rdquo; is a statement your team can verify — not a marketing claim. What the
             hosted tier adds isn&apos;t the governance. It&apos;s production Evidence Providers, curated policy packs,
             and the Decision Operations workspace.
           </p>
@@ -1314,7 +1388,7 @@ async function HomeContent() {
           </a>
           <span>· Apache-2.0 ·</span>
           <a href={LEGACY.github} rel="noreferrer" target="_blank">
-            ★ {stars}
+            {stars >= 100 ? `★ ${stars}` : "GitHub →"}
           </a>
         </div>
       </section>

@@ -11,13 +11,13 @@ export const LOOP_ENGINE_HERO_HEADLINE =
   "Your ERP records what happened. Boss Loops governs what happens next.";
 
 export const LOOP_ENGINE_AUDITOR_LINE =
-  "When the auditor asks why it was approved, you don't reconstruct the story. You retrieve it.";
+  "When someone asks why it was approved — leadership, operations, or audit — you don't reconstruct the story. You retrieve it.";
 
 export const LOOP_ENGINE_PRIMARY =
-  "Boss Loops is the system of record for decisions — governed decision intelligence for operations where a decision must be defensible after the fact.";
+  "Boss Loops is the Decision Governance layer for operational AI — the system of record for consequential decisions that agents, automations, and humans make together.";
 
 export const LOOP_ENGINE_SUPPORTING =
-  "Boss Loops turns every consequential operational decision into a governed, auditable record — fusing the evidence, the policy, the people, and the AI that produced it, and proving, years later, why the decision was made.";
+  "Workflow engines run the steps. Analytics platforms optimize the model. Boss Loops governs the commit — binding every transition to frozen evidence, deterministic guards, and an immutable Decision Record.";
 
 export const LOOP_ENGINE_META_DESCRIPTION = SITE.metaDescription;
 
