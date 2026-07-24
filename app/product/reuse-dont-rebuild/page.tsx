@@ -176,8 +176,10 @@ export default function ReuseDontRebuildPage() {
             screenshot. Not a copy. The definition your data team already certified.
           </p>
           <VisualSlot
-            label="Screenshot — Snowflake governed evidence"
-            caption="The Snowflake semantic-view evidence panel: finance.gross_margin at 42.3%, its governed definition, freshness, and provenance — frozen at decision time."
+            label="Screenshot — Snowflake governed evidence on the Decision Record"
+            caption="The Snowflake semantic view finance.gross_margin — 34.2%, within the component-cost guardrail — attributed on the Decision Record as a participant, alongside the NetSuite budget check, the AI assistant, and the humans who decided. The warehouse metric your data team already certified, frozen at decision time."
+            src="/screenshots/snowflake-governed-evidence.png"
+            alt="A supplier invoice Decision Record whose participants include a Snowflake semantic-view metric (gross margin 34.2%, within guardrail) and a NetSuite budget check, alongside the VP Operations, an AI assistant, and the Controller."
           />
           <VisualSlot
             label="Screenshot — Multiple systems, one decision"
