@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { CLOUD_START_URL, CONTACT_PAGE } from "@/lib/contact-routes";
+import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { LEGACY } from "@/lib/site-config";
 
 const ROWS = [
   { label: "Request a demo", detail: "Alpine walkthrough — no signup", href: CONTACT_PAGE, external: true },
   { label: "Build OSS", detail: "Quick start + GitHub", href: "/docs/getting-started/quick-start", external: false },
-  { label: "Run Cloud", detail: "Create your tenant", href: CLOUD_START_URL, external: true },
+  { label: "Run Cloud", detail: "Talk to us about your tenant", href: SALES_CONTACT_URL, external: true },
   { label: "Sign in", detail: "Production workspace", href: LEGACY.cloudUrl, external: true },
 ] as const;
 

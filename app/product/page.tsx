@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { VisualSlot } from "@/components/site/VisualSlot";
 import { EnterpriseStackDiagram } from "@/components/site/EnterpriseStackDiagram";
+import { RuntimeAnatomy } from "@/components/site/RuntimeAnatomy";
 import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 
 export const metadata: Metadata = {
@@ -663,6 +664,8 @@ export default function ProductPage() {
           <VisualSlot
             label="Screenshot — The Decision Record"
             caption="A full Decision Record: context, qualified evidence with sources, policy applied, AI recommendation, human approval, outcome — frozen at decision time."
+            src="/screenshots/decision-record-story.png"
+            alt="A Boss Loops Decision Record for a supplier invoice — business object, attributed participants including an AI assistant, and the decision timeline."
           />
         </div>
       </section>
@@ -690,6 +693,35 @@ export default function ProductPage() {
         </div>
       </section>
 
+      {/* Inside the runtime — the four layers */}
+      <section
+        id="runtime-anatomy"
+        className="scroll-mt-20"
+        style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)", padding: "64px 0" }}
+      >
+        <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
+          <p style={eyebrowStyle}>Inside the runtime</p>
+          <h2 className="mt-3">Four layers, one governed commit</h2>
+          <p style={bodyStyle}>
+            Intelligence recommends. Evidence grounds. Governance gates. Action executes. The layers are deliberately
+            not interchangeable — models never write to your systems of record, and nothing executes until every
+            guard passes.
+          </p>
+          <VisualSlot
+            label="Diagram — the four layers of the Boss Loops runtime"
+            caption="Intelligence and Evidence feed the Governance gate; Action runs in your systems of record only after the governed commit."
+          >
+            <RuntimeAnatomy />
+          </VisualSlot>
+          <p style={{ marginTop: 14, fontSize: "var(--text-sm)", color: "var(--color-ink-muted)" }}>
+            Go deeper:{" "}
+            <Link href="/product/how-it-works" style={{ color: "var(--color-primary)" }}>
+              How it works →
+            </Link>
+          </p>
+        </div>
+      </section>
+
       {/* See it operate */}
       <section style={{ background: "var(--color-surface)", borderTop: "1px solid var(--color-border)", padding: "64px 0" }}>
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
@@ -701,6 +733,8 @@ export default function ProductPage() {
           <VisualSlot
             label="Screenshot — Attention & Briefing"
             caption="The Decision Operations workspace: the morning briefing headline and the Attention queue of live decisions requiring review."
+            src="/screenshots/attention-briefing.png"
+            alt="The Boss Loops Morning Briefing — business summary, health metrics, and the prioritized queue of decisions requiring review."
           />
         </div>
       </section>

@@ -79,7 +79,7 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
     proof:
       "Anchored on the Alpine incident-routing scenario shown in the live Boss Loops product.",
     primaryCtaLabel: "See a governed decision",
-    primaryCtaHref: "/#governed-decision",
+    primaryCtaHref: "/product/decision-record",
     talkLabel: "Design a pilot",
     talkHref: talkHref("operations", "Boss Loops for operations"),
   },
@@ -162,7 +162,7 @@ export const MADE_FOR_SEGMENTS: MadeForSegment[] = [
       "Every finance decision — invoice, pricing, spend, vendor, forecast — is a governed record with the evidence, authority, and outcome attached.",
     proof: "Anchored on the Alpine invoice-approval scenario shown in the live Boss Loops product.",
     primaryCtaLabel: "See a governed decision",
-    primaryCtaHref: "/#governed-decision",
+    primaryCtaHref: "/product/decision-record",
     talkLabel: "Design a pilot",
     talkHref: talkHref("finance", "Boss Loops for finance"),
   },

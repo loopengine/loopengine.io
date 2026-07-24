@@ -53,7 +53,7 @@ const MENUS: NavMenu[] = [
       },
       {
         label: "The Decision Record",
-        href: "/#governed-decision",
+        href: "/product/decision-record",
         description: "One auditable artifact behind every consequential decision.",
       },
       {

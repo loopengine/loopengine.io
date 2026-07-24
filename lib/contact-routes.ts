@@ -11,8 +11,6 @@ export const SALES_CONTACT_URL =
 
 export const CONTACT_PAGE = "/contact";
 
-export const CLOUD_START_URL = "https://registry.betterdata.co/boss-loops/cloud/start";
-
 /** Sales form with tier hint folded into intent (contact form reads ?intent=). */
 export function salesContactForTier(tier: "starter" | "team" | "enterprise" | "pricing"): string {
   const subjects: Record<string, string> = {

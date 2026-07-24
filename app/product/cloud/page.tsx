@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { VisualSlot } from "@/components/site/VisualSlot";
-import { CLOUD_START_URL, CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
+import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { SITE } from "@/lib/site-config";
 
 /**
@@ -18,7 +18,7 @@ const CTA = "product-cloud";
 export const metadata: Metadata = {
   title: `${SITE.cloudName} · ${SITE.brandName}`,
   description:
-    "The managed tier of Boss Loops — governed decision loops, multi-tenant isolation, outcome-based metering, and audit exports, operated by Better Data.",
+    "The managed tier of Boss Loops — governed decision loops, user management scoped by location, outcome-based metering, and audit exports, operated by Better Data.",
   openGraph: {
     title: `${SITE.cloudName} · ${SITE.brandName}`,
     description:
@@ -42,8 +42,8 @@ export default function CloudPage() {
             The managed tier. Same engine. Operated by Better Data.
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
-            Governed decision loops, multi-tenant isolation, outcome-based metering, and
-            audit exports — without operating the runtime yourself.
+            Governed decision loops, user management scoped by location, outcome-based
+            metering, and audit exports — without operating the runtime yourself.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
@@ -56,13 +56,13 @@ export default function CloudPage() {
               Request a demo
             </a>
             <a
-              href={`${CLOUD_START_URL}?cta=${CTA}-start`}
+              href={`${SALES_CONTACT_URL}&cta=${CTA}-start`}
               target="_blank"
               rel="noopener noreferrer"
               data-ph-cta={`${CTA}-start`}
               className="inline-flex items-center rounded-lg border border-[var(--color-border)] px-6 py-3 font-mono text-sm text-[var(--color-ink-secondary)]"
             >
-              Start Cloud →
+              Talk to sales →
             </a>
           </div>
         </div>
@@ -81,8 +81,8 @@ export default function CloudPage() {
             The managed distribution of the Boss Loops engine.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
-            Same governance model. Same Decision Record. Better Data runs the multi-tenant
-            service, the managed connectors, the audit exports, and the metering — so your
+            Same governance model. Same Decision Record. Better Data runs the service,
+            the managed connectors, the audit exports, and the metering — so your
             team stays on the decision, not the runtime.
           </p>
 
@@ -112,8 +112,8 @@ export default function CloudPage() {
           <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {[
               {
-                title: "Org isolation",
-                body: "Multi-tenant by design. Your decisions, records, and evidence stay yours.",
+                title: "User management",
+                body: "Roles and approval authority scoped by location — plants, regions, and business units each see and decide only what's theirs.",
               },
               {
                 title: "Outcome-based metering",

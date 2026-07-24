@@ -70,7 +70,7 @@ export function LoopStateMachineDiagram({ style }: { style?: CSSProperties }) {
       <svg
         viewBox="0 0 660 260"
         role="img"
-        aria-label="Alpine invoice loop — state machine"
+        aria-label="Supplier invoice approval loop — state machine"
         style={{ width: "100%", height: "auto", display: "block", marginTop: 8 }}
       >
         <defs>

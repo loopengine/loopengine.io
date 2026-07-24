@@ -134,8 +134,8 @@ export default function ReuseDontRebuildPage() {
             model your business twice.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Cta primary label="Get started" href="https://registry.betterdata.co/boss-loops/cloud/start" />
-            <Cta label="See how it works ↓" href="#no-new-model" />
+            <Cta primary label="See how it works ↓" href="#no-new-model" />
+            <Cta label="Talk to us" href={SALES_CONTACT_URL} />
           </div>
           <VisualSlot label="Visual — two architectures">
             <ContrastDiagram />
@@ -303,7 +303,6 @@ export default function ReuseDontRebuildPage() {
             you&apos;ve already made — and turns it into decisions you can defend.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Cta primary label="Get started" href="https://registry.betterdata.co/boss-loops/cloud/start" />
             <Cta label="Request a demo" href={CONTACT_PAGE} primary />
             <Cta label="Talk to us" href={SALES_CONTACT_URL} />
           </div>

@@ -2,6 +2,8 @@ import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { VisualSlot } from "@/components/site/VisualSlot";
 import { LoopStateMachineDiagram } from "@/components/site/LoopStateMachineDiagram";
 import { DecisionRecordDiagram } from "@/components/site/DecisionRecordDiagram";
+import { RuntimeAnatomy } from "@/components/site/RuntimeAnatomy";
+import { EventStreamDiagram } from "@/components/site/EventStreamDiagram";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
@@ -13,6 +15,8 @@ import Link from "next/link";
 const CONCEPT_VISUALS: Record<string, ReactNode> = {
   "decision-loops": <LoopStateMachineDiagram />,
   evidence: <DecisionRecordDiagram scenario="invoice" />,
+  adapters: <RuntimeAnatomy />,
+  events: <EventStreamDiagram />,
 };
 
 export const metadata: Metadata = {
@@ -60,8 +64,8 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/concepts/what-is-a-loop",
     docsLabel: "What is a loop",
     image: {
-      label: "Diagram — a decision loop's state machine (Alpine supplier invoice)",
-      caption: "The Alpine supplier invoice loop. Active guards on the governed happy-path transition are annotated below the diagram — a transition that doesn't satisfy them doesn't commit."
+      label: "Diagram — a decision loop's state machine (supplier invoice approval)",
+      caption: "A supplier invoice approval loop as a state machine: opened, pending approval, and the three ways it can close. Active guards on the approval transition are annotated below the diagram — a transition that doesn't satisfy them doesn't commit."
     }
   },
   {
@@ -96,8 +100,10 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/concepts/actor-model",
     docsLabel: "The actor model",
     image: {
-      label: "Screenshot — actor attribution on the Alpine Decision Record (human · automation · AI)",
-      caption: "Recommended: the Participants row on Alpine record INV-2026-004521 — Sarah Chen (VP Operations, 'Case file complete. Release for payment.'), Claude (Decision assistant, 'Claude reviewed. Confidence High.'), and David Okonkwo (Controller, 'Hold for Finance; freight not on PO-11983.') — three attributed actors on one row."
+      label: "Screenshot — actor attribution on a Decision Record (human · AI · human)",
+      caption: "The Participants rows on a supplier invoice Decision Record — a VP Operations ('Case file complete. Release for payment.'), an AI decision assistant ('Claude reviewed. Confidence High.'), and a Controller ('Hold for Finance; freight not on PO-11983.') — a human approver, an AI recommender, and a human reviewer attributed on one record, with the decision timeline beneath.",
+      src: "/screenshots/actors-attribution.png",
+      alt: "The Alpine supplier invoice Decision Record showing attributed participants — a human VP Operations, an AI decision assistant, and a human Controller — with the decision timeline."
     }
   },
   {
@@ -112,8 +118,10 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/concepts/guards-and-policy",
     docsLabel: "Guards & policy",
     image: {
-      label: "Screenshot — a blocked transition with the failing guard visible",
-      caption: "Recommended: an Alpine record showing a transition that failed policy (e.g. AI confidence 0.72 below the 0.90 floor). The record captures the guard name, why it fired, and who reviewed the denial — same fidelity as an approval."
+      label: "Screenshot — a transition held by a guard until a human approves",
+      caption: "A supplier invoice held at Waiting for Approval: the purchase-order variance guard fired — variance 7.3%, above the 5% policy floor — so the transition cannot commit. The screen shows why the guard fired, who the approval routed to, and what happens if nobody acts, all before anything lands in a downstream system.",
+      src: "/screenshots/guards-policy-gate.png",
+      alt: "A Boss Loops Decision Record held in Waiting for Approval — the purchase order variance guard fired and routed the invoice to Sarah Chen for review before the transition can commit."
     }
   },
   {
@@ -128,7 +136,9 @@ const CONCEPTS: Concept[] = [
     docsLabel: "Signals",
     image: {
       label: "Screenshot — a signal opening the right loop with evidence pre-attached",
-      caption: "Recommended: a signal card (e.g. temperature excursion, invoice over threshold) with the resulting decision loop opening beneath it and the relevant evidence already visible on the record — not an alert queue."
+      caption: "An invoice arriving is the signal. The timeline shows what followed: received at 8:15, AI-reviewed at 8:19, and a Slack approval routed to the right person by 8:22 — with the recommendation, its reasons, and the invoice context already on the record. No alert queue in between.",
+      src: "/screenshots/signal-opens-loop.png",
+      alt: "A decision record timeline showing an invoice arrival opening the loop — received 8:15, AI reviewed 8:19, Slack approval requested 8:22 — alongside the AI recommendation panel and the Slack approval card with the invoice context attached."
     }
   },
   {
@@ -142,8 +152,8 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/packages/events",
     docsLabel: "Event contracts",
     image: {
-      label: "Screenshot or diagram — a loop's event stream, replay-ready",
-      caption: "Recommended: the timeline of a single Alpine decision — signal received, evidence attached, transition proposed, guards evaluated, transition committed — each row a structured event with actor + timestamp."
+      label: "Diagram — the event stream of one decision, replay-ready",
+      caption: "One supplier invoice as six structured events, each row carrying an actor and a timestamp: the arrival signal, evidence frozen at capture, an AI-proposed transition, the guard evaluation that routed it to a human, the recorded approval, and the committed transition that sealed the record."
     }
   },
   {
@@ -157,8 +167,8 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/integrations",
     docsLabel: "Adapters & integrations",
     image: {
-      label: "Diagram — the adapter taxonomy (Model Providers · Channels · Integrations)",
-      caption: "Recommended: three horizontal bands — top row Model Providers (Claude, GPT, Gemini, Grok), middle row Channels (Slack, Teams, OpenClaw), bottom row Integrations (PagerDuty, Postgres, HTTP APIs) — with the governance layer running across all three."
+      label: "Diagram — the four layers of the Boss Loops runtime",
+      caption: "Intelligence (Providers) and Evidence (Context) feed the Governance gate (Guards); Action (Integrations) executes in your systems of record only after every guard passes."
     }
   },
   {
@@ -173,8 +183,8 @@ const CONCEPTS: Concept[] = [
     docsHref: "/docs/concepts/evidence-providers",
     docsLabel: "Evidence Providers",
     image: {
-      label: "The Alpine Decision Record",
-      caption: "The Alpine supplier invoice Decision Record — evidence rows are frozen at the moment they inform the decision, with definitions inherited from the source. Same record shown across the site."
+      label: "Diagram — a Decision Record with frozen evidence",
+      caption: "A supplier invoice Decision Record — the decision, the business object, and the participants, with evidence frozen at the moment it informed the decision and definitions inherited from the source system."
     }
   },
   {

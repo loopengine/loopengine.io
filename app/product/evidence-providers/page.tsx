@@ -49,7 +49,7 @@ export default function EvidenceProvidersPage() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
-              href={`/#governed-decision?cta=${CTA}`}
+              href={`/product/decision-record?cta=${CTA}`}
               data-ph-cta={CTA}
               className="inline-flex items-center rounded-lg bg-[var(--color-primary)] px-6 py-3 font-mono text-sm text-white"
             >
