@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { EvidenceFlowDiagram } from "@/components/site/EvidenceFlowDiagram";
 import { VisualSlot } from "@/components/site/VisualSlot";
 import { SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { SITE } from "@/lib/site-config";
@@ -79,8 +80,10 @@ export default function EvidenceProvidersPage() {
           </p>
 
           <VisualSlot
-            label="Screenshot — Alpine Decision Record with Looker evidence attached"
-            caption="Recommended shot: the Alpine invoice Decision Record with the Looker semantic evidence row expanded — value, source definition, freshness, and provenance visible."
+            label="Screenshot — a Decision Record's evidence, frozen at decision time"
+            caption="The Evidence Snapshots tab of a closed supplier-invoice decision: ten immutable snapshots, each with its source, capture timestamp, content hash, and qualification badges. The Looker row carries the vendor-spend metric with its provenance (system-attested), definition (certified), and freshness (fresh) — integrity verified."
+            src="/screenshots/looker-evidence-record.png"
+            alt="The Evidence Snapshots tab of a supplier invoice Decision Record — accounts payable, Looker semantic evidence, and AI assessment rows, each frozen at decision time with qualification badges, content hashes, and integrity verification."
           />
         </div>
       </section>
@@ -208,9 +211,11 @@ export default function EvidenceProvidersPage() {
           </ul>
 
           <VisualSlot
-            label="Diagram or screenshot — evidence flow: governed source → freeze → Decision Record"
-            caption="Recommended: a small SVG diagram (or Alpine screenshot) showing Looker/Snowflake/Samsara on the left, the freeze moment in the middle, and the Decision Record on the right with the evidence row rendered."
-          />
+            label="Diagram — evidence flow: governed source → freeze → Decision Record"
+            caption="A governed source emits the value; the freeze captures it with the source's own definition, provenance, and freshness — content-hashed and immutable; the Decision Record carries the rendered evidence row from then on. Provider statuses match the list above."
+          >
+            <EvidenceFlowDiagram />
+          </VisualSlot>
         </div>
       </section>
 
