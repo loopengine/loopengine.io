@@ -157,8 +157,10 @@ export default function CloudPage() {
           </div>
 
           <VisualSlot
-            label="Screenshot — Alpine Decision Record inside Boss Loops Cloud"
-            caption="Recommended shot: the same Alpine invoice Decision Record shown elsewhere on the site, rendered inside the Cloud tenant UI — showing how reviewers see it."
+            label="Screenshot — a Decision Record inside Boss Loops Cloud"
+            caption="The same supplier-invoice Decision Record shown across this site, as a reviewer sees it in the Cloud workspace — the business object, the attributed participants, and the decision timeline on one record."
+            src="/screenshots/decision-record-story.png"
+            alt="A supplier invoice Decision Record rendered in the Boss Loops Cloud workspace — business object, attributed participants including an AI assistant, and the decision timeline."
           />
         </div>
       </section>
