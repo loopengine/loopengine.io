@@ -198,8 +198,10 @@ const CONCEPTS: Concept[] = [
     docsHref: "/catalog",
     docsLabel: "Browse the catalog",
     image: {
-      label: "Screenshot — the loop catalog grid (supplier invoice, purchase approval, returns triage, credit review)",
-      caption: "Recommended: the catalog surface as a grid of loop templates — each card showing the loop name, participant taxonomy, evidence requirements, and a 'Use as template' action."
+      label: "Screenshot — the decision system catalog",
+      caption: "Six published decision systems — returns triage, pricing review, demand forecast review, inventory reorder, supplier invoice approval, supplier risk assessment. Each card names the owning team and the AI providers powering it, with the outcomes it protects — and a test run is one click away before anything is installed.",
+      src: "/screenshots/loop-catalog.png",
+      alt: "The Boss Loops decision system catalog — a grid of six published, versioned decision systems, each card showing its owning team, AI providers, business outcomes, and Run test, Dry run, and Install actions."
     }
   }
 ];
