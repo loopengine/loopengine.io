@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EvidenceFlowDiagram } from "@/components/site/EvidenceFlowDiagram";
+import { SemanticAuthorityVignette } from "@/components/site/SemanticAuthorityVignette";
 import { VisualSlot } from "@/components/site/VisualSlot";
 import { SALES_CONTACT_URL } from "@/lib/contact-routes";
 import { SITE } from "@/lib/site-config";
@@ -138,6 +139,86 @@ export default function EvidenceProvidersPage() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Semantic authority ───────────────────────────────────────── */}
+      <section className="px-4 py-16 md:py-20">
+        <div className="mx-auto max-w-6xl">
+          <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-[var(--color-primary)]">
+            Semantic authority
+          </p>
+          <h2
+            className="mt-3 max-w-3xl font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-3xl)]"
+            style={{ letterSpacing: "-0.02em", lineHeight: 1.1 }}
+          >
+            Boss Loops doesn&apos;t care who authored the definition.
+          </h2>
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
+            dbt, LookML, Snowflake Semantic Views, Cube, AtScale — tomorrow, maybe SAP BW or
+            Microsoft Fabric. Different authoring surfaces, one role: the{" "}
+            <strong>semantic authority</strong> your business already answers to. The provider
+            contract is authority-agnostic. What it demands of a definition is the same four
+            things everywhere:
+          </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                title: "Owned",
+                body: "A named team answers for the definition. On the record, the authority is attributed — Finance owns available budget, not \u201cthe warehouse.\u201d",
+              },
+              {
+                title: "Versioned",
+                body: "The definition version is a fact of the snapshot, not a guess. The record pins the exact version the decision used.",
+              },
+              {
+                title: "Tested",
+                body: "The source's own checks passed at capture — and the result travels with the evidence, not with a wiki page.",
+              },
+              {
+                title: "Trusted",
+                body: "Certified and governed are inherited from the source's own mapping — never asserted by whoever built the loop.",
+              },
+            ].map((card) => (
+              <article
+                key={card.title}
+                className="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"
+              >
+                <h3
+                  className="font-[var(--font-display)] text-[var(--color-ink)]"
+                  style={{ fontSize: "var(--text-md)" }}
+                >
+                  {card.title}
+                </h3>
+                <p
+                  className="mt-2 text-[var(--color-ink-secondary)]"
+                  style={{ fontSize: "var(--text-sm)", lineHeight: 1.65 }}
+                >
+                  {card.body}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-10 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
+            Here is why that matters more than it sounds. Six months from now, the definition
+            will change — definitions always do. Most systems then show you today&apos;s value
+            under today&apos;s meaning and call it history. A Decision Record preserves the exact
+            semantic definition that existed when the decision was made:
+          </p>
+
+          <VisualSlot
+            label="Diagram — the definition version, pinned at decision time"
+            caption="Illustrative render of the provider contract — a budget evidence row carrying its semantic authority, source, model, definition version, and test status. The dbt semantic-authority provider is a design target, not a shipped integration; the contract fields shown are the ones the engine freezes today."
+          >
+            <SemanticAuthorityVignette />
+          </VisualSlot>
+
+          <p className="mt-8 max-w-2xl text-base leading-7 text-[var(--color-ink)]" style={{ fontWeight: 500 }}>
+            The record doesn&apos;t just capture what was known. It captures how it was
+            understood — the meaning of the data at decision time.
+          </p>
         </div>
       </section>
 
