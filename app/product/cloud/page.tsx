@@ -87,8 +87,10 @@ export default function CloudPage() {
           </p>
 
           <VisualSlot
-            label="Screenshot — Boss Loops Cloud org dashboard"
-            caption="Recommended shot: the Alpine seeded organization in the live Boss Loops Cloud — decision volume, active loops, and recent Decision Records at a glance."
+            label="Screenshot — user management in Boss Loops Cloud"
+            caption="The Users administration surface: operational roles assigned per decision system, with approval authority capped per person — an Approver on supplier invoices up to $100,000. Workspace membership is operator-assisted: Better Data provisions your people, your identity provider keeps sign-in and SSO."
+            src="/screenshots/cloud-user-management.png"
+            alt="The Boss Loops Cloud Users administration page — directory members with operational roles assigned per decision system, including an Approver on Supplier Invoice Approval with a $100,000 approval limit."
           />
         </div>
       </section>
