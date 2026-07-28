@@ -289,7 +289,9 @@ export default function ReuseDontRebuildPage() {
           </p>
           <VisualSlot
             label="Screenshot — Boss Loops in operation"
-            caption="The Decision Operations workspace: the Attention queue with live decisions requiring review."
+            caption="The Attention queue: what needs you, triaged — critical failures, escalations, and SLA risk across supplier invoices, risk assessments, and returns triage, each one an open decision with an Investigate action. Not an alert feed: every row is a governed loop waiting on a person."
+            src="/screenshots/attention-queue.png"
+            alt="The Boss Loops Attention workspace — a triaged queue of decisions needing action, filtered by critical failures, escalations, and SLA risk, each row naming the decision and offering an Investigate action."
           />
         </div>
       </section>
