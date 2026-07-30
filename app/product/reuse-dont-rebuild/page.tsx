@@ -6,7 +6,7 @@ import { OverlayArchitectureDiagram } from "@/components/site/OverlayArchitectur
 export const metadata: Metadata = {
   title: "Reuse, don't rebuild",
   description:
-    "Your enterprise has already defined its business — in ERP, CRM, Snowflake, Looker, and the systems your teams run every day. Boss Loops turns those definitions into governed decisions, without asking you to model your business twice.",
+    "Your enterprise has already defined its business — in ERP, CRM, dbt, LookML, Snowflake Semantic Models, Microsoft Fabric, Cube, and the operational systems your teams run every day. Boss Loops is not another semantic layer: it's the Decision Governance Layer, consuming those definitions as governed evidence and writing exactly one new object — the Decision Record.",
 };
 
 const bodyStyle = {
@@ -77,7 +77,7 @@ function ContrastDiagram() {
         >
           Model everything again
         </p>
-        {chip("ERP · CRM · Snowflake · Looker · Samsara")}
+        {chip("ERP · CRM · warehouse · semantic layer · operational systems")}
         {arrow}
         {chip("New enterprise decision model", true)}
         {arrow}
@@ -100,7 +100,7 @@ function ContrastDiagram() {
         >
           Reuse what exists
         </p>
-        {chip("ERP · CRM · Snowflake · Looker · Samsara — semantics stay in place")}
+        {chip("ERP · CRM · dbt · LookML · Snowflake Semantic Models · Fabric · Cube — semantics stay in place")}
         {arrow}
         {chip("Decision context — evidence from existing definitions")}
         {arrow}
@@ -129,9 +129,11 @@ export default function ReuseDontRebuildPage() {
             Reuse, don&apos;t rebuild.
           </h1>
           <p style={{ ...bodyStyle, marginTop: 16, fontSize: "var(--text-md)" }}>
-            Your enterprise has already defined its business — in ERP, CRM, Snowflake, Looker, and the systems your
-            teams run every day. Boss Loops turns those definitions into governed decisions, without asking you to
-            model your business twice.
+            Your organization has spent years defining its business — in ERP, CRM, operational systems, and the
+            semantic layers you already govern: dbt, LookML, Snowflake Semantic Models, Microsoft Fabric, Cube.
+            Boss Loops is not another semantic layer. It is the <strong>Decision Governance Layer</strong>: it
+            consumes those definitions as governed evidence and models the one thing no other system captures — the
+            decision itself.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Cta primary label="See how it works ↓" href="#no-new-model" />
@@ -146,7 +148,7 @@ export default function ReuseDontRebuildPage() {
       {/* No new model */}
       <section id="no-new-model" className="scroll-mt-20" style={{ background: "var(--color-surface)", padding: "64px 0" }}>
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
-          <h2 style={{ maxWidth: 820 }}>Most decision platforms make you build a new model. Boss Loops doesn&apos;t.</h2>
+          <h2 style={{ maxWidth: 820 }}>Not another semantic layer.</h2>
           <p style={bodyStyle}>
             The common approach centralizes your operational data into a new, enterprise-wide decision model — another
             semantic layer to populate, own, and maintain. It&apos;s a real answer to data fragmentation, but the cost
@@ -154,12 +156,17 @@ export default function ReuseDontRebuildPage() {
             places.
           </p>
           <p style={bodyStyle}>
-            Boss Loops starts from the opposite premise: the definitions already exist. Your ERP knows suppliers and
-            GL accounts. Your CRM knows customers. Snowflake and Looker already hold the certified metrics your
-            business runs on. Boss Loops consumes those semantics as evidence — it doesn&apos;t recreate them.
+            Boss Loops starts from the opposite premise: the trusted business semantics already exist.{" "}
+            <em>Available Budget. Customer Health. Gross Margin. Inventory Position. Revenue. Vendor Risk. Policy
+            Compliance.</em>{" "}
+            Your organization has already defined them — in dbt models, LookML, Snowflake Semantic Models, Fabric,
+            Cube, and the master data of your ERP and CRM. Boss Loops references those definitions as governed
+            evidence, whoever authors them — today&apos;s semantic providers or the next one. It doesn&apos;t recreate
+            them, and it doesn&apos;t compete with the layer that owns them.
           </p>
           <p style={{ ...bodyStyle, color: "var(--color-ink)", fontWeight: 500 }}>
-            The only thing Boss Loops models is the one thing no other system captures: the decision itself.
+            Boss Loops is the Decision Governance Layer. The only thing it models is the one thing no other system
+            captures: the decision itself.
           </p>
         </div>
       </section>
@@ -169,11 +176,13 @@ export default function ReuseDontRebuildPage() {
         style={{ background: "var(--color-surface-subtle)", borderTop: "1px solid var(--color-border)", padding: "64px 0" }}
       >
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
-          <h2>Governed evidence, from the systems you already trust</h2>
+          <h2>Governed evidence, from the semantics you already trust</h2>
           <p style={bodyStyle}>
             Every piece of evidence in a Boss Loops decision comes straight from its source system — the metric&apos;s
             governed definition, its value, and its freshness, captured at the moment the decision was made. Not a
-            screenshot. Not a copy. The definition your data team already certified.
+            screenshot. Not a copy. The definition your data team already certified — whether it lives in dbt,
+            LookML, a Snowflake Semantic Model, Fabric, or Cube, referenced through one contract that any semantic
+            provider can satisfy.
           </p>
           <VisualSlot
             label="Screenshot — Snowflake governed evidence on the Decision Record"
@@ -197,6 +206,12 @@ export default function ReuseDontRebuildPage() {
             SAP. The metric stays in Snowflake. Boss Loops links to each source and adds the one layer they were never
             built to hold: why the decision was made.
           </p>
+          <p style={bodyStyle}>
+            Every participant lands on the same attribution model, whoever they are: the humans who judged and
+            approved, the AI assistant that recommended, the autonomous agent that acted within policy, and the
+            enterprise systems that supplied the evidence. One record, one consistent account of who did what — no
+            special case for AI.
+          </p>
           <VisualSlot
             label="Screenshot — The Decision Record"
             caption="A supplier-invoice approval: the invoice from SAP with its cost center, business unit, and GL account; the governed metric from Snowflake; policy P-102; the AI recommendation; the manager's approval captured with the evidence presented; outcome — paid."
@@ -204,6 +219,11 @@ export default function ReuseDontRebuildPage() {
           <p style={{ ...bodyStyle, color: "var(--color-ink)", fontWeight: 500 }}>
             The ERP remains the system of record for the invoice. Boss Loops becomes the system of record for the
             decision to pay it — who decided, on what evidence, under which policy, and whether it worked.
+          </p>
+          <p style={bodyStyle}>
+            And record by record, those decisions accumulate into something no enterprise system has held before:{" "}
+            <strong style={{ color: "var(--color-ink)" }}>Decision Memory</strong> — a queryable history of how your
+            organization actually decides. Enterprise systems remember transactions. Boss Loops remembers decisions.
           </p>
         </div>
       </section>
@@ -219,14 +239,18 @@ export default function ReuseDontRebuildPage() {
           <p style={bodyStyle}>
             Most decision platforms integrate vertically — building their own analytics pane or their own enterprise
             data model on top of your warehouse, and displacing something you already run to do it. Boss Loops takes
-            the seat none of them occupy. Looker keeps semantic authority. Snowflake keeps compute, storage, and
-            secure ERP ingestion. Your applications keep execution. The overlay adds the one object none of them
-            persist — the decision commit and its record — and reads from all of them while displacing none of them.
+            the seat none of them occupy, and composes with all of them. Your semantic layer — LookML, dbt, Snowflake
+            Semantic Models, Fabric — keeps semantic authority. Snowflake keeps compute, storage, and secure ERP
+            ingestion. Your automation platforms and applications keep execution. The overlay adds the one object
+            none of them persist — the decision commit and its record — and reads from all of them while displacing
+            none of them.
           </p>
           <p style={bodyStyle}>
-            The write surface is deliberately tiny: <strong>read everything, write one new kind of object.</strong>{" "}
-            Execution — the ERP writeback, the payment run, the Slack confirmation — happens on rails you already own,
-            after the loop commits.
+            The contract is deliberately asymmetric. Boss Loops <strong>reads</strong> enterprise data, enterprise
+            semantics, policies, identity, and AI recommendations. It <strong>writes exactly one new kind of
+            object: the Decision Record.</strong> Execution — the ERP writeback, the payment run, the Workato recipe,
+            the Temporal workflow, the Slack confirmation — continues on rails you already own, after the loop
+            commits.
           </p>
           <div className="mt-8">
             <OverlayArchitectureDiagram />
@@ -247,15 +271,20 @@ export default function ReuseDontRebuildPage() {
       >
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
           <h2>A different question</h2>
-          <div style={{ marginTop: 16, maxWidth: 720 }}>
+          <div style={{ marginTop: 16, maxWidth: 760 }}>
             <p style={{ color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-              Data platforms ask <em>&ldquo;is the data trustworthy?&rdquo;</em>
+              Data platforms answer <em>&ldquo;is the data trustworthy?&rdquo;</em>
+            </p>
+            <p style={{ marginTop: 6, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
+              Automation platforms answer <em>&ldquo;what should execute?&rdquo;</em>
             </p>
             <p style={{ marginTop: 6, color: "var(--color-ink)", fontWeight: 500, lineHeight: 1.7 }}>
-              Boss Loops asks &ldquo;was the decision trustworthy?&rdquo;
+              Boss Loops answers &ldquo;was this consequential decision trustworthy, explainable, and reusable?&rdquo;
             </p>
             <p style={{ marginTop: 12, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-              Those aren&apos;t the same question — and only one of them survives an audit a year later.
+              Three different questions, three different layers of the architecture. The first two are already well
+              served — Boss Loops composes with the platforms that answer them, and occupies the layer that answers
+              the third. It&apos;s the only one of the three that survives an audit a year later.
             </p>
           </div>
         </div>
@@ -271,8 +300,8 @@ export default function ReuseDontRebuildPage() {
           <ul className="mt-5 space-y-3" style={{ maxWidth: 780 }}>
             <li style={{ color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
               <strong style={{ color: "var(--color-ink)" }}>Enterprise</strong> — reuse years of semantic investment
-              (LookML, dbt, Snowflake views, SAP objects, Fabric models) instead of rebuilding it. Protect the work,
-              skip the migration.
+              (LookML, dbt, Snowflake Semantic Models, SAP objects, Fabric models, Cube) instead of rebuilding it.
+              Protect the work, skip the migration.
             </li>
             <li style={{ color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
               <strong style={{ color: "var(--color-ink)" }}>Mid-market</strong> — governed, defensible decisions
@@ -284,8 +313,8 @@ export default function ReuseDontRebuildPage() {
             </li>
           </ul>
           <p style={bodyStyle}>
-            One platform. No ontology project. Roll out one decision at a time — and every decision you record makes
-            the next one better.
+            One platform. No ontology project. Roll out one decision at a time — every record adds to your Decision
+            Memory, and every decision you record makes the next one better.
           </p>
           <VisualSlot
             label="Screenshot — Boss Loops in operation"
@@ -303,8 +332,10 @@ export default function ReuseDontRebuildPage() {
         <div className="mx-auto w-full max-w-[1200px] px-6 md:px-10">
           <h2>Amplify what you&apos;ve already built.</h2>
           <p style={bodyStyle}>
-            Most platforms ask you to recreate your business to govern it. Boss Loops compounds the investment
-            you&apos;ve already made — and turns it into decisions you can defend.
+            Most platforms ask you to recreate your business to govern it. Boss Loops composes with the platforms you
+            already run — the warehouse, the semantic layer, the automation rails — and compounds the investment
+            you&apos;ve already made: decisions you can defend, accumulating into a Decision Memory your organization
+            keeps.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Cta label="Request a demo" href={CONTACT_PAGE} primary />

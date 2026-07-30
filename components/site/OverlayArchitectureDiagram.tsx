@@ -97,8 +97,9 @@ export function OverlayArchitectureDiagram() {
           </span>
         </div>
         <p style={{ marginTop: 6, fontSize: "var(--text-xs)", color: "var(--color-ink-secondary)", lineHeight: 1.6 }}>
-          Reads evidence from every layer below — frozen at capture, qualification inherited from the source. Writes
-          exactly one new object: <strong>the Decision Record</strong>. Nothing else of yours is rewritten.
+          Reads enterprise data, semantics, policies, identity, and AI recommendations — frozen at capture,
+          qualification inherited from the source. Writes exactly one new object:{" "}
+          <strong>the Decision Record</strong>. Nothing else of yours is rewritten.
         </p>
       </div>
 
@@ -114,12 +115,13 @@ export function OverlayArchitectureDiagram() {
       {/* Three layers */}
       <div className="grid gap-3 md:grid-cols-3">
         <LayerCard
-          title="Google Looker"
+          title="Semantic layer (e.g. Google Looker)"
           chip={<IoChip kind="read" />}
           items={[
             "LookML semantic layer — your governed definitions",
             "Immutable financial KPIs as qualified evidence",
             "Stays your read-only system of definitions; “Open in Looker” remains the live surface",
+            "Same contract for dbt, Snowflake Semantic Models, Fabric, Cube — and any future semantic provider",
           ]}
         />
         <LayerCard
@@ -136,7 +138,7 @@ export function OverlayArchitectureDiagram() {
           chip={<IoChip kind="write" />}
           items={[
             "ERP writeback, payment runs, CRM updates",
-            "Temporal / n8n pipelines; Slack & Teams delivery",
+            "Workato / Temporal / n8n pipelines; Slack & Teams delivery",
             "Run only after the loop commits — on rails you already own",
           ]}
         />
