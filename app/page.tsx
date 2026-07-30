@@ -1,10 +1,11 @@
 import Link from "next/link";
 import {
   LOOP_ENGINE_AUDITOR_LINE,
-  LOOP_ENGINE_HERO_HEADLINE,
+  LOOP_ENGINE_MEMORY_LINE,
+  LOOP_ENGINE_MEMORY_PROBLEM,
+  LOOP_ENGINE_MEMORY_SOLUTION,
   LOOP_ENGINE_META_DESCRIPTION,
-  LOOP_ENGINE_PRIMARY,
-  LOOP_ENGINE_SUPPORTING
+  LOOP_ENGINE_PRIMARY
 } from "@/lib/betterdata-ecosystem";
 import { SITE, LEGACY, npmPkgUrl } from "@/lib/site-config";
 import { CONTACT_PAGE, SALES_CONTACT_URL } from "@/lib/contact-routes";
@@ -174,7 +175,7 @@ async function HomeContent() {
                 maxWidth: 760
               }}
             >
-              The system of record for decisions.
+              {LOOP_ENGINE_MEMORY_LINE}
             </h1>
             <p
               className="fade-in-up mx-auto mt-6"
@@ -183,11 +184,11 @@ async function HomeContent() {
                 fontSize: "var(--text-md)",
                 fontWeight: 500,
                 color: "var(--color-ink)",
-                maxWidth: 620,
+                maxWidth: 660,
                 lineHeight: 1.6
               }}
             >
-              {LOOP_ENGINE_HERO_HEADLINE}
+              {LOOP_ENGINE_MEMORY_PROBLEM}
             </p>
             <p
               className="fade-in-up mx-auto mt-4"
@@ -195,11 +196,11 @@ async function HomeContent() {
                 animationDelay: "220ms",
                 fontSize: "var(--text-base)",
                 color: "var(--color-ink-tertiary)",
-                maxWidth: 640,
+                maxWidth: 660,
                 lineHeight: 1.65
               }}
             >
-              {LOOP_ENGINE_SUPPORTING}
+              {LOOP_ENGINE_MEMORY_SOLUTION}
             </p>
 
             <div
@@ -255,7 +256,7 @@ async function HomeContent() {
         </div>
       </section>
 
-      {/* The audit gap — reconstruct vs retrieve */}
+      {/* Decision memory — what disappears when the why isn't kept */}
       <section
         style={{
           background: "var(--color-surface)",
@@ -263,7 +264,7 @@ async function HomeContent() {
         }}
       >
         <div className="mx-auto w-full max-w-[900px] px-6 text-center md:px-10">
-          <p style={eyebrowStyle}>The audit gap</p>
+          <p style={eyebrowStyle}>Decision memory</p>
           <h2 className="mt-3" style={{ fontSize: "clamp(var(--text-2xl), 4vw, var(--text-4xl))", letterSpacing: "-0.02em" }}>
             &ldquo;The model said it was fine&rdquo; is not an answer.
           </h2>
@@ -275,9 +276,22 @@ async function HomeContent() {
               lineHeight: 1.7
             }}
           >
-            As AI participates in consequential decisions, the question is no longer whether the work got done —
-            it&apos;s whether anyone can defend how. Dashboards have changed since. The reasoning vanished with the
-            chat window. The approval lives in a thread nobody can find.
+            The transaction lands in the ERP. The steps land in the workflow engine. The metrics land in the BI
+            stack. The decision itself — what was known, which policy applied, what the AI recommended, who judged
+            it and why — evaporates into chat windows, screenshots, and threads nobody can find.
+          </p>
+          <p
+            style={{
+              marginTop: 16,
+              fontSize: "var(--text-base)",
+              color: "var(--color-ink-tertiary)",
+              lineHeight: 1.7
+            }}
+          >
+            What&apos;s lost is more than auditability. Institutional knowledge walks out with the people who made
+            the calls. The same case gets decided differently on different days. An AI recommendation that can&apos;t
+            be explained afterward is autonomy you can&apos;t extend. And you can&apos;t improve decisions you never
+            captured.
           </p>
           <blockquote
             style={{
@@ -292,8 +306,8 @@ async function HomeContent() {
             &ldquo;{LOOP_ENGINE_AUDITOR_LINE}&rdquo;
           </blockquote>
           <p style={{ marginTop: 24, fontSize: "var(--text-base)", color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            Evidence is frozen at the moment of capture, approvals are signed on the record, and every decision is
-            answerable years later — by construction, not by discipline.
+            Boss Loops preserves organizational decision memory: evidence frozen at the moment of capture, approvals
+            signed on the record, every decision answerable years later — by construction, not by discipline.
           </p>
           <p style={{ marginTop: 20, fontSize: "var(--text-sm)" }}>
             <Link href="/product/decision-record" style={{ color: "var(--color-primary)" }}>

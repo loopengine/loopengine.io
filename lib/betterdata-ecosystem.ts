@@ -10,6 +10,16 @@ import { SITE } from "@/lib/site-config";
 export const LOOP_ENGINE_HERO_HEADLINE =
   "Your ERP records what happened. Boss Loops governs what happens next.";
 
+/** Homepage hero — decision-memory framing (2026-07 refinement). */
+export const LOOP_ENGINE_MEMORY_LINE =
+  "Every business remembers what it did. Very few remember why.";
+
+export const LOOP_ENGINE_MEMORY_PROBLEM =
+  "Every day your operation approves, releases, holds, and commits — decisions made by humans, AI assistants, and autonomous agents together. Your systems record the transactions, the workflow state, the analytics. Almost none of them preserve why the decision was made.";
+
+export const LOOP_ENGINE_MEMORY_SOLUTION =
+  "Boss Loops is the system of record for decisions — the evidence it was made on, the policy it cleared, and every participant, human or AI, preserved on one immutable Decision Record. Your ERP records what happened. Boss Loops remembers why.";
+
 export const LOOP_ENGINE_AUDITOR_LINE =
   "When someone asks why it was approved — leadership, operations, or audit — you don't reconstruct the story. You retrieve it.";
 
