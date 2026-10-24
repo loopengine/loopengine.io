@@ -61,16 +61,14 @@ PENDING_APPROVAL --[reject]--> IDLE
 
 ```ts
 // @no-typecheck
-import Anthropic from "@anthropic-ai/sdk";
 import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const claude = createAnthropicActorAdapter(anthropic, {
-  modelId: "claude-opus-4-6",
-  confidenceThreshold: 0.75
+const claude = createAnthropicActorAdapter({
+  apiKey: process.env.ANTHROPIC_API_KEY!,
+  model: "claude-3-5-sonnet-latest",
 });
 
-const { actor, decision } = await claude.createSubmission({
+const { actor, evidence: submissionEvidence } = await claude.createSubmission({
   loopId: "scm.replenishment",
   loopName: "SCM Replenishment",
   currentState: "ANALYZING",
@@ -88,7 +86,7 @@ await engine.transition({
   aggregateId: "repl-lmb-001" as never,
   transitionId: "submit_recommendation" as never,
   actor,
-  evidence: decision
+  evidence: submissionEvidence
 });
 ```
 

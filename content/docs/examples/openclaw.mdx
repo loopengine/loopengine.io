@@ -9,7 +9,7 @@ section: Examples
 | Stage | In this example |
 | --- | --- |
 | **Provider** | Optional — agent reasoning may live in OpenClaw; governed transitions still pass through Boss Loops |
-| **Loop + Guards** | Approval loop — `allowedActors: ['human']`, `approval_obtained` |
+| **Loop + Guards** | Approval loop — `actors: ['human']`, `approval_obtained` |
 | **Channel** | **OpenClaw** — WhatsApp/Telegram/Slack/Discord delivery of approval prompts |
 | **Integration** | Downstream PO / ERP trigger after approved transition |
 | **Evidence** | Transition events + messenger reply attribution |
@@ -22,7 +22,7 @@ Provider (optional) → Loop + Guards → Channel (OpenClaw) → Integration →
 
 OpenClaw handles delivery and replies across messaging channels, while Boss Loops owns state transitions, actor constraints, and guard decisions.
 
-Approval gates are runtime policy checks, not prompt conventions. Even if an agent asks to self-approve, a transition with `allowedActors: ['human']` rejects non-human actors.
+Approval gates are runtime policy checks, not prompt conventions. Even if an agent asks to self-approve, a transition with `actors: ['human']` rejects non-human actors.
 
 ## Architecture
 
@@ -38,7 +38,7 @@ OpenClaw Gateway ------------------------------------.
 Boss Loops                                     |
      |                                                |
      |- guard: approval_obtained ✅                  |
-     |- allowedActors: ['human'] ✅                  |
+     |- actors: ['human'] ✅                        |
      v                                                |
 PENDING_BUYER_APPROVAL -> PO_TRIGGERED               |
      |                                                |
@@ -55,8 +55,17 @@ import { OpenClawEventBus } from '@loop-engine/adapter-openclaw'
 
 const replenishmentLoop = LoopBuilder
   .create('demo.repl', 'scm')
-  .state('A', { isTerminal: true })
-  .initialState('A')
+  .version('1.0.0')
+  .description('Replenishment approval')
+  .state('PENDING_BUYER_APPROVAL')
+  .state('APPROVED', { isTerminal: true })
+  .initialState('PENDING_BUYER_APPROVAL')
+  .transition({
+    id: 'approve',
+    from: 'PENDING_BUYER_APPROVAL',
+    to: 'APPROVED',
+    actors: ['human'],
+  })
   .outcome({ id: 'o', description: 'o', valueUnit: 'o', businessMetrics: [{ id: 'm', label: 'm', unit: '1' }] })
   .build()
 
@@ -83,7 +92,7 @@ void eventBus
 
 ## Why guards beat prompts
 
-`allowedActors` and guard evaluation happen in the runtime transition engine, not in the language model output path. That keeps approval logic deterministic and testable.
+`actors` and guard evaluation happen in the runtime transition engine, not in the language model output path. That keeps approval logic deterministic and testable.
 
 Prompt injection can change model text, but it cannot bypass transition authorization or guard failures. This is the security boundary for agentic operations.
 

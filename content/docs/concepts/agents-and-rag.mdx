@@ -69,7 +69,7 @@ const ragResults = {
   ragSource: "vendor-policy-kb"
 };
 
-const { actor, decision } = await adapter.createSubmission({
+const { actor, evidence: submissionEvidence } = await adapter.createSubmission({
   loopId: "procurement",
   loopName: "SCM Procurement",
   currentState: "pending_analysis",
@@ -82,7 +82,7 @@ await engine.transition({
   aggregateId: "PO-10042" as never,
   transitionId: "submit_recommendation" as never,
   actor,
-  evidence: { ...decision, ragResults }
+  evidence: { ...submissionEvidence, ragResults }
 });
 ```
 

@@ -49,7 +49,11 @@ canActorExecuteTransition(
 ): { authorized: boolean; requiresApproval: boolean; reason?: string }
 ```
 
-`canActorExecuteTransition()` validates `transition.allowedActors` and the optional `AIActorConstraints.requiresHumanApprovalFor` list for `ai-agent` actors.
+`canActorExecuteTransition()` checks `transition.actors`. When `actor.type` is not in that list it returns `{ authorized: false, requiresApproval: false, reason: "Actor type not allowed for this transition" }`.
+
+When the actor is `ai-agent` and the transition id is listed in `AIActorConstraints.requiresHumanApprovalFor`, the function returns `{ authorized: true, requiresApproval: true }`. It does not return `authorized: false` for that case. Your application decides what to do with `requiresApproval`.
+
+Boss Loops Cloud does not use this helper for hosted approvals. A human approve-signal there is accepted only when the signed-in person has an approver assignment. See [Human approval gates](/docs/ai-and-automation/human-approval-gates).
 
 ```ts
 // @no-typecheck

@@ -73,7 +73,7 @@ Registry adapters load `LoopDefinition` objects. Use `localRegistry` for in-proc
 
 | | |
 |---|---|
-| Interface | LLM-step contract — `AIActorAdapter.createSubmission(...)` returning `{ actor: AIAgentActor, decision: AIActorDecision }`; tool adapters implement `ToolAdapter.invoke(...)` |
+| Interface | `ActorAdapter.createSubmission(...)` returning `AIAgentSubmission` (`actor`, `signal`, `evidence`); tool adapters implement `ToolAdapter.invoke(...)` |
 | Slot | Invoked from transition execution paths (not a `LoopEngineOptions` field) |
 | Shipped | `@loop-engine/adapter-anthropic`, `@loop-engine/adapter-openai`, `@loop-engine/adapter-gemini`, `@loop-engine/adapter-grok`, `@loop-engine/adapter-perplexity` (tool/retrieval) |
 | Docs | [AI as Actor](/docs/ai-and-automation/ai-as-actor) · [`createAIActor`](/docs/packages/sdk#createaiactor) · per-provider integration pages |

@@ -48,7 +48,7 @@ taxonomy: provider
 
    ```typescript
    // @no-typecheck
-   const { actor, decision } = await adapter.createSubmission({
+   const { actor, signal, evidence: submissionEvidence } = await adapter.createSubmission({
      loopId: "procurement",
      loopName: "SCM Procurement",
      currentState: "pending_analysis",
@@ -65,9 +65,10 @@ taxonomy: provider
 
    await loopSystem.engine.transition({
      aggregateId: "procurement-1",
-     transitionId: decision.transitionId,
+     // signal defaults to the transition id when the definition omits signal
+     transitionId: signal,
      actor,
-     evidence: decision
+     evidence: submissionEvidence
    });
    ```
 

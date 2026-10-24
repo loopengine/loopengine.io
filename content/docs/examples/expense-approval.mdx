@@ -54,6 +54,7 @@ import { LoopBuilder } from "@loop-engine/sdk";
 // The human-only guard is the load-bearing governance rule.
 const expenseApproval = LoopBuilder
   .create("expense.approval", "finance")
+  .version("1.0.0")
   .description("Expense report approval")
   .state("SUBMITTED")
   .state("PENDING_APPROVAL")

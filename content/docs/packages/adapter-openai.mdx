@@ -25,22 +25,19 @@ openai  ^4.0.0
 
 ```typescript
 // @no-typecheck
-import OpenAI from 'openai'
 import { createOpenAIActorAdapter } from '@loop-engine/adapter-openai'
 import { createLoopSystem } from '@loop-engine/sdk'
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
-const adapter = createOpenAIActorAdapter(openai, {
-  modelId: 'gpt-4o',
-  confidenceThreshold: 0.75,
+const adapter = createOpenAIActorAdapter({
+  apiKey: process.env.OPENAI_API_KEY!,
+  model: 'gpt-4o',
 })
 
 const loopSystem = await createLoopSystem({ loops: [] })
 const aggregateId = 'procurement-1'
 
 // Get the AI actor's decision for the current loop state
-const { actor, decision } = await adapter.createSubmission({
+const { actor, signal, evidence } = await adapter.createSubmission({
   loopId: 'procurement',
   loopName: 'SCM Procurement',
   currentState: 'pending_analysis',
@@ -59,9 +56,10 @@ const { actor, decision } = await adapter.createSubmission({
 // Submit to the runtime — guards evaluate after this point
 const result = await loopSystem.engine.transition({
   aggregateId,
-  transitionId: decision.transitionId,
+  // signal defaults to the transition id when the definition omits signal
+  transitionId: signal,
   actor,
-  evidence: decision,
+  evidence,
 })
 ```
 
@@ -69,10 +67,10 @@ const result = await loopSystem.engine.transition({
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `modelId` | `string` | `gpt-4o` | OpenAI model to use |
-| `maxTokens` | `number` | `1024` | Max tokens in response |
-| `systemPrompt` | `string` | — | Optional system prompt prepended to loop context |
-| `confidenceThreshold` | `number` | `0.7` | Minimum confidence required (0–1) |
+| `apiKey` | `string` | — | Required. OpenAI API key |
+| `model` | `string` | `gpt-4o` | OpenAI model id |
+| `maxTokens` | `number` | `500` | Max tokens in the completion |
+| `temperature` | `number` | `0` | Sampling temperature |
 
 ## What the adapter produces
 

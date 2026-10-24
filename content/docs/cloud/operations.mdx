@@ -1,9 +1,8 @@
 ---
 title: Cloud operations
 description: >-
-  What Boss Loops Cloud operates for you — tenancy and isolation, outcome-based
-  metering, capability enforcement, audit exports, drift detection, and the
-  canonical loop types.
+  What Boss Loops Cloud operates for a customer organization — isolation,
+  API keys, approval authority, and the audit history.
 section: Boss Loops Cloud
 sidebar_label: Operations
 order: 3
@@ -14,39 +13,38 @@ canonical: https://www.bossloops.io/docs/cloud/operations
   <span className="docs-status-badge tier-cloud">Cloud</span>
 </div>
 
-## What you get with Boss Loops Cloud
+Boss Loops Cloud runs decision loops for your organization. Better Data operates the service. You integrate with the [Cloud API](/docs/cloud/api-reference) and approve in the product.
 
-- **User management** — roles and approval authority scoped by location (plants, regions, business units)
-- **Outcome-based metering** (billing tied to loop completions — see [Pricing](/pricing))
-- **TenantCapabilitySnapshot**-style capability enforcement for RBAC
-- Tamper-evident **loop audit trail** and export paths for compliance workflows
-- **Drift detection** (scheduled validation of expected vs observed state)
-- **Outbox relay** for cross-module event delivery
-- **Industry Pack** policy overlays (hosted-only; not published as OSS)
+## What you get
 
-## Loop types (canonical)
+- **Organization isolation.** An API key and a signed-in user only read and change loops for their own organization. Another organization's loop id is not found.
+- **Organization API keys** for integrations. Keys are shown once, can be rotated (previous secret valid for 24 hours), and can be revoked immediately. A key cannot administer other keys.
+- **Actor class on each API call.** Send `X-Actor-Type: user`, `system`, or `llm`. The class cannot be overridden by the transition body, and a key cannot act as a named person.
+- **Approver assignments.** A human approval transition runs only when that person has an approver assignment on the decision loop. When the assignment has a limit, the decision amount must be within it. Missing configuration fails closed: the transition is not recorded.
+- **History.** `GET /api/v1/loops/{aggregateId}/history` returns the recorded transitions, including who acted.
 
-| Loop | Module | What it governs |
-| ---- | ------ | ---------------- |
-| `scm.procurement` | SCM | AI-assisted PO recommendation + human approval gates |
-| `scm.fulfillment` | SCM | Multi-step order fulfillment |
-| `scm.quality` | SCM | Inspection, deviation, CAPA-style disposition |
-| `scm.replenishment` | SCM | Demand signal → reorder / replenishment |
-| `dcm.demand` | DCM | Demand signal detection and replenishment triggers |
-| `dcm.order` | DCM | Channel order routing and lifecycle |
-| `dcm.returns` | DCM | Return authorization and reverse logistics |
+Commercial metering and tier limits are enforced by the service. Numeric quotas are part of your agreement, not a fixed value in this guide. See [Pricing](/pricing).
 
-For the platform conceptual model behind these loop types, see
-[Loops on the Better Data platform](https://docs.betterdata.co/docs/platform/loops).
+## What to use the API for
 
-## Hosted services
+| Action | Route |
+| --- | --- |
+| See which loop definitions your organization can run | `GET /api/v1/loops/catalog` |
+| Open a decision loop | `POST /api/v1/loops` |
+| Advance it | `POST /api/v1/loops/{aggregateId}/transition` |
+| Stop it | `POST /api/v1/loops/{aggregateId}/cancel` |
+| Read what happened | `GET /api/v1/loops/{aggregateId}/history` |
 
-The running hosted stack includes **hosted-loops** (runtime + loops database API) and the
-published loop definitions catalog. For how these relate to the wider Better Data platform
-apps, see
-[Hosted platform apps](https://docs.betterdata.co/docs/developer-resources/reference/hosted-platform-apps).
+Details, including which actor class can complete a transition, are in the [API reference](/docs/cloud/api-reference).
 
-## API
+## Approvals
 
-Versioned HTTP routes for loop lifecycle, runs, baselines, and connector health are
-documented in the [Cloud API reference](/docs/cloud/api-reference).
+Protected approvals are transitions whose signal id is an approve signal (it contains `.approve.` or ends in `.approve` or `.approve.v1`). The person approving must be signed in and assigned as an approver. Integrations should open the loop and attach evidence. They should not send a person's identity in `actor.id` and expect that person to be the approver of record.
+
+## Connectors
+
+Slack approvals and Google Sheets applies are configured in the Boss Loops application for your organization. The open-source runtime does not include those hosted connectors. See [Getting started](/docs/cloud/getting-started).
+
+## Self-hosted
+
+The same decision-loop model can run in your process with `@loop-engine/sdk`. Isolation, keys, and approver assignments above are Cloud behavior. Self-hosted actor checks are the transition `actors` list and `canActorExecuteTransition` in `@loop-engine/actors`. See [Installation](/docs/getting-started/installation).

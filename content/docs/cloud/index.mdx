@@ -11,7 +11,7 @@ canonical: https://www.bossloops.io/docs/cloud
 
 <div className="docs-quick-links">
   <span className="docs-status-badge tier-cloud">Cloud</span>
-  <span className="docs-status-badge attr-built-in">Production: loops.betterdata.co</span>
+  <span className="docs-status-badge attr-built-in">Production: app.bossloops.io</span>
 </div>
 
 **Boss Loops Cloud** is the **managed** distribution of Boss Loops — run governed,
@@ -30,7 +30,7 @@ decision you can defend a year later.
 
 ## Start
 
-- **<CtaLink cta="start_cloud" location="boss-loops/cloud" href="https://betterdata.co/company/contact?intent=loop-engine">Talk to us about Boss Loops Cloud</CtaLink>** — we'll set up your organization and tenant with you
+- **<CtaLink cta="start_cloud" location="boss-loops/cloud" href="https://betterdata.co/company/contact?intent=loop-engine">Talk to us about Boss Loops Cloud</CtaLink>** — we'll provision your organization with you
 
 Prefer to reach out directly?
 
@@ -41,14 +41,16 @@ Prefer to reach out directly?
 > **OSS proves the loop. Cloud runs the workflow.**
 >
 > The [OSS quickstart](/docs/getting-started/quick-start) proves the loop state machine on
-> your machine. Boss Loops Cloud runs live workflows — managed connectors (Slack, Google, …),
-> tenancy, and audit exports. See [Cloud getting started](/docs/cloud/getting-started).
+> your machine. Boss Loops Cloud runs hosted decision loops — organization API keys,
+> approver assignments, and managed connectors (Slack, Google). See
+> [Cloud getting started](/docs/cloud/getting-started).
 
 ## What is Boss Loops Cloud?
 
-Boss Loops Cloud, hosted at **[loops.betterdata.co](https://loops.betterdata.co)**, runs the
-Boss Loops model as a **managed service**. You integrate via APIs and module manifests;
-Better Data operates scale, isolation, and upgrades. The runtime technology underneath is the
+Boss Loops Cloud, hosted at **[app.bossloops.io](https://app.bossloops.io)**, runs the
+Boss Loops model as a **managed service**. You integrate with the
+[Cloud API](/docs/cloud/api-reference). Better Data operates the service, isolation between
+customer organizations, and upgrades. The runtime technology underneath is the
 **Boss Loops runtime** (`@loop-engine/*`) — see [Architecture](/docs/getting-started/architecture).
 
 **Self-hosted alternative:** Boss Loops OSS — start with the
@@ -56,9 +58,8 @@ Better Data operates scale, isolation, and upgrades. The runtime technology unde
 
 ## What you get
 
-See [Cloud operations](/docs/cloud/operations) for the full capability list — org isolation,
-outcome-based metering, capability enforcement, tamper-evident audit trail, drift detection,
-and Industry Pack policy overlays.
+See [Cloud operations](/docs/cloud/operations) for organization isolation, API keys,
+approver assignments, and history.
 
 ## API
 
@@ -68,11 +69,11 @@ reference and the monorepo contract.
 
 ## Boss Loops OSS vs Boss Loops Cloud
 
-| | Boss Loops OSS (`@loop-engine/sdk`) | Boss Loops Cloud ([loops.betterdata.co](https://loops.betterdata.co)) |
+| | Boss Loops OSS (`@loop-engine/sdk`) | Boss Loops Cloud ([app.bossloops.io](https://app.bossloops.io)) |
 | - | ------------------------- | ----------------------------------------------------------- |
 | Cost | Free (Apache-2.0) | See [Pricing](/pricing) |
-| Setup | You operate | No infrastructure setup |
-| User management & location scopes | Your implementation | Built in |
-| Industry Packs | No | Yes |
-| Audit / compliance exports | Your pipelines | Platform aggregation + reports |
+| Setup | You operate | Better Data operates the service |
+| Who can approve | Your `actors` list and application checks | Approver assignment on the decision loop |
+| Integrations | Your adapters | Organization API key, plus Slack and Google in the product |
+| History | Your event bus and store | `GET /api/v1/loops/{aggregateId}/history` |
 | SLA | Self-managed | Better Data SLA |

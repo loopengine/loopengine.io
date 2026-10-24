@@ -39,7 +39,7 @@ const adapter = createGrokActorAdapter(process.env.XAI_API_KEY!, {
   confidenceThreshold: 0.75,
 })
 
-const { actor, decision } = await adapter.createSubmission({
+const submission = await adapter.createSubmission({
   loopId: 'procurement',
   loopName: 'SCM Procurement',
   currentState: 'pending_analysis',

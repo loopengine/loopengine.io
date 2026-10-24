@@ -10,6 +10,8 @@ order: 30
 Every transition is attributed to an actor in the transition record and emitted events.  
 Nothing executes anonymously.
 
+This page is the **self-hosted** engine (`@loop-engine/actors`). In Boss Loops Cloud the actor of record is the authenticated caller — an organization API key or a signed-in person — and the transition body cannot substitute a different person or actor class. See [Cloud API — actor identity](/docs/cloud/api-reference#actor-identity-on-a-transition).
+
 ## Actor types
 
 ### `human`
@@ -17,7 +19,12 @@ Nothing executes anonymously.
 Use when a person executes a transition.
 
 ```ts
-const actor = { type: 'human', id: actorId('drew@acme.com'), sessionId: 'sess_abc' }
+const actor = {
+  type: 'human' as const,
+  id: actorId('drew@acme.com'),
+  userId: 'user_drew',
+  displayName: 'Drew',
+}
 ```
 
 ### `automation`
@@ -25,7 +32,11 @@ const actor = { type: 'human', id: actorId('drew@acme.com'), sessionId: 'sess_ab
 Use for jobs, integrations, and rule engines.
 
 ```ts
-const actor = { type: 'automation', id: actorId('system:po-router'), serviceId: 'po-service' }
+const actor = {
+  type: 'automation' as const,
+  id: actorId('system:po-router'),
+  serviceId: 'po-service',
+}
 ```
 
 ### `ai-agent`
@@ -34,10 +45,10 @@ Use for model-driven recommendations or execution.
 
 ```ts
 const actor = {
-  type: 'ai-agent',
+  type: 'ai-agent' as const,
   id: actorId('agent:forecaster'),
-  agentId: 'claude-3-5-sonnet',
-  gatewaySessionId: 'gw_123'
+  modelId: 'claude-3-5-sonnet',
+  provider: 'anthropic',
 }
 ```
 
@@ -46,22 +57,16 @@ const actor = {
 Use for internal runtime/platform initiated actions.
 
 ```ts
-const actor = { type: 'system', id: actorId('system:loop-engine') }
+const actor = {
+  type: 'system' as const,
+  id: actorId('system:loop-engine'),
+  componentId: 'loop-engine',
+}
 ```
 
-## Actor evidence
+## AI evidence
 
-Use `buildActorEvidence(actor, baseEvidence)` to normalize actor-attributed evidence.
-
-For all actors, the helper adds:
-
-- `actor_type`
-- `actor_id`
-
-For `ai-agent`, it also adds:
-
-- `ai_agent_id`
-- optional `ai_confidence` and `ai_reasoning` (when present in base evidence)
+`@loop-engine/actors` exports `buildAIActorEvidence` for model submissions. It requires `modelId`, `provider`, `reasoning`, and `confidence` (0 through 1), and returns evidence plus `promptHash` when you pass `prompt`. There is no `buildActorEvidence` helper.
 
 ## Authorization checks
 

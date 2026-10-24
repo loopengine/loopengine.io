@@ -83,21 +83,27 @@ User-defined state IDs (like `OPEN`, `PO_CONFIRMED`, `SETTLED` below) are indepe
 ```yaml
 id: scm.procurement
 version: 1.0.0
+name: Procurement
 domain: scm
 description: Purchase order lifecycle from requisition through settlement
 states:
   - id: OPEN
+    label: Open
   - id: PO_CONFIRMED
+    label: PO confirmed
   - id: RECEIVED
+    label: Received
   - id: INVOICE_MATCHED
+    label: Invoice matched
   - id: SETTLED
+    label: Settled
     isTerminal: true
 initialState: OPEN
 transitions:
   - id: confirm_po
     from: OPEN
     to: PO_CONFIRMED
-    allowedActors: [human, automation, ai-agent]
+    actors: [human, automation, ai-agent]
     guards:
       - id: approval_obtained
         severity: hard
@@ -109,6 +115,10 @@ outcome:
   description: Purchase order fully settled
   valueUnit: po_settled
   measurable: true
+  businessMetrics:
+    - id: cycle_time_days
+      label: PO cycle time
+      unit: days
 ```
 
 ## Related

@@ -13,16 +13,18 @@ Use human gates for:
 - irreversible actions
 - regulated or compliance-heavy decisions
 
-## Pattern A: exclude `ai-agent` from `allowedActors`
+Self-hosted gates use the transition `actors` list and `canActorExecuteTransition` from `@loop-engine/actors`. Boss Loops Cloud adds a separate check for human approve-signals: the signed-in person must have an approver assignment on that decision loop. An API key cannot pass that check by naming a person. See [Cloud API](/docs/cloud/api-reference#human-approval).
+
+## Pattern A: omit `ai-agent` from `actors`
 
 ```yaml
 - id: settle_invoice
   from: MATCHED
   to: SETTLED
-  allowedActors: [human, automation]
+  actors: [human, automation]
 ```
 
-If an AI actor attempts this transition, authorization returns `requiresApproval: true`.
+If an `ai-agent` attempts this transition, `canActorExecuteTransition` returns `authorized: false` and `requiresApproval: false`, with reason `Actor type not allowed for this transition`.
 
 ## Pattern B: AI constraints in authorization
 
@@ -34,14 +36,14 @@ interface AIActorConstraints {
 }
 ```
 
-When an `ai-agent` actor attempts a transition whose ID appears in `requiresHumanApprovalFor`, `canActorExecuteTransition()` returns unauthorized with `requiresApproval: true`.
+When an `ai-agent` attempts a transition whose id appears in `requiresHumanApprovalFor`, `canActorExecuteTransition()` returns `authorized: true` and `requiresApproval: true`. The caller still has to stop and wait for a human. The helper does not reject the actor by itself.
 
 ## Pending approval sequence
 
 ```ts
 const aiAuth = canActorExecuteTransition(aiActor, transition, constraints)
-if (!aiAuth.authorized && aiAuth.requiresApproval) {
-  // Create human review task using ai evidence
+if (aiAuth.requiresApproval) {
+  // authorized is still true; your app creates the human review task
 }
 
 // Later, human executes same transition:
@@ -54,5 +56,5 @@ await engine.transition({
 ```
 
 <Callout variant="important" title="Per-transition gating only">
-`AIActorConstraints` ships with a single field, `requiresHumanApprovalFor`. Boss Loops does not provide a built-in consecutive-AI-transition circuit breaker. Track that policy in your application and translate it into per-transition entries on this list (or into `allowedActors` exclusions).
+`AIActorConstraints` ships with a single field, `requiresHumanApprovalFor`. Boss Loops does not provide a built-in consecutive-AI-transition circuit breaker. Track that policy in your application and translate it into per-transition entries on this list, or omit `ai-agent` from `actors`.
 </Callout>

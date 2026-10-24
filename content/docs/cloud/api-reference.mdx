@@ -1,8 +1,8 @@
 ---
 title: Boss Loops Cloud API reference
 description: >-
-  The Boss Loops Cloud HTTP API — auth, versioned routes, the generated OpenAPI
-  reference, and the canonical contract in the monorepo.
+  Organization API keys, actor class, and the hosted HTTP routes for creating,
+  transitioning, cancelling, and reading Boss Loops decision loops.
 section: Boss Loops Cloud
 taxonomy: integration
 sidebar_label: API reference
@@ -12,67 +12,205 @@ canonical: https://www.bossloops.io/docs/cloud/api-reference
 
 <div className="docs-quick-links">
   <span className="docs-status-badge tier-cloud">Cloud</span>
-  <span className="docs-status-badge attr-built-in">Production: loops.betterdata.co</span>
-  <span className="docs-status-badge attr-built-in">Taxonomy: Integration (hosted control plane)</span>
+  <span className="docs-status-badge attr-built-in">Production: app.bossloops.io</span>
 </div>
 
-## What this is
+Boss Loops Cloud is the hosted Boss Loops product. Your organization integrates with it over HTTPS. The open-source packages (`@loop-engine/*`) are the self-hosted engine and are documented on the rest of this site. They do not accept this API key.
 
-This site documents the **OSS governed engine** (`@loop-engine/*`). **Boss Loops Cloud** is
-the **hosted Integration** path: same loop/guard/evidence model, operated by Better Data
-with tenancy, API keys, and managed connectors (Slack, Google, …).
+**Production base URL:** `https://app.bossloops.io`
 
-| Surface | Where to read |
+All JSON routes live under `/api/v1`. Send `Content-Type: application/json` on requests with a body.
+
+## Authentication
+
+Integrations authenticate with an **organization API key**.
+
+| Item | Value |
 | --- | --- |
-| Boss Loops engine, taxonomy, adapters | This site (bossloops.io/docs) |
-| Boss Loops Cloud HTTP contract | This page + the references below |
-| Better Data platform, SCM, CCO applications | **[docs.betterdata.co](https://docs.betterdata.co)** |
+| Header | `Authorization: Bearer le_<32 hex characters>` |
+| Actor class | `X-Actor-Type: user` \| `system` \| `llm` |
 
-**The OSS engine** defines states, signals, guards, transitions, and events in **your**
-infrastructure. **Boss Loops Cloud** exposes the execution contract over **HTTPS** when you
-want managed governance operations.
+The key is bound to your organization when it is issued. It is shown once. Store it in your secret manager. A key can only list and change decision loops for that organization. A loop that belongs to another organization is returned as **404**, the same as a loop that does not exist.
 
-- **Developers & integrations** → **`https://loops.betterdata.co`** (Bearer JWT for first-party services, **`le_` API keys** for external automation).
-- **Operators** → **Automation** at **`app.betterdata.co/automation`** (product UX; same loops conceptually).
+Send `X-Actor-Type` on every API-key request. The supported values are:
 
-We document **shipped** Cloud capabilities here and in the references below. We do not imply
-undelivered OSS parity, Studio, docker compose runtime, or a multi-service mesh **today** —
-see [Runtime Platform Direction](/docs/concepts/runtime-platform-direction) and
-[changelog](/docs/changelog).
-
-## Routes at a glance
-
-The **hosted-loops** service exposes versioned HTTP routes under **`/api/v1/...`**.
-**Production base URL** mapping (for example **`loops.betterdata.co`**) is
-environment-specific — confirm with your deployment or support.
-
-| Prefix | Purpose (high level) |
+| `X-Actor-Type` | Meaning |
 | --- | --- |
-| **`/api/v1/loops`** | List/create loop concerns; catalog, start, transition, cancel, events, history, and integration helpers |
-| **`/api/v1/loops/runs`** | Run detail and comparison |
-| **`/api/v1/loops/definitions`** | Definition-scoped run listings |
-| **`/api/v1/baselines`** | Baselines CRUD, transitions, true-ups, delivery routes |
-| **`/api/v1/connectors/*`** | Connector health and OAuth/event surfaces (e.g. Slack, Google) |
+| `user` | A person-class caller. This does **not** name a colleague. |
+| `llm` | An AI caller. |
+| `system` | A system caller. See the transition limitation below. |
 
-External callers should use the service's **authenticated API** only; **exact auth header
-and tenancy claims** are defined by the hosted-loops implementation — treat field names and
-JWT contracts as **implementation details** to verify in the references below.
+A missing or unrecognized `X-Actor-Type` is not a supported way to choose an actor. The hosted service may still accept the call and classify it as `user`. Do not rely on that. Classification never turns the key into a named approver.
 
-## Canonical references
+People approve in the Boss Loops application, under an approver assignment for that decision loop. An integration cannot put another person's id in the request and have that person recorded as the actor.
 
-- **[Generated OpenAPI reference](https://docs.betterdata.co/docs/developer-resources/api-reference/boss-loops)** —
-  the route-by-route generated reference (from `apps/hosted-loops/openapi.yaml`, DP-07). It
-  lives on the Better Data platform docs and stays there.
-- **[Boss Loops Cloud HTTP API contract (source)](https://github.com/betterdata-platform/bd-forge-main/blob/main/apps/hosted-loops/docs/api.md)** —
-  the developer contract maintained alongside the implementation. Pull requests that change
-  route handlers should update it in the same change-set when the public JSON contract moves.
+`webhook` and platform-operator credentials have no transition authority. Those calls receive **403** `Authenticated actor has no engine authority projection`.
 
-## Related OSS docs
+<Callout variant="important" title="API keys are not user sessions">
+An API key cannot create, list, rotate, or revoke keys. Key administration requires a signed-in organization administrator. If you do not have a key yet, request one when your organization is provisioned.
+</Callout>
 
-- [HTTP adapter](/docs/integrations/http) — webhook-style **outbound** adapter from the OSS runtime; not the same as Boss Loops Cloud ingress.
-- [Architecture](/docs/getting-started/architecture) — core Boss Loops concepts reused by the hosted service.
+### Key administration
 
-## Pricing
+These routes reject an API key (`403`, `Loop API keys can only be managed with a user session JWT`). A caller who is not an organization administrator receives `403` `Tenant administrator role required`.
 
-See [Pricing](/pricing) — open core plus Starter, Team, and Enterprise tiers. Launch pricing is being
-finalized; all commercial tiers are in early access. (Do not hardcode prices in integration guides.)
+| Method | Route | Result |
+| --- | --- | --- |
+| `GET` | `/api/v1/keys` | Keys for your organization (secret material is not returned) |
+| `POST` | `/api/v1/keys` | Creates a key. Body `{ "name"?: string }`. **201** includes `plainKey` once. |
+| `POST` | `/api/v1/keys/{keyId}/rotate` | New secret. The previous secret stays valid for **24 hours**. |
+| `DELETE` | `/api/v1/keys/{keyId}` | Revokes the key immediately. |
+
+## Actor identity on a transition
+
+`POST /api/v1/loops/{aggregateId}/transition` requires a body actor, and that actor cannot replace the authenticated caller.
+
+```json
+{
+  "signalId": "approve",
+  "actor": { "id": "present-but-not-authoritative", "type": "human" },
+  "evidence": { "amount": "8000.00" }
+}
+```
+
+| Rule | Result |
+| --- | --- |
+| `signalId` missing | **422** |
+| `actor` missing, or `actor.id` empty | **422** |
+| `actor.type` is not `human`, `ai`, or `system` | **422** `actor.type must be human\|ai\|system` |
+| `actor.type` does not match the authenticated actor class | **403** `Transition actor cannot replace the authenticated principal` |
+| API key with `X-Actor-Type: user` (or a missing header) | Body `actor.type` must be `human`. The actor of record is the key, not `actor.id`. |
+| API key with `X-Actor-Type: llm` | Body `actor.type` must be `ai`. `ai-agent` is the engine name and is **422** on this route. |
+| API key with `X-Actor-Type: system` | **Not a supported transition.** No accepted `actor.type` matches a system caller, so the route returns **403**. Do not send `system` and expect the transition to run. |
+
+`signalId` is the transition id on the loop definition. When a definition omits an explicit signal, the signal id and the transition id are the same value.
+
+## Human approval
+
+A human approval is a transition whose `signalId` contains `.approve.` or ends in `.approve` or `.approve.v1`, and whose authenticated actor class is human. Reject signals (`.reject.`) are not this gate.
+
+For those approvals the service checks the signed-in person's approver assignment on that decision loop:
+
+- No assignment configured for the loop: **409** `COMMIT_AUTHORITY_NOT_CONFIGURED`. Nothing is written.
+- The person is not an approver for that loop: **409** `not authorized to approve this decision system`.
+- The decision amount is above the approver's limit: **409** `exceeded approval authority`.
+
+The amount is read from evidence `amount`, `invoiceAmount`, or `decisionAmount`, or from the same fields on the loop context. An API key cannot satisfy this check by naming a person in `actor.id`.
+
+## Errors
+
+```json
+{ "error": "message" }
+```
+
+Validation errors add a `fields` object.
+
+`GET /api/v1/loops`, `GET /api/v1/loops/catalog`, and `GET /api/v1/loops/{aggregateId}` collapse every authentication failure into **401** `{ "error": "Missing tenant context" }`. A missing header, an invalid key, and an invalid session all return that same text. This was confirmed with unauthenticated and invalid-key GETs against production, which does not write data.
+
+Routes that authenticate directly (`POST /api/v1/loops`, start, transition, cancel, history, and key administration) return a specific **401**:
+
+| Message | When |
+| --- | --- |
+| `Missing or malformed Authorization header` | No `Bearer` token |
+| `Invalid or expired API key` | `le_` token that is not an active key |
+| `Invalid or expired token` | Session token that does not verify |
+| `Missing X-Actor-Type` | API key, and the deployment is in strict actor-header mode |
+| `Unrecognized X-Actor-Type` | API key, strict mode, header not `user`, `system`, or `llm` |
+
+The default deployment accepts a missing or unrecognized `X-Actor-Type` and classifies the key as `user`. Do not rely on that. Strict mode is an operator setting, not a customer setting.
+
+Other statuses:
+
+| Status | When |
+| --- | --- |
+| 401 | See the messages above |
+| 403 | Actor class cannot run the action, entitlement or quota refused, or the loop tier/capability is not available to the organization |
+| 404 | Loop not found for this organization |
+| 409 | Approval refused, guard or engine rejection, instance already started, or instance already terminal |
+| 422 | Body or query failed validation |
+| 429 | Transition rate limit exceeded |
+| 503 | Loop catalog unavailable while creating an instance |
+
+## Routes
+
+Path `{aggregateId}` is the instance id returned as `aggregateId` when the instance was created. Responses may include additional operational fields. Clients should key off `aggregateId`.
+
+### `GET /api/v1/loops`
+
+Query: `status`, `loopId`, `limit` (1–200, default 50), `offset` (default 0).
+
+**200** `{ "loops": [ ... ], "total": number }`. Each loop includes `aggregateId`, `loopId`, `currentState`, `status`, `context`, `createdAt`, and `updatedAt`.
+
+### `POST /api/v1/loops`
+
+Body:
+
+```json
+{
+  "loopId": "expense.approval",
+  "payload": { "amount": "8000.00" },
+  "idempotencyKey": "optional-stable-key"
+}
+```
+
+`loopId` and `payload` (object) are required. `metadata`, when sent, must be an object.
+
+**201** returns the new instance. It is stored in the definition's initial state with status `OPEN`. This call does not use `POST .../start`.
+
+**200** when `idempotencyKey` matches an instance already created for your organization. The original instance is returned. The new payload is not compared to the original.
+
+**404** `LOOP_NOT_FOUND` when that loop definition is not available. **403** `CAPABILITY_REQUIRED` or `TIER_REQUIRED` when the organization cannot run it.
+
+### `GET /api/v1/loops/catalog`
+
+**200** `{ "definitions": [ { "id", "loopId", "displayName", "description", "version", "tier", "states" } ] }`.
+
+### `GET /api/v1/loops/{aggregateId}`
+
+**200** one instance, or **404**.
+
+### `POST /api/v1/loops/{aggregateId}/start`
+
+Applies only when the instance status is `CREATED` or `PENDING`. The create route above does not leave instances in those statuses. Calling start on an instance you just created returns **409** `Loop already started`.
+
+The actor is the authenticated caller. There is no body actor on this route. Webhook and platform-operator credentials receive **403**.
+
+### `POST /api/v1/loops/{aggregateId}/transition`
+
+See [Actor identity on a transition](#actor-identity-on-a-transition). **200**:
+
+```json
+{
+  "aggregateId": "...",
+  "previousState": "UNDER_REVIEW",
+  "currentState": "APPROVED",
+  "status": "OPEN",
+  "transitionedAt": "2026-10-24T16:00:00.000Z"
+}
+```
+
+A refused transition is **409** with `error` set to the refusal text. No loop event is written for an approval refusal.
+
+### `POST /api/v1/loops/{aggregateId}/cancel`
+
+Sets the instance to state `CANCELLED` and status `TERMINAL`. **409** `ALREADY_TERMINAL` when it is already terminal. **404** when the id is not in your organization. Cancel accepts the aggregate id. A legacy instance id is still accepted on this route.
+
+### `GET /api/v1/loops/{aggregateId}/history`
+
+**200** `{ "aggregateId", "events": [ { "eventId", "type", "fromState", "toState", "actor": { "id", "type" }, "evidence", "occurredAt" } ] }`.
+
+`GET /api/v1/loops/{aggregateId}/events` is the legacy raw event list. Use history.
+
+## What this API does not include
+
+Slack and Google connectors are configured in the Boss Loops application. They are not a substitute for the API key on these routes.
+
+Execution-trace routes under `/api/v1/runs` respond only when tracing is enabled for that deployment. Do not depend on them as part of the general integration contract.
+
+Self-hosted loops use `@loop-engine/sdk` in your process. See [Quick start](/docs/getting-started/quick-start). Hosted actor rules on this page do not apply to that SDK: there, the actor you pass to `engine.transition` is the actor of record, constrained by the transition's `actors` list.
+
+## Related
+
+- [Cloud overview](/docs/cloud)
+- [Actor model](/docs/concepts/actor-model) (self-hosted engine)
+- [Human approval gates](/docs/ai-and-automation/human-approval-gates)

@@ -20,6 +20,10 @@ Boss Loops currently ships these canonical definitions from `loops/`:
 
 ## Featured definition: `scm.procurement`
 
+<Callout variant="important" title="Parser contract">
+The files under `loops/` in the Loop Engine repository still use the pre-1.0 field `allowedActors` and omit required `name` and state `label` values. `parseLoopYaml` rejects that shape. Author new definitions with [YAML format](/docs/defining-loops/yaml-format). The block below is abbreviated from the repository file and is not a valid current definition until those fields are added.
+</Callout>
+
 ```yaml
 id: scm.procurement
 version: 1.0.0
@@ -43,7 +47,7 @@ transitions:
   - id: confirm_po
     from: OPEN
     to: PO_CONFIRMED
-    allowedActors: [human, automation, ai-agent]
+    actors: [human, automation, ai-agent]
 outcome:
   id: po_settled
   description: Purchase order fully settled with matched invoice and inventory updated

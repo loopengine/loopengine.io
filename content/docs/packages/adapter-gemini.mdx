@@ -32,7 +32,7 @@ const adapter = createGeminiActorAdapter(process.env.GOOGLE_AI_API_KEY!, {
   confidenceThreshold: 0.75,
 })
 
-const { actor, decision } = await adapter.createSubmission({
+const submission = await adapter.createSubmission({
   loopId: 'procurement',
   loopName: 'SCM Procurement',
   currentState: 'pending_analysis',

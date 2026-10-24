@@ -176,7 +176,7 @@ await engine.start({
 });
 
 // Provider: AI recommends a transition (does not bypass guards).
-const { actor, decision } = await ai.createSubmission({
+const { actor, evidence: submissionEvidence } = await ai.createSubmission({
   loopId: "procurement",
   loopName: "SCM Procurement",
   currentState: "pending_analysis",
@@ -189,7 +189,7 @@ await engine.transition({
   aggregateId: "PO-2001" as never,
   transitionId: "submit_recommendation" as never,
   actor,
-  evidence: decision
+  evidence: submissionEvidence
 });
 
 // Guards run in runtime — e.g. confidence threshold.

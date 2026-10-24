@@ -13,11 +13,11 @@ Boss Loops treats AI the same way it treats humans and automation: as an attribu
 
 - inspect loop state in your application layer
 - recommend transitions with evidence
-- execute transitions where `allowedActors` includes `ai-agent`
+- execute transitions where `actors` includes `ai-agent`
 
 ## What AI cannot do
 
-- bypass `allowedActors`
+- bypass `actors`
 - bypass hard guards
 - modify loop definitions at runtime
 - execute indefinitely if circuit-breaker constraints block it
@@ -27,9 +27,11 @@ Boss Loops treats AI the same way it treats humans and automation: as an attribu
 ```ts
 interface AIAgentActor extends ActorRef {
   type: "ai-agent"
-  agentId: string
-  gatewaySessionId: string
-  recommendedBy?: string
+  modelId: string
+  provider: string
+  confidence?: number
+  promptHash?: string
+  toolsUsed?: string[]
 }
 ```
 
@@ -70,20 +72,18 @@ if (auth.authorized) {
 The actor contract stays constant across providers. Only SDK wiring changes.
 
 ```ts
-// Anthropic path (Claude)
 const claudeActor: AIAgentActor = {
   type: "ai-agent",
   id: actorId("agent:demand-forecaster"),
-  agentId: "claude-sonnet-4-20250514",
-  gatewaySessionId: "claude-session-123"
+  modelId: "claude-3-5-sonnet-latest",
+  provider: "anthropic",
 }
 
-// OpenAI path (GPT-4o)
 const openAiActor: AIAgentActor = {
   type: "ai-agent",
   id: actorId("agent:demand-forecaster"),
-  agentId: "gpt-4o",
-  gatewaySessionId: "openai-session-123"
+  modelId: "gpt-4o",
+  provider: "openai",
 }
 ```
 
@@ -98,7 +98,7 @@ Anthropic and OpenAI both submit through the same transition path and evidence s
 
 - Confidence `0.58` on `recommend_replenishment` returns `guard_failed` and holds state at `AI_ANALYSIS`.
 - Confidence `0.82` passes `confidence_threshold` and advances to `PENDING_BUYER_APPROVAL`.
-- AI attempts on `approve_replenishment` are rejected when transition `allowedActors` is `["human"]`.
+- AI attempts on `approve_replenishment` are rejected when transition `actors` is `["human"]` (`authorized: false`).
 
 ## Deep-dive example
 

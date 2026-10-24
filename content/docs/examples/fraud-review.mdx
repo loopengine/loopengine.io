@@ -56,13 +56,14 @@ PENDING_REVIEW --[analyst_review]--> REVIEWED --[close_case]--> CLOSED (terminal
 
 ```ts
 // @no-typecheck
-import OpenAI from "openai";
 import { createOpenAIActorAdapter } from "@loop-engine/adapter-openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const scorer = createOpenAIActorAdapter(openai, { modelId: "gpt-4o" });
+const scorer = createOpenAIActorAdapter({
+  apiKey: process.env.OPENAI_API_KEY!,
+  model: "gpt-4o",
+});
 
-const { actor, decision } = await scorer.createSubmission({
+const { actor, evidence: submissionEvidence } = await scorer.createSubmission({
   loopId: "fraud.review",
   loopName: "Fraud Review",
   currentState: "SCORING",
@@ -76,8 +77,8 @@ await engine.transition({
   transitionId: "submit_score" as never,
   actor,
   evidence: {
-    ...decision,
-    fraud_score: decision.confidence,
+    ...submissionEvidence,
+    fraud_score: submissionEvidence.confidence,
     flagged_patterns: ["velocity_spike", "new_device", "geo_mismatch"],
     transaction_context: { amount: 1480, currency: "USD" }
   }
