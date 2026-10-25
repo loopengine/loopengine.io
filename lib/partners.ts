@@ -115,7 +115,7 @@ export const evidencePartners: Partner[] = [
     name: "Snowflake",
     slug: "snowflake",
     description:
-      "Semantic evidence — governed semantic views become Evidence Snapshots with lineage and qualification. Warehouse truth attached to the decision, not exported to a screenshot. Contract-validated shape in Boss Loops OSS; live warehouse connector planned.",
+      "Semantic evidence — governed semantic views become Evidence Snapshots with lineage and qualification. Warehouse truth attached to the decision, not exported to a screenshot. Contract-validated shape in the public LoopEngine repository; live warehouse connector planned.",
     runtimeLayer: "evidence",
     docsPath: "/docs/concepts/evidence-providers#snowflake-semantic-evidence-planned",
     marketingBadge: "Planned",
@@ -125,7 +125,7 @@ export const evidencePartners: Partner[] = [
     name: "Samsara",
     slug: "samsara",
     description:
-      "Operational evidence — telemetry captured at decision time, with provenance up to origin-attested where hardware and process support it. Contract-validated shape in Boss Loops OSS; live fleet connector planned.",
+      "Operational evidence — telemetry captured at decision time, with provenance up to origin-attested where hardware and process support it. Contract-validated shape in the public LoopEngine repository; live fleet connector planned.",
     runtimeLayer: "evidence",
     docsPath: "/docs/concepts/evidence-providers#samsara-operational-evidence-planned",
     marketingBadge: "Planned",

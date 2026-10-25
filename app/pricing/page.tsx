@@ -140,8 +140,8 @@ const FAQS: { q: string; a: string }[] = [
     a: "Yes — that's the point of the open core. The conformance suite is an executable artifact: self-host the engine, run the suite, and prove the invariants hold. “Every evidence source in this decision conformed to the contract” is a statement an auditor can check, not a marketing claim."
   },
   {
-    q: "What's the difference between Boss Loops OSS and Boss Loops Cloud?",
-    a: "Same engine, same governance model. OSS you run yourself — free, with reference providers to verify against. Cloud adds the managed runtime (auth, tenancy, monitoring), production Evidence Providers as they ship, the Decision Operations workspace, and audit exports."
+    q: "What's the difference between the LoopEngine open-source library and Boss Loops Cloud?",
+    a: "LoopEngine is the open-source execution library you run yourself — free, with reference providers to verify against. Boss Loops Cloud is the hosted product for governed decision loops. It uses that library and adds the managed runtime (auth, tenancy, monitoring), production Evidence Providers as they ship, the Decision Operations workspace, and audit exports."
   },
   {
     q: "How is Boss Loops Cloud priced?",

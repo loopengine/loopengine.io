@@ -309,7 +309,8 @@ export default function PartnersPage() {
           </div>
           <p className="mt-6 text-sm text-[var(--color-ink-muted)]">
             Preview means a fixture illustrates the architecture on the demo Decision Record — not a live vendor
-            connection. The provider contract and conformance suite are open in Boss Loops OSS.{" "}
+            connection. The provider contract and conformance suite are source in the public LoopEngine
+            repository. <code>@loop-engine/provider-conformance</code> is not published on npm.{" "}
             <Link href="/docs/concepts/evidence-providers" className="text-[var(--color-primary)] underline underline-offset-4">
               How Evidence Providers work →
             </Link>
