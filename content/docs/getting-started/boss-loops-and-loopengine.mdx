@@ -5,20 +5,21 @@ section: Getting Started
 order: 5
 ---
 
-Boss Loops is the product and hosted platform for governed decision loops. LoopEngine is the open-source execution library that runs those loops. The product was originally introduced as LoopEngine. It is now called Boss Loops. The library kept the LoopEngine name, the `@loop-engine/*` packages, and the local execution APIs.
+Boss Loops is the product and hosted platform for governed decision loops. It is not a generic workflow engine. LoopEngine is the open-source execution library Boss Loops uses to run those loops. The product was originally introduced as LoopEngine. The library kept that name and the `@loop-engine/*` packages.
 
-Boss Loops is not a renamed copy of the library, and the library is not the hosted product.
-
-## What each one is
+## Comparison
 
 | | Boss Loops | LoopEngine |
 | --- | --- | --- |
-| What it is | The product and the hosted platform at [app.bossloops.io](https://app.bossloops.io) | The open-source execution library |
-| Who it is for | Organizations running governed decisions in the hosted product | Developers embedding or self-hosting loop execution |
-| How you call it | [Cloud API](/docs/cloud/api-reference) with an organization API key | `@loop-engine/*` packages in your Node.js process |
-| What it adds | Organization context, hosted authentication, approver assignments, managed connectors, history | Definitions, schemas, guards, actors, and `createLoopSystem` |
+| Identity | Commercial product and hosted platform at [app.bossloops.io](https://app.bossloops.io) | Open-source execution library |
+| Primary purpose | Governed decision loops | Execution of defined loops |
+| Interface | Hosted application and [Cloud API](/docs/cloud/api-reference) | TypeScript library and packages |
+| Authentication | Organization API keys and hosted authorization | Application-controlled integration |
+| Execution | Uses LoopEngine | Provides execution primitives, including `createLoopSystem` |
+| Human approvals | Hosted approver assignments | Library-level actors and guards |
+| Installation | Hosted service | `@loop-engine/*` packages |
 
-The hosted application uses LoopEngine to execute transitions. It does not expose the library's in-process API as the customer HTTP contract.
+The hosted application does not expose the library's in-process API as the customer HTTP contract.
 
 ## What does not carry over
 

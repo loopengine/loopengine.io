@@ -32,7 +32,7 @@ Three properties make this different from linking to a dashboard:
   how attestable its provenance, how fresh the reading — these come from the
   source's own mapping, not from whoever built the loop.
 - **Conformance is verifiable.** The provider contract and conformance suite
-  live in Boss Loops OSS, so "every evidence source in this decision conformed
+  live in LoopEngine, so "every evidence source in this decision conformed
   to the contract" is a statement an auditor can check — not a marketing claim.
 
 ## Status legend
@@ -65,7 +65,7 @@ Warehouse truth exists; decisions happen in email with screenshots and stale
 exports. With Snowflake as an Evidence Provider, **governed semantic views**
 become Evidence Snapshots with lineage and qualification.
 
-**Today:** the evidence shape is contract-validated in Boss Loops OSS
+**Today:** the evidence shape is contract-validated in LoopEngine
 (governed semantic metric exemplar); a reference JSON provider exercises it.
 There is no live warehouse connection on the demo.
 
@@ -80,7 +80,7 @@ someone refreshed later. With Samsara as an Evidence Provider, **telemetry is
 captured at decision time**, with provenance up to origin-attested where
 hardware and process support it.
 
-**Today:** the evidence shapes are contract-validated in Boss Loops OSS
+**Today:** the evidence shapes are contract-validated in LoopEngine
 (telemetry and origin-attested exemplars). There is no live fleet connection on
 the demo. Operational evidence is captured, not streamed as a live widget on
 the record.
@@ -88,11 +88,12 @@ the record.
 **Next:** a production operational provider with real-time freshness and
 origin attestation where warranted.
 
-## Where the line sits (OSS vs. hosted)
+## Where the line sits (library vs. hosted)
 
 The **contract, reference providers, and conformance suite are open** in
-Boss Loops OSS — you can validate an evidence shape and verify the invariants
+LoopEngine — you can validate an evidence shape and verify the invariants
 yourself. **Production adapters** (managed auth, live vendor connections, full
-qualification presentation) ship in the hosted tier. Consuming your existing
-semantics — not re-modeling them — is the point: Boss Loops opens what Looker,
-Snowflake, and Samsara already govern; it does not replace them.
+qualification presentation) are a hosted Boss Loops path, not a second open-source
+product edition. Consuming your existing semantics — not re-modeling them — is
+the point: Boss Loops opens what Looker, Snowflake, and Samsara already govern;
+it does not replace them.
