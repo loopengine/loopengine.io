@@ -60,7 +60,7 @@ Evidence is the audit table. On 2026-10-24 the production deployment of `app.bos
 
 These are not fixed by documentation.
 
-1. **Engine repository YAML is repaired on a separate branch, not in this docs change.** `docs/yaml-examples-parse` in `loopengine/loop-engine` uses `actors`, `name`, and state `label`, and a parser test covers `loops/**/*.yaml`. The public loop-library page still warns that those files do not parse. That warning stays true until the engine branch merges. `crm.lead-qualification` `schedule_meeting` used `webhook`, which is not an engine actor; the example now uses `automation`. `spawnableLoops` is still present and is dropped by `LoopDefinitionSchema`.
+1. **Engine repository YAML is repaired on `docs/yaml-examples-parse`.** That branch uses `actors`, `name`, and state `label`. `spawnableLoops` was removed because the schema drops it. `schedule_meeting` uses `automation` instead of `webhook`. The public loop-library page no longer warns that the files fail to parse. Merge the engine branch before this documentation branch so the GitHub file links match the page.
 2. **`X-Actor-Type: system` cannot transition.** Hosted `system` projects to engine `system`. The HTTP body value `system` projects to engine `automation`, and `ai-agent` is rejected with 422 before projection. No accepted body type matches. Documented as unsupported. Making it work is a product change.
 3. **HTTP route rejects wire type `ai-agent`.** `authorizeTransitionPrincipal` accepts it as an alias of `ai`. The route returns 422 first. Docs tell callers to send `ai`.
 4. **Create leaves status `OPEN`, so start returns 409.** Documented. Whether create should also enter the engine store is an implementation question and was not re-tested live.

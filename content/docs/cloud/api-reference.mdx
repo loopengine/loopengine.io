@@ -157,7 +157,7 @@ Body:
 
 **201** returns the new instance. It is stored in the definition's initial state with status `OPEN`. This call does not use `POST .../start`.
 
-**200** when `idempotencyKey` matches an instance already created for your organization. The original instance is returned. The new payload is not compared to the original.
+**200** when `idempotencyKey` matches an instance already created for your organization. The original instance is returned. The new payload is not compared to the original, and a different payload is not a **409**. Do not reuse an idempotency key with a different payload. The later request returns the first instance and discards the new payload.
 
 **404** `LOOP_NOT_FOUND` when that loop definition is not available. **403** `CAPABILITY_REQUIRED` or `TIER_REQUIRED` when the organization cannot run it.
 

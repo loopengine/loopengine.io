@@ -54,17 +54,17 @@ While naive tooling models invoice approvals as sequential workflows, the [Alpin
 
 - `id: LoopId`
 - `version: string`
+- `name: string`
 - `description: string`
-- `domain: string`
+- `domain?: string`
 - `states: StateSpec[]`
 - `initialState: StateId`
 - `transitions: TransitionSpec[]`
-- `outcome: OutcomeSpec`
-- `participants?: string[]`
-- `spawnableLoops?: LoopId[]`
+- `outcome?: OutcomeSpec`
+- `tags?: string[]`
 - `metadata?: Record<string, unknown>`
 
-Use optional fields (`participants`, `spawnableLoops`, `metadata`) only when needed by your platform model.
+`name` is required. `metadata` is an open bag of strings and values. The schema does not include `spawnableLoops` or `participants`. A parser that uses this schema drops those keys.
 
 ## Lifecycle (`LoopStatus`)
 

@@ -20,28 +20,23 @@ Boss Loops currently ships these canonical definitions from `loops/`:
 
 ## Featured definition: `scm.procurement`
 
-<Callout variant="important" title="Parser contract">
-The files under `loops/` in the Loop Engine repository still use the pre-1.0 field `allowedActors` and omit required `name` and state `label` values. `parseLoopYaml` rejects that shape. Author new definitions with [YAML format](/docs/defining-loops/yaml-format). The block below is abbreviated from the repository file and is not a valid current definition until those fields are added.
-</Callout>
+The repository files use `name`, state `label`, and `actors`. They parse with the current `LoopDefinition` schema. Author new definitions with [YAML format](/docs/defining-loops/yaml-format). The block below is abbreviated from `loops/scm/procurement.yaml`.
 
 ```yaml
 id: scm.procurement
+name: Procurement
 version: 1.0.0
 domain: scm
 description: >
   Purchase order lifecycle from requisition through receipt and settlement.
 states:
   - id: OPEN
+    label: OPEN
   - id: PO_CONFIRMED
-  - id: RECEIPT_SCHEDULED
-  - id: RECEIVED
-  - id: INVOICE_MATCHED
+    label: PO CONFIRMED
   - id: SETTLED
+    label: SETTLED
     isTerminal: true
-  - id: CANCELLED
-    isTerminal: true
-  - id: DISPUTED
-    isError: true
 initialState: OPEN
 transitions:
   - id: confirm_po
@@ -53,6 +48,11 @@ outcome:
   description: Purchase order fully settled with matched invoice and inventory updated
   valueUnit: po_settled
   measurable: true
+  businessMetrics:
+    - id: cycle_time_days
+      label: PO cycle time (days)
+      unit: days
+      improvableByAI: true
 ```
 
 Raw files:
