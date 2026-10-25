@@ -46,7 +46,7 @@ taxonomy: provider
 3. **Submit to a loop transition**
 
    ```typescript
-   const { actor, decision } = await adapter.createSubmission({
+   const { actor, signal, evidence: submissionEvidence } = await adapter.createSubmission({
      loopId: "procurement",
      loopName: "SCM Procurement",
      currentState: "pending_analysis",
@@ -57,9 +57,9 @@ taxonomy: provider
 
    await loopSystem.engine.transition({
      aggregateId: "procurement-1",
-     transitionId: decision.transitionId,
+     transitionId: signal,
      actor,
-     evidence: decision
+     evidence: submissionEvidence
    });
    ```
 
@@ -68,7 +68,7 @@ taxonomy: provider
 1. Builds loop prompt context
 2. Calls xAI endpoint through OpenAI-compatible SDK
 3. Parses and validates structured response
-4. Returns attributed actor + decision for runtime guard enforcement
+4. Returns an attributed `actor`, `signal`, and `evidence` for runtime guard enforcement
 
 ## Configuration reference
 

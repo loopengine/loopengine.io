@@ -43,17 +43,15 @@ PENDING_APPROVAL --[reject]--> IDLE
 
 ```ts
 // @no-typecheck
-import OpenAI from "openai";
 import { createOpenAIActorAdapter } from "@loop-engine/adapter-openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const gpt = createOpenAIActorAdapter(openai, {
-  modelId: "gpt-4o",
-  confidenceThreshold: 0.75
+const gpt = createOpenAIActorAdapter({
+  apiKey: process.env.OPENAI_API_KEY!,
+  model: "gpt-4o",
 });
 
 // Same loop context and transition IDs as Claude variant.
-const { actor, decision } = await gpt.createSubmission({
+const { actor, evidence: submissionEvidence } = await gpt.createSubmission({
   loopId: "scm.replenishment",
   loopName: "SCM Replenishment",
   currentState: "ANALYZING",
@@ -66,7 +64,7 @@ await engine.transition({
   aggregateId: "repl-lmb-001" as never,
   transitionId: "submit_recommendation" as never,
   actor,
-  evidence: decision
+  evidence: submissionEvidence
 });
 ```
 

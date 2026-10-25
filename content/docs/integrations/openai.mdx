@@ -22,7 +22,7 @@ taxonomy: provider
 
 ## What it does
 
-`@loop-engine/adapter-openai` uses OpenAI chat completions with `response_format: { type: "json_object" }` to produce structured actor decisions. It returns an `AIAgentActor` and `AIActorDecision` for runtime submission where policy guards are enforced.
+`@loop-engine/adapter-openai` uses OpenAI chat completions with `response_format: { type: "json_object" }` to produce a structured `AIAgentSubmission` (`actor`, `signal`, and `evidence`) for runtime submission where policy guards are enforced.
 
 ## Quick setup
 
@@ -47,7 +47,7 @@ taxonomy: provider
 
    ```typescript
    // @no-typecheck
-   const { actor, decision } = await adapter.createSubmission({
+   const { actor, signal, evidence: submissionEvidence } = await adapter.createSubmission({
      loopId: "procurement",
      loopName: "SCM Procurement",
      currentState: "pending_analysis",
@@ -64,9 +64,10 @@ taxonomy: provider
 
    await loopSystem.engine.transition({
      aggregateId: "procurement-1",
-     transitionId: decision.transitionId,
+     // signal defaults to the transition id when the definition omits signal
+     transitionId: signal,
      actor,
-     evidence: decision
+     evidence: submissionEvidence
    });
    ```
 

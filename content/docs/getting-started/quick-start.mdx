@@ -26,6 +26,7 @@ import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
 
 const approval = LoopBuilder
   .create('expense.approval', 'finance')
+  .version('1.0.0')
   .description('Expense report approval')
   .state('SUBMITTED')
   .state('UNDER_REVIEW')

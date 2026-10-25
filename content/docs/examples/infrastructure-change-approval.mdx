@@ -55,15 +55,16 @@ PENDING_APPROVAL --[reject_change]--> REJECTED
 
 ```ts
 // @no-typecheck
-import Anthropic from "@anthropic-ai/sdk";
 import { createLoopSystem } from "@loop-engine/sdk";
 import { createAnthropicActorAdapter } from "@loop-engine/adapter-anthropic";
 
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const adapter = createAnthropicActorAdapter(anthropic, { modelId: "claude-opus-4-6" });
+const adapter = createAnthropicActorAdapter({
+  apiKey: process.env.ANTHROPIC_API_KEY!,
+  model: "claude-3-5-sonnet-latest",
+});
 const { engine } = await createLoopSystem({ loops: [changeApprovalLoop] });
 
-const { actor, decision } = await adapter.createSubmission({
+const { actor, evidence: submissionEvidence } = await adapter.createSubmission({
   loopId: "infrastructure.change_approval",
   loopName: "Infrastructure Change Approval",
   currentState: "ANALYZING",
@@ -77,7 +78,7 @@ await engine.transition({
   transitionId: "submit_analysis" as never,
   actor,
   evidence: {
-    ...decision,
+    ...submissionEvidence,
     blast_radius_score: 0.22,
     affected_services: ["payments-api", "settlement-worker"],
     rollback_plan: "revert migration and recycle workers"

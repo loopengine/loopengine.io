@@ -7,25 +7,26 @@ order: 10
 
 ## Loop definition YAML reference
 
-This format is validated by `LoopDefinitionSchema` in `@loop-engine/loop-definition`.
+This format is validated by `LoopDefinitionSchema` in `@loop-engine/core` via `parseLoopYaml` (`@loop-engine/loop-definition`).
 
 ### Top-level fields
 
 - `id: string` (required)
-- `version: string` semver `x.y.z` (required)
+- `version: string` (required; published examples use semver, and the schema accepts any string)
+- `name: string` (required)
 - `description: string` (required)
-- `domain: string` (required)
-- `states: StateSpec[]` (required, at least 1)
+- `domain?: string`
+- `states: StateSpec[]` (required)
 - `initialState: string` (required, must exist in `states`)
 - `transitions: TransitionSpec[]` (required)
-- `outcome: OutcomeSpec` (required)
-- `participants?: string[]`
-- `spawnableLoops?: string[]`
+- `outcome?: OutcomeSpec` (when present, `businessMetrics` must be a non-empty array)
+- `tags?: string[]`
 - `metadata?: Record<string, unknown>`
 
 ### `StateSpec`
 
 - `id: string` (required)
+- `label: string` (required)
 - `description?: string`
 - `isTerminal?: boolean`
 - `isError?: boolean`
@@ -35,43 +36,54 @@ This format is validated by `LoopDefinitionSchema` in `@loop-engine/loop-definit
 - `id: string`
 - `from: string`
 - `to: string`
-- `allowedActors: ("human" | "automation" | "ai-agent" | "system")[]`
+- `signal?: string` (defaults to `id`)
+- `actors: ("human" | "automation" | "ai-agent" | "system")[]` (required, at least one)
 - `guards?: GuardSpec[]`
-- `sideEffects?: SideEffectSpec[]`
 - `description?: string`
+- `metadata?: Record<string, unknown>`
+
+`allowedActors` is not a field on the current schema. Definitions that still use it fail validation.
 
 ### `GuardSpec`
 
 - `id: string`
 - `description: string`
-- `failureMessage: string`
 - `severity: "hard" | "soft"`
 - `evaluatedBy: "runtime" | "module" | "external"`
+- `failureMessage?: string`
+- `parameters?: Record<string, unknown>`
 
 ### `OutcomeSpec`
 
-- `id: string`
 - `description: string`
 - `valueUnit: string`
-- `measurable: boolean`
-- `businessMetrics?: BusinessMetric[]`
+- `businessMetrics: BusinessMetric[]` (required and non-empty when `outcome` is set)
+- `id?: string`
+- `measurable?: boolean`
 
 ## Annotated example (`scm.procurement`)
 
 ```yaml
 id: scm.procurement
 version: 1.0.0
+name: Procurement
 domain: scm
 description: Purchase order lifecycle through settlement
 
 states:
   - id: OPEN
+    label: Open
   - id: PO_CONFIRMED
+    label: PO confirmed
   - id: RECEIVED
+    label: Received
   - id: INVOICE_MATCHED
+    label: Invoice matched
   - id: SETTLED
+    label: Settled
     isTerminal: true
   - id: DISPUTED
+    label: Disputed
     isError: true
 
 initialState: OPEN
@@ -80,7 +92,7 @@ transitions:
   - id: confirm_po
     from: OPEN
     to: PO_CONFIRMED
-    allowedActors: [human, automation, ai-agent]
+    actors: [human, automation, ai-agent]
     guards:
       - id: approval_obtained
         severity: hard
@@ -103,7 +115,8 @@ outcome:
 ## Common validation errors
 
 - `initialState` not found in `states`
-- transition `from`/`to` references unknown state
-- empty `allowedActors`
-- duplicate state IDs
-- invalid `version` format (must be semver)
+- transition `from`/`to` references an unknown state
+- missing `actors`, or `actors` empty
+- missing `name`, or a state missing `label`
+- `outcome` present without a non-empty `businessMetrics` array
+- duplicate state ids

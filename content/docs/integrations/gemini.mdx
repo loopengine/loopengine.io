@@ -45,7 +45,7 @@ taxonomy: provider
 3. **Submit to a loop transition**
 
    ```typescript
-   const { actor, decision } = await adapter.createSubmission({
+   const { actor, signal, evidence: submissionEvidence } = await adapter.createSubmission({
      loopId: "procurement",
      loopName: "SCM Procurement",
      currentState: "pending_analysis",
@@ -56,9 +56,9 @@ taxonomy: provider
 
    await loopSystem.engine.transition({
      aggregateId: "procurement-1",
-     transitionId: decision.transitionId,
+     transitionId: signal,
      actor,
-     evidence: decision
+     evidence: submissionEvidence
    });
    ```
 
@@ -67,7 +67,7 @@ taxonomy: provider
 1. Formats context using Boss Loops actor prompt shape
 2. Calls Gemini generate endpoint
 3. Parses decision JSON and validates fields
-4. Returns actor + decision for runtime guard evaluation
+4. Returns `actor`, `signal`, and `evidence` for runtime guard evaluation
 
 ## Configuration reference
 

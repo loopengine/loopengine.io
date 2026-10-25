@@ -99,25 +99,30 @@ Equivalent YAML for the same loop:
 ```yaml
 id: expense.approval
 version: 1.0.0
+name: Expense approval
 description: Expense approval loop
 domain: finance
 states:
   - id: SUBMITTED
+    label: Submitted
   - id: UNDER_REVIEW
+    label: Under review
   - id: APPROVED
+    label: Approved
     isTerminal: true
   - id: REJECTED
+    label: Rejected
     isTerminal: true
 initialState: SUBMITTED
 transitions:
   - id: start_review
     from: SUBMITTED
     to: UNDER_REVIEW
-    allowedActors: [automation]
+    actors: [automation]
   - id: approve
     from: UNDER_REVIEW
     to: APPROVED
-    allowedActors: [human]
+    actors: [human]
     guards:
       - id: approval_obtained
         description: Manager approval required
@@ -129,6 +134,10 @@ outcome:
   description: Expense approved
   valueUnit: expense_approved
   measurable: true
+  businessMetrics:
+    - id: m_expense_approved
+      label: Expense approved
+      unit: count
 ```
 
 See `/docs/defining-loops/yaml-format` for the full format reference.

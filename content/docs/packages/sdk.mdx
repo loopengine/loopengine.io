@@ -76,6 +76,8 @@ import { LoopBuilder, createLoopSystem } from "@loop-engine/sdk"
 
 const loop = LoopBuilder
   .create("expense.approval", "finance")
+  .version("1.0.0")
+  .description("Expense approval")
   .state("SUBMITTED")
   .state("APPROVED", { isTerminal: true })
   .state("REJECTED", { isTerminal: true })

@@ -23,7 +23,7 @@ We describe Boss Loops as infrastructure for **governed operational decisions**,
 
 | Capability | Status | How |
 | --- | --- | --- |
-| Loop definitions (YAML / TypeScript) | **Shipped** | `@loop-engine/sdk`, `@loop-engine/dsl` |
+| Loop definitions (YAML / TypeScript) | **Shipped** | `@loop-engine/sdk`, `@loop-engine/loop-definition` |
 | Transition execution + guards | **Shipped** | `@loop-engine/runtime`, `@loop-engine/guards` |
 | Actors, evidence, events | **Shipped** | `@loop-engine/actors`, `@loop-engine/events` |
 | Provider / Channel / Integration adapters | **Shipped** (per adapter) | See [runtime connections](/docs/integrations) |
@@ -42,9 +42,9 @@ npm install @loop-engine/sdk
 
 | | **OSS runtime (self-host)** | **Boss Loops Cloud (hosted)** |
 | --- | --- | --- |
-| **Runs where** | Your infrastructure | Better Data operated (`loops.betterdata.co`) |
+| **Runs where** | Your infrastructure | Better Data operated (`app.bossloops.io`) |
 | **Primary job** | Govern transitions in **your** apps | Hosted governance API + managed connectors |
-| **Tenancy** | Your app’s isolation model | Multi-tenant control plane |
+| **Isolation** | Your application’s model | Each customer organization sees only its own loops |
 | **Connectors** | You implement OAuth/secrets | Documented hosted connector paths (Slack, Google, …) |
 | **Docs surface** | **loopengine.io** (this site) | Cloud API page + **[docs.betterdata.co](https://docs.betterdata.co)** for company/apps |
 

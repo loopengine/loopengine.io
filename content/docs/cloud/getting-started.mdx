@@ -1,8 +1,8 @@
 ---
 title: Getting started with Boss Loops Cloud
 description: >-
-  Choose your path — prove the loop mechanics locally with Boss Loops OSS in five
-  minutes, or start Boss Loops Cloud for live connectors, tenancy, and audit exports.
+  Prove a decision loop locally with Boss Loops OSS, or use Boss Loops Cloud
+  for hosted execution, connectors, and organization API keys.
 section: Boss Loops Cloud
 sidebar_label: Getting started
 order: 2
@@ -13,40 +13,40 @@ canonical: https://www.bossloops.io/docs/cloud/getting-started
   <span className="docs-status-badge tier-cloud">Cloud</span>
 </div>
 
-Two ways to experience Boss Loops:
+Two ways to use Boss Loops:
 
-| | **Run locally in 5 minutes** | **Run live with integrations** |
+| | **Run locally** | **Run hosted** |
 | - | --- | --- |
 | Product | **Boss Loops OSS** | **Boss Loops Cloud** |
-| What you get | dry-run of the Spreadsheet Approval loop over seeded evidence | live **Slack** approval + live **Google Sheets** apply |
-| Credentials | **none** | Slack app + Google OAuth |
-| Where | [OSS quick start](/docs/getting-started/quick-start) | [Start Boss Loops Cloud](/docs/cloud) |
+| What you get | The engine in your process: definitions, guards, actors, events | Hosted loops for your organization, API keys, approver assignments, and managed Slack and Google connectors |
+| Credentials | None for the quick start | An organization API key, issued for your organization |
+| Where | [OSS quick start](/docs/getting-started/quick-start) | [Cloud API](/docs/cloud/api-reference) |
 
-## The OSS 5-minute proof
+## Local
 
 ```bash
-# Boss Loops OSS — local, credential-free 5-minute proof
-pnpm boss-loops:demo --dry-run
+npm install @loop-engine/sdk
 ```
 
-<Callout variant="info">
-The `boss-loops:demo` script runs from the Better Data monorepo checkout. If you are
-starting from the published packages instead, follow the
-[quick start](/docs/getting-started/quick-start) — same loop model, SDK-first.
-</Callout>
+Follow the [quick start](/docs/getting-started/quick-start). That example runs in your process. It does not call Boss Loops Cloud, and it does not need an API key.
 
-The dry-run walks the real loop state machine and prints the staged change, the approval,
-the applied result, and an audit trail — no Slack or Google credentials required.
+`@loop-engine/sdk` on npm is `1.0.0-rc.1`. See [Installation](/docs/getting-started/installation) for the rest of the package cohort.
 
-## The Cloud path
+## Hosted
 
-Live connectors (Slack approvals, Google Sheets apply) are **Cloud-only** — the OSS
-self-host runtime intentionally excludes hosted connectors:
+Boss Loops Cloud is at **[app.bossloops.io](https://app.bossloops.io)**. Organizations are provisioned with Better Data. Start from the [Cloud overview](/docs/cloud) to request access.
 
-```txt
-Slack approval request → Google Sheets staged update → Approve in Slack
-→ Sheet updated → confirmation → execution history
+When you have an organization API key:
+
+```bash
+curl -sS \
+  -H "Authorization: Bearer $BOSS_LOOPS_API_KEY" \
+  -H "X-Actor-Type: user" \
+  "https://app.bossloops.io/api/v1/loops/catalog"
 ```
 
-Start from the [Cloud overview](/docs/cloud) — organization and tenant are created in
-seconds, no payment required. Commercial tiers: [Pricing](/pricing).
+`BOSS_LOOPS_API_KEY` is `le_` plus 32 hex characters. Send `X-Actor-Type` on every call. Read [Authentication](/docs/cloud/api-reference#authentication) before transitioning a loop: the body actor cannot name a different person, and a system-classified key cannot complete a transition today.
+
+Live Slack approval and Google Sheets apply are configured in the hosted product. They are not part of the OSS quick start.
+
+Commercial tiers: [Pricing](/pricing).

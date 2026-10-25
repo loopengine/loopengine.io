@@ -55,13 +55,15 @@ export type LoopStatus =
 export interface GuardSpec {
   id: GuardId
   description: string
-  failureMessage: string
+  failureMessage?: string
   severity: "hard" | "soft"
   evaluatedBy: "runtime" | "module" | "external"
+  parameters?: Record<string, unknown>
 }
 
 export interface StateSpec {
   id: StateId
+  label: string
   description?: string
   isTerminal?: boolean
   isError?: boolean
@@ -71,23 +73,25 @@ export interface TransitionSpec {
   id: TransitionId
   from: StateId
   to: StateId
-  allowedActors: ActorType[]
+  /** Present on the parsed definition. Defaults to `id` when omitted at authoring time. */
+  signal: SignalId
+  actors: ActorType[]
   guards?: GuardSpec[]
-  sideEffects?: SideEffectSpec[]
   description?: string
+  metadata?: Record<string, unknown>
 }
 
 export interface LoopDefinition {
   id: LoopId
   version: string
+  name: string
   description: string
-  domain: string
+  domain?: string
   states: StateSpec[]
   initialState: StateId
   transitions: TransitionSpec[]
-  outcome: OutcomeSpec
-  participants?: string[]
-  spawnableLoops?: LoopId[]
+  outcome?: OutcomeSpec
+  tags?: string[]
   metadata?: Record<string, unknown>
 }
 ```

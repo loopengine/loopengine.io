@@ -33,8 +33,12 @@ import { LoopBuilder } from '@loop-engine/sdk'
 
 const loop = LoopBuilder
   .create('demo.forward', 'demo')
-  .state('A', { isTerminal: true })
-  .initialState('A')
+  .version('1.0.0')
+  .description('Forward loop events')
+  .state('OPEN')
+  .state('DONE', { isTerminal: true })
+  .initialState('OPEN')
+  .transition({ id: 'finish', from: 'OPEN', to: 'DONE', actors: ['automation'] })
   .outcome({
     id: 'done',
     description: 'done',

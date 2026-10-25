@@ -24,23 +24,26 @@ SUBMITTED -> UNDER_REVIEW -> APPROVED
 `StateSpec` fields from `@loop-engine/core`:
 
 - `id` (required)
-- `isTerminal?: boolean` (default false)
-- `isError?: boolean` (default false)
+- `label` (required in YAML; `LoopBuilder` derives it from the state id)
+- `description?: string`
+- `isTerminal?: boolean`
+- `isError?: boolean`
 
 Terminal states close the loop (`status: "completed"`).  
 Error states set `status: "failed"`.
 
 ## 3) Actors
 
-Boss Loops supports 5 actor types:
+The self-hosted engine has four actor types:
 
 - `human`
 - `automation`
 - `ai-agent`
-- `webhook`
 - `system`
 
-Actor authorization is checked against each transition's `allowedActors`.
+Actor authorization is checked against each transition's `actors` list. `LoopBuilder` requires `.version()` and `.description()` before `.build()`, and at least one `.transition()`.
+
+Hosted Boss Loops also classifies `webhook` and platform-operator credentials. Those credentials cannot execute a transition. See the [Cloud API](/docs/cloud/api-reference#actor-identity-on-a-transition).
 
 See [The Actor Model](/docs/concepts/actor-model) for full details.
 
@@ -53,6 +56,7 @@ import { LoopBuilder, createLoopSystem } from '@loop-engine/sdk'
 
 const approval = LoopBuilder
   .create('expense.approval', 'finance')
+  .version('1.0.0')
   .description('Expense report approval')
   .state('SUBMITTED')
   .state('UNDER_REVIEW')
