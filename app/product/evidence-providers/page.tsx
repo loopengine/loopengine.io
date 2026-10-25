@@ -117,7 +117,7 @@ export default function EvidenceProvidersPage() {
               },
               {
                 title: "Conformance verifiable",
-                body: "The provider contract and conformance suite are open. An auditor can check that every evidence source in a decision conformed to the contract.",
+                body: "The provider contract and conformance suite are public Apache-2.0 source in the LoopEngine repository. @loop-engine/provider-conformance is not published on npm.",
               },
             ].map((card) => (
               <article

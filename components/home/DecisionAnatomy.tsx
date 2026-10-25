@@ -52,7 +52,7 @@ const GOVERNANCE: Layer = {
   technical: "Guards",
   accent: "#7DD3FC",
   description:
-    "The Boss Loops engine, where intelligence and evidence are fused and verified against policy. Guards are structural gates, not prompt-based instructions — they decide whether a transition may commit before any side effect occurs.",
+    "The LoopEngine library, where intelligence and evidence are fused and verified against policy. Guards are structural gates, not prompt-based instructions — they decide whether a transition may commit before any side effect occurs.",
   examples: ["human-only", "confidence-threshold", "evidence-required"],
 };
 

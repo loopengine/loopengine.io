@@ -32,16 +32,19 @@ Three properties make this different from linking to a dashboard:
   how attestable its provenance, how fresh the reading — these come from the
   source's own mapping, not from whoever built the loop.
 - **Conformance is verifiable.** The provider contract and conformance suite
-  live in LoopEngine, so "every evidence source in this decision conformed
-  to the contract" is a statement an auditor can check — not a marketing claim.
+  are public Apache-2.0 source in the LoopEngine repository.
+  `@loop-engine/provider-conformance` is not published on npm. From that
+  repository, `pnpm test-provider` runs the suite, so "every evidence source
+  in this decision conformed to the contract" is a statement an auditor can
+  check — not a marketing claim.
 
 ## Status legend
 
 | Badge | Meaning |
 |---|---|
 | **Preview** | A fixture/seed illustrates the architecture on the demo Decision Record; not a live vendor connection |
-| **Contract-validated** | The evidence shape passes the OSS contract exemplars and conformance checks |
-| **Conformant Provider** | Future — a production adapter that passes the public OSS conformance suite |
+| **Contract-validated** | The evidence shape passes the LoopEngine contract exemplars and conformance checks |
+| **Conformant Provider** | Future — a production adapter that passes the conformance suite in the public LoopEngine repository |
 | **Boss Loops Cloud** | Future hosted connector path, managed auth included |
 
 ## Looker — semantic evidence (Preview)
@@ -90,9 +93,9 @@ origin attestation where warranted.
 
 ## Where the line sits (library vs. hosted)
 
-The **contract, reference providers, and conformance suite are open** in
-LoopEngine — you can validate an evidence shape and verify the invariants
-yourself. **Production adapters** (managed auth, live vendor connections, full
+The **contract, reference providers, and conformance suite** are public
+Apache-2.0 source in LoopEngine. `@loop-engine/provider-conformance` is not
+published on npm. **Production adapters** (managed auth, live vendor connections, full
 qualification presentation) are a hosted Boss Loops path, not a second open-source
 product edition. Consuming your existing semantics — not re-modeling them — is
 the point: Boss Loops opens what Looker, Snowflake, and Samsara already govern;

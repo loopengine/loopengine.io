@@ -78,7 +78,7 @@ export default function CloudPage() {
             className="mt-3 font-[var(--font-display)] text-[var(--color-ink)] text-[var(--text-3xl)]"
             style={{ letterSpacing: "-0.02em", lineHeight: 1.1 }}
           >
-            The managed distribution of the Boss Loops engine.
+            Boss Loops Cloud runs on the LoopEngine library.
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-7 text-[var(--color-ink-secondary)]">
             Same governance model. Same Decision Record. Better Data runs the service,

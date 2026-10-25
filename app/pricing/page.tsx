@@ -7,7 +7,7 @@ import { Fragment } from "react";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Boss Loops is open core — the engine is free and Apache-2.0. Boss Loops Cloud ships in Starter, Team, and Enterprise tiers. Launch pricing is being finalized — talk to us for early access.",
+    "Boss Loops is open core — the LoopEngine library is free and Apache-2.0. Boss Loops Cloud ships in Starter, Team, and Enterprise tiers. Launch pricing is being finalized — talk to us for early access.",
 };
 
 type Tier = {
@@ -23,9 +23,9 @@ const TIERS: Tier[] = [
   {
     name: "Open Core",
     price: "Free",
-    tagline: "The governed engine, yours to run. Apache-2.0, forever.",
+    tagline: "The LoopEngine library, yours to run. Apache-2.0, forever.",
     bullets: [
-      "The Boss Loops engine, contracts, and conformance suite",
+      "The LoopEngine library, evidence contracts, and conformance suite source",
       "Governed decision loops with enforced invariants",
       "Evidence frozen at capture, with recorded provenance",
       "Reference Evidence Providers for local verification",
@@ -133,11 +133,11 @@ const COMPARISON_ROWS: { group: string; rows: TableRow[] }[] = [
 const FAQS: { q: string; a: string }[] = [
   {
     q: "What's actually open source?",
-    a: "The Boss Loops engine, the evidence contracts, and the conformance suite — Apache-2.0, forever. The governance invariants are enforced in the open engine, not behind a paywall. What's commercial is the hosted experience: production Evidence Providers, curated policy packs, and the Decision Operations workspace."
+    a: "The LoopEngine library, the evidence contracts, and the conformance suite — Apache-2.0 source, forever. The suite is public source in the LoopEngine repository. @loop-engine/provider-conformance is not published on npm. The governance invariants are enforced in that library, not behind a paywall. What's commercial is the hosted experience: production Evidence Providers, curated policy packs, and the Decision Operations workspace."
   },
   {
     q: "Can I verify the governance claims myself?",
-    a: "Yes — that's the point of the open core. The conformance suite is an executable artifact: self-host the engine, run the suite, and prove the invariants hold. “Every evidence source in this decision conformed to the contract” is a statement an auditor can check, not a marketing claim."
+    a: "Yes. The conformance suite is public Apache-2.0 source in the LoopEngine repository, not a published npm package. From that repository, pnpm test-provider runs it. “Every evidence source in this decision conformed to the contract” is a statement an auditor can check against that source, not a marketing claim."
   },
   {
     q: "What's the difference between the LoopEngine open-source library and Boss Loops Cloud?",
@@ -188,8 +188,9 @@ export default function PricingPage() {
             Open core. Pay for providers, policy, and experience — never for governance.
           </h1>
           <p style={{ marginTop: 14, maxWidth: 760, color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            The {SITE.productName} engine, evidence contracts, and conformance suite are free and Apache-2.0 — the
-            governance guarantees hold in the open engine, verifiable by anyone. {SITE.cloudName} adds the hosted
+            The LoopEngine library, evidence contracts, and conformance suite are free Apache-2.0 source.
+            @loop-engine/provider-conformance is not published on npm. The governance guarantees hold in that
+            library and can be checked from the public repository. {SITE.cloudName} adds the hosted
             experience: production Evidence Providers, curated policy, and the Decision Operations workspace.
           </p>
           <p

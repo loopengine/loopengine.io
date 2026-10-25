@@ -516,9 +516,10 @@ async function HomeContent() {
             Governance sits on execution — not beside it.
           </h2>
           <p style={{ marginTop: 18, fontSize: "var(--text-base)", color: "var(--color-ink-tertiary)", lineHeight: 1.7 }}>
-            The claims on this page aren&apos;t marketing you have to take on faith. The Boss Loops engine, the
-            evidence contracts, and the conformance suite are Apache-2.0 — inspect the code, run the suite, and prove
-            the invariants yourself before you trust a single consequential decision to it.
+            The claims on this page aren&apos;t marketing you have to take on faith. The LoopEngine library, the
+            evidence contracts, and the conformance suite are Apache-2.0 source in the public repository.
+            @loop-engine/provider-conformance is not published on npm. Inspect the code and run pnpm test-provider
+            there before you trust a single consequential decision to it.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
