@@ -1,9 +1,8 @@
 ---
 title: Boss Loops Cloud
 description: >-
-  Boss Loops Cloud — the managed distribution of Boss Loops. Governed decision
-  loops, user management scoped by location, outcome-based metering, and audit
-  exports, operated by Better Data.
+  Boss Loops Cloud is the hosted Boss Loops product at app.bossloops.io.
+  LoopEngine is the open-source library the service uses for execution.
 section: Boss Loops Cloud
 order: 1
 canonical: https://www.bossloops.io/docs/cloud
@@ -14,10 +13,10 @@ canonical: https://www.bossloops.io/docs/cloud
   <span className="docs-status-badge attr-built-in">Production: app.bossloops.io</span>
 </div>
 
-**Boss Loops Cloud** is the **managed** distribution of Boss Loops — run governed,
-observable decision loops without operating the runtime yourself. Same engine, same
-governance model as [Boss Loops OSS](/docs/getting-started/quick-start); Better Data
-operates scale, isolation, metering, and upgrades. Commercial tiers and early access:
+**Boss Loops Cloud** is the hosted Boss Loops product at
+[app.bossloops.io](https://app.bossloops.io). It uses [LoopEngine](/docs/getting-started/boss-loops-and-loopengine),
+the open-source execution library, and adds organization API keys, approver assignments,
+and managed connectors. The library quick start is a different surface. Commercial terms:
 [Pricing](/pricing).
 
 ## See the product: the governed Decision Record
@@ -38,23 +37,19 @@ Prefer to reach out directly?
 - <CtaLink cta="waitlist" location="boss-loops/cloud" href="https://betterdata.co/company/contact?intent=loop-engine">Join the waitlist</CtaLink>
 - <CtaLink cta="sales" location="boss-loops/cloud" href="https://betterdata.co/company/contact?intent=loop-engine">Contact sales</CtaLink>
 
-> **OSS proves the loop. Cloud runs the workflow.**
->
-> The [OSS quickstart](/docs/getting-started/quick-start) proves the loop state machine on
-> your machine. Boss Loops Cloud runs hosted decision loops — organization API keys,
-> approver assignments, and managed connectors (Slack, Google). See
-> [Cloud getting started](/docs/cloud/getting-started).
+> The [LoopEngine quick start](/docs/getting-started/quick-start) runs a loop in your process.
+> Boss Loops Cloud runs hosted decision loops — organization API keys, approver assignments,
+> and managed connectors (Slack, Google). See [Cloud getting started](/docs/cloud/getting-started).
 
 ## What is Boss Loops Cloud?
 
-Boss Loops Cloud, hosted at **[app.bossloops.io](https://app.bossloops.io)**, runs the
-Boss Loops model as a **managed service**. You integrate with the
-[Cloud API](/docs/cloud/api-reference). Better Data operates the service, isolation between
-customer organizations, and upgrades. The runtime technology underneath is the
-**Boss Loops runtime** (`@loop-engine/*`) — see [Architecture](/docs/getting-started/architecture).
+Boss Loops Cloud, hosted at **[app.bossloops.io](https://app.bossloops.io)**, is the managed
+product. You integrate with the [Cloud API](/docs/cloud/api-reference). Better Data operates
+the service, isolation between customer organizations, and upgrades. Execution goes through
+LoopEngine (`@loop-engine/*`). See [Boss Loops and LoopEngine](/docs/getting-started/boss-loops-and-loopengine).
 
-**Self-hosted alternative:** Boss Loops OSS — start with the
-[quick start](/docs/getting-started/quick-start) and the engine docs on this site.
+**Library alternative:** install `@loop-engine/sdk` and follow the
+[quick start](/docs/getting-started/quick-start). That does not provision a Cloud organization.
 
 ## What you get
 
@@ -63,13 +58,13 @@ approver assignments, and history.
 
 ## API
 
-The hosted runtime exposes a versioned HTTP API — see the
-[Cloud API reference](/docs/cloud/api-reference), which also links the generated OpenAPI
-reference and the monorepo contract.
+The hosted product exposes a versioned HTTP API. The
+[Cloud API reference](/docs/cloud/api-reference) is the customer contract. It is not a
+generated OpenAPI page.
 
-## Boss Loops OSS vs Boss Loops Cloud
+## LoopEngine library vs Boss Loops Cloud
 
-| | Boss Loops OSS (`@loop-engine/sdk`) | Boss Loops Cloud ([app.bossloops.io](https://app.bossloops.io)) |
+| | LoopEngine (`@loop-engine/sdk`) | Boss Loops Cloud ([app.bossloops.io](https://app.bossloops.io)) |
 | - | ------------------------- | ----------------------------------------------------------- |
 | Cost | Free (Apache-2.0) | See [Pricing](/pricing) |
 | Setup | You operate | Better Data operates the service |

@@ -5,14 +5,14 @@ import { SITE, LEGACY } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: "Docs",
   description:
-    "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Loops Cloud.",
+    "Boss Loops is the product and hosted platform. LoopEngine is the open-source execution library. Docs cover Cloud APIs and @loop-engine/* packages.",
   alternates: {
     canonical: `${SITE.baseUrl}/docs`
   },
   openGraph: {
     title: "Docs · Boss Loops",
     description:
-      "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Loops Cloud.",
+      "Boss Loops is the product and hosted platform. LoopEngine is the open-source execution library. Docs cover Cloud APIs and @loop-engine/* packages.",
     url: `${SITE.baseUrl}/docs`,
     images: [
       {
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Docs · Boss Loops",
     description:
-      "Governed operational runtime documentation — taxonomy, architecture, self-host SDK, and Boss Loops Cloud.",
+      "Boss Loops is the product and hosted platform. LoopEngine is the open-source execution library. Docs cover Cloud APIs and @loop-engine/* packages.",
     images: [`${SITE.baseUrl}/og?title=Docs&section=Documentation`]
   }
 };
@@ -37,9 +37,10 @@ export default function DocsHomePage() {
     {
       icon: "🚀",
       title: "Get Started",
-      description: "Install Boss Loops and run your first governed loop in under 10 minutes.",
+      description: "See how Boss Loops and LoopEngine differ, then run a library loop or open Cloud.",
       accentColor: "var(--color-primary)",
       links: [
+        { label: "Boss Loops and LoopEngine", href: "/docs/getting-started/boss-loops-and-loopengine" },
         { label: "Quick Start", href: "/docs/getting-started/quick-start" },
         { label: "Runtime Taxonomy", href: "/docs/concepts/runtime-taxonomy" },
         { label: "Architecture", href: "/docs/getting-started/architecture" }
@@ -150,7 +151,7 @@ export default function DocsHomePage() {
       ]
     },
     {
-      heading: "Packages",
+      heading: "LoopEngine Library",
       links: [
         {
           label: "@loop-engine/sdk",
@@ -198,11 +199,16 @@ export default function DocsHomePage() {
               Boss Loops Documentation
             </h1>
             <p className="mb-6 max-w-[520px] text-[var(--text-base)] leading-7 text-[var(--color-ink-muted)]">
-              Governed operational runtime documentation. Start with{" "}
-              <Link href="/docs/concepts/runtime-taxonomy" className="text-[var(--color-primary-light)] underline-offset-2 hover:underline">
-                Runtime Taxonomy
+              Boss Loops is the product and hosted platform. LoopEngine is the open-source execution library Boss Loops uses, originally the product name and still the name of the{" "}
+              <code>@loop-engine/*</code> packages.{" "}
+              <Link href="/docs/getting-started/boss-loops-and-loopengine" className="text-[var(--color-primary-light)] underline-offset-2 hover:underline">
+                Read the distinction
               </Link>
-              , run the quick start, or browse runtime connections (Providers, Channels, Integrations).
+              , then use{" "}
+              <Link href="/docs/cloud" className="text-[var(--color-primary-light)] underline-offset-2 hover:underline">
+                Boss Loops Cloud
+              </Link>{" "}
+              or the library quick start.
             </p>
             <div className="inline-flex max-w-full rounded-[var(--radius-md)] border border-[var(--color-border-dark)] bg-[rgba(15,23,42,0.82)] px-4 py-3 font-mono text-[var(--text-sm)] text-[var(--color-code-text)] shadow-[var(--shadow-sm)]">
               npm install @loop-engine/sdk

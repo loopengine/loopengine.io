@@ -1,0 +1,39 @@
+---
+title: Boss Loops and LoopEngine
+description: Boss Loops is the product and hosted platform. LoopEngine is the open-source execution library it uses. Package names stay @loop-engine/*.
+section: Getting Started
+order: 5
+---
+
+Boss Loops is the product and hosted platform for governed decision loops. LoopEngine is the open-source execution library that runs those loops. The product was originally introduced as LoopEngine. It is now called Boss Loops. The library kept the LoopEngine name, the `@loop-engine/*` packages, and the local execution APIs.
+
+Boss Loops is not a renamed copy of the library, and the library is not the hosted product.
+
+## What each one is
+
+| | Boss Loops | LoopEngine |
+| --- | --- | --- |
+| What it is | The product and the hosted platform at [app.bossloops.io](https://app.bossloops.io) | The open-source execution library |
+| Who it is for | Organizations running governed decisions in the hosted product | Developers embedding or self-hosting loop execution |
+| How you call it | [Cloud API](/docs/cloud/api-reference) with an organization API key | `@loop-engine/*` packages in your Node.js process |
+| What it adds | Organization context, hosted authentication, approver assignments, managed connectors, history | Definitions, schemas, guards, actors, and `createLoopSystem` |
+
+The hosted application uses LoopEngine to execute transitions. It does not expose the library's in-process API as the customer HTTP contract.
+
+## What does not carry over
+
+Library behavior and hosted behavior are different surfaces.
+
+- **Actors.** In LoopEngine, a transition names an actor type on the definition (`human`, `automation`, `ai-agent`, or `system`). On the Cloud API, the actor of record is the authenticated caller. Send `X-Actor-Type: user`, `system`, or `llm`. The transition body uses `human`, `ai`, or `system`, and `ai` is stored as `ai-agent`. A body cannot name a different person.
+- **Approval.** LoopEngine can mark a transition as requiring approval. Boss Loops Cloud accepts a human approval only when that person has an approver assignment. An API key cannot approve by putting someone's name in the body.
+- **Organizations.** Cloud calls are limited to the organization that owns the API key. A loop from another organization is not returned. The library has no organization API key.
+- **Lifecycle.** `POST /api/v1/loops` creates a hosted instance. It does not call the library `start` operation. See the [Cloud API](/docs/cloud/api-reference).
+- **Packages.** Do not rename imports to `@boss-loops/*`. Those packages are not the published interface.
+
+`X-Actor-Type: system` authenticates on the Cloud API and then cannot complete a transition. Do not document that as a supported hosted operation.
+
+## Where to go next
+
+- Hosted product: [Boss Loops Cloud](/docs/cloud) and the [Cloud API](/docs/cloud/api-reference)
+- Library: [install `@loop-engine/sdk`](/docs/getting-started/installation) and the [package index](/docs/packages)
+- Boundaries in the runtime model: [Architecture](/docs/getting-started/architecture)

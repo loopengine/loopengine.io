@@ -9,7 +9,7 @@ export const SECTION_LABEL_ORDER: string[] = [
   "Core Concepts",
   "Defining Loops",
   "Running Loops",
-  "Packages",
+  "LoopEngine Library",
   "Loop catalog",
   "Examples",
   "Runtime Connections",
@@ -115,7 +115,10 @@ const EXAMPLES_SLUG_RANK: Record<string, number> = (() => {
 })();
 
 function rankInStaticLists(sectionLabel: string, slugPath: string): number | null {
-  if (sectionLabel === "Packages" && slugPath in PACKAGES_SLUG_RANK) {
+  if (
+    (sectionLabel === "LoopEngine Library" || sectionLabel === "Packages") &&
+    slugPath in PACKAGES_SLUG_RANK
+  ) {
     return PACKAGES_SLUG_RANK[slugPath]!;
   }
   if (sectionLabel === "Runtime Connections" && slugPath in INTEGRATIONS_SLUG_RANK) {

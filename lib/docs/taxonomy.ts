@@ -20,7 +20,12 @@ export const TAXONOMY_GROUP_ORDER: RuntimeTaxonomy[] = [
 ];
 
 /** Sections whose sidebar uses taxonomy sub-groups (top-level section label unchanged). */
-export const TAXONOMY_GROUPED_SECTIONS = new Set(["Integrations", "Runtime Connections", "Packages"]);
+export const TAXONOMY_GROUPED_SECTIONS = new Set([
+  "Integrations",
+  "Runtime Connections",
+  "Packages",
+  "LoopEngine Library",
+]);
 
 export function taxonomyGroupLabel(taxonomy: RuntimeTaxonomy | undefined): string | null {
   if (!taxonomy) return null;

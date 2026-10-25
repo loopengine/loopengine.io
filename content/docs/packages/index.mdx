@@ -1,11 +1,13 @@
 ---
-title: Package taxonomy
-description: Select Boss Loops npm packages by runtime role — runtime core, Providers, Channels, and Integrations.
-section: Packages
+title: LoopEngine packages
+description: Select @loop-engine/* packages by runtime role. These are the LoopEngine library, not the Boss Loops Cloud API.
+section: LoopEngine Library
 taxonomy: platform
 ---
 
-Boss Loops installs in layers. The minimum floor is always `@loop-engine/sdk`. Additional packages are opt-in by capability.
+These are **LoopEngine** packages. Boss Loops Cloud calls them from the hosted service. You install them when you embed or self-host execution. They are not the [Cloud API](/docs/cloud/api-reference). See [Boss Loops and LoopEngine](/docs/getting-started/boss-loops-and-loopengine).
+
+The minimum install is `@loop-engine/sdk`. Additional packages are opt-in by capability.
 
 Public docs group connections as **[Providers](/docs/concepts/runtime-taxonomy#providers)**, **[Channels](/docs/concepts/runtime-taxonomy#channels)**, and **[Integrations](/docs/concepts/runtime-taxonomy#integrations)**. npm package names and developer types (`ActorAdapter`, `ToolAdapter`, `IntegrationAdapter` archetypes) sit underneath — see [IntegrationAdapter archetype](/docs/concepts/integration-adapter).
 

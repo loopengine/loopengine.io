@@ -4,6 +4,10 @@ Date: 2026-10-24
 
 Documentation only. No application code, schemas, workflows, or infrastructure were changed. Nothing was pushed.
 
+## Product and library identity
+
+Boss Loops is the product and hosted platform. LoopEngine is the open-source execution library the hosted app calls through `@loop-engine/*`. The product was originally introduced as LoopEngine. The docs landing page and [Boss Loops and LoopEngine](/docs/getting-started/boss-loops-and-loopengine) carry that explanation. The package sidebar is labeled LoopEngine Library. Package names were not renamed. The phrase "workflow orchestration product" was not used: the product docs define Boss Loops as governed decision loops, not a generic workflow engine.
+
 ## A. Executive summary
 
 - **Pages reviewed:** 100 Boss Loops doc pages (`content/docs`, matching the live sitemap) plus related Boss Loops pages on docs.betterdata.co.

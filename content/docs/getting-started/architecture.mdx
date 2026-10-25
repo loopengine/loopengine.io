@@ -1,11 +1,11 @@
 ---
 title: Architecture
-description: Boss Loops runtime architecture — governance boundaries, evidence flow, Providers, Channels, Integrations, and runtime vs Cloud.
+description: How Boss Loops and LoopEngine divide hosted product controls from library execution, including guards, evidence, and Cloud boundaries.
 section: Getting Started
 order: 40
 ---
 
-Boss Loops is a **governance runtime**, not a generic workflow orchestrator or AI automation builder. This page describes how the runtime composes **decision loops**, **deterministic guards**, and **evidence** with external **Providers**, **Channels**, and **Integrations**.
+Boss Loops is the product for governed decision loops, not a generic workflow orchestrator or AI automation builder. LoopEngine is the open-source library that executes those loops. This page describes how that execution composes **decision loops**, **deterministic guards**, and **evidence** with external **Providers**, **Channels**, and **Integrations**. The product and the library are not the same surface — see [Boss Loops and LoopEngine](/docs/getting-started/boss-loops-and-loopengine).
 
 → Full glossary: [Runtime Taxonomy](/docs/concepts/runtime-taxonomy)
 
@@ -59,27 +59,27 @@ Downstream analytics and learning signals consume events — they do not replace
 | Humans | Attribution + channel routing | Slack/Teams UIs are Channels |
 | Intelligence | Provider adapters submit decisions | Models do not call integrations directly |
 
-## Runtime platform vs Boss Loops Cloud
+## LoopEngine and Boss Loops Cloud
 
-**Boss Loops can run inside your infrastructure, or connect to hosted governance services from Better Data.** Full positioning constraints and roadmap language: **[Runtime Platform Direction](/docs/concepts/runtime-platform-direction)**.
+LoopEngine runs in your Node.js process. Boss Loops Cloud is the hosted product. They share the loop model and do not share authentication, approval authority, or persistence. Roadmap limits: **[Runtime Platform Direction](/docs/concepts/runtime-platform-direction)**.
 
-### OSS runtime platform (today)
+### LoopEngine (library)
 
-- **Local-first** — your Node.js process runs `createLoopSystem` with chosen stores and adapters (not a required multi-service mesh today).
-- **Self-host substrate** — operational governance in your stack: loops, guards, evidence, events via `@loop-engine/sdk`.
-- **Adapters** — Providers, Channels, and Integrations you wire and operate.
+- Your process calls `createLoopSystem` with the stores and adapters you operate.
+- Definitions, guards, actors, and events come from `@loop-engine/*`.
+- There is no organization API key and no hosted approver assignment.
 
-→ [Quick Start](/docs/getting-started/quick-start) · [Runtime Platform Direction](/docs/concepts/runtime-platform-direction)
+→ [Quick Start](/docs/getting-started/quick-start) · [Packages](/docs/packages)
 
-### Boss Loops Cloud (hosted)
+### Boss Loops Cloud (hosted product)
 
-- **Governance control plane** — multi-tenant HTTP API, connector credentials, documented `/api/v1` contract.
-- **Adds** — managed connector paths (e.g. Slack, Google) and fleet-style operations **without** replacing the OSS runtime model.
-- **Not claimed** — full OSS parity with every Cloud feature; Studio; docker compose kit; multi-service runtime **today**.
+- Canonical origin `https://app.bossloops.io`. Customers use the [Cloud API](/docs/cloud/api-reference) and an organization API key.
+- The service uses LoopEngine for execution and adds organization isolation, approver assignments, history, and managed Slack and Google connectors.
+- A Cloud feature is not automatically a library feature, and a library actor type is not automatically a Cloud permission. `X-Actor-Type: system` cannot complete a hosted transition.
 
 → [Boss Loops Cloud HTTP API](/docs/cloud/api-reference)
 
-**Better Data company and application docs:** [docs.betterdata.co](https://docs.betterdata.co) — not loopengine.io.
+**Better Data company and application docs:** [docs.betterdata.co](https://docs.betterdata.co).
 
 ## Connection types (taxonomy summary)
 

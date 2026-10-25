@@ -13,7 +13,7 @@ type MobileMenuProps = {
 const topLinks = [
   { label: "Docs", href: "/docs" },
   { label: "Examples", href: "/docs/examples" },
-  { label: "Packages", href: "/docs/packages" },
+  { label: "LoopEngine Library", href: "/docs/packages" },
   { label: "GitHub", href: "https://github.com/loopengine/loop-engine", external: true }
 ];
 

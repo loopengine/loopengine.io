@@ -38,7 +38,7 @@ const COLUMNS: { title: string; links: FooterLink[] }[] = [
     links: [
       { label: "Documentation", href: "/docs" },
       { label: "Examples", href: "/docs/examples" },
-      { label: "Packages", href: "/docs/packages" },
+      { label: "LoopEngine Library", href: "/docs/packages" },
       { label: "Loop catalog", href: "/catalog" },
       { label: "GitHub", href: LEGACY.github, external: true },
       { label: "npm", href: LEGACY.npmOrg, external: true },

@@ -1,3 +1,4 @@
 {
-  "order": ["quick-start", "installation", "your-first-loop", "architecture"]
+  "title": "Getting Started",
+  "order": ["boss-loops-and-loopengine", "quick-start", "installation", "your-first-loop", "architecture"]
 }
